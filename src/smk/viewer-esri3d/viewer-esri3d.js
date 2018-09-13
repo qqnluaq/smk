@@ -155,6 +155,10 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
             self.changedPopup()
         } )
 
+        self.getVar = function () { return smk.getVar.apply( smk, arguments ) }
+
+        this.extentLayer = new E.layers.GraphicsLayer( { visible: true, elevationInfo: { mode: 'on-the-ground' } } )
+        smk.$viewer.map.add( this.extentLayer )
     }
 
     ViewerEsri3d.prototype.screenToGroundDistance = function ( pt1, pt2 ) {
@@ -293,6 +297,106 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
 
     ViewerEsri3d.prototype.isPopupVisible = function () {
         return this.view.popup.visible
+    }
+
+    ViewerEsri3d.prototype.getPanelPadding = function ( panelVisible ) {
+        var overlayPadding = parseInt( this.getVar( 'overlay-padding' ) )
+        var panelPadding = 10 
+        var padding = overlayPadding + panelPadding
+        
+        var width = parseInt( this.getVar( 'panel-width' ) )
+        var bottom = parseInt( this.getVar( 'panel-bottom' ) )
+
+        if ( !panelVisible )
+            return {
+                top: padding,
+                left: padding,
+                right: padding,
+                bottom: padding
+            }
+
+        if ( bottom > 0 )
+            return {
+                top: this.view.height - overlayPadding - bottom + panelPadding,
+                left: padding,
+                right: padding,
+                bottom: padding
+                // topLeft: L.point( padding, this.view.height - overlayPadding - bottom + panelPadding ),
+                // bottomRight: L.point( padding, padding ),
+            }
+
+        return {
+            top: padding,
+            left: width + padding,
+            right: padding,
+            bottom: padding
+            // topLeft: L.point( width + padding, padding ),
+            // bottomRight: L.point( padding, padding ),
+        }
+    }
+
+    ViewerEsri3d.prototype.zoomTo = function ( target, panelVisible ) {
+        var extent 
+        if ( Array.isArray( target ) ) {
+            target.forEach( function ( v ) {
+                var ex
+                if ( v.geometry.type == 'point' )
+                    ex = new E.geometry.Extent( { xmin: v.geometry.x, xmax: v.geometry.x, ymin: v.geometry.y, ymax: v.geometry.y } ) 
+                else 
+                    ex =  v.extent
+
+                if ( extent )
+                    extent.union( ex )
+                else    
+                    extent = ex.clone()
+            } )
+        }
+        // debugger /* jshint -W087 */
+        var padding = this.getPanelPadding( true )
+        var origin = this.view.toMap( { x: 0, y: 0 } )
+        var panel = this.view.toMap( { x: padding.left, y: padding.top } )
+
+        var offset = {
+            x: Math.abs( origin.longitude - panel.longitude ),
+            y: Math.abs( origin.latitude - panel.latitude )
+        }
+        console.log(origin,panel,offset)
+
+        extent.ymax = extent.ymax + offset.y
+        extent.xmin = extent.xmin - offset.x
+
+        this.extentLayer.removeAll()
+
+        var geojson = {
+            type: 'Feature',
+            geometry: {
+                type: 'Polygon',
+                coordinates: [
+                    [
+                        [ extent.xmin, extent.ymin ],
+                        [ extent.xmin, extent.ymax ],
+                        [ extent.xmax, extent.ymax ],
+                        [ extent.xmax, extent.ymin ],
+                        [ extent.xmin, extent.ymin ],
+                    ]
+                ]
+            }
+        }
+        var stylePick = SMK.UTIL.smkStyleToEsriSymbol( {
+            strokeColor:    'black',
+            strokeWidth:    8,
+            strokeOpacity:  0.8,
+            fillColor:      'white',
+            fillOpacity:    0.5,
+        } ),
+            stylePickFn = function ( type ) { return stylePick[ type ] }
+
+        var grs = SMK.UTIL.geoJsonToEsriGeometry( geojson, stylePickFn ).map( function ( g ) { return new E.Graphic( g ) } )
+            // symbol: stylePickFn( g.geometry.type )
+        // } )
+        this.extentLayer.addMany( grs )
+
+        this.view.goTo( extent )
     }
 
 } )

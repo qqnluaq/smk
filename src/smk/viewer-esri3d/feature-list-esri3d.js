@@ -33,13 +33,18 @@ include.module( 'feature-list-esri3d', [ 'esri3d', 'types-esri3d', 'util-esri3d'
         this.highlight = {}
 
         this.changedActive( function () {
+            var padding
             if ( self.active ) {
-                if ( self.showPanel )
-                    smk.$viewer.view.padding = { left: 340 }
+                // padding = smk.$viewer.getPanelPadding( self.isPanelVisible() )
+
+                // if ( self.showPanel )
+                    // smk.$viewer.view.padding = padding
                 self.featureListLayer.visible = true
             }
             else {
-                smk.$viewer.view.padding = { left: 0 }
+                // padding = smk.$viewer.getPanelPadding( false )
+
+                // smk.$viewer.view.padding = padding
                 self.featureListLayer.visible = false
                 smk.$viewer.hidePopup()
             }
@@ -117,10 +122,12 @@ include.module( 'feature-list-esri3d', [ 'esri3d', 'types-esri3d', 'util-esri3d'
 
                 self.featureListLayer.removeMany( self.highlight[ ev.feature.id ] )
 
-                var loc = self.clickLocation ? self.clickLocation.geometry : self.highlight[ ev.feature.id ][ 0 ].geometry
-                smk.$viewer.view.goTo( loc ).then( function () {
-                    self.showPopup( loc )
-                } )
+                if ( !self.showFeatures || self.showFeatures == 'identify-popup' || self.showFeatures == 'query-popup' ) {
+                    var loc = self.clickLocation ? self.clickLocation.geometry : self.highlight[ ev.feature.id ][ 0 ].geometry
+                    smk.$viewer.view.goTo( loc ).then( function () {
+                        self.showPopup( loc )
+                    } )
+                }
             }
 
             if ( ev.was && !ev.feature )
@@ -128,7 +135,8 @@ include.module( 'feature-list-esri3d', [ 'esri3d', 'types-esri3d', 'util-esri3d'
         } )
 
         self.featureSet.zoomToFeature( function ( ev ) {
-            smk.$viewer.view.goTo( self.highlight[ ev.feature.id ] )
+            smk.$viewer.zoomTo( self.highlight[ ev.feature.id ], self.isPanelVisible() )
+            // smk.$viewer.view.goTo( self.highlight[ ev.feature.id ] )
         } )
 
     }
