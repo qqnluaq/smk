@@ -6,7 +6,7 @@
   "homepage": "https://bcgov.github.io/smk-client/",
   "repository": "github:bcgov/smk-client",
   "dependencies": {
-    "grunt": "^1.0.3",
+    "grunt": "^1.0.4",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-connect": "^1.0.0",
     "grunt-zip": "^0.17.1"

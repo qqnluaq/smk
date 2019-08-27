@@ -100,6 +100,7 @@
         } )
 
         attr.config = configs
+        
 
         return attr
     }
@@ -644,7 +645,8 @@
                     { type: 'shortcut-menu',enabled: false, order: 10 },
                     { type: 'toolbar',      enabled: true },
                     // { type: 'version',      enabled: false }, -- so it won't be enabled by show-tools=all
-                    { type: 'zoom',         enabled: false, order: 1 }
+                    { type: 'zoom',         enabled: false, order: 1 },
+                    { type: 'print',        enabled: false, order: 7, position: 'list-menu',                        icon: 'print',          title: 'Print' }
                 ]
             },
 
