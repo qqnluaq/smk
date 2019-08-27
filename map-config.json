@@ -1,1 +1,647 @@
-{"lmfId":"test","lmfRevision":1,"version":"0.8.1-MVP","name":"test","createdBy":"User","createdDate":"20-08-2019 11:21:50","modifiedBy":"","modifiedDate":"26-08-2019 16:29:45","surround":{"type":"default","title":""},"viewer":{"type":"leaflet","location":{"extent":[-142.33886718750003,61.64816245852389,-107.22656250000001,46.13417004624326],"center":[-124.78271484375003,53.89116625238358],"zoom":5.0},"baseMap":"NationalGeographic","clusterOption":{"showCoverageOnHover":false},"device":"auto","themes":[],"deviceAutoBreakpoint":500,"panelWidth":400},"tools":[{"type":"about","enabled":true,"title":"","content":""},{"type":"coordinate","enabled":true},{"type":"attribution","enabled":true},{"type":"layers","enabled":true,"title":"","display":[]},{"type":"pan","enabled":true},{"type":"zoom","enabled":true,"mouseWheel":true,"doubleClick":true,"box":true,"control":true},{"type":"measure","enabled":true},{"type":"markup","enabled":true},{"type":"scale","enabled":true,"showFactor":true,"showBar":true},{"type":"minimap","enabled":true,"baseMap":"Topographic"},{"type":"directions","enabled":true,"title":""},{"type":"location","enabled":true},{"type":"baseMaps","enabled":true,"title":"","choices":["Topographic","Streets","Imagery","Oceans","NationalGeographic","DarkGray","Gray"]},{"type":"select","enabled":true,"title":"Selection Panel","style":{"strokeStyle":"","strokeColor":"#000000","fillColor":"#000000","markerSize":[20,20],"markerOffset":[10,10]}},{"type":"identify","enabled":true,"title":"Identify Panel","style":{"strokeStyle":"","strokeColor":"#000000","fillColor":"#000000","markerSize":[20,20],"markerOffset":[10,0]},"tolerance":5},{"type":"search","enabled":true},{"type":"list-menu","enabled":false},{"type":"toolbar","enabled":true},{"type":"shortcut-menu","enabled":true},{"type":"print","enabled":true}],"_id":"953b10e7-1f9c-4249-9ed7-86b717b5d003","_rev":"23-3e3e9dd1476627832df354076ef78401"}
+{
+  "lmfId": "test",
+  "lmfRevision": 1,
+  "version": "0.8.1-MVP",
+  "name": "test",
+  "project": null,
+  "createdBy": "User",
+  "createdDate": "20-08-2019 11:21:50",
+  "modifiedBy": "",
+  "modifiedDate": "26-08-2019 09:36:54",
+  "published": null,
+  "surround": {
+    "type": "default",
+    "title": ""
+  },
+  "viewer": {
+    "type": "leaflet",
+    "device": "auto",
+    "deviceAutoBreakpoint": 500,
+    "themes": [],
+    "location": {
+      "extent": [
+        -142.33886718750003,
+        61.64816245852389,
+        -107.22656250000001,
+        46.13417004624326
+      ],
+      "center": [
+        -123.06589582335172,
+        48.487493740555415
+      ],
+      "zoom": 10.06079907681221
+    },
+    "baseMap": "NationalGeographic",
+    "clusterOption": {
+      "showCoverageOnHover": false
+    },
+    "panelWidth": 400
+  },
+  "layers": [
+    {
+      "type": "esri-dynamic",
+      "id": "airphoto-operation-areas--1985----outlined",
+      "title": "Airphoto Operation Areas (1985) - Outlined",
+      "isVisible": true,
+      "attribution": "Copyright 2019 DataBC, Government of British Columbia",
+      "metadataUrl": "http://catalogue.data.gov.bc.ca/dataset/air-photo-system-operation-polygons",
+      "opacity": 0.65,
+      "minScale": 1000000,
+      "maxScale": 0,
+      "isQueryable": true,
+      "attributes": [
+        {
+          "id": "oper-id",
+          "name": "OPER_ID",
+          "title": "OPER_ID",
+          "visible": true
+        },
+        {
+          "id": "feature-code",
+          "name": "FEATURE_CODE",
+          "title": "FEATURE_CODE",
+          "visible": true
+        },
+        {
+          "id": "operation-tag",
+          "name": "OPERATION_TAG",
+          "title": "OPERATION_TAG",
+          "visible": true
+        },
+        {
+          "id": "operation-name",
+          "name": "OPERATION_NAME",
+          "title": "OPERATION_NAME",
+          "visible": true
+        },
+        {
+          "id": "nominal-scale",
+          "name": "NOMINAL_SCALE",
+          "title": "NOMINAL_SCALE",
+          "visible": true
+        },
+        {
+          "id": "year",
+          "name": "YEAR",
+          "title": "YEAR",
+          "visible": true
+        },
+        {
+          "id": "film-emulsion",
+          "name": "FILM_EMULSION",
+          "title": "FILM_EMULSION",
+          "visible": true
+        },
+        {
+          "id": "objectid",
+          "name": "OBJECTID",
+          "title": "OBJECTID",
+          "visible": true
+        },
+        {
+          "id": "geometry",
+          "name": "GEOMETRY",
+          "title": "GEOMETRY",
+          "visible": true
+        },
+        {
+          "id": "feature-area-sqm",
+          "name": "FEATURE_AREA_SQM",
+          "title": "Area Square Meters",
+          "visible": true
+        },
+        {
+          "id": "feature-length-m",
+          "name": "FEATURE_LENGTH_M",
+          "title": "Length Meters",
+          "visible": true
+        }
+      ],
+      "mpcmId": 2061,
+      "mpcmWorkspace": "MPCM_ALL_PUB",
+      "serviceUrl": "https://maps.gov.bc.ca/arcgis/rest/services/mpcm/bcgw/MapServer",
+      "dynamicLayers": [
+        "{\"id\":2061,\"definitionExpression\":\"YEAR = '1985'\",\"source\":{\"type\":\"dataLayer\",\"dataSource\":{\"type\":\"table\",\"workspaceId\":\"MPCM_ALL_PUB\",\"dataSourceName\":\"WHSE_REFERENCE.APS_OPERATION_POLYGONS_SP\",\"gdbVersion\":\"\"}},\"drawingInfo\":{\"renderer\":{\"type\":\"simple\",\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[0,0,0,0],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[0,204,204,255],\"width\":2}},\"label\":\"Airphoto Operation Area\",\"description\":\"\"},\"transparency\":0,\"labelingInfo\":null}}"
+      ]
+    },
+    {
+      "type": "wms",
+      "id": "pub:REG_LAND_AND_NATURAL_RESOURCE.FISH_KOKANEE_HAB_ZONES_OK_SP-1059",
+      "title": "Kokanee Habitat Zones Okanagan Region Kokanee Habitat Zones Okanagan Region Colour Themed",
+      "isVisible": true,
+      "attribution": "",
+      "metadataUrl": "",
+      "opacity": 0.65,
+      "isQueryable": true,
+      "attributes": [
+        {
+          "id": "FISH_KHZO_SYSID",
+          "name": "FISH_KHZO_SYSID",
+          "title": "FISH_KHZO_SYSID",
+          "visible": true
+        },
+        {
+          "id": "TIMING_WINDOW",
+          "name": "TIMING_WINDOW",
+          "title": "TIMING_WINDOW",
+          "visible": true
+        },
+        {
+          "id": "SCIENTIFIC_NAME",
+          "name": "SCIENTIFIC_NAME",
+          "title": "SCIENTIFIC_NAME",
+          "visible": true
+        },
+        {
+          "id": "ENGLISH_NAME",
+          "name": "ENGLISH_NAME",
+          "title": "ENGLISH_NAME",
+          "visible": true
+        },
+        {
+          "id": "HABITAT_ZONE",
+          "name": "HABITAT_ZONE",
+          "title": "HABITAT_ZONE",
+          "visible": true
+        },
+        {
+          "id": "BUFFER_DISTANCE",
+          "name": "BUFFER_DISTANCE",
+          "title": "BUFFER_DISTANCE",
+          "visible": true
+        },
+        {
+          "id": "FEATURE_AREA_SQM",
+          "name": "FEATURE_AREA_SQM",
+          "title": "FEATURE_AREA_SQM",
+          "visible": true
+        },
+        {
+          "id": "FEATURE_LENGTH_M",
+          "name": "FEATURE_LENGTH_M",
+          "title": "FEATURE_LENGTH_M",
+          "visible": true
+        },
+        {
+          "id": "OBJECTID",
+          "name": "OBJECTID",
+          "title": "OBJECTID",
+          "visible": true
+        },
+        {
+          "id": "SE_ANNO_CAD_DATA",
+          "name": "SE_ANNO_CAD_DATA",
+          "title": "SE_ANNO_CAD_DATA",
+          "visible": true
+        }
+      ],
+      "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
+      "layerName": "pub:REG_LAND_AND_NATURAL_RESOURCE.FISH_KOKANEE_HAB_ZONES_OK_SP",
+      "styleName": "1059"
+    },
+    {
+      "type": "esri-dynamic",
+      "id": "bc-network-coverage---50-mbps-pct-dwellings-served",
+      "title": "BC Network Coverage - 50 Mbps Pct Dwellings Served",
+      "isVisible": true,
+      "attribution": "Copyright 2019 DataBC, Government of British Columbia",
+      "metadataUrl": "https://catalogue.data.gov.bc.ca/dataset/ee60bfce-e9ce-449b-ba8f-3491553ede35",
+      "opacity": 0.65,
+      "minScale": 9244649,
+      "maxScale": 0,
+      "isQueryable": true,
+      "attributes": [
+        {
+          "id": "hex-code-id",
+          "name": "HEX_CODE_ID",
+          "title": "Hex Code ID",
+          "visible": true
+        },
+        {
+          "id": "population",
+          "name": "POPULATION",
+          "title": "Population",
+          "visible": true
+        },
+        {
+          "id": "total-dwellings",
+          "name": "TOTAL_DWELLINGS",
+          "title": "Total Dwellings",
+          "visible": true
+        },
+        {
+          "id": "usual-residences",
+          "name": "USUAL_RESIDENCES",
+          "title": "Usual Residences",
+          "visible": true
+        },
+        {
+          "id": "wireline-coverage",
+          "name": "WIRELINE_COVERAGE",
+          "title": "Wireline Coverage",
+          "visible": true
+        },
+        {
+          "id": "fixed-wireless-coverage",
+          "name": "FIXED_WIRELESS_COVERAGE",
+          "title": "Fixed Wireless Coverage",
+          "visible": true
+        },
+        {
+          "id": "mobile-wireless-coverage",
+          "name": "MOBILE_WIRELESS_COVERAGE",
+          "title": "Mobile Wireless Coverage",
+          "visible": true
+        },
+        {
+          "id": "satellite-coverage",
+          "name": "SATELLITE_COVERAGE",
+          "title": "Satellite Coverage",
+          "visible": true
+        },
+        {
+          "id": "percent-served-5-mbps",
+          "name": "PERCENT_SERVED_5_MBPS",
+          "title": "Percent Served 5 Mbps",
+          "visible": true
+        },
+        {
+          "id": "percent-served-50-mbps",
+          "name": "PERCENT_SERVED_50_MBPS",
+          "title": "Percent Served 50 Mbps",
+          "visible": true
+        },
+        {
+          "id": "cable-providers",
+          "name": "CABLE_PROVIDERS",
+          "title": "Cable Providers",
+          "visible": true
+        },
+        {
+          "id": "fibre-providers",
+          "name": "FIBRE_PROVIDERS",
+          "title": "Fibre Providers",
+          "visible": true
+        },
+        {
+          "id": "dsl-providers",
+          "name": "DSL_PROVIDERS",
+          "title": "DSL Providers",
+          "visible": true
+        },
+        {
+          "id": "fixed-wireless-providers",
+          "name": "FIXED_WIRELESS_PROVIDERS",
+          "title": "Fixed Wireless Providers",
+          "visible": true
+        },
+        {
+          "id": "satellite-providers",
+          "name": "SATELLITE_PROVIDERS",
+          "title": "Satellite Providers",
+          "visible": true
+        },
+        {
+          "id": "mobile-wireless-providers",
+          "name": "MOBILE_WIRELESS_PROVIDERS",
+          "title": "Mobile Wireless Providers",
+          "visible": true
+        },
+        {
+          "id": "feature-area-sqm",
+          "name": "FEATURE_AREA_SQM",
+          "title": "Feature Area Sqm",
+          "visible": true
+        },
+        {
+          "id": "feature-length-m",
+          "name": "FEATURE_LENGTH_M",
+          "title": "Feature Length M",
+          "visible": true
+        },
+        {
+          "id": "shape",
+          "name": "SHAPE",
+          "title": "SHAPE",
+          "visible": true
+        },
+        {
+          "id": "objectid",
+          "name": "OBJECTID",
+          "title": "OBJECTID",
+          "visible": true
+        }
+      ],
+      "mpcmId": 7590,
+      "mpcmWorkspace": "MPCM_ALL_PUB",
+      "serviceUrl": "https://maps.gov.bc.ca/arcgis/rest/services/mpcm/bcgw/MapServer",
+      "dynamicLayers": [
+        "{\"id\":7590,\"source\":{\"type\":\"dataLayer\",\"dataSource\":{\"type\":\"table\",\"workspaceId\":\"MPCM_ALL_PUB\",\"dataSourceName\":\"WHSE_IMAGERY_AND_BASE_MAPS.BCNC_BC_NETWORK_COVERAGE_SV\",\"gdbVersion\":\"\"}},\"drawingInfo\":{\"renderer\":{\"type\":\"classBreaks\",\"field\":\"PERCENT_SERVED_50_MBPS\",\"classificationMethod\":\"esriClassifyManual\",\"minValue\":-999,\"classBreakInfos\":[{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[0,0,0,0],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":-999,\"label\":\"No reported dwellings\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[255,200,0,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":0,\"label\":\"0\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[255,106,20,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":20.99,\"label\":\"0.1 - 20.9\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[234,82,87,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":40.99,\"label\":\"21 - 40.9\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[207,56,137,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":60.99,\"label\":\"41 - 60.9\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[151,17,202,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":80.99,\"label\":\"61 - 80.9\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[0,0,255,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":100,\"label\":\"81 - 100\",\"description\":\"\"}]},\"transparency\":75,\"labelingInfo\":null}}"
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "type": "about",
+      "enabled": true,
+      "order": 1,
+      "position": "list-menu",
+      "icon": "help",
+      "title": "",
+      "content": ""
+    },
+    {
+      "type": "baseMaps",
+      "enabled": true,
+      "order": 3,
+      "position": [
+        "shortcut-menu",
+        "list-menu",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar"
+      ],
+      "icon": "map",
+      "title": "",
+      "choices": [
+        "Topographic",
+        "Streets",
+        "Imagery",
+        "Oceans",
+        "NationalGeographic",
+        "DarkGray",
+        "Gray"
+      ]
+    },
+    {
+      "type": "coordinate",
+      "enabled": true,
+      "order": 3
+    },
+    {
+      "type": "directions",
+      "enabled": true,
+      "order": 4,
+      "position": [
+        "shortcut-menu",
+        "list-menu",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar"
+      ],
+      "icon": "directions_car",
+      "title": ""
+    },
+    {
+      "type": "identify",
+      "enabled": true,
+      "order": 5,
+      "position": "list-menu",
+      "icon": "info_outline",
+      "title": "Identify Panel",
+      "style": {
+        "strokeStyle": "",
+        "strokeColor": "#000000",
+        "fillColor": "#000000",
+        "markerSize": [
+          20,
+          20
+        ],
+        "markerOffset": [
+          10,
+          0
+        ]
+      },
+      "tolerance": 5
+    },
+    {
+      "type": "layers",
+      "enabled": true,
+      "order": 3,
+      "position": [
+        "shortcut-menu",
+        "list-menu",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar"
+      ],
+      "icon": "layers",
+      "title": "",
+      "display": [
+        {
+          "id": "airphoto-operation-areas--1985----outlined",
+          "type": "layer",
+          "title": "Airphoto Operation Areas (1985) - Outlined",
+          "isVisible": true
+        },
+        {
+          "id": "pub:REG_LAND_AND_NATURAL_RESOURCE.FISH_KOKANEE_HAB_ZONES_OK_SP-1059",
+          "type": "layer",
+          "title": "Kokanee Habitat Zones Okanagan Region Kokanee Habitat Zones Okanagan Region Colour Themed",
+          "isVisible": true
+        },
+        {
+          "id": "bc-network-coverage---50-mbps-pct-dwellings-served",
+          "type": "layer",
+          "title": "BC Network Coverage - 50 Mbps Pct Dwellings Served",
+          "isVisible": true
+        }
+      ]
+    },
+    {
+      "type": "list-menu",
+      "enabled": false
+    },
+    {
+      "type": "location",
+      "enabled": true
+    },
+    {
+      "type": "markup",
+      "enabled": true,
+      "order": 3
+    },
+    {
+      "type": "measure",
+      "enabled": true,
+      "order": 6,
+      "position": [
+        "shortcut-menu",
+        "list-menu",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar"
+      ],
+      "icon": "straighten",
+      "title": "Measurement"
+    },
+    {
+      "type": "minimap",
+      "enabled": true,
+      "order": 1,
+      "baseMap": "Topographic"
+    },
+    {
+      "type": "pan",
+      "enabled": true
+    },
+    {
+      "type": "scale",
+      "enabled": true,
+      "order": 2,
+      "showFactor": true,
+      "showBar": true
+    },
+    {
+      "type": "search",
+      "enabled": true,
+      "order": 2,
+      "position": "toolbar",
+      "icon": "search",
+      "title": "Search for Location"
+    },
+    {
+      "type": "select",
+      "enabled": true,
+      "order": 6,
+      "position": "list-menu",
+      "icon": "select_all",
+      "title": "Selection Panel",
+      "style": {
+        "strokeStyle": "",
+        "strokeColor": "#000000",
+        "fillColor": "#000000",
+        "markerSize": [
+          20,
+          20
+        ],
+        "markerOffset": [
+          10,
+          10
+        ]
+      }
+    },
+    {
+      "type": "shortcut-menu",
+      "enabled": true,
+      "order": 10
+    },
+    {
+      "type": "toolbar",
+      "enabled": true
+    },
+    {
+      "type": "zoom",
+      "enabled": true,
+      "order": 1,
+      "mouseWheel": true,
+      "doubleClick": true,
+      "box": true,
+      "control": true
+    },
+    {
+      "type": "print",
+      "enabled": true,
+      "order": 7,
+      "position": "list-menu",
+      "icon": "print",
+      "title": "Print"
+    },
+    {
+      "type": "attribution",
+      "enabled": true
+    },
+    {
+      "type": "identify-feature",
+      "enabled": true,
+      "position": "list-menu",
+      "title": "Identify Panel"
+    },
+    {
+      "type": "select-feature",
+      "enabled": true,
+      "position": "list-menu",
+      "title": "Selection Panel"
+    },
+    {
+      "type": "search-location",
+      "enabled": true,
+      "position": "toolbar"
+    },
+    {
+      "type": "directions-route",
+      "enabled": true,
+      "position": [
+        "shortcut-menu",
+        "list-menu",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar"
+      ]
+    },
+    {
+      "type": "directions-route",
+      "enabled": true,
+      "position": [
+        "shortcut-menu",
+        "list-menu",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar"
+      ]
+    },
+    {
+      "type": "identify-feature",
+      "enabled": true,
+      "position": "list-menu",
+      "title": "Identify Panel"
+    },
+    {
+      "type": "select-feature",
+      "enabled": true,
+      "position": "list-menu",
+      "title": "Selection Panel"
+    },
+    {
+      "type": "search-location",
+      "enabled": true,
+      "position": "toolbar"
+    }
+  ],
+  "_id": "953b10e7-1f9c-4249-9ed7-86b717b5d003",
+  "_rev": "18-0bb45b6a9c817df9e7a290f154ab8be4"
+}
