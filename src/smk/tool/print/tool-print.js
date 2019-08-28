@@ -221,13 +221,13 @@ include.module( 'tool-print', [ 'tool', 'widgets', 'tool-print.panel-print-html'
 
         // can find co-ordinates and zoom here, but only if it's changed
         if (smk.$viewer.map._animateToCenter){
-            console.log(smk.$viewer.map._animateToCenter)
+            //console.log(smk.$viewer.map._animateToCenter)
             jsonObjectHolder.viewer.location.center[0] = smk.$viewer.map._animateToCenter.lng
             jsonObjectHolder.viewer.location.center[1] = smk.$viewer.map._animateToCenter.lat
         }
         
         if (smk.$viewer.map._animateToZoom){
-            console.log(smk.$viewer.map._animateToZoom)
+            //console.log(smk.$viewer.map._animateToZoom)
             jsonObjectHolder.viewer.location.zoom = smk.$viewer.map._animateToZoom
         }
 
@@ -296,14 +296,16 @@ include.module( 'tool-print', [ 'tool', 'widgets', 'tool-print.panel-print-html'
             'activate': function () {
             
             //This is creating an update to date link of the JSON file to download
-            createJsonLink( smk )
+            createJsonLink( smk );
             
+            console.log ( smk);
             
-            
+            // leaflet specific 
+           
             
             
          
-            console.log ( smk)
+            
             
            
            //if an import has occured this value will be set, and then the next time this button is pressed
@@ -313,6 +315,16 @@ include.module( 'tool-print', [ 'tool', 'widgets', 'tool-print.panel-print-html'
                     smk.$viewer.layerDisplayContext.setItemVisible( jsonOfSMKData.layers[layer].id, visible, false )
                     smk.$viewer.updateLayersVisible()
                 }
+                 // leaflet specific 
+                if (smk.$viewer.type == "leaflet") {
+                var zoom = jsonOfSMKData.viewer.location.zoom; 
+                var center = jsonOfSMKData.viewer.location.center
+                console.log(center)
+                smk.$viewer.currentBasemap[0]._map.setView(new L.LatLng(center[1], center[0]), zoom);
+                } else {
+                    console.log("esri import support not yet implemented")
+                }
+
             }
 
 

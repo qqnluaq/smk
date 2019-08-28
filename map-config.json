@@ -26,10 +26,10 @@
         46.13417004624326
       ],
       "center": [
-        -123.06589582335172,
-        48.487493740555415
+        -108.94177887669596,
+        29.108401288875314
       ],
-      "zoom": 10.06079907681221
+      "zoom": 6.060799076812209
     },
     "baseMap": "NationalGeographic",
     "clusterOption": {
@@ -362,6 +362,9 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar"
       ],
       "icon": "map",
@@ -388,6 +391,12 @@
       "position": [
         "shortcut-menu",
         "list-menu",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar",
         "toolbar",
         "toolbar",
@@ -438,6 +447,9 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar"
       ],
       "icon": "layers",
@@ -483,6 +495,9 @@
       "position": [
         "shortcut-menu",
         "list-menu",
+        "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar",
         "toolbar",
         "toolbar",
@@ -601,8 +616,19 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar"
       ]
+    },
+    {
+      "type": "search-location",
+      "enabled": true,
+      "position": "toolbar"
     },
     {
       "type": "directions-route",
@@ -610,6 +636,12 @@
       "position": [
         "shortcut-menu",
         "list-menu",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar",
         "toolbar",
         "toolbar",
@@ -635,11 +667,6 @@
       "enabled": true,
       "position": "list-menu",
       "title": "Selection Panel"
-    },
-    {
-      "type": "search-location",
-      "enabled": true,
-      "position": "toolbar"
     }
   ],
   "_id": "953b10e7-1f9c-4249-9ed7-86b717b5d003",
