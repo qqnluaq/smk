@@ -109,11 +109,23 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                         console.log("about to loop through drawings")
                         for (var drawing in jsonOfSMKData.drawings) {
                             console.log(jsonOfSMKData.drawings[drawing])
+                            //handling import of circles 
                             if (jsonOfSMKData.drawings[drawing].type == "circle") {
                                 console.log(jsonOfSMKData.drawings[drawing].latlng)
                                 console.log(jsonOfSMKData.drawings[drawing].radius)
                                 L.circle([jsonOfSMKData.drawings[drawing].latlng.lat, jsonOfSMKData.drawings[drawing].latlng.lng], {radius: jsonOfSMKData.drawings[drawing].radius}).addTo(smk.$viewer.currentBasemap[0]._map);
+                            //handling import of lines 
+                            } else if (jsonOfSMKData.drawings[drawing].type == "line") {
+                                console.log(jsonOfSMKData.drawings[drawing].latlngs)
+                                var latlngs = jsonOfSMKData.drawings[drawing].latlngs
+                                L.polyline(latlngs, {color: 'blue'}).addTo(smk.$viewer.currentBasemap[0]._map);
+                            } else if (jsonOfSMKData.drawings[drawing].type == "polygon") {
+                                console.log(jsonOfSMKData.drawings[drawing].latlngs)
+                                var latlngs = jsonOfSMKData.drawings[drawing].latlngs
+                                L.polygon(latlngs, {color: '#3498db'}).addTo(smk.$viewer.currentBasemap[0]._map);
                             }
+
+
                         }
                         //L.circle([25.695809175817676, 2.08601363120728], {radius: 2024869.5610604829}).addTo(smk.$viewer.currentBasemap[0]._map);
                     

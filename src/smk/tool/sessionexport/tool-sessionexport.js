@@ -239,18 +239,44 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
         // handle the export of circles created in leaflet here
         if (smk.$viewer.type == "leaflet") {
-            for (var checkTest in smk.$viewer.map._layers) {
-                if (smk.$viewer.map._layers[checkTest]._mRadius && smk.$viewer.map._layers[checkTest]._latlng) {
-                    console.log("_mRadius exists and is: ", smk.$viewer.map._layers[checkTest]._mRadius)
-                    var radius = smk.$viewer.map._layers[checkTest]._mRadius
+            for (var drawing in smk.$viewer.map._layers) {
+                if (smk.$viewer.map._layers[drawing]._mRadius && smk.$viewer.map._layers[drawing]._latlng) {
+                    console.log("_mRadius exists and is: ", smk.$viewer.map._layers[drawing]._mRadius)
+                    var radius = smk.$viewer.map._layers[drawing]._mRadius
                     console.log(radius)
-                    console.log("_latling exists and is: ", smk.$viewer.map._layers[checkTest]._latlng)
-                    var latlng = smk.$viewer.map._layers[checkTest]._latlng
+                    console.log("_latling exists and is: ", smk.$viewer.map._layers[drawing]._latlng)
+                    var latlng = smk.$viewer.map._layers[drawing]._latlng
                     console.log(latlng)
                     var circleObj = { type: "circle", latlng, radius}
                     jsonObjectHolder.drawings.push(circleObj)
 
+                // handle support for lines and those other things that I don't really know what they are
+                } else if (smk.$viewer.map._layers[drawing]._latlngs && smk.$viewer.map._layers[drawing]._path) {
+                    if ( smk.$viewer.map._layers[drawing]._path.attributes[6].nodeValue == "none") {
+                        // handle retriveing the latlangs needed for making a line, and give it the type of "line"
+                        console.log("This is a line!")
+                        console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
+                        var latlngs = smk.$viewer.map._layers[drawing]._latlngs
+                        console.log(latlngs)
+                        var lineObj = { type: "line", latlngs}
+                        jsonObjectHolder.drawings.push(lineObj)
+
+                        
+                    } else { //if nodeValue is not "none" then it's a polyline thing
+                        console.log("This is a polygon")
+                        console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
+                        var latlngs = smk.$viewer.map._layers[drawing]._latlngs
+                        console.log(latlngs)
+                        var polygonObj = { type: "polygon", latlngs}
+                        jsonObjectHolder.drawings.push(polygonObj)
+                        
+
+                    }
+                  
+
                 }
+                
+                
             
             }
         } else {
@@ -283,16 +309,35 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
     sessionexportTool.prototype.afterInitialize.push( function ( smk ) {
         smk.on( this.id, {
             'activate': function () {
-            
+           
             
             
 
             
             //console.log(smk.$viewer.map._layers)
+
+
             //This is creating an update to date link of the JSON file to download
             createJsonLink( smk );
             
-                
+
+
+
+
+            //var map = smk.$viewer.currentBasemap[0]._map
+            //L.circle([25.695809175817676, 2.08601363120728], {radius: 2024869.5610604829}).addTo(smk.$viewer.currentBasemap[0]._map);
+            // create a red polyline from an array of LatLng points
+            /*
+            var latlngs = [
+                [33.83577330024089 ,-100.45512544665523],
+                [ 34.58486909930809, -109.07108246262929 ],
+                [33.37961394129598 , -100.51832317537874],
+                [ 33.95817234737975, -99.33863223920628]
+            ];
+            
+            var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+            
+            */
 
             }
         } )
