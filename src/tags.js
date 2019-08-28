@@ -153,6 +153,12 @@ t.group( 'tool-zoom' )
 t.group( 'tool-print' )
     .dir( 'smk/tool/print/*' )
 
+t.group( 'tool-sessionimport' )
+    .dir( 'smk/tool/sessionimport/*' )
+
+t.group( 'tool-sessionexport' )
+    .dir( 'smk/tool/sessionexport/*' )
+
 // ==================================================================================
 // leaflet
 // ==================================================================================

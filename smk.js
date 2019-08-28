@@ -1645,6 +1645,46 @@ include.tag( "tool-select",
     }
 )
 
+include.tag( "tool-sessionexport",
+    {
+        "loader": "group",
+        "tags": [
+            {
+                "url": "smk/tool/sessionexport/panel-sessionexport.html",
+                "loader": "template"
+            },
+            {
+                "url": "smk/tool/sessionexport/tool-sessionexport.css",
+                "loader": "style"
+            },
+            {
+                "url": "smk/tool/sessionexport/tool-sessionexport.js",
+                "loader": "script"
+            }
+        ]
+    }
+)
+
+include.tag( "tool-sessionimport",
+    {
+        "loader": "group",
+        "tags": [
+            {
+                "url": "smk/tool/sessionimport/panel-sessionimport.html",
+                "loader": "template"
+            },
+            {
+                "url": "smk/tool/sessionimport/tool-sessionimport.css",
+                "loader": "style"
+            },
+            {
+                "url": "smk/tool/sessionimport/tool-sessionimport.js",
+                "loader": "script"
+            }
+        ]
+    }
+)
+
 include.tag( "tool-shortcut-menu",
     {
         "loader": "group",
@@ -2514,7 +2554,9 @@ window.include.SMK = true
                     { type: 'toolbar',      enabled: true },
                     // { type: 'version',      enabled: false }, -- so it won't be enabled by show-tools=all
                     { type: 'zoom',         enabled: false, order: 1 },
-                    { type: 'print',        enabled: false, order: 7, position: 'list-menu',                        icon: 'print',          title: 'Print' }
+                    { type: 'print',        enabled: false, order: 7, position: 'list-menu',                        icon: 'print',          title: 'Print' },
+                    { type: 'sessionimport',enabled: false, order: 8, position: 'list-menu',                        icon: 'input',          title: 'Session Import' },
+                    { type: 'sessionexport',enabled: false, order: 8, position: 'list-menu',                        icon: 'backup',         title: 'Session Export' }
                 ]
             },
 
@@ -2527,9 +2569,9 @@ window.include.SMK = true
             },
 
             BUILD: {
-                commit:     'e3f69bfd72b4f60e3ccee65a9b1752dc614b7795',
+                commit:     '3d13e83399fe1912bb3389ae683dc77f90aeb959',
                 branch:     'master',
-                lastCommit: '"2019-08-27 16:21:56 -0700"'.replace( /^"|"$/g, '' ),
+                lastCommit: '"2019-08-28 09:58:39 -0700"'.replace( /^"|"$/g, '' ),
                 origin:     'https://github.com/cebergin/smk-client.git',
                 version:    '0.8.1',
             }

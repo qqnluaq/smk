@@ -580,6 +580,22 @@
       "icon": "print",
       "title": "Print"
     },
+	{
+      "type": "sessionimport",
+      "enabled": true,
+      "order": 8,
+      "position": "list-menu",
+      "icon": "input",
+      "title": "Session Import"
+    },
+	{
+      "type": "sessionexport",
+      "enabled": true,
+      "order": 9,
+      "position": "list-menu",
+      "icon": "backup",
+      "title": "Session Import"
+    },
     {
       "type": "attribution",
       "enabled": true

@@ -646,7 +646,9 @@
                     { type: 'toolbar',      enabled: true },
                     // { type: 'version',      enabled: false }, -- so it won't be enabled by show-tools=all
                     { type: 'zoom',         enabled: false, order: 1 },
-                    { type: 'print',        enabled: false, order: 7, position: 'list-menu',                        icon: 'print',          title: 'Print' }
+                    { type: 'print',        enabled: false, order: 7, position: 'list-menu',                        icon: 'print',          title: 'Print' },
+                    { type: 'sessionimport',enabled: false, order: 8, position: 'list-menu',                        icon: 'input',          title: 'Session Import' },
+                    { type: 'sessionexport',enabled: false, order: 8, position: 'list-menu',                        icon: 'backup',         title: 'Session Export' }
                 ]
             },
 
