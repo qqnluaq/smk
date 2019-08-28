@@ -45,10 +45,13 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
         for (var tool in jsonConfig.tools) {
             //console.log(jsonConfig.tools[tool])
             if (jsonConfig.tools[tool].type == "layers") {
+                console.log("found layers")
                 for ( var item in jsonConfig.tools[tool].display) {
-                    if ( jsonConfig.tools[tool].display[item] == layerId) {
-                        //console.log("Match, setting visibility")
-                        //console.log(jsonConfig.tools[tool].display[item])
+                    console.log("layer id is: ", layerId)
+                    console.log(jsonConfig.tools[tool].display[item])
+                    if ( jsonConfig.tools[tool].display[item].id == layerId) {
+                        console.log("Match, setting visibility")
+                        console.log(jsonConfig.tools[tool].display[item])
 
                         return jsonConfig.tools[tool].display[item].isVisible
                     }
@@ -86,12 +89,13 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                 reader.onload = readerEvent => {
                     jsonOfSMKData = readerEvent.target.result; 
                     jsonOfSMKData = JSON.parse(jsonOfSMKData)
-                    console.log( jsonOfSMKData );
+                    //console.log( jsonOfSMKData );
 
                     //if an import has occured this value will be set, and then the next time this button is pressed
                     if ( jsonOfSMKData != null) {
                         for (var layer in jsonOfSMKData.layers) {
                             var visible = getLayerToolVisibility(jsonOfSMKData, jsonOfSMKData.layers[layer].id )
+                            //console.log("visible is set to", visible)
                             smk.$viewer.layerDisplayContext.setItemVisible( jsonOfSMKData.layers[layer].id, visible, false )
                             smk.$viewer.updateLayersVisible()
                         }
@@ -99,7 +103,7 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                         if (smk.$viewer.type == "leaflet") {
                         var zoom = jsonOfSMKData.viewer.location.zoom; 
                         var center = jsonOfSMKData.viewer.location.center
-                        console.log(center)
+                        //console.log(center)
                         smk.$viewer.currentBasemap[0]._map.setView(new L.LatLng(center[1], center[0]), zoom);
                         } else {
                             console.log("esri import support not yet implemented")

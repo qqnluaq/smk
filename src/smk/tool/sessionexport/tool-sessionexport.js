@@ -190,6 +190,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         }
         // now need to check state and set it appropriately for the various tool displayers
         // first turn everything off
+
         for (var tool in jsonObjectHolder.tools) {
             //console.log(jsonObjectHolder.tools[y])
             if (jsonObjectHolder.tools[tool].type == "layers") {
@@ -199,12 +200,19 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 }
             }
         }
+        
         // then compare the tools display state to every visible layer, if there is a match then turn on the visibility
         for (var x in smk.$viewer.visibleLayer) {
+            
+            
             for (var y in jsonObjectHolder.tools) {
+                
                 if (jsonObjectHolder.tools[y].type == "layers") {
                     for ( var j in jsonObjectHolder.tools[y].display) {
+                        
+
                         if ( x == jsonObjectHolder.tools[y].display[j].id ) {
+                            
                             jsonObjectHolder.tools[y].display[j].isVisible = true
                         }
 
