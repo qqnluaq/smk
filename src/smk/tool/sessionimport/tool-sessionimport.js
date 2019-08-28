@@ -45,13 +45,11 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
         for (var tool in jsonConfig.tools) {
             //console.log(jsonConfig.tools[tool])
             if (jsonConfig.tools[tool].type == "layers") {
-                console.log("found layers")
+                
                 for ( var item in jsonConfig.tools[tool].display) {
-                    console.log("layer id is: ", layerId)
-                    console.log(jsonConfig.tools[tool].display[item])
+                    
                     if ( jsonConfig.tools[tool].display[item].id == layerId) {
-                        console.log("Match, setting visibility")
-                        console.log(jsonConfig.tools[tool].display[item])
+                        
 
                         return jsonConfig.tools[tool].display[item].isVisible
                     }
@@ -101,13 +99,26 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                         }
                         // leaflet specific 
                         if (smk.$viewer.type == "leaflet") {
+
+                        // setting zoom and center for the map
                         var zoom = jsonOfSMKData.viewer.location.zoom; 
                         var center = jsonOfSMKData.viewer.location.center
-                        //console.log(center)
                         smk.$viewer.currentBasemap[0]._map.setView(new L.LatLng(center[1], center[0]), zoom);
-                        } else {
-                            console.log("esri import support not yet implemented")
+                        
+                        //Here we need to loop through the drawings section looking for circle type layers to draw them to the map (can later handle all types of drawings)
+                        console.log("about to loop through drawings")
+                        for (var drawing in jsonOfSMKData.drawings) {
+                            console.log(jsonOfSMKData.drawings[drawing])
+                            if (jsonOfSMKData.drawings[drawing].type == "circle") {
+                                console.log(jsonOfSMKData.drawings[drawing].latlng)
+                                console.log(jsonOfSMKData.drawings[drawing].radius)
+                                L.circle([jsonOfSMKData.drawings[drawing].latlng.lat, jsonOfSMKData.drawings[drawing].latlng.lng], {radius: jsonOfSMKData.drawings[drawing].radius}).addTo(smk.$viewer.currentBasemap[0]._map);
+                            }
                         }
+                        //L.circle([25.695809175817676, 2.08601363120728], {radius: 2024869.5610604829}).addTo(smk.$viewer.currentBasemap[0]._map);
+                    
+                    
+                        }   else {  console.log("esri import support not yet implemented")  }
 
                     }
                 }

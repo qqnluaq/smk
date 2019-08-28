@@ -105,7 +105,9 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 {}
             ],
             "_id": null,
-            "_rev": null
+            "_rev": null,
+            "drawings": [
+            ]
 
             
             }
@@ -235,6 +237,27 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         }
 
 
+        // handle the export of circles created in leaflet here
+        if (smk.$viewer.type == "leaflet") {
+            for (var checkTest in smk.$viewer.map._layers) {
+                if (smk.$viewer.map._layers[checkTest]._mRadius && smk.$viewer.map._layers[checkTest]._latlng) {
+                    console.log("_mRadius exists and is: ", smk.$viewer.map._layers[checkTest]._mRadius)
+                    var radius = smk.$viewer.map._layers[checkTest]._mRadius
+                    console.log(radius)
+                    console.log("_latling exists and is: ", smk.$viewer.map._layers[checkTest]._latlng)
+                    var latlng = smk.$viewer.map._layers[checkTest]._latlng
+                    console.log(latlng)
+                    var circleObj = { type: "circle", latlng, radius}
+                    jsonObjectHolder.drawings.push(circleObj)
+
+                }
+            
+            }
+        } else {
+            console.log ("No esri support for circles yet, sorry.")
+        }
+
+
 
         
         return jsonObjectHolder
@@ -261,6 +284,11 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         smk.on( this.id, {
             'activate': function () {
             
+            
+            
+
+            
+            //console.log(smk.$viewer.map._layers)
             //This is creating an update to date link of the JSON file to download
             createJsonLink( smk );
             
