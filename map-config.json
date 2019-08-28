@@ -594,7 +594,7 @@
       "order": 9,
       "position": "list-menu",
       "icon": "backup",
-      "title": "Session Import"
+      "title": "Session Export"
     },
     {
       "type": "attribution",

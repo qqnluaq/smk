@@ -3,9 +3,8 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
     
     var jsonDownloadValue = "Normal"
-    var mapLayersJSON = null
     var dynamicLink = "Placeholder"
-    var jsonOfSMKData = null
+
     
     
 
@@ -23,13 +22,8 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
               jsonDownloadLink: jsonDownloadValue,
               titleCheck: dynamicLink
             }
-          },
-          methods: {
-            previewFiles() {
-              this.files = this.$refs.myFiles.files
-              handleFiles (this.files)
-            }
-        }
+          }
+        
     } )
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
@@ -60,9 +54,10 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         var blob = new Blob([JSON.stringify(copyIntoJSONObject( smk ), null, 2)], {type : 'application/json'});
         var a = document.createElement('a');
         a.href = window.URL.createObjectURL(blob)
-        a.download = 'data.json';
+        a.download = 'map-config.json';
         a.innerHTML = 'download JSON';
         jsonDownloadValue = a
+        a.dispatchEvent(new MouseEvent(`click`, {bubbles: true, cancelable: true, view: window}));
     }
 
 
@@ -237,45 +232,10 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         return jsonObjectHolder
     }
 
-    //if passed in a config file and a layerID returns the true/false value of it's visibility from tools.display
-    function getLayerToolVisibility ( jsonConfig, layerId ) {
-        for (var tool in jsonConfig.tools) {
-            //console.log(jsonConfig.tools[tool])
-            if (jsonConfig.tools[tool].type == "layers") {
-                for ( var item in jsonConfig.tools[tool].display) {
-                    if ( jsonConfig.tools[tool].display[item] == layerId) {
-                        //console.log("Match, setting visibility")
-                        //console.log(jsonConfig.tools[tool].display[item])
-
-                        return jsonConfig.tools[tool].display[item].isVisible
-                    }
-                    
-                    
-                }
-            }
-        }
-    }
 
 
-    //Handles the importing of a json file created by smk which eventually populates the  mapLayersJSON variable with the layers
-    function handleFiles ( files ) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-        //console.log('', event.target.result);
-        json = event.target.result
-        //console.log(JSON.parse(json))
-        //console.log(typeof(json))
-        var mapLayersJSON = JSON.parse ( json )
-        //console.log("imported map layers json are: ")
-        //console.log(mapLayersJSON)
-        //console.log("type of mapLayersJSON is:")
-        //console.log(typeof(mapLayersJSON))
-        jsonOfSMKData = mapLayersJSON
-        
 
-        };
-        var json = reader.readAsText(files[0]);
-    }
+
 
 
 
@@ -290,49 +250,12 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     sessionexportTool.prototype.afterInitialize.push( function ( smk ) {
-        var self = this
-
         smk.on( this.id, {
             'activate': function () {
             
             //This is creating an update to date link of the JSON file to download
             createJsonLink( smk );
             
-            console.log ( smk);
-            
-            // leaflet specific 
-           
-            
-            
-         
-            
-            
-           
-           //if an import has occured this value will be set, and then the next time this button is pressed
-            if ( jsonOfSMKData != null) {
-                for (var layer in jsonOfSMKData.layers) {
-                    var visible = getLayerToolVisibility(jsonOfSMKData, jsonOfSMKData.layers[layer].id )
-                    smk.$viewer.layerDisplayContext.setItemVisible( jsonOfSMKData.layers[layer].id, visible, false )
-                    smk.$viewer.updateLayersVisible()
-                }
-                 // leaflet specific 
-                if (smk.$viewer.type == "leaflet") {
-                var zoom = jsonOfSMKData.viewer.location.zoom; 
-                var center = jsonOfSMKData.viewer.location.center
-                console.log(center)
-                smk.$viewer.currentBasemap[0]._map.setView(new L.LatLng(center[1], center[0]), zoom);
-                } else {
-                    console.log("esri import support not yet implemented")
-                }
-
-            }
-
-
-            if ( !self.enabled ) return
-
-
-            self.active = !self.active
-
                 
 
             }
