@@ -127,77 +127,109 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         var jsonObjectHolder = createSMKJSONObject()
 
         if ( jsonObjectHolder.hasOwnProperty("lmfId")  && smk.hasOwnProperty('lmfId')){
-            //console.log ("both have a lmfid property")
+            ////console.log ("both have a lmfid property")
             jsonObjectHolder.lmfId = smk.lmfId
         }
         if ( jsonObjectHolder.hasOwnProperty("lmfRevision")  && smk.hasOwnProperty('lmfRevision')){
-            //console.log ("both have a lmfRevision property")
+            ////console.log ("both have a lmfRevision property")
             jsonObjectHolder.lmfRevision = smk.lmfRevision
         }
         if ( jsonObjectHolder.hasOwnProperty("version")  && smk.hasOwnProperty('version')){
-            //console.log ("both have a version property")
+            ////console.log ("both have a version property")
             jsonObjectHolder.version = smk.version
         }
         if ( jsonObjectHolder.hasOwnProperty("name")  && smk.hasOwnProperty('name')){
-            //console.log ("both have a name property")
+            ////console.log ("both have a name property")
             jsonObjectHolder.name = smk.name
         }
         if ( jsonObjectHolder.hasOwnProperty("project")  && smk.hasOwnProperty('project')){
-            //console.log ("both have a project property")
+            ////console.log ("both have a project property")
             jsonObjectHolder.project = smk.project
         }
         if ( jsonObjectHolder.hasOwnProperty("createdBy")  && smk.hasOwnProperty('createdBy')){
-            //console.log ("both have a createdBy property")
+            ////console.log ("both have a createdBy property")
             jsonObjectHolder.createdBy = smk.createdBy
         }
         if ( jsonObjectHolder.hasOwnProperty("createdDate")  && smk.hasOwnProperty('createdDate')){
-            //console.log ("both have a createdDate property")
+            ////console.log ("both have a createdDate property")
             jsonObjectHolder.createdDate = smk.createdDate
         }
         if ( jsonObjectHolder.hasOwnProperty("modifiedBy")  && smk.hasOwnProperty('modifiedBy')){
-            //console.log ("both have a modifiedBy property")
+            ////console.log ("both have a modifiedBy property")
             jsonObjectHolder.modifiedBy = smk.modifiedBy
         }
         if ( jsonObjectHolder.hasOwnProperty("modifiedDate")  && smk.hasOwnProperty('modifiedDate')){
-            //console.log ("both have a modifiedDate property")
+            ////console.log ("both have a modifiedDate property")
             jsonObjectHolder.modifiedDate = smk.modifiedDate
         }
         if ( jsonObjectHolder.hasOwnProperty("published")  && smk.hasOwnProperty('published')){
-            //console.log ("both have a published property")
+            ////console.log ("both have a published property")
             jsonObjectHolder.published = smk.published
         }
         if ( jsonObjectHolder.hasOwnProperty("surround")  && smk.hasOwnProperty('surround')){
-            //console.log ("both have a surround property")
+            ////console.log ("both have a surround property")
             jsonObjectHolder.surround = smk.surround
         }
         if ( jsonObjectHolder.hasOwnProperty("viewer")  && smk.hasOwnProperty('viewer')){
-            //console.log ("both have a viewer property")
+            ////console.log ("both have a viewer property")
             jsonObjectHolder.viewer = smk.viewer
+            var baseMap
+            if ( smk.$viewer.currentBasemap[0]._url.includes("World_Topo_Map")) {
+                baseMap = "Topographic"
+                
+            }
+            if ( smk.$viewer.currentBasemap[0]._url.includes("World_Street_Map")) {
+                baseMap = "Streets"
+                
+                
+            }
+            if ( smk.$viewer.currentBasemap[0]._url.includes("World_Imagery")) {
+                baseMap = "Imagery"
+                
+            }
+            if ( smk.$viewer.currentBasemap[0]._url.includes("World_Ocean_Base")) {
+                baseMap = "Oceans"
+                
+            }
+            if ( smk.$viewer.currentBasemap[0]._url.includes("NatGeo_World_Map")) {
+                baseMap = "National Geographic"
+                
+            }
+            if ( smk.$viewer.currentBasemap[0]._url.includes("World_Dark_Gray_Base")) {
+                baseMap = "Dark Grey"
+                
+            }
+            if ( smk.$viewer.currentBasemap[0]._url.includes("World_Light_Gray_Base")) {
+                baseMap = "Gray"
+                
+            }
+            jsonObjectHolder.viewer.baseMap = baseMap;
+
         }
         if ( jsonObjectHolder.hasOwnProperty("layers")  && smk.hasOwnProperty('layers')){
-            //console.log ("both have a layers property")
+            ////console.log ("both have a layers property")
             jsonObjectHolder.layers = smk.layers
         }
         if ( jsonObjectHolder.hasOwnProperty("tools")  && smk.hasOwnProperty("tools")){
-            //console.log ("both have a tools property")
+            ////console.log ("both have a tools property")
             jsonObjectHolder.tools = smk.tools
         }
         if ( jsonObjectHolder.hasOwnProperty("_id")  && smk.hasOwnProperty('_id')){
-            //console.log ("both have a _id property")
+            ////console.log ("both have a _id property")
             jsonObjectHolder._id = smk._id
         }
         if ( jsonObjectHolder.hasOwnProperty("_rev")  && smk.hasOwnProperty('_rev')){
-            //console.log ("both have a _rev property")
+            ////console.log ("both have a _rev property")
             jsonObjectHolder._rev = smk._rev
         }
         // now need to check state and set it appropriately for the various tool displayers
         // first turn everything off
 
         for (var tool in jsonObjectHolder.tools) {
-            //console.log(jsonObjectHolder.tools[y])
+            ////console.log(jsonObjectHolder.tools[y])
             if (jsonObjectHolder.tools[tool].type == "layers") {
                 for ( var item in jsonObjectHolder.tools[tool].display) {
-                    //console.log(jsonObjectHolder.tools[y].display[x])
+                    ////console.log(jsonObjectHolder.tools[y].display[x])
                     jsonObjectHolder.tools[tool].display[item].isVisible = false
                 }
             }
@@ -226,13 +258,13 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
         // can find co-ordinates and zoom here, but only if it's changed
         if (smk.$viewer.map._animateToCenter){
-            //console.log(smk.$viewer.map._animateToCenter)
+            ////console.log(smk.$viewer.map._animateToCenter)
             jsonObjectHolder.viewer.location.center[0] = smk.$viewer.map._animateToCenter.lng
             jsonObjectHolder.viewer.location.center[1] = smk.$viewer.map._animateToCenter.lat
         }
         
         if (smk.$viewer.map._animateToZoom){
-            //console.log(smk.$viewer.map._animateToZoom)
+            ////console.log(smk.$viewer.map._animateToZoom)
             jsonObjectHolder.viewer.location.zoom = smk.$viewer.map._animateToZoom
         }
 
@@ -241,12 +273,12 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         if (smk.$viewer.type == "leaflet") {
             for (var drawing in smk.$viewer.map._layers) {
                 if (smk.$viewer.map._layers[drawing]._mRadius && smk.$viewer.map._layers[drawing]._latlng) {
-                    console.log("_mRadius exists and is: ", smk.$viewer.map._layers[drawing]._mRadius)
+                    //console.log("_mRadius exists and is: ", smk.$viewer.map._layers[drawing]._mRadius)
                     var radius = smk.$viewer.map._layers[drawing]._mRadius
-                    console.log(radius)
-                    console.log("_latling exists and is: ", smk.$viewer.map._layers[drawing]._latlng)
+                    //console.log(radius)
+                    //console.log("_latling exists and is: ", smk.$viewer.map._layers[drawing]._latlng)
                     var latlng = smk.$viewer.map._layers[drawing]._latlng
-                    console.log(latlng)
+                    //console.log(latlng)
                     var circleObj = { type: "circle", latlng, radius}
                     jsonObjectHolder.drawings.push(circleObj)
 
@@ -254,33 +286,40 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 } else if (smk.$viewer.map._layers[drawing]._latlngs && smk.$viewer.map._layers[drawing]._path) {
                     if ( smk.$viewer.map._layers[drawing]._path.attributes[6].nodeValue == "none") {
                         // handle retriveing the latlangs needed for making a line, and give it the type of "line"
-                        console.log("This is a line!")
-                        console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
+                        //console.log("This is a line!")
+                        //console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
                         var latlngs = smk.$viewer.map._layers[drawing]._latlngs
-                        console.log(latlngs)
+                        //console.log(latlngs)
                         var lineObj = { type: "line", latlngs}
                         jsonObjectHolder.drawings.push(lineObj)
 
                         
                     } else { //if nodeValue is not "none" then it's a polyline thing
-                        console.log("This is a polygon")
-                        console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
+                        //console.log("This is a polygon")
+                        //console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
                         var latlngs = smk.$viewer.map._layers[drawing]._latlngs
-                        console.log(latlngs)
+                        //console.log(latlngs)
                         var polygonObj = { type: "polygon", latlngs}
                         jsonObjectHolder.drawings.push(polygonObj)
                         
 
                     }
                   
+                    // handle exporting of markers
 
+                } else if (smk.$viewer.map._layers[drawing]._icon && smk.$viewer.map._layers[drawing]._latlng && smk.$viewer.map._layers[drawing]._shadow) {
+                    var latlng = smk.$viewer.map._layers[drawing]._latlng
+                    var markerObj = { type: "marker", latlng}
+                    jsonObjectHolder.drawings.push(markerObj)
+                    //console.log("another marker hmm")
+                    //console.log(smk.$viewer.map._layers[drawing])
                 }
                 
                 
             
             }
         } else {
-            console.log ("No esri support for circles yet, sorry.")
+            //console.log ("No esri support for circles yet, sorry.")
         }
 
 
@@ -310,34 +349,32 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         smk.on( this.id, {
             'activate': function () {
            
-            
-            
-
-            
-            //console.log(smk.$viewer.map._layers)
-
-
             //This is creating an update to date link of the JSON file to download
+            //often disabled during testing and should be re-enabled
             createJsonLink( smk );
+
+            console.log ( smk.$viewer )
+            
+           
+            
+            
+            
+
+            
+            
+            
+            
+
+            
+            
+
+
+            
             
 
 
 
 
-            //var map = smk.$viewer.currentBasemap[0]._map
-            //L.circle([25.695809175817676, 2.08601363120728], {radius: 2024869.5610604829}).addTo(smk.$viewer.currentBasemap[0]._map);
-            // create a red polyline from an array of LatLng points
-            /*
-            var latlngs = [
-                [33.83577330024089 ,-100.45512544665523],
-                [ 34.58486909930809, -109.07108246262929 ],
-                [33.37961394129598 , -100.51832317537874],
-                [ 33.95817234737975, -99.33863223920628]
-            ];
-            
-            var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
-            
-            */
 
             }
         } )
