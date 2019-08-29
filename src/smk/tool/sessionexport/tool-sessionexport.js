@@ -51,8 +51,8 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
     // downloadable object
     function createJsonLink ( smk ) {
 
-        var blob = new Blob([JSON.stringify(copyIntoJSONObject( smk ), null, 2)], {type : 'application/json'});
-        var a = document.createElement('a');
+        let blob = new Blob([JSON.stringify(copyIntoJSONObject( smk ), null, 2)], {type : 'application/json'});
+        let a = document.createElement('a');
         a.href = window.URL.createObjectURL(blob)
         a.download = 'map-config.json';
         a.innerHTML = 'download JSON';
@@ -64,7 +64,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
     // creates a JSON object using the same structure as the eventual format as a map-config file
     function createSMKJSONObject () {
 
-        var smkJSONHolder = {
+        let smkJSONHolder = {
                 "lmfId": null,
                 "lmfRevision" : null,
                 "version" : null,
@@ -116,7 +116,14 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
     }
 
-    
+    //check if the passed object has tooltip, if it does it has content to be returned
+    function checkForContent ( obj) {
+        let content = null
+        if ( obj._tooltip ) {
+            content = obj._tooltip._content
+        }
+        return content
+    }
 
     // takes the empty JSON holder and the smk object and fills the smkJSON holder with the useful values of smk to create a JSON file that can be used as a map-config
     // or at least as a similar file
@@ -124,7 +131,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
     // has to check state to see if the layers are enabled or disabled as well via checking smk.$viewer.visibleLayer
     function copyIntoJSONObject ( smk ){
-        var jsonObjectHolder = createSMKJSONObject()
+        let jsonObjectHolder = createSMKJSONObject()
 
         if ( jsonObjectHolder.hasOwnProperty("lmfId")  && smk.hasOwnProperty('lmfId')){
             ////console.log ("both have a lmfid property")
@@ -173,7 +180,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         if ( jsonObjectHolder.hasOwnProperty("viewer")  && smk.hasOwnProperty('viewer')){
             ////console.log ("both have a viewer property")
             jsonObjectHolder.viewer = smk.viewer
-            var baseMap
+            let baseMap
             if ( smk.$viewer.currentBasemap[0]._url.includes("World_Topo_Map")) {
                 baseMap = "Topographic"
                 
@@ -192,11 +199,11 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 
             }
             if ( smk.$viewer.currentBasemap[0]._url.includes("NatGeo_World_Map")) {
-                baseMap = "National Geographic"
+                baseMap = "NationalGeographic"
                 
             }
             if ( smk.$viewer.currentBasemap[0]._url.includes("World_Dark_Gray_Base")) {
-                baseMap = "Dark Grey"
+                baseMap = "DarkGray"
                 
             }
             if ( smk.$viewer.currentBasemap[0]._url.includes("World_Light_Gray_Base")) {
@@ -225,10 +232,10 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         // now need to check state and set it appropriately for the various tool displayers
         // first turn everything off
 
-        for (var tool in jsonObjectHolder.tools) {
+        for (let tool in jsonObjectHolder.tools) {
             ////console.log(jsonObjectHolder.tools[y])
             if (jsonObjectHolder.tools[tool].type == "layers") {
-                for ( var item in jsonObjectHolder.tools[tool].display) {
+                for ( let item in jsonObjectHolder.tools[tool].display) {
                     ////console.log(jsonObjectHolder.tools[y].display[x])
                     jsonObjectHolder.tools[tool].display[item].isVisible = false
                 }
@@ -236,13 +243,13 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         }
         
         // then compare the tools display state to every visible layer, if there is a match then turn on the visibility
-        for (var x in smk.$viewer.visibleLayer) {
+        for (let x in smk.$viewer.visibleLayer) {
             
             
-            for (var y in jsonObjectHolder.tools) {
+            for (let y in jsonObjectHolder.tools) {
                 
                 if (jsonObjectHolder.tools[y].type == "layers") {
-                    for ( var j in jsonObjectHolder.tools[y].display) {
+                    for ( let j in jsonObjectHolder.tools[y].display) {
                         
 
                         if ( x == jsonObjectHolder.tools[y].display[j].id ) {
@@ -271,45 +278,52 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
         // handle the export of circles created in leaflet here
         if (smk.$viewer.type == "leaflet") {
-            for (var drawing in smk.$viewer.map._layers) {
+            for (let drawing in smk.$viewer.map._layers) {
                 if (smk.$viewer.map._layers[drawing]._mRadius && smk.$viewer.map._layers[drawing]._latlng) {
                     //console.log("_mRadius exists and is: ", smk.$viewer.map._layers[drawing]._mRadius)
-                    var radius = smk.$viewer.map._layers[drawing]._mRadius
+                    let radius = smk.$viewer.map._layers[drawing]._mRadius
                     //console.log(radius)
                     //console.log("_latling exists and is: ", smk.$viewer.map._layers[drawing]._latlng)
-                    var latlng = smk.$viewer.map._layers[drawing]._latlng
-                    //console.log(latlng)
-                    var circleObj = { type: "circle", latlng, radius}
+                    let latlng = smk.$viewer.map._layers[drawing]._latlng
+                    //checking for _content which would be there if a tooltip had occured
+                    let content = checkForContent( smk.$viewer.map._layers[drawing] )
+                    let circleObj = { type: "circle", latlng, radius, content}
                     jsonObjectHolder.drawings.push(circleObj)
 
-                // handle support for lines and those other things that I don't really know what they are
+                // handle support for lines and polygons
                 } else if (smk.$viewer.map._layers[drawing]._latlngs && smk.$viewer.map._layers[drawing]._path) {
                     if ( smk.$viewer.map._layers[drawing]._path.attributes[6].nodeValue == "none") {
                         // handle retriveing the latlangs needed for making a line, and give it the type of "line"
                         //console.log("This is a line!")
                         //console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
-                        var latlngs = smk.$viewer.map._layers[drawing]._latlngs
-                        //console.log(latlngs)
-                        var lineObj = { type: "line", latlngs}
+                        let latlngs = smk.$viewer.map._layers[drawing]._latlngs
+                        //checking for _content which would be there if a tooltip had occured
+                        let content = checkForContent( smk.$viewer.map._layers[drawing] )
+                        
+                        let lineObj = { type: "line", latlngs, content }
                         jsonObjectHolder.drawings.push(lineObj)
 
                         
-                    } else { //if nodeValue is not "none" then it's a polyline thing
+                    } else { //if nodeValue is not "none" then it's a polygon
                         //console.log("This is a polygon")
                         //console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
-                        var latlngs = smk.$viewer.map._layers[drawing]._latlngs
-                        //console.log(latlngs)
-                        var polygonObj = { type: "polygon", latlngs}
+                        let latlngs = smk.$viewer.map._layers[drawing]._latlngs
+                        //checking for _content which would be there if a tooltip had occured
+                        let content = checkForContent( smk.$viewer.map._layers[drawing] )
+                        
+                        
+                        let polygonObj = { type: "polygon", latlngs, content}
                         jsonObjectHolder.drawings.push(polygonObj)
                         
 
                     }
                   
                     // handle exporting of markers
-
                 } else if (smk.$viewer.map._layers[drawing]._icon && smk.$viewer.map._layers[drawing]._latlng && smk.$viewer.map._layers[drawing]._shadow) {
-                    var latlng = smk.$viewer.map._layers[drawing]._latlng
-                    var markerObj = { type: "marker", latlng}
+                    let latlng = smk.$viewer.map._layers[drawing]._latlng
+                    //checking for _content which would be there if a tooltip had occured
+                    let content = checkForContent( smk.$viewer.map._layers[drawing] )
+                    let markerObj = { type: "marker", latlng, content  }
                     jsonObjectHolder.drawings.push(markerObj)
                     //console.log("another marker hmm")
                     //console.log(smk.$viewer.map._layers[drawing])
@@ -353,20 +367,27 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             //often disabled during testing and should be re-enabled
             createJsonLink( smk );
 
-            console.log ( smk.$viewer )
             
+            /*
+            let marker = L.marker([50.5, 30.5]).addTo(smk.$viewer.currentBasemap[0]._map);
+            
+            marker.bindTooltip("marker tooltip says ").openTooltip();
+            
+            
+            let latlngs = [
+                [45.51, -122.68],
+                [37.77, -122.43],
+                [34.04, -118.2]
+            ];
+            let polyline = L.polyline(latlngs, {color: 'red'}).addTo(smk.$viewer.currentBasemap[0]._map);
+            
+            
+            polyline.bindTooltip("Polyline has a tooltip").openTooltip();
+            
+
+            console.log ( smk.$viewer.currentBasemap[0]._map._layers )
+            */
            
-            
-            
-            
-
-            
-            
-            
-            
-
-            
-            
 
 
             

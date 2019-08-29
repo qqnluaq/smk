@@ -1,4 +1,4 @@
-include.module( 'tool-print', [ 'tool', 'widgets', 'tool-print.panel-print-html' ], function ( inc ) {
+include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html' ], function ( inc ) {
     "use strict";
 
     
@@ -49,7 +49,8 @@ include.module( 'tool-print', [ 'tool', 'widgets', 'tool-print.panel-print-html'
         smk.on( this.id, {
             'activate': function () {
             window.print()
-         
+                
+            
            
  
 
