@@ -159,6 +159,12 @@ t.group( 'tool-sessionimport' )
 t.group( 'tool-sessionexport' )
     .dir( 'smk/tool/sessionexport/*' )
 
+t.group( 'tool-label' )
+    .dir( 'smk/tool/label/*' )
+
+t.group( 'tool-layerimport' )
+    .dir( 'smk/tool/layerimport/*' )
+
 // ==================================================================================
 // leaflet
 // ==================================================================================

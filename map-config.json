@@ -596,6 +596,22 @@
       "icon": "backup",
       "title": "Session Export"
     },
+	{
+      "type": "label",
+      "enabled": true,
+      "order": 10,
+      "position": "list-menu",
+      "icon": "label",
+      "title": "Label"
+    },
+	{
+      "type": "layerimport",
+      "enabled": true,
+      "order": 11,
+      "position": "list-menu",
+      "icon": "landscape",
+      "title": "Layer Import"
+    },
     {
       "type": "attribution",
       "enabled": true

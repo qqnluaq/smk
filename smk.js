@@ -1097,6 +1097,46 @@ include.tag( "tool-identify",
     }
 )
 
+include.tag( "tool-label",
+    {
+        "loader": "group",
+        "tags": [
+            {
+                "url": "smk/tool/label/panel-label.html",
+                "loader": "template"
+            },
+            {
+                "url": "smk/tool/label/tool-label.css",
+                "loader": "style"
+            },
+            {
+                "url": "smk/tool/label/tool-label.js",
+                "loader": "script"
+            }
+        ]
+    }
+)
+
+include.tag( "tool-layerimport",
+    {
+        "loader": "group",
+        "tags": [
+            {
+                "url": "smk/tool/layerimport/panel-layerimport.html",
+                "loader": "template"
+            },
+            {
+                "url": "smk/tool/layerimport/tool-layerimport.css",
+                "loader": "style"
+            },
+            {
+                "url": "smk/tool/layerimport/tool-layerimport.js",
+                "loader": "script"
+            }
+        ]
+    }
+)
+
 include.tag( "tool-layers",
     {
         "loader": "group",
@@ -2532,31 +2572,33 @@ window.include.SMK = true
                     }
                 },
                 tools: [
-                    { type: 'about',        enabled: false, order: 1, position: 'list-menu',                        icon: 'help',           title: 'About SMK' },
-                    { type: 'baseMaps',     enabled: false, order: 3, position: [ 'shortcut-menu', 'list-menu' ],   icon: 'map',            title: 'Base Maps' },
+                    { type: 'about',        enabled: false, order: 1,   position: 'list-menu',                        icon: 'help',           title: 'About SMK' },
+                    { type: 'baseMaps',     enabled: false, order: 3,   position: [ 'shortcut-menu', 'list-menu' ],   icon: 'map',            title: 'Base Maps' },
                     { type: 'coordinate',   enabled: false, order: 3 },
-                    { type: 'directions',   enabled: false, order: 4, position: [ 'shortcut-menu', 'list-menu' ],   icon: 'directions_car', title: 'Route Planner' },
+                    { type: 'directions',   enabled: false, order: 4,   position: [ 'shortcut-menu', 'list-menu' ],   icon: 'directions_car', title: 'Route Planner' },
                     // { type: 'dropdown',     enabled: false }, -- so it won't be enabled by show-tools=all, no tools use it by default
-                    { type: 'identify',     enabled: false, order: 5, position: 'list-menu',                        icon: 'info_outline',   title: 'Identify Results' },
-                    { type: 'layers',       enabled: false, order: 3, position: [ 'shortcut-menu', 'list-menu' ],   icon: 'layers',         title: 'Layers' },
+                    { type: 'identify',     enabled: false, order: 5,   position: 'list-menu',                        icon: 'info_outline',   title: 'Identify Results' },
+                    { type: 'layers',       enabled: false, order: 3,   position: [ 'shortcut-menu', 'list-menu' ],   icon: 'layers',         title: 'Layers' },
                     { type: 'list-menu',    enabled: false },
                     { type: 'location',     enabled: true },
                     { type: 'markup',       enabled: true,  order: 3 },
-                    { type: 'measure',      enabled: false, order: 6, position: [ 'shortcut-menu', 'list-menu' ],   icon: 'straighten',     title: 'Measurement' },
+                    { type: 'measure',      enabled: false, order: 6,   position: [ 'shortcut-menu', 'list-menu' ],   icon: 'straighten',     title: 'Measurement' },
                     // { type: 'menu',         enabled: false }, -- so it won't be enabled by show-tools=all, no tools use it by default
                     { type: 'minimap',      enabled: false, order: 1 },
                     { type: 'pan',          enabled: false },
                     // { type: 'query',        enabled: false }, -- so it won't be enabled by show-tools=all, as it needs an instance
                     { type: 'scale',        enabled: false, order: 2 },
-                    { type: 'search',       enabled: true,  order: 2, position: 'toolbar',                          icon: 'search',         title: 'Search for Location' },
-                    { type: 'select',       enabled: false, order: 6, position: 'list-menu',                        icon: 'select_all',     title: 'Selected Features' },
+                    { type: 'search',       enabled: true,  order: 2,   position: 'toolbar',                          icon: 'search',         title: 'Search for Location' },
+                    { type: 'select',       enabled: false, order: 6,   position: 'list-menu',                        icon: 'select_all',     title: 'Selected Features' },
                     { type: 'shortcut-menu',enabled: false, order: 10 },
                     { type: 'toolbar',      enabled: true },
                     // { type: 'version',      enabled: false }, -- so it won't be enabled by show-tools=all
                     { type: 'zoom',         enabled: false, order: 1 },
-                    { type: 'print',        enabled: false, order: 7, position: 'list-menu',                        icon: 'print',          title: 'Print' },
-                    { type: 'sessionimport',enabled: false, order: 8, position: 'list-menu',                        icon: 'input',          title: 'Session Import' },
-                    { type: 'sessionexport',enabled: false, order: 8, position: 'list-menu',                        icon: 'backup',         title: 'Session Export' }
+                    { type: 'print',        enabled: false, order: 7,   position: 'list-menu',                        icon: 'print',          title: 'Print' },
+                    { type: 'sessionimport',enabled: false, order: 8,   position: 'list-menu',                        icon: 'input',          title: 'Session Import' },
+                    { type: 'sessionexport',enabled: false, order: 9,   position: 'list-menu',                        icon: 'backup',         title: 'Session Export' },
+                    { type: 'label',        enabled: false, order: 10,  position: 'list-menu',                        icon: 'label',          title: 'Label' },
+                    { type: 'layerimport',  enabled: false, order: 11,  position: 'list-menu',                        icon: 'landscape',      title: 'Layer Import' }
                 ]
             },
 
@@ -2569,9 +2611,9 @@ window.include.SMK = true
             },
 
             BUILD: {
-                commit:     'f57eebf1ea7c4a085a7bcc07ba5cc93663fba645',
+                commit:     '6a34f67cf24b89c3b7573eab664b7d6b18d8fe6c',
                 branch:     'master',
-                lastCommit: '"2019-08-29 11:16:36 -0700"'.replace( /^"|"$/g, '' ),
+                lastCommit: '"2019-08-29 13:52:06 -0700"'.replace( /^"|"$/g, '' ),
                 origin:     'https://github.com/cebergin/smk-client.git',
                 version:    '0.8.1',
             }

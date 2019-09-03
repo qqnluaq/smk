@@ -1,0 +1,17 @@
+<side-panel class="smk-layerimport-panel" v-bind:showHeader="false">
+    <h3 v-if="service">{{ service }} </h3>
+    <h3 v-else>Enter Layer Service:</h3>
+
+    <input type="text" :id="URL" v-model="URL"> 
+    <button v-on:click="fetchLayersFromURL":id="URL" :content="URL" class="toolButton " >Input Layer Service URL</button>
+
+    <ul id="example-1">
+        <li v-for="item in items">
+                
+            {{ item }}  
+          <button v-on:click="setLayerImport":id="item"  class="toolButton" >Import Layer</button>
+ 
+        </li>
+      </ul>
+
+</side-panel>

@@ -367,35 +367,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             //often disabled during testing and should be re-enabled
             createJsonLink( smk );
 
-            
-            /*
-            let marker = L.marker([50.5, 30.5]).addTo(smk.$viewer.currentBasemap[0]._map);
-            
-            marker.bindTooltip("marker tooltip says ").openTooltip();
-            
-            
-            let latlngs = [
-                [45.51, -122.68],
-                [37.77, -122.43],
-                [34.04, -118.2]
-            ];
-            let polyline = L.polyline(latlngs, {color: 'red'}).addTo(smk.$viewer.currentBasemap[0]._map);
-            
-            
-            polyline.bindTooltip("Polyline has a tooltip").openTooltip();
-            
-
-            console.log ( smk.$viewer.currentBasemap[0]._map._layers )
-            */
-           
-
-
-            
-            
-
-
-
-
 
             }
         } )
