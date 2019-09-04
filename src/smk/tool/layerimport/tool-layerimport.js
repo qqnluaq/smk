@@ -20,7 +20,8 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 featureListShow: false,
                 layerListShow: false,
                 jsonFeatures: null,
-                styleName: null
+                styleName: null,
+                selected: 'ARCGis'
                 
             }
           },
@@ -274,6 +275,30 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
             'activate': function () {
             
                 console.log(smk.$viewer.map)
+
+
+                
+                let url = 'https://maps.gov.bc.ca/arcgis/rest/services/mpcm/bcgw/MapServer';
+                let dynamicLayer = '{"id":7557,"minScale":20000000,"maxScale":0,"source":{"type":"dataLayer","dataSource":{"type":"table","workspaceId":"MPCM_ALL_PUB","dataSourceName":"WHSE_WILDLIFE_MANAGEMENT.WLD_WILD_MTN_SHEEP_DISTRIB_SP","gdbVersion":""}},"drawingInfo":{"renderer":{"type":"uniqueValue","field1":"SPECIES_COMMON_NAME","field2":null,"field3":null,"defaultSymbol":null,"defaultLabel":null,"uniqueValueInfos":[{"symbol":{"type":"esriSFS","style":"esriSFSSolid","color":[93,44,112,255],"outline":{"type":"esriSLS","style":"esriSLSSolid","color":[0,0,0,0],"width":1}},"value":"Bighorn Sheep","label":"Bighorn Sheep","description":""},{"symbol":{"type":"esriSFS","style":"esriSFSSolid","color":[240,118,5,255],"outline":{"type":"esriSLS","style":"esriSLSSolid","color":[0,0,0,0],"width":1}},"value":"Thinhorn Sheep","label":"Thinhorn Sheep","description":""}],"fieldDelimiter":","},"transparency":40,"labelingInfo":null}}'
+                dynamicLayer = JSON.parse(dynamicLayer)
+
+                
+                let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
+
+                var layer = L.esri.dynamicMapLayer( {
+                    url:            url,
+                    opacity:        0.65,
+                    dynamicLayers:  dynamicLayer,
+                    maxZoom:        100000,
+                    minZoom:        0
+    
+                }).addTo(map);
+                
+
+                
+                
+                
+                
 
 
                 if ( !self.enabled ) return

@@ -2,44 +2,73 @@
     <h3 v-if="service">{{ service }} </h3>
     <h3 v-else>Enter Layer Service:</h3>
 
-    <input type="text" :id="URL" v-model="URL"> 
-    <button v-on:click="fetchLayersFromURL":id="URL" :content="URL" class="toolButton " >Input Layer Service URL</button>
+    <select v-model="selected">
+        <option value="ARCGis" >ARCGis</option>
+        <option value="wms">wms</option>
+        <option value="Shape">Shape</option>
+        <option value="KML">KML</option>
+        <option value="GeoJSON">GeoJSON</option>
+      </select> 
 
-    <div v-if="featureListShow"> 
-      Feature list show has been enabled
-      {{ layerName }}
-      <li v-for="feature in jsonFeatures">
-                
-          {{ feature.id }}  
-          <button v-on:click="setFeatureImport":id="feature.id"  class="toolButton" >Import Feature</button>
+
+      <div v-if="selected === 'ARCGis'" > 
+        Yes this is the {{ selected}} input area
+      </div>
+
+      <div v-if="selected === 'KML'" > 
+        Yes this is the {{ selected}} input area
+      </div>
+      <div v-if="selected === 'Shape'" > 
+        Yes this is the {{ selected}} input area
+      </div>
+      <div v-if="selected === 'GeoJSON'" > 
+        Yes this is the {{ selected}} input area
+      </div>
+
+      <div v-if="selected === 'wms'" > 
+          Yes this is the {{ selected}} input area
+      <input type="text" :id="URL" v-model="URL"> 
+      <button v-on:click="fetchLayersFromURL":id="URL" :content="URL" class="toolButton " >Input Layer Service URL</button>
+
+      <div v-if="featureListShow"> 
+        Feature list show has been enabled
+        {{ layerName }}
+        <li v-for="feature in jsonFeatures">
+                  
+            {{ feature.id }}  
+            <button v-on:click="setFeatureImport":id="feature.id"  class="toolButton" >Import Feature</button>
+          
+
+        </li>
         
-
-      </li>
-      
-    </div>
+      </div>
 
     
 
-    <div v-if="layerListShow">
-    <ul id="example-1">
-        <li v-for="item in items">
-          
-          <details>
-          <summary>{{ item.layerName }} </summary>
-          <div id="layerDisplay"> 
-          
-          
-          <li v-for="style in item.stylesArr">
-            {{ style.name }}
-            {{ style.title }}
-          <button v-on:click="setLayerImport":id="item.layerName"  :styleName="style.name" :styleTitle="style.title" class="toolButton" >Import Layer & Style</button>
+      <div v-if="layerListShow">
+      <ul id="example-1">
+          <li v-for="item in items">
+            
+            <details>
+            <summary>{{ item.layerName }} </summary>
+            <div id="layerDisplay"> 
+            
+            
+            <li v-for="style in item.stylesArr">
+              {{ style.name }}
+              {{ style.title }}
+            <button v-on:click="setLayerImport":id="item.layerName"  :styleName="style.name" :styleTitle="style.title" class="toolButton" >Import Layer & Style</button>
+            </li>
+            </div>   
+            </details>  
+            
+  
           </li>
-          </div>   
-          </details>  
-          
- 
-        </li>
-      </ul>
-      </div>
+        </ul>
+        </div>
+    </div>
+
+
+
 
 </side-panel>
