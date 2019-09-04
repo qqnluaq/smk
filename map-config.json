@@ -26,10 +26,10 @@
         46.13417004624326
       ],
       "center": [
-        -108.94177887669596,
-        29.108401288875314
+        -122.38690998315262,
+        49.68408113859742
       ],
-      "zoom": 6.060799076812209
+      "zoom": 8.08993973787212
     },
     "baseMap": "NationalGeographic",
     "clusterOption": {
@@ -365,6 +365,7 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
         "toolbar"
       ],
       "icon": "map",
@@ -391,6 +392,8 @@
       "position": [
         "shortcut-menu",
         "list-menu",
+        "toolbar",
+        "toolbar",
         "toolbar",
         "toolbar",
         "toolbar",
@@ -450,6 +453,7 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
         "toolbar"
       ],
       "icon": "layers",
@@ -459,19 +463,19 @@
           "id": "airphoto-operation-areas--1985----outlined",
           "type": "layer",
           "title": "Airphoto Operation Areas (1985) - Outlined",
-          "isVisible": true
+          "isVisible": false
         },
         {
           "id": "pub:REG_LAND_AND_NATURAL_RESOURCE.FISH_KOKANEE_HAB_ZONES_OK_SP-1059",
           "type": "layer",
           "title": "Kokanee Habitat Zones Okanagan Region Kokanee Habitat Zones Okanagan Region Colour Themed",
-          "isVisible": true
+          "isVisible": false
         },
         {
           "id": "bc-network-coverage---50-mbps-pct-dwellings-served",
           "type": "layer",
           "title": "BC Network Coverage - 50 Mbps Pct Dwellings Served",
-          "isVisible": true
+          "isVisible": false
         }
       ]
     },
@@ -495,6 +499,7 @@
       "position": [
         "shortcut-menu",
         "list-menu",
+        "toolbar",
         "toolbar",
         "toolbar",
         "toolbar",
@@ -580,7 +585,7 @@
       "icon": "print",
       "title": "Print"
     },
-	{
+    {
       "type": "sessionimport",
       "enabled": true,
       "order": 8,
@@ -588,7 +593,7 @@
       "icon": "input",
       "title": "Session Import"
     },
-	{
+    {
       "type": "sessionexport",
       "enabled": true,
       "order": 9,
@@ -596,7 +601,7 @@
       "icon": "backup",
       "title": "Session Export"
     },
-	{
+    {
       "type": "label",
       "enabled": true,
       "order": 10,
@@ -604,7 +609,7 @@
       "icon": "label",
       "title": "Label"
     },
-	{
+    {
       "type": "layerimport",
       "enabled": true,
       "order": 11,
@@ -654,8 +659,16 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar"
       ]
+    },
+    {
+      "type": "identify-feature",
+      "enabled": true,
+      "position": "list-menu",
+      "title": "Identify Panel"
     },
     {
       "type": "search-location",
@@ -685,14 +698,10 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar"
       ]
-    },
-    {
-      "type": "identify-feature",
-      "enabled": true,
-      "position": "list-menu",
-      "title": "Identify Panel"
     },
     {
       "type": "select-feature",
@@ -702,5 +711,6 @@
     }
   ],
   "_id": "953b10e7-1f9c-4249-9ed7-86b717b5d003",
-  "_rev": "18-0bb45b6a9c817df9e7a290f154ab8be4"
+  "_rev": "18-0bb45b6a9c817df9e7a290f154ab8be4",
+  "drawings": []
 }

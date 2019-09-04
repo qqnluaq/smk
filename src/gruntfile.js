@@ -106,6 +106,7 @@ module.exports = function( grunt ) {
                 sub: true,
                 browser: true,
                 devel: true,
+				esversion: 8,
 
                 '-W018': true, // confusing use of !
 

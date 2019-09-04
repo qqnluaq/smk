@@ -5,13 +5,41 @@
     <input type="text" :id="URL" v-model="URL"> 
     <button v-on:click="fetchLayersFromURL":id="URL" :content="URL" class="toolButton " >Input Layer Service URL</button>
 
+    <div v-if="featureListShow"> 
+      Feature list show has been enabled
+      {{ layerName }}
+      <li v-for="feature in jsonFeatures">
+                
+          {{ feature.id }}  
+          <button v-on:click="setFeatureImport":id="feature.id"  class="toolButton" >Import Feature</button>
+        
+
+      </li>
+      
+    </div>
+
+    
+
+    <div v-if="layerListShow">
     <ul id="example-1">
         <li v-for="item in items">
-                
-            {{ item }}  
-          <button v-on:click="setLayerImport":id="item"  class="toolButton" >Import Layer</button>
+          
+          <details>
+          <summary>{{ item.layerName }} </summary>
+          <div id="layerDisplay"> 
+          
+          
+          <li v-for="style in item.stylesArr">
+            {{ style.name }}
+            {{ style.title }}
+          <button v-on:click="setLayerImport":id="item.layerName"  :styleName="style.name" :styleTitle="style.title" class="toolButton" >Import Layer & Style</button>
+          </li>
+          </div>   
+          </details>  
+          
  
         </li>
       </ul>
+      </div>
 
 </side-panel>
