@@ -26,10 +26,10 @@
         46.13417004624326
       ],
       "center": [
-        -122.38690998315262,
-        49.68408113859742
+        -119.55712346644857,
+        49.76464455167632
       ],
-      "zoom": 8.08993973787212
+      "zoom": 10.466480296746091
     },
     "baseMap": "NationalGeographic",
     "clusterOption": {
@@ -366,6 +366,8 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar"
       ],
       "icon": "map",
@@ -392,6 +394,10 @@
       "position": [
         "shortcut-menu",
         "list-menu",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar",
         "toolbar",
         "toolbar",
@@ -454,6 +460,8 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar"
       ],
       "icon": "layers",
@@ -469,7 +477,7 @@
           "id": "pub:REG_LAND_AND_NATURAL_RESOURCE.FISH_KOKANEE_HAB_ZONES_OK_SP-1059",
           "type": "layer",
           "title": "Kokanee Habitat Zones Okanagan Region Kokanee Habitat Zones Okanagan Region Colour Themed",
-          "isVisible": false
+          "isVisible": true
         },
         {
           "id": "bc-network-coverage---50-mbps-pct-dwellings-served",
@@ -499,6 +507,8 @@
       "position": [
         "shortcut-menu",
         "list-menu",
+        "toolbar",
+        "toolbar",
         "toolbar",
         "toolbar",
         "toolbar",
@@ -661,19 +671,12 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar"
       ]
-    },
-    {
-      "type": "identify-feature",
-      "enabled": true,
-      "position": "list-menu",
-      "title": "Identify Panel"
-    },
-    {
-      "type": "search-location",
-      "enabled": true,
-      "position": "toolbar"
     },
     {
       "type": "directions-route",
@@ -700,8 +703,23 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar"
       ]
+    },
+    {
+      "type": "identify-feature",
+      "enabled": true,
+      "position": "list-menu",
+      "title": "Identify Panel"
+    },
+    {
+      "type": "search-location",
+      "enabled": true,
+      "position": "toolbar"
     },
     {
       "type": "select-feature",

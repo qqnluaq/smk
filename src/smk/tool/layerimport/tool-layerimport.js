@@ -15,8 +15,8 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
             return {
                 items: '',
                 service: '',
-                URL: 'https://openmaps.gov.bc.ca/geo/pub/ows',
-                //URL: 'https://openmaps.gov.bc.ca/geo/pub/REG_LEGAL_AND_ADMIN_BOUNDARIES.QSOI_BC_REGIONS/ows?service=WMS&request=GetCapabilities',
+                //URL: 'https://openmaps.gov.bc.ca/geo/pub/ows',
+                URL: 'https://openmaps.gov.bc.ca/geo/pub/REG_LEGAL_AND_ADMIN_BOUNDARIES.QSOI_BC_REGIONS/ows?service=WMS&request=GetCapabilities',
                 featureListShow: false,
                 layerListShow: false,
                 jsonFeatures: null,
@@ -244,10 +244,10 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
     }
     
+
+    /*
     //gets a list of all the feature layers from a layer name and WMS returning all the features available to that layer, these can be display
-
-
-
+    //currently not required
     async function asyncGetFeaturesFromWMS (layerName, wmsURLService) {
         console.log('the url of the wms is:', wmsURLService )
 
@@ -259,6 +259,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         return json
 
     }
+    */
 
     SMK.TYPE.layerimportTool = layerimportTool
 
@@ -272,45 +273,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         smk.on( this.id, {
             'activate': function () {
             
-            
-                
-                //feature request, directly getting all the features based on a layer name, outputs in JSON!
-                /*
-                
-                fetch('https://openmaps.gov.bc.ca/geo/pub/WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY/ows?service=WFS&request=GetFeature&typeNames=WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY&outputformat=application%2Fjson')
-                .then(
-                    function(response) {
-                    if (response.status !== 200) {
-                        console.log('Looks like there was a problem. Status Code: ' +
-                        response.status);
-                        return;
-                    }
-
-                    // Examine the text in the response
-                    response.json().then(function(data) {
-                    console.log(data);
-               
-                    });
-                    }
-                )
-                .catch(function(err) {
-                    console.log('Fetch Error :-S', err);
-                });
-                */
-
-                    /*
-                var nexrad = L.tileLayer.wms("http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi", {
-                    layers: 'nexrad-n0r-900913',
-                    format: 'image/png',
-                    transparent: true,
-                    attribution: "Weather data © 2012 IEM Nexrad"
-                }).addTo(map);
-                */
-                //console.log(smk)
-                //console.log(smk.$tool)
-            
-
-                
+                console.log(smk.$viewer.map)
 
 
                 if ( !self.enabled ) return

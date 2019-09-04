@@ -229,6 +229,11 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             ////console.log ("both have a _rev property")
             jsonObjectHolder._rev = smk._rev
         }
+
+
+
+
+
         // now need to check state and set it appropriately for the various tool displayers
         // first turn everything off
 
@@ -262,6 +267,58 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 }
             }
         }
+
+
+        // Going to get a list of all the layers currently in the system
+        // then iterate through all existing objects to check for duplicates, if no duplicates are found then add both the tool version
+        // and the layer version to  jsonLayersAndToolsToBeAdded array,
+        //this allows for layers that have been added through tool-layer import to be carried into the main system
+        let arrayOfJSONLayersAndTools = getArrayOfJSONLayers( smk )
+        // need to first loop through all layers, to check for matches, if there is a match then don't add it
+        console.log("The existing layers are: ", jsonObjectHolder.layers)
+        console.log("The array of JSON layers and tools are: ", arrayOfJSONLayersAndTools)
+
+        // this object is going to store all the new layers that we'll add in the step after the for loop
+        let jsonLayersAndToolsToBeAdded = []
+        for (let newLayers in arrayOfJSONLayersAndTools) {
+            for (let layer in jsonObjectHolder.layers) {
+                console.log("existing layer is: ", jsonObjectHolder.layers[layer].id)
+                console.log("possible new layer is: ", arrayOfJSONLayersAndTools[newLayers].jsonLayerInfo.id)
+                if (jsonObjectHolder.layers[layer].id == arrayOfJSONLayersAndTools[newLayers].jsonLayerInfo.id) {
+                    console.log("Match, this layer should not be added")
+                    break;
+                } 
+                // this should mean we're in the last length of the loop and there has not been a match, and therefore this layer should be added
+                console.log("Layer number is: ", layer)
+                console.log("total length is: ", jsonObjectHolder.layers.length)
+                if (layer == (jsonObjectHolder.layers.length - 1)) {
+                    console.log("this one should be added")
+                    console.log("NOT MATCH existing layer is: ", jsonObjectHolder.layers[layer].id)
+                    console.log("NOT MATCH possible new layer is: ", arrayOfJSONLayersAndTools[newLayers].jsonLayerInfo.id)
+
+                    jsonLayersAndToolsToBeAdded.push(arrayOfJSONLayersAndTools[newLayers])
+                }
+            }       
+        }
+
+        console.log("These are the layers and tools that are not duplicates: ", jsonLayersAndToolsToBeAdded)
+        // now to add these layers and tools into the main jsonObjectHolder object so they will be exported correctly
+        for (let layerTool in jsonLayersAndToolsToBeAdded) {
+            jsonObjectHolder.layers.push(jsonLayersAndToolsToBeAdded[layerTool].jsonLayerInfo)
+
+            for (let tool in jsonObjectHolder.tools) {
+                if (jsonObjectHolder.tools[tool].type == "layers" ){
+                    jsonObjectHolder.tools[tool].display.push(jsonLayersAndToolsToBeAdded[layerTool].jsonToolLayerInfo)
+                }
+
+                
+            }
+
+        }
+
+
+
+
 
         // can find co-ordinates and zoom here, but only if it's changed
         if (smk.$viewer.map._animateToCenter){
@@ -344,8 +401,97 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
 
 
+    //grab all the layer info needed required to recreate a layer on load, and return a JSON of that info that can be parse and inserted into
+    // the existing map_config.json structure
+    function getArrayOfJSONLayers( smk ) {
+
+        //final return value holder
+        let arrayOfJSONLayers = [];
+
+        let type = null;
+        let id = null;
+        let title = null;
+        let isVisible = true;
+        let attribution = '';
+        let metadataURL = '';
+        let opacity = 0.65;
+        let isQueryable = true;
+        let attributes = [];
+
+        let serviceUrl = null;
+        let layerName = null;
+        let styleName = null;
+
+        console.log("Hey look this is the array of json layers function start, just checking really");
+        console.log("Oh and here is smk: ", smk);
+        console.log(smk.$viewer.map._layers);
+
+        //this loop needs to create a JSON object for each WMS layer it finds, then add it to the array of all the JSON layer objects we have
+        for (let layer in smk.$viewer.map._layers ) {
+            console.log(smk.$viewer.map._layers[layer])
+            if (smk.$viewer.map._layers[layer].options && smk.$viewer.map._layers[layer].wmsParams) {
+
+                let jsonToolAndLayerInfoCombined = '{ "jsonLayerInfo": "", "jsonToolLayerInfo": ""}'
+                jsonToolAndLayerInfoCombined = JSON.parse(jsonToolAndLayerInfoCombined)
 
 
+                console.log('The service URL is: ', smk.$viewer.map._layers[layer]._url)
+                console.log('The layer is: ', smk.$viewer.map._layers[layer].options.layers)
+                console.log('The style is: ', smk.$viewer.map._layers[layer].options.styles)
+
+                type = smk.$viewer.map._layers[layer].wmsParams.service
+                serviceUrl = smk.$viewer.map._layers[layer]._url
+                layerName = smk.$viewer.map._layers[layer].options.layers
+                styleName = smk.$viewer.map._layers[layer].options.styles
+
+                console.log("layer name is: ", layerName)
+                console.log("The style name is: ", styleName)
+
+
+                id = (layerName + "-" + styleName)
+
+                //This title name is a placeholder
+                title = (layerName + "-" + styleName)
+                title = title.replace(/_/g, " ")
+                console.log("placeholder title is: ", title)
+                console.log("ID is: ", id)
+
+                let jsonLayerInfo = '{  "type": null, "id": null, "title": null, "isVisible": true, "attribution": "", "metadataUrl": "", "opacity": 0.65,  "isQueryable": true, "attributes": [], "serviceUrl":null, "layerName": null, "styleName": null }';
+
+                jsonLayerInfo = JSON.parse(jsonLayerInfo)
+                jsonLayerInfo.type = type.toLowerCase()
+                jsonLayerInfo.id = id
+                jsonLayerInfo.title = title
+                jsonLayerInfo.serviceUrl = serviceUrl
+                jsonLayerInfo.layerName = layerName
+                jsonLayerInfo.styleName = styleName
+                
+
+                console.log("json layer info is: ", jsonLayerInfo)
+
+                let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }'
+                jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo)
+                jsonToolLayerInfo.id = id
+                jsonToolLayerInfo.title = title 
+
+                jsonToolAndLayerInfoCombined.jsonLayerInfo = jsonLayerInfo
+                jsonToolAndLayerInfoCombined.jsonToolLayerInfo = jsonToolLayerInfo
+
+                 // Should be adding to the array here
+                arrayOfJSONLayers.push(jsonToolAndLayerInfoCombined)
+            }
+            
+
+        }
+        
+
+        return (arrayOfJSONLayers)
+        
+
+
+
+
+    }
 
 
 
@@ -367,6 +513,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             //often disabled during testing and should be re-enabled
             createJsonLink( smk );
 
+            //console.log(getArrayOfJSONLayers( smk ))
 
             }
         } )
