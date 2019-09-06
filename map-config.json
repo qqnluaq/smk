@@ -26,10 +26,10 @@
         46.13417004624326
       ],
       "center": [
-        -123.33787501604381,
-        48.44254868327321
+        -123.2688608659317,
+        49.494354653258746
       ],
-      "zoom": 12.910312989156635
+      "zoom": 8.264205943695059
     },
     "baseMap": "NationalGeographic",
     "clusterOption": {
@@ -338,20 +338,6 @@
       "dynamicLayers": [
         "{\"id\":7590,\"source\":{\"type\":\"dataLayer\",\"dataSource\":{\"type\":\"table\",\"workspaceId\":\"MPCM_ALL_PUB\",\"dataSourceName\":\"WHSE_IMAGERY_AND_BASE_MAPS.BCNC_BC_NETWORK_COVERAGE_SV\",\"gdbVersion\":\"\"}},\"drawingInfo\":{\"renderer\":{\"type\":\"classBreaks\",\"field\":\"PERCENT_SERVED_50_MBPS\",\"classificationMethod\":\"esriClassifyManual\",\"minValue\":-999,\"classBreakInfos\":[{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[0,0,0,0],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":-999,\"label\":\"No reported dwellings\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[255,200,0,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":0,\"label\":\"0\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[255,106,20,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":20.99,\"label\":\"0.1 - 20.9\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[234,82,87,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":40.99,\"label\":\"21 - 40.9\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[207,56,137,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":60.99,\"label\":\"41 - 60.9\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[151,17,202,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":80.99,\"label\":\"61 - 80.9\",\"description\":\"\"},{\"symbol\":{\"type\":\"esriSFS\",\"style\":\"esriSFSSolid\",\"color\":[0,0,255,255],\"outline\":{\"type\":\"esriSLS\",\"style\":\"esriSLSSolid\",\"color\":[156,156,156,255],\"width\":1}},\"classMaxValue\":100,\"label\":\"81 - 100\",\"description\":\"\"}]},\"transparency\":75,\"labelingInfo\":null}}"
       ]
-    },
-    {
-      "type": "wms",
-      "id": "pub:REG_LEGAL_AND_ADMIN_BOUNDARIES.QSOI_BC_REGIONS-400",
-      "title": "pub:REG LEGAL AND ADMIN BOUNDARIES.QSOI BC REGIONS-400",
-      "isVisible": true,
-      "attribution": "",
-      "metadataUrl": "",
-      "opacity": 0.65,
-      "isQueryable": true,
-      "attributes": [],
-      "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
-      "layerName": "pub:REG_LEGAL_AND_ADMIN_BOUNDARIES.QSOI_BC_REGIONS",
-      "styleName": "400"
     }
   ],
   "tools": [
@@ -371,6 +357,7 @@
       "position": [
         "shortcut-menu",
         "list-menu",
+        "toolbar",
         "toolbar",
         "toolbar",
         "toolbar",
@@ -411,6 +398,8 @@
       "position": [
         "shortcut-menu",
         "list-menu",
+        "toolbar",
+        "toolbar",
         "toolbar",
         "toolbar",
         "toolbar",
@@ -488,6 +477,7 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
         "toolbar"
       ],
       "icon": "layers",
@@ -497,25 +487,19 @@
           "id": "airphoto-operation-areas--1985----outlined",
           "type": "layer",
           "title": "Airphoto Operation Areas (1985) - Outlined",
-          "isVisible": true
+          "isVisible": false
         },
         {
           "id": "pub:REG_LAND_AND_NATURAL_RESOURCE.FISH_KOKANEE_HAB_ZONES_OK_SP-1059",
           "type": "layer",
           "title": "Kokanee Habitat Zones Okanagan Region Kokanee Habitat Zones Okanagan Region Colour Themed",
-          "isVisible": true
+          "isVisible": false
         },
         {
           "id": "bc-network-coverage---50-mbps-pct-dwellings-served",
           "type": "layer",
           "title": "BC Network Coverage - 50 Mbps Pct Dwellings Served",
-          "isVisible": true
-        },
-        {
-          "id": "pub:REG_LEGAL_AND_ADMIN_BOUNDARIES.QSOI_BC_REGIONS-400",
-          "type": "layer",
-          "title": "pub:REG LEGAL AND ADMIN BOUNDARIES.QSOI BC REGIONS-400",
-          "isVisible": true
+          "isVisible": false
         }
       ]
     },
@@ -539,6 +523,7 @@
       "position": [
         "shortcut-menu",
         "list-menu",
+        "toolbar",
         "toolbar",
         "toolbar",
         "toolbar",
@@ -716,8 +701,21 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar"
       ]
+    },
+    {
+      "type": "identify-feature",
+      "enabled": true,
+      "position": "list-menu",
+      "title": "Identify Panel"
+    },
+    {
+      "type": "search-location",
+      "enabled": true,
+      "position": "toolbar"
     },
     {
       "type": "directions-route",
@@ -754,19 +752,10 @@
         "toolbar",
         "toolbar",
         "toolbar",
+        "toolbar",
+        "toolbar",
         "toolbar"
       ]
-    },
-    {
-      "type": "identify-feature",
-      "enabled": true,
-      "position": "list-menu",
-      "title": "Identify Panel"
-    },
-    {
-      "type": "search-location",
-      "enabled": true,
-      "position": "toolbar"
     },
     {
       "type": "select-feature",

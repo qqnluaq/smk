@@ -1,9 +1,21 @@
 div {
     font-family: "Times New Roman", Times, serif;
-    font-size: 0.925em;
+    font-size: 0.95em;
   }
 
 .layerDisplay {
     font-family: "Times New Roman", Times, serif;
-    font-size: 0.725em;
+    font-size: 0.95em;
+}
+
+li.sublayerOne {
+  text-indent: 1.0em;
+}
+li.sublayerTwo {
+  text-indent: 1.50em;
+}
+
+
+div.mpcmId {
+  text-indent: 2em;
 }

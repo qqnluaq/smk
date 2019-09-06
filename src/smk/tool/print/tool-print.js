@@ -1,9 +1,9 @@
-include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html' ], function ( inc ) {
+include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html', 'lprint' ], function ( inc ) {
     "use strict";
 
     
 
-    
+    let pressed = false;
 
     Vue.component( 'print-widget', {
         extends: inc.widgets.toolButton,
@@ -48,8 +48,24 @@ include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html
         
         smk.on( this.id, {
             'activate': function () {
-            window.print()
+            //window.print()
+            
+            console.log(pressed)
+            if (pressed == false) {
                 
+            let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
+            L.control.browserPrint(
+                {
+                    title: 'Just print me!',
+                }).addTo(map)
+            L.control.browserPrint(
+                {
+                    title: 'Just print me!',
+                }).addTo(map)
+
+            pressed = true
+            }
+            console.log(pressed)
             
            
  

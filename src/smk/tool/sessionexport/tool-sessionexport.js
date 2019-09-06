@@ -134,51 +134,51 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         let jsonObjectHolder = createSMKJSONObject()
 
         if ( jsonObjectHolder.hasOwnProperty("lmfId")  && smk.hasOwnProperty('lmfId')){
-            ////console.log ("both have a lmfid property")
+            //////console.log ("both have a lmfid property")
             jsonObjectHolder.lmfId = smk.lmfId
         }
         if ( jsonObjectHolder.hasOwnProperty("lmfRevision")  && smk.hasOwnProperty('lmfRevision')){
-            ////console.log ("both have a lmfRevision property")
+            //////console.log ("both have a lmfRevision property")
             jsonObjectHolder.lmfRevision = smk.lmfRevision
         }
         if ( jsonObjectHolder.hasOwnProperty("version")  && smk.hasOwnProperty('version')){
-            ////console.log ("both have a version property")
+            //////console.log ("both have a version property")
             jsonObjectHolder.version = smk.version
         }
         if ( jsonObjectHolder.hasOwnProperty("name")  && smk.hasOwnProperty('name')){
-            ////console.log ("both have a name property")
+            //////console.log ("both have a name property")
             jsonObjectHolder.name = smk.name
         }
         if ( jsonObjectHolder.hasOwnProperty("project")  && smk.hasOwnProperty('project')){
-            ////console.log ("both have a project property")
+            //////console.log ("both have a project property")
             jsonObjectHolder.project = smk.project
         }
         if ( jsonObjectHolder.hasOwnProperty("createdBy")  && smk.hasOwnProperty('createdBy')){
-            ////console.log ("both have a createdBy property")
+            //////console.log ("both have a createdBy property")
             jsonObjectHolder.createdBy = smk.createdBy
         }
         if ( jsonObjectHolder.hasOwnProperty("createdDate")  && smk.hasOwnProperty('createdDate')){
-            ////console.log ("both have a createdDate property")
+            //////console.log ("both have a createdDate property")
             jsonObjectHolder.createdDate = smk.createdDate
         }
         if ( jsonObjectHolder.hasOwnProperty("modifiedBy")  && smk.hasOwnProperty('modifiedBy')){
-            ////console.log ("both have a modifiedBy property")
+            //////console.log ("both have a modifiedBy property")
             jsonObjectHolder.modifiedBy = smk.modifiedBy
         }
         if ( jsonObjectHolder.hasOwnProperty("modifiedDate")  && smk.hasOwnProperty('modifiedDate')){
-            ////console.log ("both have a modifiedDate property")
+            //////console.log ("both have a modifiedDate property")
             jsonObjectHolder.modifiedDate = smk.modifiedDate
         }
         if ( jsonObjectHolder.hasOwnProperty("published")  && smk.hasOwnProperty('published')){
-            ////console.log ("both have a published property")
+            //////console.log ("both have a published property")
             jsonObjectHolder.published = smk.published
         }
         if ( jsonObjectHolder.hasOwnProperty("surround")  && smk.hasOwnProperty('surround')){
-            ////console.log ("both have a surround property")
+            //////console.log ("both have a surround property")
             jsonObjectHolder.surround = smk.surround
         }
         if ( jsonObjectHolder.hasOwnProperty("viewer")  && smk.hasOwnProperty('viewer')){
-            ////console.log ("both have a viewer property")
+            //////console.log ("both have a viewer property")
             jsonObjectHolder.viewer = smk.viewer
             let baseMap
             if ( smk.$viewer.currentBasemap[0]._url.includes("World_Topo_Map")) {
@@ -214,19 +214,19 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
         }
         if ( jsonObjectHolder.hasOwnProperty("layers")  && smk.hasOwnProperty('layers')){
-            ////console.log ("both have a layers property")
+            //////console.log ("both have a layers property")
             jsonObjectHolder.layers = smk.layers
         }
         if ( jsonObjectHolder.hasOwnProperty("tools")  && smk.hasOwnProperty("tools")){
-            ////console.log ("both have a tools property")
+            //////console.log ("both have a tools property")
             jsonObjectHolder.tools = smk.tools
         }
         if ( jsonObjectHolder.hasOwnProperty("_id")  && smk.hasOwnProperty('_id')){
-            ////console.log ("both have a _id property")
+            //////console.log ("both have a _id property")
             jsonObjectHolder._id = smk._id
         }
         if ( jsonObjectHolder.hasOwnProperty("_rev")  && smk.hasOwnProperty('_rev')){
-            ////console.log ("both have a _rev property")
+            //////console.log ("both have a _rev property")
             jsonObjectHolder._rev = smk._rev
         }
 
@@ -238,10 +238,10 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         // first turn everything off
 
         for (let tool in jsonObjectHolder.tools) {
-            ////console.log(jsonObjectHolder.tools[y])
+            //////console.log(jsonObjectHolder.tools[y])
             if (jsonObjectHolder.tools[tool].type == "layers") {
                 for ( let item in jsonObjectHolder.tools[tool].display) {
-                    ////console.log(jsonObjectHolder.tools[y].display[x])
+                    //////console.log(jsonObjectHolder.tools[y].display[x])
                     jsonObjectHolder.tools[tool].display[item].isVisible = false
                 }
             }
@@ -275,33 +275,33 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         //this allows for layers that have been added through tool-layer import to be carried into the main system
         let arrayOfJSONLayersAndTools = getArrayOfJSONLayers( smk )
         // need to first loop through all layers, to check for matches, if there is a match then don't add it
-        console.log("The existing layers are: ", jsonObjectHolder.layers)
-        console.log("The array of JSON layers and tools are: ", arrayOfJSONLayersAndTools)
+        //console.log("The existing layers are: ", jsonObjectHolder.layers)
+        //console.log("The array of JSON layers and tools are: ", arrayOfJSONLayersAndTools)
 
         // this object is going to store all the new layers that we'll add in the step after the for loop
         let jsonLayersAndToolsToBeAdded = []
         for (let newLayers in arrayOfJSONLayersAndTools) {
             for (let layer in jsonObjectHolder.layers) {
-                console.log("existing layer is: ", jsonObjectHolder.layers[layer].id)
-                console.log("possible new layer is: ", arrayOfJSONLayersAndTools[newLayers].jsonLayerInfo.id)
+                //console.log("existing layer is: ", jsonObjectHolder.layers[layer].id)
+                //console.log("possible new layer is: ", arrayOfJSONLayersAndTools[newLayers].jsonLayerInfo.id)
                 if (jsonObjectHolder.layers[layer].id == arrayOfJSONLayersAndTools[newLayers].jsonLayerInfo.id) {
-                    console.log("Match, this layer should not be added")
+                    //console.log("Match, this layer should not be added")
                     break;
                 } 
                 // this should mean we're in the last length of the loop and there has not been a match, and therefore this layer should be added
-                console.log("Layer number is: ", layer)
-                console.log("total length is: ", jsonObjectHolder.layers.length)
+                //console.log("Layer number is: ", layer)
+                //console.log("total length is: ", jsonObjectHolder.layers.length)
                 if (layer == (jsonObjectHolder.layers.length - 1)) {
-                    console.log("this one should be added")
-                    console.log("NOT MATCH existing layer is: ", jsonObjectHolder.layers[layer].id)
-                    console.log("NOT MATCH possible new layer is: ", arrayOfJSONLayersAndTools[newLayers].jsonLayerInfo.id)
+                    //console.log("this one should be added")
+                    //console.log("NOT MATCH existing layer is: ", jsonObjectHolder.layers[layer].id)
+                    //console.log("NOT MATCH possible new layer is: ", arrayOfJSONLayersAndTools[newLayers].jsonLayerInfo.id)
 
                     jsonLayersAndToolsToBeAdded.push(arrayOfJSONLayersAndTools[newLayers])
                 }
             }       
         }
 
-        console.log("These are the layers and tools that are not duplicates: ", jsonLayersAndToolsToBeAdded)
+        //console.log("These are the layers and tools that are not duplicates: ", jsonLayersAndToolsToBeAdded)
         // now to add these layers and tools into the main jsonObjectHolder object so they will be exported correctly
         for (let layerTool in jsonLayersAndToolsToBeAdded) {
             jsonObjectHolder.layers.push(jsonLayersAndToolsToBeAdded[layerTool].jsonLayerInfo)
@@ -322,13 +322,13 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
         // can find co-ordinates and zoom here, but only if it's changed
         if (smk.$viewer.map._animateToCenter){
-            ////console.log(smk.$viewer.map._animateToCenter)
+            //////console.log(smk.$viewer.map._animateToCenter)
             jsonObjectHolder.viewer.location.center[0] = smk.$viewer.map._animateToCenter.lng
             jsonObjectHolder.viewer.location.center[1] = smk.$viewer.map._animateToCenter.lat
         }
         
         if (smk.$viewer.map._animateToZoom){
-            ////console.log(smk.$viewer.map._animateToZoom)
+            //////console.log(smk.$viewer.map._animateToZoom)
             jsonObjectHolder.viewer.location.zoom = smk.$viewer.map._animateToZoom
         }
 
@@ -337,10 +337,10 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         if (smk.$viewer.type == "leaflet") {
             for (let drawing in smk.$viewer.map._layers) {
                 if (smk.$viewer.map._layers[drawing]._mRadius && smk.$viewer.map._layers[drawing]._latlng) {
-                    //console.log("_mRadius exists and is: ", smk.$viewer.map._layers[drawing]._mRadius)
+                    ////console.log("_mRadius exists and is: ", smk.$viewer.map._layers[drawing]._mRadius)
                     let radius = smk.$viewer.map._layers[drawing]._mRadius
-                    //console.log(radius)
-                    //console.log("_latling exists and is: ", smk.$viewer.map._layers[drawing]._latlng)
+                    ////console.log(radius)
+                    ////console.log("_latling exists and is: ", smk.$viewer.map._layers[drawing]._latlng)
                     let latlng = smk.$viewer.map._layers[drawing]._latlng
                     //checking for _content which would be there if a tooltip had occured
                     let content = checkForContent( smk.$viewer.map._layers[drawing] )
@@ -351,8 +351,8 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 } else if (smk.$viewer.map._layers[drawing]._latlngs && smk.$viewer.map._layers[drawing]._path) {
                     if ( smk.$viewer.map._layers[drawing]._path.attributes[6].nodeValue == "none") {
                         // handle retriveing the latlangs needed for making a line, and give it the type of "line"
-                        //console.log("This is a line!")
-                        //console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
+                        ////console.log("This is a line!")
+                        ////console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
                         let latlngs = smk.$viewer.map._layers[drawing]._latlngs
                         //checking for _content which would be there if a tooltip had occured
                         let content = checkForContent( smk.$viewer.map._layers[drawing] )
@@ -362,8 +362,8 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
                         
                     } else { //if nodeValue is not "none" then it's a polygon
-                        //console.log("This is a polygon")
-                        //console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
+                        ////console.log("This is a polygon")
+                        ////console.log("_latlngs exists and is: ", smk.$viewer.map._layers[drawing]._latlngs)
                         let latlngs = smk.$viewer.map._layers[drawing]._latlngs
                         //checking for _content which would be there if a tooltip had occured
                         let content = checkForContent( smk.$viewer.map._layers[drawing] )
@@ -382,15 +382,15 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                     let content = checkForContent( smk.$viewer.map._layers[drawing] )
                     let markerObj = { type: "marker", latlng, content  }
                     jsonObjectHolder.drawings.push(markerObj)
-                    //console.log("another marker hmm")
-                    //console.log(smk.$viewer.map._layers[drawing])
+                    ////console.log("another marker hmm")
+                    ////console.log(smk.$viewer.map._layers[drawing])
                 }
                 
                 
             
             }
         } else {
-            //console.log ("No esri support for circles yet, sorry.")
+            ////console.log ("No esri support for circles yet, sorry.")
         }
 
 
@@ -422,39 +422,37 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         let layerName = null;
         let styleName = null;
 
-        console.log("Hey look this is the array of json layers function start, just checking really");
-        console.log("Oh and here is smk: ", smk);
-        console.log(smk.$viewer.map._layers);
+        //console.log("Hey look this is the array of json layers function start, just checking really");
+        //console.log("Oh and here is smk: ", smk);
+        //console.log(smk.$viewer.map._layers);
 
         //this loop needs to create a JSON object for each WMS layer it finds, then add it to the array of all the JSON layer objects we have
         for (let layer in smk.$viewer.map._layers ) {
-            console.log(smk.$viewer.map._layers[layer])
+            //console.log(smk.$viewer.map._layers[layer])
             if (smk.$viewer.map._layers[layer].options && smk.$viewer.map._layers[layer].wmsParams) {
 
                 let jsonToolAndLayerInfoCombined = '{ "jsonLayerInfo": "", "jsonToolLayerInfo": ""}'
                 jsonToolAndLayerInfoCombined = JSON.parse(jsonToolAndLayerInfoCombined)
 
-
-                console.log('The service URL is: ', smk.$viewer.map._layers[layer]._url)
-                console.log('The layer is: ', smk.$viewer.map._layers[layer].options.layers)
-                console.log('The style is: ', smk.$viewer.map._layers[layer].options.styles)
+                //console.log('The service URL is: ', smk.$viewer.map._layers[layer]._url)
+                //console.log('The layer is: ', smk.$viewer.map._layers[layer].options.layers)
+                //console.log('The style is: ', smk.$viewer.map._layers[layer].options.styles)
 
                 type = smk.$viewer.map._layers[layer].wmsParams.service
                 serviceUrl = smk.$viewer.map._layers[layer]._url
                 layerName = smk.$viewer.map._layers[layer].options.layers
                 styleName = smk.$viewer.map._layers[layer].options.styles
 
-                console.log("layer name is: ", layerName)
-                console.log("The style name is: ", styleName)
-
+                //console.log("layer name is: ", layerName)
+                //console.log("The style name is: ", styleName)
 
                 id = (layerName + "-" + styleName)
 
                 //This title name is a placeholder
                 title = (layerName + "-" + styleName)
                 title = title.replace(/_/g, " ")
-                console.log("placeholder title is: ", title)
-                console.log("ID is: ", id)
+                //console.log("placeholder title is: ", title)
+                //console.log("ID is: ", id)
 
                 let jsonLayerInfo = '{  "type": null, "id": null, "title": null, "isVisible": true, "attribution": "", "metadataUrl": "", "opacity": 0.65,  "isQueryable": true, "attributes": [], "serviceUrl":null, "layerName": null, "styleName": null }';
 
@@ -465,9 +463,8 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 jsonLayerInfo.serviceUrl = serviceUrl
                 jsonLayerInfo.layerName = layerName
                 jsonLayerInfo.styleName = styleName
-                
 
-                console.log("json layer info is: ", jsonLayerInfo)
+                //console.log("json layer info is: ", jsonLayerInfo)
 
                 let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }'
                 jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo)
@@ -481,16 +478,10 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 arrayOfJSONLayers.push(jsonToolAndLayerInfoCombined)
             }
             
-
         }
         
-
         return (arrayOfJSONLayers)
         
-
-
-
-
     }
 
 
@@ -513,7 +504,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             //often disabled during testing and should be re-enabled
             createJsonLink( smk );
 
-            //console.log(getArrayOfJSONLayers( smk ))
+            ////console.log(getArrayOfJSONLayers( smk ))
 
             }
         } )

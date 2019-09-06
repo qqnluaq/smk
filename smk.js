@@ -705,6 +705,13 @@ include.tag( "leaflet",
     }
 )
 
+include.tag( "lprint",
+    {
+        "url": "lib/leaflet.browser.print.min.js",
+        "loader": "script"
+    }
+)
+
 include.tag( "material-icons",
     {
         "external": true,
@@ -2611,9 +2618,9 @@ window.include.SMK = true
             },
 
             BUILD: {
-                commit:     '1ed675b88bdc85752c0ecb3f28d3c49df6456d72',
+                commit:     '63b5a66c00ccc8f3497967c245b5651c8f9ee60b',
                 branch:     'master',
-                lastCommit: '"2019-09-04 14:34:41 -0700"'.replace( /^"|"$/g, '' ),
+                lastCommit: '"2019-09-04 16:44:11 -0700"'.replace( /^"|"$/g, '' ),
                 origin:     'https://github.com/cebergin/smk-client.git',
                 version:    '0.8.1',
             }

@@ -119,6 +119,7 @@ module.exports = function( grunt ) {
                     include: true,
                     require: true,
                     turf: true,
+                    lprint: true,
                     Terraformer: true,
                     proj4: true,
                     L: true,
