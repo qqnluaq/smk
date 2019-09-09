@@ -275,10 +275,9 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         //this allows for layers that have been added through tool-layer import to be carried into the main system
         let arrayOfJSONLayersAndTools = getArrayOfJSONLayers( smk )
         // need to first loop through all layers, to check for matches, if there is a match then don't add it
-        //console.log("The existing layers are: ", jsonObjectHolder.layers)
-        //console.log("The array of JSON layers and tools are: ", arrayOfJSONLayersAndTools)
+        
 
-        // this object is going to store all the new layers that we'll add in the step after the for loop
+        // this object is going to store all the new layers that we'll add in the step during a for loop where no matches were found for that layer
         let jsonLayersAndToolsToBeAdded = []
         for (let newLayers in arrayOfJSONLayersAndTools) {
             for (let layer in jsonObjectHolder.layers) {
@@ -301,7 +300,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             }       
         }
 
-        //console.log("These are the layers and tools that are not duplicates: ", jsonLayersAndToolsToBeAdded)
+        
         // now to add these layers and tools into the main jsonObjectHolder object so they will be exported correctly
         for (let layerTool in jsonLayersAndToolsToBeAdded) {
             jsonObjectHolder.layers.push(jsonLayersAndToolsToBeAdded[layerTool].jsonLayerInfo)
@@ -390,7 +389,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             
             }
         } else {
-            ////console.log ("No esri support for circles yet, sorry.")
+            ////console.log ("No esri3D support for circles yet, sorry.")
         }
 
 
@@ -422,11 +421,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         let layerName = null;
         let styleName = null;
 
-        //console.log("Hey look this is the array of json layers function start, just checking really");
-        //console.log("Oh and here is smk: ", smk);
-        //console.log(smk.$viewer.map._layers);
-
-        //this loop needs to create a JSON object for each WMS layer it finds, then add it to the array of all the JSON layer objects we have
+        //this loop creates a JSON object for each WMS layer it finds, then add it to the array of all the JSON layer objects we have
         for (let layer in smk.$viewer.map._layers ) {
             //console.log(smk.$viewer.map._layers[layer])
             if (smk.$viewer.map._layers[layer].options && smk.$viewer.map._layers[layer].wmsParams) {

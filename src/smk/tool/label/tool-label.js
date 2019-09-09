@@ -85,14 +85,7 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
         arrayOfDrawings = []
 
         
-                    
-                        
-               
-            
-            
-            
-
-         /////////////////////////////////////////////////////////////////// TEST TEST TEST////////////////////////////////
+       
          console.log(smk.$viewer.map.pm)
          for (let drawing in smk.$viewer.map._layers) {
             if (smk.$viewer.map._layers[drawing]._mRadius && smk.$viewer.map._layers[drawing]._latlng) {

@@ -15,23 +15,39 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
             return {
                 items: '',
                 service: '',
-                //WMSURL: 'https://openmaps.gov.bc.ca/geo/pub/ows',
-                WMSURL: 'https://openmaps.gov.bc.ca/geo/pub/REG_LEGAL_AND_ADMIN_BOUNDARIES.QSOI_BC_REGIONS/ows?service=WMS&request=GetCapabilities',
+                WMSURL: 'https://openmaps.gov.bc.ca/geo/pub/ows',
+                //WMSURL: 'https://openmaps.gov.bc.ca/geo/pub/REG_LEGAL_AND_ADMIN_BOUNDARIES.QSOI_BC_REGIONS/ows?service=WMS&request=GetCapabilities',
                 //ESRIURL: 'https://mpcm-catalogue.api.gov.bc.ca/catalogV2/PROD/',
                 //ESRIURL: 'https://apps.gov.bc.ca/pub/mpcm/services/catalog/PROD/',
                 ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/test/test/',
+                KMLURL: 'https://openmaps.gov.bc.ca/kml/geo/layers/WHSE_IMAGERY_AND_BASE_MAPS.AIMG_HIST_INDEX_MAPS_POINT_loader.kml',
+                
                 featureListShow: false,
                 layerListShow: false,
                 esriLayerListShow: false,
                 jsonFeatures: null,
                 styleName: null,
-                selected: 'ARCGis'
+                selected: 'GeoJSON',
+                color: '#0066ff',
+                stroke: true,
+                strokeWidth: 3,
+                opacity: 0.6,
+                lineCap: 'round',
+                lineJoin: 'bevel',
+                dashArray: null,
+                dashOffset: null,
+                fill: true,
+                fillColor: '#0066ff',
+                fillOpacity: 0.2,
+                fillRule: 'evenodd'
+
+
                 
             }
           },
           methods: {
-            // this handles a layer being selected and outputs to console all the features attached to that layer
-            // next need to display a list of features so they can be added to the map selectively
+        
+            //imports a layer to the leaflet map directly (doesn't currently let smk know the layer has been added)
             setLayerImport: async function  ( event ) {
                 
                 console.log("The event is: ",event)
@@ -40,8 +56,9 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 console.log("The style title is: ",event.srcElement.attributes.item(2).nodeValue)
                 console.log("The full object is: ",event.srcElement.attributes.item(3).nodeValue)
                 
+
                 let layerName = event.srcElement.id
-                
+        
                 let styleName = event.srcElement.attributes.item(1).nodeValue
 
                 let layerObject = event.srcElement.attributes.item(3).nodeValue
@@ -49,16 +66,15 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 console.log("Hopefully the layer object is: ", layerObject)
                 console.log("Hopefully the layer object type is: ", layerObject.layerName)
 
-                 //Showing features is not currently required as their information is superfluous
-                //In theory, could at least exit back out here after adding a layer, or do anything
-                //This did load all the features from a WMS and displayed them (fully functional, but not really useful)
-                /*
+                
+                // this does load the features from the wms server, it seems features are not the same as attributes however which this does not get (I think, needs checking)                
                 let url = this.service
                 const json = await asyncGetFeaturesFromWMS( layerName, url);
-                console.log("The json is: ")
+                console.log("The json feature list is: ")
                 console.log(json)
                 this.jsonFeatures = json.features
 
+                /*
                 this.layerListShow = false;
                 this.featureListShow = true;
                 */
@@ -69,7 +85,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
 
                 
-                //testing out direct adding of layers to map
+                //directly adds a layer to the map
                 let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
                 var wmsLayer = L.tileLayer.wms( this.service ,{ 
                     layers: this.layerName,
@@ -79,12 +95,16 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 }).addTo(map);
                 
                 // need to have all the SMK json information here so we can add it to SMKs layers and tools otherwise it's not really being properly intergrated into the system
+                // The below does add the information to smk, it does not refresh any of the smk tools to recognize it, which eventually needs to happen
+
+                //creating the json layer info in the same style as map-config.json
                 let jsonLayerInfo = '{  "type": null, "id": null, "title": null, "isVisible": true, "attribution": "", "metadataUrl": "", "opacity": 0.65,  "isQueryable": true, "attributes": [], "serviceUrl":null, "layerName": null, "styleName": null }';
 
                 let title = (layerName + "-" + styleName)
                 title = title.replace(/_/g, " ")
                 let id = layerName + "-" + styleName
 
+                
                 jsonLayerInfo = JSON.parse(jsonLayerInfo)
                 jsonLayerInfo.type = "wms"
                 jsonLayerInfo.id = id
@@ -93,9 +113,25 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 jsonLayerInfo.layerName = layerName
                 jsonLayerInfo.styleName = styleName
 
+                // creating the json attribute information in the same style as map-config.json, but we don't seem to have true atttribute data yet
+                let jsonAttribute = '{"id": null,"name": null,"title": null,"visible": true}'
+                jsonAttribute = JSON.parse(jsonAttribute)
+                
+                
+                for (let object in this.jsonFeatures) {
+
+                    jsonAttribute.id = this.jsonFeatures[object].id
+                    jsonAttribute.name = this.jsonFeatures[object].id
+                    jsonAttribute.title =this.jsonFeatures[object].id
+
+                    jsonLayerInfo.attributes.push(jsonAttribute)
+                }
+                
+                
                 console.log("json layer info is: ", jsonLayerInfo)
                 SMK.MAP[1].layers.push(jsonLayerInfo)
                 
+                // creating the json  tool information in the same style as map-config.json
                 let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }'
                 jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo)
                 jsonToolLayerInfo.id = id
@@ -112,6 +148,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 
         
             },
+
             //in theory this adds the selected feature to the map (Not functional)
             setFeatureImport: function  ( event ) {
                 
@@ -155,20 +192,27 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 }
                 if (this.selected == 'ARCGis') {
 
+                    //currently hardcoding to only use this service, in the future will allow for other services to be selected earlier on
                     this.service = "https://maps.gov.bc.ca/arcgis/rest/services/mpcm/bcgw/MapServer"
 
+                    // waits while fetching all the information from the service and URL, could take some time for that to render
                     let jsonArrayOfDyanmicLayerIDNames = await asyncGetLayersFromEsriDynamic( this.service, this.ESRIURL )
                     this.items = jsonArrayOfDyanmicLayerIDNames
                     this.esriLayerListShow = true
-                    // need an await here where we fetch the layers from the provided service url
+                    
 
 
+                }
+                if (this.selected == 'KML'){
+                    await asyncAddKMLLayerToMap( this.KMLURL)
                 }
                 
 
             },
 
             // this function is going to add a dynamic layer to the map after fetching the relevant information
+
+            //currently waiting for the data source to send us the individual data, currently not functional
             fetchEsriLayerInfo: async function ( event ) {
                 let id  = event.srcElement.id;
                 console.log("Id is: ", id , " and we're going to call the data fetch from here to retrieve it")
@@ -178,7 +222,37 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
                 console.log("esri layer data in detail is: ", esriLayerData)
 
+            },
+
+
+            importGeoJSON: function (event) {
+                console.log("The file list object is: ", event.target.files);
+
+                for (let file in event.target.files) {
+                    //making sure it has a type to make sure it's a file object
+                    if (event.target.files[file].type) {
+                        console.log("The file is: ", event.target.files[file])
+                        let reader = new FileReader();
+                        reader.onload = e => {
+                            // we have the GeoJSON here so we're going to add it to the map
+                            console.log("The reader onload result is: ", e.target.result);
+                            addGeoJSONFileToMap( e.target.result, this.color, this.stroke, this.fill, this.opacity, this.strokeWidth, this.lineCap, this.lineJoin, 
+                                this.dashArray, this.dashOffset, this.fillColor, this.fillOpacity, this.fillRule )
+
+
+
+                        };
+                        reader.readAsText(event.target.files[file])
+                }
+
+                }
+             
+                
+
             }
+
+            
+
 
           }
 
@@ -203,6 +277,24 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
     }
 
+    //add a KML Layer to the map from a URL
+    async function asyncAddKMLLayerToMap ( kMLURL) {
+        console.log("KML URL is: ", kMLURL)
+
+        const response = await fetch(kMLURL, {});
+        const text = await response.text();
+
+        console.log("raw text returned from fetch: ", text)
+
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(text,"text/xml");
+
+        console.log( "XML doc returned from KML request is: ", xmlDoc )
+
+    }
+
+
+    // returns the xml of esri layer data
     async function asyncGetEsriLayerData ( serviceUrl, id ) {
         let esriLayerInfo = []
 
@@ -370,7 +462,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
     }
 
     // given the MPCM esri XML document return an array filled with JSON objects containing the superstructure
-
+    // used in processing the esri layers information xml document
     class MPCMInfoLayer {
         constructor() {
             this.jsonObject =   '{ "id": 0, "mpcmId": null,"label": null, "subLayers": [] }'
@@ -401,6 +493,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
     }
 
+    // part of processing the esri layers information
     function processFolders( folders, parent, id){
         if (folders != null) {
             for (let i = 0; i < folders.length; i++) {
@@ -443,6 +536,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         return id;
       }
 
+      // part of processing the esri layers information
     function processLayers(layers, parent, id) {
         if (layers != null) {
             for (let i = 0; i < layers.length; i++) {
@@ -469,7 +563,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         return id
     }
 
-
+    //returns a json structure from the esri xml document
     function getJSONDataFromEsriXML( xmlDoc ) {
 
         //array of all the nodes
@@ -533,12 +627,108 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
     }
 
+    //print a geoJSONfile to a leaflet map
+    function addGeoJSONFileToMap( geoJSONFile, color, stroke, fill, opacity, strokeWidth, lineCap, lineJoin, dashArray, dashOffset, fillColor, fillOpacity, fillRule ) {
+
+        console.log ("color, stroke, fill, opacity, strokeWidth, lineCap, lineJoin, dashArray, dashOffset, fillColor, fillOpacity, is: ", 
+        color, stroke, fill, opacity, strokeWidth, lineCap, lineJoin, dashArray, dashOffset, fillColor, fillOpacity, fillRule)
+
+        let geoJSONStyle = {
+            "color": color,
+            "weight": strokeWidth,
+            "opacity": opacity,
+            "stroke": stroke,
+            "fill": fill,
+            "lineCap": lineCap,
+            "lineJoin": lineJoin,
+            "dashArray": dashArray,
+            "dashOffset": dashOffset,
+            "fillColor": fillColor,
+            "fillOpacity": fillOpacity,
+            "fillRule": fillRule,
+            
+
+        }
+
+
+        console.log(geoJSONFile)
+        geoJSONFile = JSON.parse(geoJSONFile)
+        console.log("GeoJSON file parsed: ", geoJSONFile)
+
+        let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
+
+        if (geoJSONFile.type == "Feature") {
+
+            L.geoJSON(geoJSONFile.features[feature], {
+                style: geoJSONStyle
+            }).addTo(map)
+            
+
+        } else if ( geoJSONFile.type == "FeatureCollection") {
+            for ( let feature in geoJSONFile.features){
+                
+                //every type but Line String is handled here
+                if (geoJSONFile.features[feature].type == "Feature") {
+
+                    if ( geoJSONFile.features[feature].geometry.type == "Point") {
+
+                        L.geoJSON(geoJSONFile.features[feature], {
+                            style: geoJSONStyle
+                        }).addTo(map)
+                        
+                    } else if (geoJSONFile.features[feature].geometry.type == "Polygon") {
+    
+                        L.geoJSON(geoJSONFile.features[feature], {
+                            style: geoJSONStyle
+                        }).addTo(map)
+    
+                    } else if (geoJSONFile.features[feature].geometry.type == "MultiPoint") {
+    
+                        L.geoJSON(geoJSONFile.features[feature], {
+                            style: geoJSONStyle
+                        }).addTo(map)
+    
+                    } else if (geoJSONFile.features[feature].geometry.type == "MultiLineString") {
+    
+                        L.geoJSON(geoJSONFile.features[feature], {
+                            style: geoJSONStyle
+                        }).addTo(map)
+    
+                    } else if (geoJSONFile.features[feature].geometry.type == "MultiPolygon") {
+    
+                        L.geoJSON(geoJSONFile.features[feature], {
+                            style: geoJSONStyle
+                        }).addTo(map)
+    
+                    } else if (geoJSONFile.features[feature].geometry.type == "GeometryCollection") {
+    
+                        L.geoJSON(geoJSONFile.features[feature], {
+                            style: geoJSONStyle
+                        }).addTo(map)
+    
+                    }
+                // line strings are different as they have different layering
+                }  else if (geoJSONFile.features[feature].type == "LineString") {
+                        
+                    L.geoJSON(geoJSONFile.features[feature], {
+                        style: geoJSONStyle
+                    }).addTo(map)
+
+                }
+                
+
+            }
+
+
+        }
+
+    }
 
 
 
 
 
-    /*
+    
     //gets a list of all the feature layers from a layer name and WMS returning all the features available to that layer, these can be display
     //currently not required
     async function asyncGetFeaturesFromWMS (layerName, wmsURLService) {
@@ -552,7 +742,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         return json
 
     }
-    */
+    
 
     SMK.TYPE.layerimportTool = layerimportTool
 
