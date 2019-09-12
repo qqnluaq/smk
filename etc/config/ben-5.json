@@ -113,7 +113,7 @@
       "metadataUrl": "",
       "opacity": 0.65,
       "isQueryable": true,
-      "attributes": [],
+      
       "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
       "layerName": "pub:WHSE_BASEMAPPING.GBA_RAILWAY_TRACKS_SP",
       "styleName": "Railway_Tracks",
@@ -128,7 +128,7 @@
       "metadataUrl": "",
       "opacity": 0.65,
       "isQueryable": true,
-      "attributes": [],
+      
       "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
       "layerName": "pub:WHSE_BASEMAPPING.GBA_RAILWAY_TRACKS_SP",
       "styleName": "4756",
@@ -143,7 +143,7 @@
       "metadataUrl": "",
       "opacity": 0.65,
       "isQueryable": true,
-      "attributes": [],
+      
       "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
       "layerName": "pub:WHSE_BASEMAPPING.GBA_RAILWAY_TRACKS_SP",
       "styleName": "4790",
@@ -158,7 +158,7 @@
       "metadataUrl": "",
       "opacity": 0.65,
       "isQueryable": true,
-      "attributes": [],
+      
       "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
       "layerName": "pub:WHSE_BASEMAPPING.GBA_RAILWAY_TRACKS_SP",
       "styleName": "5234",
@@ -173,7 +173,7 @@
       "metadataUrl": "",
       "opacity": 0.65,
       "isQueryable": true,
-      "attributes": [],
+      
       "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
       "layerName": "pub:WHSE_BASEMAPPING.GBA_RAILWAY_TRACKS_SP",
       "styleName": "5235",
@@ -188,7 +188,7 @@
       "metadataUrl": "",
       "opacity": 0.65,
       "isQueryable": true,
-      "attributes": [],
+      
       "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
       "layerName": "pub:WHSE_BASEMAPPING.GBA_RAILWAY_TRACKS_SP",
       "styleName": "6631",
@@ -203,7 +203,7 @@
       "metadataUrl": "",
       "opacity": 0.65,
       "isQueryable": true,
-      "attributes": [],
+      
       "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
       "layerName": "pub:WHSE_BASEMAPPING.TRIM_WATER_LINES",
       "styleName": "3345",
@@ -218,7 +218,7 @@
       "metadataUrl": "",
       "opacity": 0.65,
       "isQueryable": true,
-      "attributes": [],
+      
       "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
       "layerName": "pub:WHSE_FOREST_TENURE.FTEN_MAP_NOTATN_POLY_SVW",
       "styleName": "2904_2905",
@@ -233,7 +233,7 @@
       "metadataUrl": "",
       "opacity": 0.65,
       "isQueryable": true,
-      "attributes": [],
+      
       "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
       "layerName": "pub:WHSE_FOREST_TENURE.FTEN_RECREATION_POLY_SVW",
       "styleName": "3213_3214",
@@ -248,7 +248,7 @@
       "metadataUrl": "",
       "opacity": 0.65,
       "isQueryable": true,
-      "attributes": [],
+      
       "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
       "layerName": "pub:WHSE_IMAGERY_AND_BASE_MAPS.DRP_BCTC_TRANSMISSION_LINES_SP",
       "styleName": "4395",

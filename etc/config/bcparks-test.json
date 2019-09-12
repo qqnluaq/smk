@@ -13,7 +13,8 @@
     },
     "viewer": {
         "type": "leaflet",
-        "baseMap": "NationalGeographic"
+        "baseMap": "NationalGeographic",
+        "activeTool": "about"
     },
     "tools": [
         {
