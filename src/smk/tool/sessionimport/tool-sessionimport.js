@@ -51,7 +51,7 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                     if ( jsonConfig.tools[tool].display[item].id == layerId) {
                         
 
-                        return jsonConfig.tools[tool].display[item].isVisible
+                        return jsonConfig.tools[tool].display[item].isVisible;
                     }
                     
                     
@@ -72,9 +72,9 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
     function getArrayOfJSONLayers( smk ) {
        let arrayOfJSONLayers = []
        for (let layer in SMK.MAP[1].layers){
-           arrayOfJSONLayers.push(SMK.MAP[1].layers[layer].id)
+           arrayOfJSONLayers.push(SMK.MAP[1].layers[layer].id);
        }
-        return (arrayOfJSONLayers)
+        return (arrayOfJSONLayers);
     }
     
 
@@ -92,18 +92,18 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
             transparent: true
         }).addTo(map);
         //layer should be already correct format
-        SMK.MAP[1].layers.push(wmsLayer)
+        SMK.MAP[1].layers.push(wmsLayer);
          
          
-         let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }'
-         jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo)
-         jsonToolLayerInfo.id = wmsLayer.id
-         jsonToolLayerInfo.title = wmsLayer.title
+         let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }';
+         jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo);
+         jsonToolLayerInfo.id = wmsLayer.id;
+         jsonToolLayerInfo.title = wmsLayer.title;
 
 
          for (let tool in SMK.MAP[1].tools) {
              if (SMK.MAP[1].tools[tool].type == "layers" ){
-                 SMK.MAP[1].tools[tool].display.push(jsonToolLayerInfo)
+                 SMK.MAP[1].tools[tool].display.push(jsonToolLayerInfo);
              }
 
               
@@ -137,7 +137,7 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                 reader.readAsText(file,'UTF-8');
                 reader.onload = readerEvent => {
                     jsonOfSMKData = readerEvent.target.result; 
-                    jsonOfSMKData = JSON.parse(jsonOfSMKData)
+                    jsonOfSMKData = JSON.parse(jsonOfSMKData);
 
                     if ( jsonOfSMKData != null) {
 
@@ -145,7 +145,7 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                         if (smk.$viewer.type == "leaflet") {
 
                             // import first needs to check all the layers in the map, and return a list of them, visible or not
-                            let arrayOfJSONLayersInMap = getArrayOfJSONLayers( smk )
+                            let arrayOfJSONLayersInMap = getArrayOfJSONLayers( smk );
                             //console.log(arrayOfJSONLayersInMap)
 
                             for (let maybeNewLayer in jsonOfSMKData.layers) {
@@ -165,7 +165,7 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
 
                                         if ( jsonOfSMKData.layers[maybeNewLayer].type == "wms"){
                                             //console.log("is of type wms proceed accordingly")
-                                            addWMSLayerToLeafletMap(jsonOfSMKData.layers[maybeNewLayer])
+                                            addWMSLayerToLeafletMap(jsonOfSMKData.layers[maybeNewLayer]);
                                         } 
                                     }
                                 }
@@ -173,14 +173,14 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
 
                             //handles visibility by looping through layers and setting visibility 
                             for (let layer in jsonOfSMKData.layers) {
-                                let visible = getLayerToolVisibility(jsonOfSMKData, jsonOfSMKData.layers[layer].id )
-                                smk.$viewer.layerDisplayContext.setItemVisible( jsonOfSMKData.layers[layer].id, visible, false )
-                                smk.$viewer.updateLayersVisible()
+                                let visible = getLayerToolVisibility(jsonOfSMKData, jsonOfSMKData.layers[layer].id );
+                                smk.$viewer.layerDisplayContext.setItemVisible( jsonOfSMKData.layers[layer].id, visible, false );
+                                smk.$viewer.updateLayersVisible();
                             }
                             
                                 // setting zoom and center for the map
                                 let zoom = jsonOfSMKData.viewer.location.zoom; 
-                                let center = jsonOfSMKData.viewer.location.center
+                                let center = jsonOfSMKData.viewer.location.center;
                                 smk.$viewer.currentBasemap[0]._map.setView(new L.LatLng(center[1], center[0]), zoom);
                                 
                                 //Here we need to loop through the drawings section looking for circle type layers to draw them to the map (can later handle all types of drawings)
@@ -196,13 +196,13 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                                         //handling import of lines 
                                     } else if (jsonOfSMKData.drawings[drawing].type == "line") {
                                         //console.log(jsonOfSMKData.drawings[drawing].latlngs)
-                                        let latlngs = jsonOfSMKData.drawings[drawing].latlngs
+                                        let latlngs = jsonOfSMKData.drawings[drawing].latlngs;
                                         let drawingOnMap = L.polyline(latlngs, {color: 'blue'}).addTo(smk.$viewer.currentBasemap[0]._map);
                                         ifContentExists( drawingOnMap, jsonOfSMKData.drawings[drawing]);
                                     //handling import of polygons
                                     } else if (jsonOfSMKData.drawings[drawing].type == "polygon") {
                                         //console.log(jsonOfSMKData.drawings[drawing].latlngs)
-                                        let latlngs = jsonOfSMKData.drawings[drawing].latlngs
+                                        let latlngs = jsonOfSMKData.drawings[drawing].latlngs;
                                         let drawingOnMap = L.polygon(latlngs, {color: '#3498db'}).addTo(smk.$viewer.currentBasemap[0]._map);
                                         ifContentExists( drawingOnMap, jsonOfSMKData.drawings[drawing]);
                                     //handling import of markers
@@ -217,7 +217,7 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                                     }  
                                     // handle changing baseMap based on import
                                     
-                                    smk.$viewer.setBasemap(jsonOfSMKData.viewer.baseMap)
+                                    smk.$viewer.setBasemap(jsonOfSMKData.viewer.baseMap);
 
 
 

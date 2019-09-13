@@ -57,15 +57,15 @@ include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html
             L.control.browserPrint(
                 {
                     title: 'Just print me!',
-                }).addTo(map)
+                }).addTo(map);
             L.control.browserPrint(
                 {
                     title: 'Just print me!',
-                }).addTo(map)
+                }).addTo(map);
 
             pressed = true
             }
-            console.log(pressed)
+            console.log(pressed);
             
            
  

@@ -882,6 +882,13 @@ include.tag( "theme-gamma",
     }
 )
 
+include.tag( "togeojson",
+    {
+        "url": "lib/togeojson-master/togeojson.js",
+        "loader": "script"
+    }
+)
+
 include.tag( "tool-about",
     {
         "loader": "group",
@@ -2618,9 +2625,9 @@ window.include.SMK = true
             },
 
             BUILD: {
-                commit:     '06ef5843b11dc8ea9bf1a33cddb5f55bb7c3f450',
+                commit:     'f0e17f024138cc5c66044edf84d89d16b01da373',
                 branch:     'master',
-                lastCommit: '"2019-09-06 15:06:54 -0700"'.replace( /^"|"$/g, '' ),
+                lastCommit: '"2019-09-09 15:34:23 -0700"'.replace( /^"|"$/g, '' ),
                 origin:     'https://github.com/cebergin/smk-client.git',
                 version:    '0.8.1',
             }

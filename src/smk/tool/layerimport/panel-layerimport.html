@@ -3,14 +3,14 @@
     <h3 v-else>Enter Layer Service:</h3>
 
     <select v-model="selected">
-        <option value="ARCGis">ARCGis</option>
+        <option value="arcGIS">arcGIS</option>
         <option value="wms">wms</option>
         <option value="Shape">Shape</option>
         <option value="KML">KML</option>
         <option value="GeoJSON">GeoJSON</option>
     </select>
 
-    <div v-if="selected === 'ARCGis'">
+    <div v-if="selected === 'arcGIS'">
         Yes this is the {{ selected}} input area
         <label :id="ESRIURL"> {{ ESRIURL }} </label>
         <button v-on:click="fetchLayersFromURL" :id="ESRIURL" :content="ESRIURL" class="toolButton ">Layer Service ESRI URL</button>
@@ -55,15 +55,10 @@
         {{ selected}} input area
         <input type="text" :id="KMLURL" v-model="KMLURL">
         <button v-on:click="fetchLayersFromURL" :id="KMLURL" :content="KMLURL" class="toolButton ">Input Layer Service KMLURL</button>
-    </div>
-    <div v-if="selected === 'Shape'">
-        {{ selected}} input area
-    </div>
-    <div v-if="selected === 'GeoJSON'">
 
         <div class="geoJSONStyleOptions">
             <details>
-                <summary>GeoJSON Styling Options </summary>
+                <summary>GeoJSON Styling Options (If no network link in KML file) </summary>
 
                 <div class="strokeColor">
                     Stroke Color:
@@ -181,8 +176,116 @@
 
             </details>
         </div>
-        {{ selected}} input area, please browse for a GeoJSON file
+
+
+
+    </div>
+    <div v-if="selected === 'Shape'">
+        {{ selected}} input area
+    </div>
+    <div v-if="selected === 'GeoJSON'">
+
+        <div class="geoJSONStyleOptions">
+            <details>
+                <summary>GeoJSON Styling Options </summary>
+
+                <div class="strokeColor">
+                    Stroke Color:
+                    <input type="color" name="favcolor" v-model="color" value="#0066ff">
+                </div>
+
+                <div class=stroke>
+                    Should the line stroke (on polygons and circles) be displayed?
+                    <input type="checkbox" id="checkbox" v-model="stroke">
+                    <label for="checkbox">{{ stroke }}</label>
+                </div>
+
+                <div class=strokeWidth>
+                    Stroke Width(Min: 1, Max: 100):
+                    <input type=number v-model="strokeWidth" min="1" max="100" value=3>    
+                </div>
+
+                <div class=opacity>
+                    Stroke Opacity Selection(Min: 0, Max: 1):
+                    <input type=number v-model="opacity" min="0" max="1" value=0.65 step="0.05">   
+                </div>
+
+                <div class=fill>
+                    Should the path (on polygons and circles) be filled with color?
+                    <input type="checkbox" id="checkbox" v-model="fill">
+                    <label for="checkbox">{{ fill }}</label>
+                </div>
+
+                <div class=fillOpacity>
+                    Fill Opacity Selection(Min: 0, Max:1):
+                    <input type=number v-model="fillOpacity" min="0" max="1" value=0.2 step="0.1">   
+                </div>
+
+                
+                <div class=fillColor>
+                    Fill Color:
+                    <input type="color" name="favcolor" v-model="fillColor" value="#0066fe">
+                </div>
+
+                <div class=lineCap>
+                    Line Cap:
+                    <select v-model="lineCap">
+                        <option value='round'>Round</option>
+                        <option value='square'>Square</option>
+                        <option value='butt'>Butt</option>
+                    </select>
+                </div>
+
+                <div class=lineJoin>
+                    Line Join:
+                    <select v-model="lineJoin">
+                        <option value='miter'>Miter</option>
+                        <option value='round'>Round</option>
+                        <option value='bevel'>Bevel</option>
+                        <option value='mitir-clip'>Mitir Clip</option>
+                        <option value='arcs'>Arcs</option>
+                    </select>
+                </div>
+
+                <div class=dashArray>
+                    Dash Array:
+                    <select v-model="dashArray">
+                        <option value=null>Solid</option>
+                        <option value='4'>Dashes and gaps of the same size</option>
+                        <option value='4 1'>Dashes and gaps of different sizes</option>
+                        <option value='4 1 2'>Dashes and gaps of various sizes with an odd number of values</option>
+                        <option value='4 1 2 3'>Dashes and gaps of various sizes with an even number of values</option>
+                    </select>
+                </div>
+
+                <div class=dashOffset>
+                    Dash Offset:
+                    <select v-model="dashOffset">
+                        <option value=null>No Offset</option>
+                        <option value='1'>Dash Offset of positive 1</option>
+                        <option value='3'>Offset of positive 3</option>
+                        <option value='-3'>Offset of negative 3</option>
+                    </select>
+                </div>
+
+                <div class=fillRule>
+                    Define how the inside of a shape is determined
+                    <select v-model="fillRule">
+                        <option value='evenodd'>evenodd</option>
+                        <option value='nonzero'>nonzero</option>
+                    </select>
+                </div>
+
+
+            </details>
+        </div>
+
+        {{ selected}} input area, please browse for a GeoJSON file once you're done styling.
         <input type="file" @change="importGeoJSON" multiple>
+        <div v-if="geoJSONFileUploadSuccess">
+          Import of {{ geoJSONfileValue }} was successful.
+        </div>
+
     </div>
 
     <div v-if="selected === 'wms'">
