@@ -1,7 +1,8 @@
 include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel-layerimport-html', 'togeojson' ], function ( inc ) {
     "use strict";
 
-    
+    // global variable for keeping track of how often multiPointCollections have activatied
+    var multiPointCollectionCounter = 0;
 
     Vue.component( 'layerimport-widget', {
         extends: inc.widgets.toolButton,
@@ -598,6 +599,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         //used to give each geometry collections added in the file to the map an ID that will be combined with date to be unique to this session
         // useful when trying to rebuild geomtry collections later
         let geometryCollectionCounter = 0;
+        
         let date = new Date();
         let featureCollectionTimeAdded = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(); 
 
@@ -625,10 +627,27 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
         if (geoJSONFile.type == "Feature") {
 
-            L.geoJSON(geoJSONFile, {
-                style: geoJSONStyle,
-                originalGeoJSONType: geoJSONFile.geometry.type
-            }).addTo(map);
+            switch(geoJSONFile.geometry.type) {
+                case "GeometryCollection":
+                    addGeoJSONGeometryCollectionAndStyleToMap(geoJSONFile, null, geoJSONStyle, map, "GeometryCollection", geometryCollectionCounter, "No Collection");
+                    geometryCollectionCounter += 1;
+                    break;
+                case "Point":
+                    addGeoJSONPointAsCircleMarker(geoJSONFile, null, geoJSONStyle, map, "Point", "No Collection", "No Geo Collection", "No Geo Collection");
+                    break;
+                case "MultiPoint":
+                    addGeoJSONMultiPointsAsCircleMarker(geoJSONFile, null, geoJSONStyle, map, "MultiPoint", "No Collection", "No Geo Collection", "No Geo Collection")
+                    break;
+                default:
+                    L.geoJSON(geoJSONFile, {
+                        style: geoJSONStyle,
+                        originalGeoJSONType: geoJSONFile.geometry.type,
+                        featureCollectionTime: "No Collection",
+                        alt: "No Collection"
+                    }).addTo(map);
+            }
+
+            
             
         
         } else if ( geoJSONFile.type == "FeatureCollection") {
@@ -637,7 +656,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     switch(geoJSONFile.features[feature].geometry.type) {
                         // the types are passed in to addgeoJSONFeatureAndStyleToMap so that leaflet has access to them in objects, useful elsewhere
                         case "Point":
-                            addgeoJSONFeatureAndStyleToMap(geoJSONFile, feature, geoJSONStyle, map, "Point", featureCollectionTimeAdded);
+                            addGeoJSONPointAsCircleMarker(geoJSONFile, feature, geoJSONStyle, map, "Point", featureCollectionTimeAdded, "No Geo Collection", "No Geo Collection");
                             break;
                         case "LineString":
                             addgeoJSONFeatureAndStyleToMap(geoJSONFile, feature, geoJSONStyle, map, "LineString", featureCollectionTimeAdded);
@@ -646,7 +665,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                             addgeoJSONFeatureAndStyleToMap(geoJSONFile, feature, geoJSONStyle, map, "Polygon", featureCollectionTimeAdded);
                             break;
                         case "MultiPoint":
-                            addgeoJSONFeatureAndStyleToMap(geoJSONFile, feature, geoJSONStyle, map, "MultiPoint", featureCollectionTimeAdded);
+                            addGeoJSONMultiPointsAsCircleMarker(geoJSONFile, feature, geoJSONStyle, map, "MultiPoint", featureCollectionTimeAdded, "No Geo Collection", "No Geo Collection")
                             break;
                         case "MultiLineString":
                             addgeoJSONFeatureAndStyleToMap(geoJSONFile, feature, geoJSONStyle, map, "MultiLineString", featureCollectionTimeAdded);
@@ -669,13 +688,189 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         }
     }
 
+
+    function addGeoJSONPointAsCircleMarker (geoJSONFile, feature, geoJSONStyle, map, type, featureCollectionTimeAdded, geometryCollectionCounter, geoCollectionHour) {
+        
+        console.log("Inside add geo JSON Point as circle marker")
+        let geojsonMarkerOptions = {
+            radius: 1,
+            fillColor: geoJSONStyle.fillColor,
+            color: geoJSONStyle.color,
+            weight: geoJSONStyle.weight,
+            opacity: geoJSONStyle.opacity,
+            fillOpacity: geoJSONStyle.fillOpacity,
+            featureCollectionTime: featureCollectionTimeAdded,
+            originalGeoJSONType: type,
+            style: geoJSONStyle,
+            creationID: geometryCollectionCounter,
+            geoCollectionHour: geoCollectionHour
+            
+
+        };
+
+        if (feature == null && featureCollectionTimeAdded == "No Collection" && geometryCollectionCounter == "No Geo Collection"){
+            // handles if there is no feature collection and no geometry collection aka just adding a feature by itself
+
+            let geoJSONPointCoords = geoJSONFile.geometry.coordinates;
+            let latlng = []
+            latlng[0] = geoJSONPointCoords[1]
+            latlng[1] = geoJSONPointCoords[0]
+
+            L.geoJSON(geoJSONFile, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                }
+            }).addTo(map);
+
+        } else if (geometryCollectionCounter != "No Geo Collection" && featureCollectionTimeAdded != "No Collection"){
+            //handles if there is a geometry collection and a feature collection
+            let geoJSONPointCoords = geoJSONFile.coordinates;
+            let latlng = []
+            latlng[0] = geoJSONPointCoords[0][1]
+            latlng[1] = geoJSONPointCoords[0][0]
+
+            L.geoJSON(geoJSONFile, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                }
+            }).addTo(map);
+
+        } else if (geometryCollectionCounter != "No Geo Collection") {
+            // handles if there is just a geo collection
+            let geoJSONPointCoords = geoJSONFile.coordinates;
+            let latlng = []
+            latlng[0] = geoJSONPointCoords[0][1]
+            latlng[1] = geoJSONPointCoords[0][0]
+
+            L.geoJSON(geoJSONFile, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                }
+            }).addTo(map);
+        
+            
+        
+
+        } else {
+            // else handles if there is just a feature collection
+            let geoJSONPointCoords = geoJSONFile.features[feature].geometry.coordinates;
+            let latlng = []
+            latlng[0] = geoJSONPointCoords[1]
+            latlng[1] = geoJSONPointCoords[0]
+
+
+            L.geoJSON(geoJSONFile.features[feature], {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                }
+            }).addTo(map);
+        }
+    }
+
+
+
+
+    function addGeoJSONMultiPointsAsCircleMarker (geoJSONFile, feature, geoJSONStyle, map, type, featureCollectionTimeAdded, geometryCollectionCounter, geoCollectionHour) {
+        
+        
+        console.log("Inside add geo JSON Point as circle marker")
+        let geojsonMarkerOptions = {
+            radius: 1,
+            fillColor: geoJSONStyle.fillColor,
+            color: geoJSONStyle.color,
+            weight: geoJSONStyle.weight,
+            opacity: geoJSONStyle.opacity,
+            fillOpacity: geoJSONStyle.fillOpacity,
+            featureCollectionTime: featureCollectionTimeAdded,
+            originalGeoJSONType: type,
+            id : multiPointCollectionCounter,
+            style: geoJSONStyle,
+            creationID: geometryCollectionCounter,
+            geoCollectionHour: geoCollectionHour
+
+
+        };
+
+        if (feature == null && featureCollectionTimeAdded == "No Collection" && geometryCollectionCounter == "No Geo Collection"){
+            // handles if there is no feature collection and no geometry collection aka just adding a feature by itself
+            let geoJSONPointCoords = geoJSONFile.geometry.coordinates;
+            let latlng = []
+            latlng[0] = geoJSONPointCoords[0][1]
+            latlng[1] = geoJSONPointCoords[0][0]
+
+            L.geoJSON(geoJSONFile, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                }
+            }).addTo(map);
+
+
+        } else if (geometryCollectionCounter != "No Geo Collection" && featureCollectionTimeAdded != "No Collection"){
+            //handles if there is a geometry collection and a feature collection
+
+            let geoJSONPointCoords = geoJSONFile.coordinates;
+            let latlng = []
+            latlng[0] = geoJSONPointCoords[0][1]
+            latlng[1] = geoJSONPointCoords[0][0]
+
+
+            L.geoJSON(geoJSONFile, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                }
+            }).addTo(map);
+
+
+        } else if (geometryCollectionCounter != "No Geo Collection") {
+            // handles if there is just a geo collection
+            let geoJSONPointCoords = geoJSONFile.coordinates;
+            let latlng = []
+            latlng[0] = geoJSONPointCoords[0][1]
+            latlng[1] = geoJSONPointCoords[0][0]
+
+            L.geoJSON(geoJSONFile, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                }
+            }).addTo(map);
+
+
+        } else {
+            // else handles if there is just a feature collection
+            let geoJSONPointCoords = geoJSONFile.features[feature].geometry.coordinates;
+            let latlng = []
+            latlng[0] = geoJSONPointCoords[0][1]
+            latlng[1] = geoJSONPointCoords[0][0]
+
+            L.geoJSON(geoJSONFile.features[feature], {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                }
+            }).addTo(map);
+            
+        }
+
+        multiPointCollectionCounter += 1
+
+    }
+
+
+
+
+
+
+
+
+
+
     //default function used to add most features to a map
     function addgeoJSONFeatureAndStyleToMap(geoJSONFile, feature, geoJSONStyle, map, type, featureCollectionTimeAdded) {
         
         L.geoJSON(geoJSONFile.features[feature], {
             style: geoJSONStyle,
             originalGeoJSONType: type,
-            featureCollectionTime: featureCollectionTimeAdded
+            featureCollectionTime: featureCollectionTimeAdded,
+            originalGeoJSONFeatureCollection: geoJSONFile,
         }).addTo(map);
 
     }
@@ -687,28 +882,67 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         let date = new Date();
         let time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(); 
 
-        //console.log("The geometry collection looks like: ", geoJSONFileGeoCollection)
-        //console.log("The geometry collection looks like specfically: ", geoJSONFileGeoCollection.features[feature])
+        console.log("The geometry collection looks like: ", geoJSONFileGeoCollection)
+        
 
-        for (let geometry in geoJSONFileGeoCollection.features[feature].geometry.geometries){
-            //console.log("The inner geometries should be: ", geoJSONFileGeoCollection.features[feature].geometry.geometries[geometry])
 
-            L.geoJSON(geoJSONFileGeoCollection.features[feature].geometry.geometries[geometry], {
-                style: geoJSONStyle,
-                originalGeoJSONType: type,
-                geoCollectionSubType: geoJSONFileGeoCollection.features[feature].geometry.geometries[geometry].type,
-                hour: time,
-                creationID: geometryCollectionCounter,
-                originalGeometryCollectionObject: geoJSONFileGeoCollection.features[feature],
-                featureCollectionTime: featureCollectionTimeAdded
+        // in case the geometry collection isn't part of a feature collection
+        if (feature == null && featureCollectionTimeAdded == "No Collection"){
+            for (let geometry in geoJSONFileGeoCollection.geometry.geometries){
+                //console.log("The inner geometries should be: ", geoJSONFileGeoCollection.geometry.geometries[geometry])
 
-            }).addTo(map);
+                if (geoJSONFileGeoCollection.geometry.geometries[geometry].type == "MultiPoint"){
+
+
+                    addGeoJSONMultiPointsAsCircleMarker(geoJSONFileGeoCollection.geometry.geometries[geometry], null, geoJSONStyle, map, "MultiPoint", "No Collection", geometryCollectionCounter, time)
+
+                } else if(geoJSONFileGeoCollection.geometry.geometries[geometry].type == "Point") {
+                    addGeoJSONPointAsCircleMarker(geoJSONFileGeoCollection.geometry.geometries[geometry], null, geoJSONStyle, map, "Point", "No Collection", geometryCollectionCounter, time)
+
+                } else {
+                    L.geoJSON(geoJSONFileGeoCollection.geometry.geometries[geometry], {
+                        style: geoJSONStyle,
+                        originalGeoJSONType: type,
+                        geoCollectionSubType: geoJSONFileGeoCollection.geometry.geometries[geometry].type,
+                        hour: time,
+                        creationID: geometryCollectionCounter,
+                        originalGeometryCollectionObject: geoJSONFileGeoCollection,
+                        featureCollectionTime: featureCollectionTimeAdded
+
+                    }).addTo(map);
+                }
+            }
+
+        } else {
+            for (let geometry in geoJSONFileGeoCollection.features[feature].geometry.geometries){
+                //console.log("The inner geometries should be: ", geoJSONFileGeoCollection.features[feature].geometry.geometries[geometry])
+
+                if (geoJSONFileGeoCollection.features[feature].geometry.geometries[geometry].type == "MultiPoint"){
+                    addGeoJSONMultiPointsAsCircleMarker(geoJSONFileGeoCollection.features[feature].geometry.geometries[geometry], feature, geoJSONStyle, map, "MultiPoint", featureCollectionTimeAdded, geometryCollectionCounter, time)
+
+                } else if(geoJSONFileGeoCollection.features[feature].geometry.geometries[geometry].type == "Point") {
+                    addGeoJSONPointAsCircleMarker(geoJSONFileGeoCollection.features[feature].geometry.geometries[geometry], feature, geoJSONStyle, map, "Point", featureCollectionTimeAdded, geometryCollectionCounter, time)
+
+                } else {
+                L.geoJSON(geoJSONFileGeoCollection.features[feature].geometry.geometries[geometry], {
+                    style: geoJSONStyle,
+                    originalGeoJSONType: type,
+                    geoCollectionSubType: geoJSONFileGeoCollection.features[feature].geometry.geometries[geometry].type,
+                    hour: time,
+                    creationID: geometryCollectionCounter,
+                    originalGeometryCollectionObject: geoJSONFileGeoCollection.features[feature],
+                    featureCollectionTime:featureCollectionTimeAdded
+
+                }).addTo(map);
+            }
         }
-
-
-        
-        
     }
+}
+
+
+
+
+
     
     //gets a list of all the feature layers from a layer name and WMS returning all the features available to that layer, these can be display
     //currently not required

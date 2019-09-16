@@ -281,7 +281,7 @@
         </div>
 
         {{ selected}} input area, please browse for a GeoJSON file once you're done styling.
-        <input type="file" @change="importGeoJSON" multiple>
+        <input type="file" @change="importGeoJSON" >
         <div v-if="geoJSONFileUploadSuccess">
           Import of {{ geoJSONfileValue }} was successful.
         </div>

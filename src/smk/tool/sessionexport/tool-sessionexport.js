@@ -47,7 +47,12 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
     // returns a nice geoJSON object with or without styles
     class GeoJSONcreator {
 
-        constructor(mainType,  geometryType, coordinates, propertyName, propertyContent, propertyStyle, radius, featureCollectionTime ){
+        //feature collection time is the time that the feature collection was created, used to group parts of feature collections that are seperated back together
+        // multiPointID is used to put back together multi points that get seperated
+        // geometryCollectionIDAndMultiPoint is used to put points and multi points back into their respective geocollections
+        // geometryCollection hour is used in tandem with geometryCollectionIDAndMultiPoint to reassmble multi points and points with their geo collections
+        
+        constructor(mainType,  geometryType, coordinates, propertyName, propertyContent, propertyStyle, radius, featureCollectionTime, multiPointID, geometryCollectionIDPointAndMultiPoint, geometryCollectionHour ){
             this.mainType = mainType;
             this.geometryType = geometryType;
             this.coordinates = coordinates;
@@ -55,12 +60,15 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             this.content = propertyContent;
             this.style = propertyStyle;
             this.radius = radius;
-            this.featureCollectionTime = featureCollectionTime
+            this.featureCollectionTime = featureCollectionTime;
+            this.multiPointID = multiPointID;
+            this.geometryCollectionIDPointAndMultiPoint = geometryCollectionIDPointAndMultiPoint;
+            this.geometryCollectionHour = geometryCollectionHour;
         }
 
 
         getGeoJSONObjectWithStyle(){
-            let geoJSON = '{"type": "","geometry": {"type": "","coordinates": ""}, "properties": { "name" : "", "content": "", "style" : "", "radius" : "", "featureCollectionTime": null } }';
+            let geoJSON = '{"type": "","geometry": {"type": "","coordinates": ""}, "properties": { "name" : "", "content": "", "style" : "", "radius" : "", "featureCollectionTime": null, "multiPointID": null, "geometryCollectionIDPointAndMultiPoint": null, "geometryCollectionHour": null } }';
             geoJSON = JSON.parse(geoJSON);
 
             geoJSON.type = this.mainType;
@@ -68,9 +76,12 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             geoJSON.geometry.coordinates = this.coordinates;
             geoJSON.properties.name = this.name;
             geoJSON.properties.content = this.content;
-            geoJSON.properties.style = this.style
-            geoJSON.properties.radius = this.radius
-            geoJSON.properties.featureCollectionTime = this.featureCollectionTime
+            geoJSON.properties.style = this.style;
+            geoJSON.properties.radius = this.radius;
+            geoJSON.properties.featureCollectionTime = this.featureCollectionTime;
+            geoJSON.properties.multiPointID = this.multiPointID;
+            geoJSON.properties.geometryCollectionIDPointAndMultiPoint = this.geometryCollectionIDPointAndMultiPoint;
+            geoJSON.properties.geometryCollectionHour = this.geometryCollectionHour;
             
             return geoJSON;
         }
@@ -352,9 +363,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             jsonObjectHolder.viewer.location.zoom = smk.$viewer.map._animateToZoom;
         }
 
-
-       
-
         //handle all the exports of leaflet drawing layers as well as GeoJSON layers here
         if (smk.$viewer.type == "leaflet") {
             jsonObjectHolder = handleLeafletDrawingsAndGeoJSONLayers( smk, jsonObjectHolder );
@@ -364,85 +372,213 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         return jsonObjectHolder;
     }
 
+    // Takes all the Layer information that comes from drawings or GeoJSON and converts it to GeoJSON for export 
+    function fillDrawingsWithGeoJSON ( smk, jsonObjectHolder){
+
+        let arrayOfGeometryCollections = []
+        let arrayOfMultiPoints = []
+
+        //this is a loop through every layer on the map
+        for (let drawing in smk.$viewer.map._layers) {
+       
+            // if (typeof smk.$viewer.map._layers[drawing].options.style == "undefined") is true it means these are leaflet drawn drawings and not geoJson imports
+            // this if is for leaflet layers created by the leaflet drawing tool
+            if (typeof smk.$viewer.map._layers[drawing].options.style == "undefined") {
+
+                    let drawingObj = getLeaftletDrawing(drawing, smk )
+                    //check if drawing exists, and then convert it to geoJSON before adding it to the jsonObjectHolder
+                    if (drawingObj != null) {
+
+                        //console.log("The leaflet drawing is: ", drawingObj)
+                        let geoJSONDrawingObj = convertLeafletDrawingToGeoJSON(drawingObj);
+
+                        jsonObjectHolder.drawings.push( geoJSONDrawingObj );
+                    }
+                
+                } else if (typeof smk.$viewer.map._layers[drawing].options.style !== "undefined" && typeof smk.$viewer.map._layers[drawing]._latlngs !== "undefined") {
+                    // these should be all the layers imported through the geojson import tool in layerimport AKA were originally in GeoJSON
+ 
+                    // need to handle geometry collections differently than straight geoJSON features
+                    if (smk.$viewer.map._layers[drawing].options.originalGeoJSONType == "GeometryCollection"){
+                        
+                        // check if arrayOfGeometryCollection already has a geometry collection in it
+                        // if it does we need to find which element contains the other geometry collection pieces
+                        if (arrayOfGeometryCollections.length != 0) {
+                            for ( let element in arrayOfGeometryCollections) {
+                                if (  checkForMatchingGeometryCollectionIDsAndHour(arrayOfGeometryCollections[element], smk.$viewer.map._layers[drawing])) {
+                                    //console.log(" part of the same geometry collection")
+                                    arrayOfGeometryCollections[element].arrayOfGeoCollectionElements.push(smk.$viewer.map._layers[drawing])
+                                } else {
+                                    // only should be added if we've already checked the other elements in the array to make sure there was nothing there
+                                    if (element == arrayOfGeometryCollections.length - 1) {
+                                    //console.log("must be a part of a different geometry collection")
+                                    arrayOfGeometryCollections.push(  createJSONGeometryCollectionObject(smk.$viewer.map._layers[drawing])   );
+                                    }
+                                }
+                            }                          
+                        } else {
+                            // if the array doesn't have any elements in it, we can add the first element to the array which contains this geometry element
+                            // as well as it's ID and Time for identification
+                            arrayOfGeometryCollections.push(  createJSONGeometryCollectionObject(smk.$viewer.map._layers[drawing])   );
+                        }
+                    } else {
+                        // handles everything that isn't a GeoJSON Geometry Collection
+                        let geoJSONFromImport = retrieveExistingGeoJSONFromLeaflet(smk.$viewer.map._layers[drawing]);
+                        jsonObjectHolder.drawings.push(geoJSONFromImport);
+                    }
+
+                // handles addition of point and multi point markers that only have a _latlng not a _latlngs
+                } else if (typeof smk.$viewer.map._layers[drawing].options.style !== "undefined" && typeof smk.$viewer.map._layers[drawing]._latlng !== "undefined") {
+
+                if (smk.$viewer.map._layers[drawing].options.originalGeoJSONType == "MultiPoint") {
+                    //multi points require special handling of their GeoJSON once retrieved to be reassembled into their multiarray form rather than seperate multipoint arrays
+                    if (arrayOfMultiPoints.length != 0) {
+                        for ( let element in arrayOfMultiPoints) {
+                            if (  checkForMatchingMultiPointIDs(arrayOfMultiPoints[element], smk.$viewer.map._layers[drawing])) {
+                                arrayOfMultiPoints[element].arrayOfMultiPointElements.push(    smk.$viewer.map._layers[drawing]  )
+                            } else {
+                                // only should be added if we've already checked the other elements in the array to make sure there was nothing there
+                                if (element == arrayOfMultiPoints.length - 1) {
+                                
+                                arrayOfMultiPoints.push( createJSONMultiPointCollectionObject(smk.$viewer.map._layers[drawing] ));
+                                }
+                            }
+                        }                          
+                    } else {
+                        // if the array doesn't have any elements in it, we can add the first element to the array which contains this multipoint element
+                        // as well as it's ID and Time for identification
+                        arrayOfMultiPoints.push( createJSONMultiPointCollectionObject(smk.$viewer.map._layers[drawing] ));
+                    }
+                } else {
+                    let geoJSONFromImport = retrieveExistingGeoJSONFromLeaflet(smk.$viewer.map._layers[drawing]);
+                    jsonObjectHolder.drawings.push(geoJSONFromImport);
+                }
+             }
+        }
+        // with all the multi point collections gathered together we need to assemble each element into the array (containing seperate multi points) into one multi point for each array element
+        if (arrayOfMultiPoints.length != 0) {
+            for (let multiPointElement in arrayOfMultiPoints){
+                let multiPointGeoJSON = reassembleMultiPoints(arrayOfMultiPoints[multiPointElement]);
+                jsonObjectHolder.drawings.push(multiPointGeoJSON);
+            }
+        }
+
+        // Once all the geomtry collections are, well collected they need to be built into their correct geoJSON, 
+        if (arrayOfGeometryCollections.length != 0) {
+            //console.log("need to process all elements in the geometry collection array here");
+            //console.log("All the geometry collection elements should be in this array sorted by collection: ", arrayOfGeometryCollections);
+            for (let element in arrayOfGeometryCollections){
+                let geoJSONFromImport = reassambleGeoJSONGeometryCollection(arrayOfGeometryCollections[element]);
+                //console.log("The returned value from reassmbleGeoJSONGeometryCollection looks like: ", geoJSONFromImport)
+                jsonObjectHolder.drawings.push(geoJSONFromImport);
+                //console.log("After pushing the geoJSONFromImport onto jsonObjectHolder.drawings it looks like: ", jsonObjectHolder.drawings)
+            }
+        }
+
+        // Now that the geometry collections are collected and identified, and all the multipoints and points are assemblemed in JSON, the two can be combined
+        // we can loop through the available drawings for geometry collections, and then if a point matches their ID and hour it can be added to that geometry collection
+        // if an encountered point has no collection then we can break
+        // we'll make the changes into a copied version of jsonObjectHolder and then assign that to the actual jsonObjectHolder once the changes are made
+
+        let tempJsonObjectHolder = jsonObjectHolder.drawings;
+        for ( let maybeGeoCollection in jsonObjectHolder.drawings){
+            // is this a geometry collection or is it a geometry collection inside a feature, both are fine
+            if (jsonObjectHolder.drawings[maybeGeoCollection].type == "Feature" && jsonObjectHolder.drawings[maybeGeoCollection].geometry.type == "GeometryCollection" ){
+                for (let maybeGeoCollectionElement in jsonObjectHolder.drawings){
+                    if (isPointOrMultiFromGeoCollection(jsonObjectHolder.drawings[maybeGeoCollectionElement], jsonObjectHolder.drawings[maybeGeoCollection] ) ) {
+
+                        // because features keep their properties above their geometry, the properties need to be grabbed and recombined with the geometry collection to fit in a geo collection
+                        let tempJsonPointOrMultiPointObject = jsonObjectHolder.drawings[maybeGeoCollectionElement].geometry;
+                        tempJsonPointOrMultiPointObject.properties = (jsonObjectHolder.drawings[maybeGeoCollectionElement].properties);
+                        tempJsonObjectHolder[maybeGeoCollection].geometry.geometries.push(tempJsonPointOrMultiPointObject);
+
+                    }
+                }
+            }
+        }
+        // Now that all the points and multi points that should be inside their geoCollections are safely inside we'll copy over everything inside a geoCollection, or outside that has the
+        // No Geo Collection value for their geometryCollectionIDPointAndMultiPoint
+        jsonObjectHolder.drawings = []
+        for (let drawing in tempJsonObjectHolder){
+            if ( typeof tempJsonObjectHolder[drawing].properties != "undefined" && typeof tempJsonObjectHolder[drawing].properties.geometryCollectionIDPointAndMultiPoint != "undefined" && tempJsonObjectHolder[drawing].geometry.type != "GeometryCollection" && tempJsonObjectHolder[drawing].properties.geometryCollectionIDPointAndMultiPoint != "No Geo Collection" && tempJsonObjectHolder[drawing].properties.geometryCollectionIDPointAndMultiPoint != null){
+                console.log("This element should be inside a geocollection already, and since it isn't it's not getting transfered over")
+            } else {
+                jsonObjectHolder.drawings.push(tempJsonObjectHolder[drawing])
+            }  
+        }
+        return jsonObjectHolder;
+    }
+
+    //first check if feature is a point or multi point
+    // if not then return
+    // then if it is,
+    // check if it's geometryCollectionIDPointAndMultiPoint equals "No Geo Collection", if so then return
+    // if not then compare it's geometryCollectionIDPointAndMultiPoint and geometryCollecionHour for a match
+    function isPointOrMultiFromGeoCollection ( maybeGeoCollectionPointOrMultiPoint, geoCollection){
+        let match = false
+        //checking if it's a point or multi point, if it isn't return false
+        if (maybeGeoCollectionPointOrMultiPoint.geometry.type == "Point" || maybeGeoCollectionPointOrMultiPoint.geometry.type == "MultiPoint"){
+                // checking if it's part of a geo collection, if it isn't return false
+            if (maybeGeoCollectionPointOrMultiPoint.properties.geometryCollectionIDPointAndMultiPoint == "No Geo Collection"){
+                return match;
+            }
+            //checking if ID's and hours match
+            if (maybeGeoCollectionPointOrMultiPoint.properties.geometryCollectionIDPointAndMultiPoint == geoCollection.geometryCollectionIDPointAndMultiPoint && maybeGeoCollectionPointOrMultiPoint.properties.geometryCollectionHour == geoCollection.geometryCollectionHour){
+                
+                match = true;
+                return match;
+            }
+        }
+        return match;
+    }
+
+
+    function createJSONMultiPointCollectionObject ( geoJSONFromLeaflet ) {
+        let jsonArrayElements = '{ "id": "", "arrayOfMultiPointElements": [] }'
+        jsonArrayElements = JSON.parse(jsonArrayElements)
+        jsonArrayElements.id = geoJSONFromLeaflet.options.id
+        jsonArrayElements.arrayOfMultiPointElements.push(geoJSONFromLeaflet)
+
+        return jsonArrayElements
+
+    }
+
+    function reassembleMultiPoints( multiPointElements){
+
+        let multiPointGeoJSONIndividual = [];
+
+        for (let individualMultiPoints in multiPointElements.arrayOfMultiPointElements){
+            multiPointGeoJSONIndividual.push(retrieveExistingGeoJSONFromLeaflet(multiPointElements.arrayOfMultiPointElements[individualMultiPoints]));
+        }
+
+        for (let singleMultiPoint in multiPointGeoJSONIndividual){
+            if (singleMultiPoint != 0) {
+
+            multiPointGeoJSONIndividual[0].geometry.coordinates[0].push(multiPointGeoJSONIndividual[singleMultiPoint].geometry.coordinates[0]);
+            }
+        }
+        return multiPointGeoJSONIndividual[0];
+
+    }
+
+    function checkForMatchingMultiPointIDs (arrayOfMultiPoints, multiPointElement){
+        let match = false
+        if (arrayOfMultiPoints.id == multiPointElement.options.id ){
+            match = true;
+        }
+        return match
+    }
+
+
     function handleLeafletDrawingsAndGeoJSONLayers ( smk, jsonObjectHolder ){
                    // geometry collections can be multiple objects and must be stored in an array of their subelements until they can be all collected at once
-                   let arrayOfGeometryCollections = []
-                   //this is a loop through every layer on the map
-                   for (let drawing in smk.$viewer.map._layers) {
-       
-                       // if (typeof smk.$viewer.map._layers[drawing].options.style == "undefined") is true it means these are leaflet drawn drawings and not geoJson imports
-                       // this if is for leaflet layers created by the leaflet drawing tool
-                       if (typeof smk.$viewer.map._layers[drawing].options.style == "undefined") {
-       
-                           let drawingObj = getLeaftletDrawing(drawing, smk )
-                           //check if drawing exists, and then convert it to geoJSON before adding it to the jsonObjectHolder
-                           if (drawingObj != null) {
-       
-                               //console.log("The leaflet drawing is: ", drawingObj)
-                               let geoJSONDrawingObj = convertLeafletDrawingToGeoJSON(drawingObj);
-       
-                               jsonObjectHolder.drawings.push( geoJSONDrawingObj );
-                           }
-       
-                           
-                        } else if (typeof smk.$viewer.map._layers[drawing].options.style !== "undefined" && typeof smk.$viewer.map._layers[drawing]._latlngs !== "undefined") {
-                            // these should be all the layers imported through the geojson import tool in layerimport AKA were originally in GeoJSON
-                            //console.log("These are the imported geoJson layers", smk.$viewer.map._layers[drawing])
-                            //console.log("The styling for this object is: ", smk.$viewer.map._layers[drawing].options.style)
-                            //console.log("The co-ords for imported geoJson layers is: ", smk.$viewer.map._layers[drawing]._latlngs);
-                           // need to handle geometry collections differently than straight geoJSON features
-                           if (smk.$viewer.map._layers[drawing].options.originalGeoJSONType == "GeometryCollection"){
-                               //console.log("Geometry collection handling goes here")
-                               //console.log(smk.$viewer.map._layers[drawing])
-                               // check if arrayOfGeometryCollection already has a geometry collection in it
-                               // if it does we need to find which element contains the other geometry collection pieces
-                               if (arrayOfGeometryCollections.length != 0) {
-                                   for ( let element in arrayOfGeometryCollections) {
-                                       if (  checkForMatchingGeometryCollectionIDsAndHour(arrayOfGeometryCollections[element], smk.$viewer.map._layers[drawing])) {
-                                           //console.log(" part of the same geometry collection")
-                                           arrayOfGeometryCollections[element].arrayOfGeoCollectionElements.push(smk.$viewer.map._layers[drawing])
-                                       } else {
-                                           // only should be added if we've already checked the other elements in the array to make sure there was nothing there
-                                           if (element == arrayOfGeometryCollections.length - 1) {
-                                           //console.log("must be a part of a different geometry collection")
-                                           arrayOfGeometryCollections.push(  createJSONGeometryCollectionObject(smk.$viewer.map._layers[drawing])   );
-                                           }
-                                       }
-                                   }                          
-                               } else {
-                                   // if the array doesn't have any elements in it, we can add the first element to the array which contains this geometry element
-                                   // as well as it's ID and Time for identification
-                                   //console.log("first element pushed into the array of geo collections: ", smk.$viewer.map._layers[drawing]);
-                                   arrayOfGeometryCollections.push(  createJSONGeometryCollectionObject(smk.$viewer.map._layers[drawing])   );
-                               }
-                           } else {
-                               // handles everything that isn't a GeoJSON Geometry Collection
-                               //console.log("every other type of feature element is handled here")
-                               let geoJSONFromImport = retrieveExistingGeoJSONFromLeaflet(smk.$viewer.map._layers[drawing]);
-                               jsonObjectHolder.drawings.push(geoJSONFromImport);
-                           }
-                        }
-                   }
-                   // Once all the geomtry collections are, well collected they need to be built into their correct geoJSON, and have their loose markers collected and added in
-                   if (arrayOfGeometryCollections.length != 0) {
-                       //console.log("need to process all elements in the geometry collection array here");
-                       console.log("All the geometry collection elements should be in this array sorted by collection: ", arrayOfGeometryCollections);
-                       for (let element in arrayOfGeometryCollections){
-                           let geoJSONFromImport = reassambleGeoJSONGeometryCollection(arrayOfGeometryCollections[element], jsonObjectHolder.drawings);
-                           jsonObjectHolder.drawings.push(geoJSONFromImport);
-                       }
-                   }
-
-                   //Now that all the markers that are supposed to be in geomtetry collections have been added to geomtry collections
-                   // we need to remove them from the JSON object holder, which means comparing all points in Geometry Collections with all points in
-                   // the jsonObjectHolder, once there is a match each drawing marker will need to have a flag for deletion marker added
-                   // once all the markers have been added, a seperate function will parse the jsonObjectHolder and remove any marker that has been flagged for deletion
-
-                   // before the above can be done we need to wrap everything that comes from a feature collection in it's feature collection, that way markers which are outside their feature collections
+                    jsonObjectHolder = fillDrawingsWithGeoJSON(smk, jsonObjectHolder)
+                   //  wrap everything that comes from a feature collection in it's feature collection, that way markers which are outside their feature collections
                    // will not interfere, eg we will only check markers outside feature elements versus markers inside feature elements
 
                    // we can assume that points appear by themselves, or as part of a collection which contains other non point elements
-                   
+                   console.log("Before building the feature collection objects the drawing array looks like: ", jsonObjectHolder.drawings)
+
                    let arrayOfFeatureCollections = []
                    for ( let drawing in jsonObjectHolder.drawings){
                         let featureCollection = '{ "type": "FeatureCollection", "features" : [], "properties": { "featureCollectionID" : null}} ';
@@ -500,15 +636,32 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                         }
                    }
                    // now that all the featureCollections have been built it should be safe to add them to the jsonObjectHolder, though ideally we'll clear out any element with
-                   // a feature collection id first, which works fine for non-markers, markers since they have a hard time having properties passed to them need a special handler
-                   // where we check every marker outside a feature collection with every marker inside a feature collection, and if there is a duplicate the markers outside need to be removed
+                   // a feature collection id first, which works fine for non-markers. All loose markers outside collections 
 
                    // remove all features with feature elements
                    // create a temporary array to hold the drawings we want to keep
                    let tempDrawings = []
                    for ( let drawing in jsonObjectHolder.drawings) {
+                       
                        if ( typeof jsonObjectHolder.drawings[drawing].properties =="undefined" || jsonObjectHolder.drawings[drawing].properties.featureCollectionTime != null){
-                        delete jsonObjectHolder.drawings[drawing];
+
+                           // this if handles the loose No Collection features which are supposed to be kept as they were added outside a feature collection (for non-geo collection)
+                            if (typeof jsonObjectHolder.drawings[drawing].properties !="undefined" && jsonObjectHolder.drawings[drawing].properties.featureCollectionTime == "No Collection"){
+                                tempDrawings.push(jsonObjectHolder.drawings[drawing])
+
+                            // the else-if on the other hand handles loose No Collection features which are kept as they're added outside a feature collection but are GeometryCollections
+                            } else if(typeof jsonObjectHolder.drawings[drawing].geometry.type !="undefined" && jsonObjectHolder.drawings[drawing].geometry.type == "GeometryCollection"){
+                                for ( let geometryCollectionElement in jsonObjectHolder.drawings[drawing].geometry.geometries){
+                                    if (typeof jsonObjectHolder.drawings[drawing].geometry.geometries[geometryCollectionElement].properties !="undefined" && jsonObjectHolder.drawings[drawing].geometry.geometries[geometryCollectionElement].properties.featureCollectionTime == "No Collection"){
+                                        tempDrawings.push(jsonObjectHolder.drawings[drawing])
+                                        break
+                                    }
+                                }
+                            } else {
+                                //this deletes all the elements that are part of feature collections and are already safely in those feature collections
+                                delete jsonObjectHolder.drawings[drawing];
+                            }
+                        
                        } else {
                            tempDrawings.push(jsonObjectHolder.drawings[drawing])
                        }
@@ -526,6 +679,8 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         return jsonObjectHolder
     }
 
+
+
     function buildingAFeatureCollection( arrayOfFeatureCollections, featureCollectionJSON, featureCollectionID, geoJSONFeature ){
 
         //First we check if the array of feature collections is empty, if it is we skip to the else where we put the first element in it
@@ -533,8 +688,8 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         // If there is a match, great add that feature to the feature collection object inside the array
         // if there isn't a match we need to wait until we've checked every element of the array, if there still isn't a match we need to create a new array element and push that
         
-        // This if handles points being added which still do not have proper processing
-        if (featureCollectionID == null ){
+        // This if handles points being added which still do not have proper processing AND any feature that isn't part of a collection
+        if (featureCollectionID == null || featureCollectionID == "No Collection"){
             return arrayOfFeatureCollections
         }
 
@@ -549,6 +704,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 // this is the simplest option, we looked for a match and found one so we're adding this feature to that collection
                 if (arrayOfFeatureCollections[featureCollection].properties.featureCollectionID == featureCollectionID) {
                     arrayOfFeatureCollections[featureCollection].features.push(geoJSONFeature)
+                    break;
 
                 } else {
                     // this is where we checked all existing elements and couldn't find a match so we've added one
@@ -587,67 +743,27 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         console.log("Wait.")
     }
 
-
-
-    //with this we can fetch the original object, see if it has any markers, if it has any markers, they'll need to be added to the
-    // geometry collection but also removed from the jsonObjectHolder if they exist there
-    function addMarkersToGeometryCollections (originalGeoJSONGeometryCollection, jsonObjectHolderDrawings, geoJSONGeomtryCollectionObj){
-        for ( let geometry in originalGeoJSONGeometryCollection.geometry.geometries){
-            if ( originalGeoJSONGeometryCollection.geometry.geometries[geometry].type == "Point" ){
-                console.log("The original GeoJSONGeometryCollection object originally passed in looked like: ", geoJSONGeomtryCollectionObj)
-                console.log("The original array had a ", originalGeoJSONGeometryCollection.geometry.geometries[geometry].type,  " we may be missing at: ", originalGeoJSONGeometryCollection.geometry.geometries[geometry].coordinates )
-             // since we know it has a point, we need to see if this point is already in the jsonObjectHolder and if it is we can add it to this object
-                 console.log("The current jsonObjectHolder looks like: ", jsonObjectHolderDrawings)
-                 for (let drawing in jsonObjectHolderDrawings){
-                     if (jsonObjectHolderDrawings[drawing].geometry.type == "Point"){
-                         console.log("There is an existing ", jsonObjectHolderDrawings[drawing].geometry.type, " jsonObjectHolderDrawings at: ", jsonObjectHolderDrawings[drawing].geometry.coordinates )
-                         // should compare it to the point information we have above to see if there is a match, if there is we should add it to this object
-                         if ( comparePoints(originalGeoJSONGeometryCollection.geometry.geometries[geometry], jsonObjectHolderDrawings[drawing])){
-                             // if these are a match we need to add the point to our geometry collection
-                             let pointJSON = '{ "type": "Point", "coordinates": "", "properties": { "name" : null, "content" : null, "style" : null, "radius" : null, "featureCollectionTime": null }}'
-                             pointJSON = JSON.parse(pointJSON);
-                             pointJSON.coordinates = jsonObjectHolderDrawings[drawing].geometry.coordinates;
-                             pointJSON.properties.name = "Point";
-                             console.log("adding a point and checking feature collection time: ", jsonObjectHolderDrawings[drawing])
- 
-                             geoJSONGeomtryCollectionObj.geometry.geometries.push(pointJSON)
- 
-                         }
- 
-                     }
-                 }
- 
- 
-             }
- 
-         } 
-         return geoJSONGeomtryCollectionObj
-    }
-
-    function reassambleGeoJSONGeometryCollection( element, jsonObjectHolderDrawings){
-        let geoJSONGeomtryCollectionObj = '{ "type": "Feature", "geometry": { "type": "GeometryCollection", "geometries": []}}';
+    function reassambleGeoJSONGeometryCollection( element ){
+        let geoJSONGeomtryCollectionObj = '{ "type": "Feature", "geometry": { "type": "GeometryCollection", "geometries": [] }, "geometryCollectionIDPointAndMultiPoint": null, "geometryCollectionHour": null }';
         geoJSONGeomtryCollectionObj = JSON.parse(geoJSONGeomtryCollectionObj);
         console.log("The element is: ", element)
 
+        let geometryCollectionID = element.arrayOfGeoCollectionElements[0].options.creationID;
+        let hour = element.arrayOfGeoCollectionElements[0].options.hour;
         
-        let originalGeoJSONGeometryCollection = element.arrayOfGeoCollectionElements[0].options.originalGeometryCollectionObject
-        console.log("the original Geometry collection looked like: ", originalGeoJSONGeometryCollection)
-        geoJSONGeomtryCollectionObj = addMarkersToGeometryCollections(originalGeoJSONGeometryCollection, jsonObjectHolderDrawings, geoJSONGeomtryCollectionObj);
-
+        let originalGeoJSONGeometryCollection = element.arrayOfGeoCollectionElements[0].options.originalGeometryCollectionObject;
+        console.log("the original Geometry collection looked like: ", originalGeoJSONGeometryCollection);
         
-        
-
-
         for (let geoInformation in element.arrayOfGeoCollectionElements){
-            console.log(" a element[geoInformation] contains: ", element.arrayOfGeoCollectionElements[geoInformation])
+            console.log(" a element[geoInformation] contains: ", element.arrayOfGeoCollectionElements[geoInformation]);
 
             // this function is designed to return the element as a feature object, so once we have the information we need
             // it needs to be pulled out of the geoJSON and assigned to our geometry collection object
-           let geoJSON = retrieveExistingGeoJSONFromLeaflet( element.arrayOfGeoCollectionElements[geoInformation])
-           console.log("function created geoJSON is: ", geoJSON)
+           let geoJSON = retrieveExistingGeoJSONFromLeaflet( element.arrayOfGeoCollectionElements[geoInformation]);
+           console.log("function created geoJSON is: ", geoJSON);
             let geoJSONGeometryCollectionJSON = '{ "type": "", "coordinates": "", "properties": { "name" : null, "content" : null, "style" : null, "radius" : null, "featureCollectionTime": null }}';
 
-            geoJSONGeometryCollectionJSON = JSON.parse(geoJSONGeometryCollectionJSON)
+            geoJSONGeometryCollectionJSON = JSON.parse(geoJSONGeometryCollectionJSON);
             geoJSONGeometryCollectionJSON.type = geoJSON.geometry.type;
             geoJSONGeometryCollectionJSON.coordinates = geoJSON.geometry.coordinates;
 
@@ -655,6 +771,9 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             geoJSONGeometryCollectionJSON.properties.content = geoJSON.properties.content;
             geoJSONGeometryCollectionJSON.properties.style = geoJSON.properties.style;
             geoJSONGeometryCollectionJSON.properties.featureCollectionTime = geoJSON.properties.featureCollectionTime;
+
+            geoJSONGeomtryCollectionObj.geometryCollectionIDPointAndMultiPoint = geometryCollectionID;
+            geoJSONGeomtryCollectionObj.geometryCollectionHour = hour;
 
             geoJSONGeomtryCollectionObj.geometry.geometries.push(geoJSONGeometryCollectionJSON);
 
@@ -697,7 +816,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         jsonArrayElements.arrayOfGeoCollectionElements.push(geoJSONFromLeaflet)
 
         return jsonArrayElements
-
     }
 
     // retrieves actual json data from the information leaflet has in smk.$viewer.map._layers and returns a GeoJSON object
@@ -710,34 +828,34 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             toolTipInfo = geoJSONFromLeaflet._tooltip._content;
         }
 
-        
         //console.log("The passed in object is: ", geoJSONFromLeaflet )
         //console.log("The styling for this object is: ", geoJSONFromLeaflet.options.style);
         //console.log("The co-ords for imported geoJson layers is: ", geoJSONFromLeaflet._latlngs);
         // if the object we're coming from is a GeometryCollection we want to base the switch on it's subtype rather than original type
         if ( geoJSONFromLeaflet.options.originalGeoJSONType == "GeometryCollection"){
             switch(geoJSONFromLeaflet.options.geoCollectionSubType) {
+                case "Point":
+                    geoJSONObject = new GeoJSONcreator("Feature", "Point", convertLeafletLatLngToGeoJSONPointAndMultiPoints(geoJSONFromLeaflet._latlng, "Point"), "Point", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null,  geoJSONFromLeaflet.options.creationID, geoJSONFromLeaflet.options.geoCollectionHour)
+                    rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
+                    break;
                 case "LineString":
-                    console.log("inside line string case, latlngs are: ", geoJSONFromLeaflet._latlngs)
-                    console.log("inside line string case, latlngs[0] is: ", geoJSONFromLeaflet._latlngs[0])
-    
-                    geoJSONObject = new GeoJSONcreator("Feature", "LineString", convertLeafletLatLngArrayToGeoJSONStandard(geoJSONFromLeaflet._latlngs), "LineString", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime)
+                    geoJSONObject = new GeoJSONcreator("Feature", "LineString", convertLeafletLatLngArrayToGeoJSONStandard(geoJSONFromLeaflet._latlngs), "LineString", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "Polygon":
-                    geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandardForPolygons(geoJSONFromLeaflet._latlngs[0]), "Polygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime)
+                    geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandardForPolygons(geoJSONFromLeaflet._latlngs[0]), "Polygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "MultiPoint":
-                    geoJSONObject = new GeoJSONcreator("Feature", "MultiPoint", convertLeafletLatLngArrayToGeoJSONStandard(geoJSONFromLeaflet._latlngs[0]), "MultiPoint", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime)
+                    geoJSONObject = new GeoJSONcreator("Feature", "MultiPoint", convertLeafletLatLngToGeoJSONPointAndMultiPoints(geoJSONFromLeaflet._latlng, "MultiPoint"), "MultiPoint", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, geoJSONFromLeaflet.options.id, geoJSONFromLeaflet.options.creationID, geoJSONFromLeaflet.options.geoCollectionHour)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "MultiLineString":
-                    geoJSONObject = new GeoJSONcreator("Feature", "MultiLineString", convertLatLngArrayToGeoJSONStandardForMultiLineStrings(geoJSONFromLeaflet._latlngs), "MultiLineString", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime)
+                    geoJSONObject = new GeoJSONcreator("Feature", "MultiLineString", convertLatLngArrayToGeoJSONStandardForMultiLineStrings(geoJSONFromLeaflet._latlngs), "MultiLineString", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "MultiPolygon":
-                    geoJSONObject = new GeoJSONcreator("Feature", "MultiPolygon", convertLatLngArrayToGeoJSONStandardForMultiPolygons(geoJSONFromLeaflet._latlngs), "MultiPolygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime)
+                    geoJSONObject = new GeoJSONcreator("Feature", "MultiPolygon", convertLatLngArrayToGeoJSONStandardForMultiPolygons(geoJSONFromLeaflet._latlngs), "MultiPolygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 default:
@@ -745,41 +863,37 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             }
         } else {
             switch(geoJSONFromLeaflet.options.originalGeoJSONType) {
+                case "Point":
+                    geoJSONObject = new GeoJSONcreator("Feature", "Point", convertLeafletLatLngToGeoJSONPointAndMultiPoints(geoJSONFromLeaflet._latlng, "Point"), "Point", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, geoJSONFromLeaflet.options.creationID, geoJSONFromLeaflet.options.geoCollectionHour)
+                    rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
+                    break;
                 case "LineString":
                     console.log("inside line string case, latlngs are: ", geoJSONFromLeaflet._latlngs)
                     console.log("inside line string case, latlngs[0] is: ", geoJSONFromLeaflet._latlngs[0])
     
-                    geoJSONObject = new GeoJSONcreator("Feature", "LineString", convertLeafletLatLngArrayToGeoJSONStandard(geoJSONFromLeaflet._latlngs), "LineString", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime)
+                    geoJSONObject = new GeoJSONcreator("Feature", "LineString", convertLeafletLatLngArrayToGeoJSONStandard(geoJSONFromLeaflet._latlngs), "LineString", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "Polygon":
-                    geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandardForPolygons(geoJSONFromLeaflet._latlngs[0]), "Polygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime)
+                    geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandardForPolygons(geoJSONFromLeaflet._latlngs[0]), "Polygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "MultiPoint":
-                    geoJSONObject = new GeoJSONcreator("Feature", "MultiPoint", convertLeafletLatLngArrayToGeoJSONStandard(geoJSONFromLeaflet._latlngs[0]), "MultiPoint", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime)
+                    geoJSONObject = new GeoJSONcreator("Feature", "MultiPoint", convertLeafletLatLngToGeoJSONPointAndMultiPoints(geoJSONFromLeaflet._latlng ,"MultiPoint"), "MultiPoint", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, geoJSONFromLeaflet.options.id, geoJSONFromLeaflet.options.creationID, geoJSONFromLeaflet.options.geoCollectionHour)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "MultiLineString":
-                    geoJSONObject = new GeoJSONcreator("Feature", "MultiLineString", convertLatLngArrayToGeoJSONStandardForMultiLineStrings(geoJSONFromLeaflet._latlngs), "MultiLineString", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime)
+                    geoJSONObject = new GeoJSONcreator("Feature", "MultiLineString", convertLatLngArrayToGeoJSONStandardForMultiLineStrings(geoJSONFromLeaflet._latlngs), "MultiLineString", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "MultiPolygon":
-                    geoJSONObject = new GeoJSONcreator("Feature", "MultiPolygon", convertLatLngArrayToGeoJSONStandardForMultiPolygons(geoJSONFromLeaflet._latlngs), "MultiPolygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime)
+                    geoJSONObject = new GeoJSONcreator("Feature", "MultiPolygon", convertLatLngArrayToGeoJSONStandardForMultiPolygons(geoJSONFromLeaflet._latlngs), "MultiPolygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 default:
                     console.log("Not one of the defaults")  
             }
         }
-
-        
-
-
-
-
-        
-
         return rebuiltGeoJSON
     }
 
@@ -807,7 +921,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 convertedLNGLATS.push(firstPoint);
                 firstPoint = null
             }
-
         }
         return convertedLNGLATS;
     
@@ -874,10 +987,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         return finalArray;
     }
 
-
-
-
-
     function convertLeafletDrawingToGeoJSON (leafletDrawingObject ){
 
         
@@ -888,19 +997,19 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
         switch (leafletDrawingObject.type){
             case "circle":
-                geoJSONObject = new GeoJSONcreator("Feature", "Point", convertLeafletLatLngToGeoJSONStandard(leafletDrawingObject), leafletDrawingObject.type, leafletDrawingObject.content, null, leafletDrawingObject.radius, null);
+                geoJSONObject = new GeoJSONcreator("Feature", "Point", convertLeafletLatLngToGeoJSONStandard(leafletDrawingObject), leafletDrawingObject.type, leafletDrawingObject.content, null, leafletDrawingObject.radius, null, null, null);
                 geoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                 break;
             case "line":
-                geoJSONObject = new GeoJSONcreator("Feature", "LineString", convertLeafletLatLngArrayToGeoJSONStandard(leafletDrawingObject.latlngs), leafletDrawingObject.type, leafletDrawingObject.content, null, null, null);
+                geoJSONObject = new GeoJSONcreator("Feature", "LineString", convertLeafletLatLngArrayToGeoJSONStandard(leafletDrawingObject.latlngs), leafletDrawingObject.type, leafletDrawingObject.content, null, null, null, null, null);
                 geoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                 break;
             case "polygon":
-                geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandard(leafletDrawingObject.latlngs), leafletDrawingObject.type, leafletDrawingObject.content, null, null, null);
+                geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandard(leafletDrawingObject.latlngs), leafletDrawingObject.type, leafletDrawingObject.content, null, null, null, null, null);
                 geoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                 break;
             case "marker":
-                geoJSONObject = new GeoJSONcreator("Feature", "Point", convertLeafletLatLngToGeoJSONStandard(leafletDrawingObject), leafletDrawingObject.type, leafletDrawingObject.content, null, null, null);
+                geoJSONObject = new GeoJSONcreator("Feature", "Point", convertLeafletLatLngToGeoJSONStandard(leafletDrawingObject), leafletDrawingObject.type, leafletDrawingObject.content, null, null, null, null, null);
                 geoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                 break;
             default:
@@ -929,7 +1038,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         return convertedLNGLATS;
     
     }
-       
 
     //leaflet does lat, then lng, everything else is lng then lat
     //for a single point
@@ -944,9 +1052,32 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         return convertedLNGLATS;
     }
 
-
     
+    //leaflet does lat, then lng, everything else is lng then lat
+    //for a single point
+    function convertLeafletLatLngToGeoJSONPointAndMultiPoints( latlng, type ) {
+        let convertedLNGLATS = [];
+        if (type == "Point") {
+        
+        console.log("The latlng object is: ", latlng)
+        //for points that don't have an array of latlngs and just have one
+        console.log("Should only have a single latlng")
+        convertedLNGLATS.push(latlng.lng);
+        convertedLNGLATS.push(latlng.lat);
 
+        } else if (type == "MultiPoint"){
+        console.log("The latlng object is: ", latlng)
+        //for points that don't have an array of latlngs and just have one
+        console.log("Should only have a single latlng")
+        convertedLNGLATS.push(latlng.lng);
+        convertedLNGLATS.push(latlng.lat);
+        let outerArray = []
+        outerArray.push(convertedLNGLATS)
+        return outerArray
+        }
+
+        return convertedLNGLATS;
+    }
     
     function getLeaftletDrawing(drawing, smk) {
 
@@ -990,7 +1121,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 let polygonObj = { type: "polygon", latlngs, content};
                 return polygonObj;
                 
-
             }
           
             // handle exporting of markers
@@ -1006,12 +1136,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
 
     }
-
-
-
-
-    
-
 
     //grab all the layer info needed required to recreate a layer on load, and return a JSON of that info that can be parse and inserted into
     // the existing map_config.json structure
