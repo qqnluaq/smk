@@ -2625,9 +2625,9 @@ window.include.SMK = true
             },
 
             BUILD: {
-                commit:     '3cc24c608aa3463ecfdf406c4eb4277c8f76c8c0',
+                commit:     'b69446693e2b2e48ad9e7ec9835389e6b8a10930',
                 branch:     'master',
-                lastCommit: '"2019-09-13 08:48:46 -0700"'.replace( /^"|"$/g, '' ),
+                lastCommit: '"2019-09-16 11:58:44 -0700"'.replace( /^"|"$/g, '' ),
                 origin:     'https://github.com/cebergin/smk-client.git',
                 version:    '0.8.1',
             }

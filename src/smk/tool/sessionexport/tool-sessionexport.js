@@ -1005,7 +1005,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 geoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                 break;
             case "polygon":
-                geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandard(leafletDrawingObject.latlngs), leafletDrawingObject.type, leafletDrawingObject.content, null, null, null, null, null);
+                geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandard(leafletDrawingObject.latlngs[0]), leafletDrawingObject.type, leafletDrawingObject.content, null, null, null, null, null);
                 geoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                 break;
             case "marker":

@@ -941,8 +941,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
 
 
-
-
+  
     
     //gets a list of all the feature layers from a layer name and WMS returning all the features available to that layer, these can be display
     //currently not required
@@ -969,6 +968,10 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         
         smk.on( this.id, {
             'activate': function () {
+
+                
+                
+               
                 
                 console.log("smk is: ", smk);
                 console.log("smk.$viewer.map is: ", smk.$viewer.map);

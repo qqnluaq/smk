@@ -2,6 +2,7 @@ include.module( 'util', null, function ( inc ) {
     "use strict";
 
     Object.assign( window.SMK.UTIL, {
+
         makePromise: function( withFn ) {
             return new Promise( withFn || function () {} )
         },
@@ -326,7 +327,29 @@ include.module( 'util', null, function ( inc ) {
                 .map( function ( v ) { return ( '' + v ).toLowerCase().replace( /[^a-z0-9]+/g, '-' ).replace( /^[-]|[-]$/g, '' ) } )
                 .map( function ( v ) { return v ? v : '~' } )
                 .join( '=' )
+        },
+
+
+
+        test: function(){
+            console.log("test")
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     } )
 

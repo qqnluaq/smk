@@ -62,9 +62,10 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
 
     function ifContentExists ( drawing, drawingObj) {
         if (drawingObj.content != null) {
-            drawing.bindTooltip(drawingObj.content).openTooltip();
+            drawing.bindTooltip(drawingObj.content, {
+                permanent: true
+            }).openTooltip();
         }
-
     }
 
 
@@ -115,6 +116,60 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
 
     }
 
+    
+    function importLeafletDrawings( smk, drawing ) {
+        let drawingOnMap;
+        let latlng;
+        let latlngs = []
+        switch( drawing.properties.name ){
+            case "circle":
+                latlng = L.GeoJSON.coordsToLatLng(drawing.geometry.coordinates);
+                drawingOnMap = L.circle(latlng, {radius: drawing.properties.radius}).addTo(smk.$viewer.currentBasemap[0]._map);
+                ifContentExists( drawingOnMap, drawing.properties);
+                break;
+            case "line":
+                for (let coord in drawing.geometry.coordinates){
+                    latlng = L.GeoJSON.coordsToLatLng(drawing.geometry.coordinates[coord]);
+                    latlngs.push(latlng);
+                }
+                drawingOnMap = L.polyline(latlngs, {color: 'blue'}).addTo(smk.$viewer.currentBasemap[0]._map);
+                ifContentExists( drawingOnMap, drawing.properties);
+                break;
+            case "polygon":
+                for (let coord in drawing.geometry.coordinates){
+                    latlng = L.GeoJSON.coordsToLatLng(drawing.geometry.coordinates[coord]);
+                    latlngs.push(latlng);
+                }
+                drawingOnMap = L.polygon(latlngs, {color: 'blue'}).addTo(smk.$viewer.currentBasemap[0]._map);
+                ifContentExists( drawingOnMap, drawing.properties);
+                break;
+            case "marker":
+                latlng = L.GeoJSON.coordsToLatLng(drawing.geometry.coordinates);
+                drawingOnMap = L.marker(latlng).addTo(smk.$viewer.currentBasemap[0]._map);
+                ifContentExists( drawingOnMap, drawing.properties);
+                break;
+            default:
+                console.log("Not a leaflet drawing")
+
+        }
+
+
+
+    }
+
+    function isSimpleLeafletDrawing( drawing ){
+        let match = false;
+        if (typeof drawing.properties != "undefined") {
+            let drawingType = drawing.properties.name;
+            if ( drawingType == "marker" || drawingType == "line" || drawingType == "circle" || drawingType == "polygon"){
+                match = true;
+            }
+
+        }
+        return match;
+        
+
+    }
 
 
     SMK.TYPE.sessionimportTool = sessionimportTool
@@ -186,34 +241,16 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                                 //Here we need to loop through the drawings section looking for circle type layers to draw them to the map (can later handle all types of drawings)
                                 //console.log("about to loop through drawings")
                                 for (let drawing in jsonOfSMKData.drawings) {
-                                    //console.log(jsonOfSMKData.drawings[drawing])
-                                    //handling import of circles 
-                                    if (jsonOfSMKData.drawings[drawing].type == "circle") {
-                                        //console.log(jsonOfSMKData.drawings[drawing].latlng)
-                                        //console.log(jsonOfSMKData.drawings[drawing].radius)
-                                        let drawingOnMap = L.circle([jsonOfSMKData.drawings[drawing].latlng.lat, jsonOfSMKData.drawings[drawing].latlng.lng], {radius: jsonOfSMKData.drawings[drawing].radius}).addTo(smk.$viewer.currentBasemap[0]._map);
-                                        ifContentExists( drawingOnMap, jsonOfSMKData.drawings[drawing]);
-                                        //handling import of lines 
-                                    } else if (jsonOfSMKData.drawings[drawing].type == "line") {
-                                        //console.log(jsonOfSMKData.drawings[drawing].latlngs)
-                                        let latlngs = jsonOfSMKData.drawings[drawing].latlngs;
-                                        let drawingOnMap = L.polyline(latlngs, {color: 'blue'}).addTo(smk.$viewer.currentBasemap[0]._map);
-                                        ifContentExists( drawingOnMap, jsonOfSMKData.drawings[drawing]);
-                                    //handling import of polygons
-                                    } else if (jsonOfSMKData.drawings[drawing].type == "polygon") {
-                                        //console.log(jsonOfSMKData.drawings[drawing].latlngs)
-                                        let latlngs = jsonOfSMKData.drawings[drawing].latlngs;
-                                        let drawingOnMap = L.polygon(latlngs, {color: '#3498db'}).addTo(smk.$viewer.currentBasemap[0]._map);
-                                        ifContentExists( drawingOnMap, jsonOfSMKData.drawings[drawing]);
-                                    //handling import of markers
-                                    }  else if (jsonOfSMKData.drawings[drawing].type == "marker") {
-                                        //console.log(jsonOfSMKData.drawings[drawing].latlngs)
-                                        let latlng = jsonOfSMKData.drawings[drawing].latlng;
-                                        let drawingOnMap = L.marker(latlng).addTo(smk.$viewer.currentBasemap[0]._map);
-                                        ifContentExists( drawingOnMap, jsonOfSMKData.drawings[drawing]);
-                                        }
+                                    
+                                    //first check if it's one of the simple leaflet drawing types (all lowercase names: marker, polygon, line, circle)
+                                    if ( isSimpleLeafletDrawing(jsonOfSMKData.drawings[drawing])){
+                                        importLeafletDrawings(smk, jsonOfSMKData.drawings[drawing]);
+                                    }
+                                    
 
-
+                                    
+                                    
+                                    
                                     }  
                                     // handle changing baseMap based on import
                                     
