@@ -101,22 +101,13 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
          jsonToolLayerInfo.id = wmsLayer.id;
          jsonToolLayerInfo.title = wmsLayer.title;
 
-
          for (let tool in SMK.MAP[1].tools) {
              if (SMK.MAP[1].tools[tool].type == "layers" ){
                  SMK.MAP[1].tools[tool].display.push(jsonToolLayerInfo);
-             }
-
-              
+             } 
          }
-
-
-         
-
-
     }
 
-    
     function importLeafletDrawings( smk, drawing ) {
         let drawingOnMap;
         let latlng;
@@ -150,11 +141,7 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                 break;
             default:
                 console.log("Not a leaflet drawing")
-
         }
-
-
-
     }
 
     function isSimpleLeafletDrawing( drawing ){
@@ -164,13 +151,87 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
             if ( drawingType == "marker" || drawingType == "line" || drawingType == "circle" || drawingType == "polygon"){
                 match = true;
             }
-
         }
         return match;
-        
+    }
+
+
+    function isStyledGeoJSON( geoJSON ){
+        let match = false;
+        if (geoJSON.type == "Feature" || geoJSON.type == "FeatureCollection"){
+            match = true;
+        }
+
+        return match;
 
     }
 
+    function importStyledGeoJSON ( geoJSON ){
+        let color;
+        let stroke;
+        let fill;
+        let opacity;
+        let strokeWidth;
+        let lineCap;
+        let lineJoin;
+        let dashArray;
+        let dashOffset;
+        let fillColor;
+        let fillOpacity;
+        let fillRule;
+
+        if ( geoJSON.type != "FeatureCollection") {
+            color = geoJSON.properties.style.color;
+            stroke = geoJSON.properties.style.stroke;
+            fill = geoJSON.properties.style.fill;
+            opacity = geoJSON.properties.style.opacity;
+            strokeWidth = geoJSON.properties.style.strokeWidth;
+            lineCap = geoJSON.properties.style.lineCap;
+            lineJoin = geoJSON.properties.style.lineJoin;
+            dashArray = geoJSON.properties.style.dashArray;
+            dashOffset = geoJSON.properties.style.dashOffset;
+            fillColor = geoJSON.properties.style.fillColor;
+            fillOpacity = geoJSON.properties.style.fillOpacity;
+            fillRule = geoJSON.properties.style.fillRule;
+        } else {
+            // check if the first element in the feature collection is a geometry collection, if so we need to go inside the geometry collection to check it's sub geometries for their style elements
+            if ( typeof geoJSON.features[0].geometry.type != "undefined" && geoJSON.features[0].geometry.type == "GeometryCollection"){
+                for (let geometry in geoJSON.features[0].geometry.geometries){
+                    if (typeof geoJSON.features[0].geometry.geometries[geometry].properties != "undefined" && typeof geoJSON.features[0].geometry.geometries[geometry].properties.style != "undefined" ){
+                        color = geoJSON.features[0].geometry.geometries[geometry].properties.style.color;
+                        stroke = geoJSON.features[0].geometry.geometries[geometry].properties.style.stroke;
+                        fill = geoJSON.features[0].geometry.geometries[geometry].properties.style.fill;
+                        opacity = geoJSON.features[0].geometry.geometries[geometry].properties.style.opacity;
+                        strokeWidth = geoJSON.features[0].geometry.geometries[geometry].properties.style.strokeWidth;
+                        lineCap = geoJSON.features[0].geometry.geometries[geometry].properties.style.lineCap;
+                        lineJoin = geoJSON.features[0].geometry.geometries[geometry].properties.style.lineJoin;
+                        dashArray = geoJSON.features[0].geometry.geometries[geometry].properties.style.dashArray;
+                        dashOffset = geoJSON.features[0].geometry.geometries[geometry].properties.style.dashOffset;
+                        fillColor = geoJSON.features[0].geometry.geometries[geometry].properties.style.fillColor;
+                        fillOpacity = geoJSON.features[0].geometry.geometries[geometry].properties.style.fillOpacity;
+                        fillRule = geoJSON.features[0].geometry.geometries[geometry].properties.style.fillRule;
+                        break;
+                    }
+                }
+            } else {
+                // just taking feature zero because all non-Geo Collection features in a collection are styled the same, if a change is requested to allow specfic feature styling this can be changed
+                color = geoJSON.features[0].properties.style.color;
+                stroke = geoJSON.features[0].properties.style.stroke;
+                fill = geoJSON.features[0].properties.style.fill;
+                opacity = geoJSON.features[0].properties.style.opacity;
+                strokeWidth = geoJSON.features[0].properties.style.strokeWidth;
+                lineCap = geoJSON.features[0].properties.style.lineCap;
+                lineJoin = geoJSON.features[0].properties.style.lineJoin;
+                dashArray = geoJSON.features[0].properties.style.dashArray;
+                dashOffset = geoJSON.features[0].properties.style.dashOffset;
+                fillColor = geoJSON.features[0].properties.style.fillColor;
+                fillOpacity = geoJSON.features[0].properties.style.fillOpacity;
+                fillRule = geoJSON.features[0].properties.style.fillRule;
+            } 
+        }
+        geoJSON = JSON.stringify(geoJSON);
+        SMK.UTIL.addGeoJSONFileToMap( geoJSON, color, stroke, fill, opacity, strokeWidth, lineCap, lineJoin, dashArray, dashOffset, fillColor, fillOpacity, fillRule );
+    }
 
     SMK.TYPE.sessionimportTool = sessionimportTool
 
@@ -198,72 +259,48 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
 
                         // leaflet specific 
                         if (smk.$viewer.type == "leaflet") {
-
                             // import first needs to check all the layers in the map, and return a list of them, visible or not
                             let arrayOfJSONLayersInMap = getArrayOfJSONLayers( smk );
-                            //console.log(arrayOfJSONLayersInMap)
-
                             for (let maybeNewLayer in jsonOfSMKData.layers) {
-                                //console.log("maybe new layer ID is: ", jsonOfSMKData.layers[maybeNewLayer].id)
                                 for  (let existingLayer in arrayOfJSONLayersInMap){
-                                    //console.log("existing layer ID is: ", arrayOfJSONLayersInMap[existingLayer])
                                     if (jsonOfSMKData.layers[maybeNewLayer].id == arrayOfJSONLayersInMap[existingLayer]) {
-                                        //console.log("Match, layer already exists do not add")
                                         break
                                     }
                                     //if there are no matches the layer should be added to the map the same way we would in tool-layerimport
-                                    //console.log("current iteration is: ", existingLayer)
-                                    //console.log("max number of iterations is: ", (arrayOfJSONLayersInMap.length -1))
                                     if (existingLayer == (arrayOfJSONLayersInMap.length - 1)){
-                                        //console.log("Checked every possible match, no match for: ", jsonOfSMKData.layers[maybeNewLayer].id)
                                         //handle the proper layer import here
-
                                         if ( jsonOfSMKData.layers[maybeNewLayer].type == "wms"){
-                                            //console.log("is of type wms proceed accordingly")
                                             addWMSLayerToLeafletMap(jsonOfSMKData.layers[maybeNewLayer]);
                                         } 
                                     }
                                 }
                             }
-
                             //handles visibility by looping through layers and setting visibility 
                             for (let layer in jsonOfSMKData.layers) {
                                 let visible = getLayerToolVisibility(jsonOfSMKData, jsonOfSMKData.layers[layer].id );
                                 smk.$viewer.layerDisplayContext.setItemVisible( jsonOfSMKData.layers[layer].id, visible, false );
                                 smk.$viewer.updateLayersVisible();
                             }
-                            
                                 // setting zoom and center for the map
                                 let zoom = jsonOfSMKData.viewer.location.zoom; 
                                 let center = jsonOfSMKData.viewer.location.center;
                                 smk.$viewer.currentBasemap[0]._map.setView(new L.LatLng(center[1], center[0]), zoom);
-                                
                                 //Here we need to loop through the drawings section looking for circle type layers to draw them to the map (can later handle all types of drawings)
-                                //console.log("about to loop through drawings")
                                 for (let drawing in jsonOfSMKData.drawings) {
-                                    
                                     //first check if it's one of the simple leaflet drawing types (all lowercase names: marker, polygon, line, circle)
                                     if ( isSimpleLeafletDrawing(jsonOfSMKData.drawings[drawing])){
                                         importLeafletDrawings(smk, jsonOfSMKData.drawings[drawing]);
+                                    } else if ( isStyledGeoJSON( jsonOfSMKData.drawings[drawing]) ){
+                                        importStyledGeoJSON(jsonOfSMKData.drawings[drawing]);
                                     }
                                     
 
                                     
                                     
                                     
-                                    }  
-                                    // handle changing baseMap based on import
-                                    
-                                    smk.$viewer.setBasemap(jsonOfSMKData.viewer.baseMap);
-
-
-
-                                
-            
-
-
-                                    
-
+                                }  
+                                // handle changing baseMap based on import
+                                smk.$viewer.setBasemap(jsonOfSMKData.viewer.baseMap);
                                 // esri support can be implemented below once available
                             }   else {  console.log("esri import support not yet implemented")  }
 

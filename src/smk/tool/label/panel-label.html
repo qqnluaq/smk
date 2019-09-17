@@ -2,7 +2,7 @@
     <ul id="example-1">
         <li v-for="item in items">
                 
-       {{ item.type }} <input type="text" :id="item.drawing" v-model="item.content" @mouseover="showLabelTemp" @mouseleave="removeLabelTemp" > 
+          <input type="text" :id="item.drawing" v-model="item.content" @mouseover="showLabelTemp" @mouseleave="removeLabelTemp" > 
           <button v-on:click="setLabel":id="item.drawing" :content="item.content" class="toolButton">Set Label</button>
           <button v-on:click="destroyLabel":id="item.drawing" :content="item.content" class="toolButton">Remove Label</button>
  

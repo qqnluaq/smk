@@ -169,14 +169,8 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         return content;
     }
 
-    // takes the empty JSON holder and the smk object and fills the smkJSON holder with the useful values of smk to create a JSON file that can be used as a map-config
-    // or at least as a similar file
-    // should come back and clean this up into a readable for loop going through smk and checking all it's properties against jsonObjectHolder's properties that way
-
-    // has to check state to see if the layers are enabled or disabled as well via checking smk.$viewer.visibleLayer
-    function copyIntoJSONObject ( smk ){
-        let jsonObjectHolder = createSMKJSONObject()
-
+    // copy over the current values from smk into our json object holder
+    function copyFromsmk ( jsonObjectHolder, smk) {
         if ( jsonObjectHolder.hasOwnProperty("lmfId")  && smk.hasOwnProperty('lmfId')){
             //////console.log ("both have a lmfid property")
             jsonObjectHolder.lmfId = smk.lmfId;
@@ -222,17 +216,15 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             jsonObjectHolder.surround = smk.surround;
         }
         if ( jsonObjectHolder.hasOwnProperty("viewer")  && smk.hasOwnProperty('viewer')){
-            //////console.log ("both have a viewer property")
             jsonObjectHolder.viewer = smk.viewer;
+            
+            // handle basemap
             let baseMap;
             if ( smk.$viewer.currentBasemap[0]._url.includes("World_Topo_Map")) {
-                baseMap = "Topographic";
-                
+                baseMap = "Topographic"; 
             }
             if ( smk.$viewer.currentBasemap[0]._url.includes("World_Street_Map")) {
                 baseMap = "Streets";
-                
-                
             }
             if ( smk.$viewer.currentBasemap[0]._url.includes("World_Imagery")) {
                 baseMap = "Imagery";
@@ -255,7 +247,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 
             }
             jsonObjectHolder.viewer.baseMap = baseMap;
-
         }
         if ( jsonObjectHolder.hasOwnProperty("layers")  && smk.hasOwnProperty('layers')){
             //////console.log ("both have a layers property")
@@ -273,14 +264,21 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
             //////console.log ("both have a _rev property")
             jsonObjectHolder._rev = smk._rev;
         }
+        return jsonObjectHolder
+    }
 
+    // takes the empty JSON holder and the smk object and fills the smkJSON holder with the useful values of smk to create a JSON file that can be used as a map-config
+    // or at least as a similar file
+    // should come back and clean this up into a readable for loop going through smk and checking all it's properties against jsonObjectHolder's properties that way
 
+    // has to check state to see if the layers are enabled or disabled as well via checking smk.$viewer.visibleLayer
+    function copyIntoJSONObject ( smk ){
+        let jsonObjectHolder = createSMKJSONObject()
 
+        jsonObjectHolder = copyFromsmk ( jsonObjectHolder, smk)
 
-
-        // now need to check state and set it appropriately for the various tool displayers
+        // check state and set it appropriately for the various tool displayers
         // first turn everything off
-
         for (let tool in jsonObjectHolder.tools) {
             //////console.log(jsonObjectHolder.tools[y])
             if (jsonObjectHolder.tools[tool].type == "layers") {
@@ -290,7 +288,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 }
             }
         }
-        
         // then compare the tools display state to every visible layer, if there is a match then turn on the visibility
         for (let x in smk.$viewer.visibleLayer) {
             for (let y in jsonObjectHolder.tools) {
@@ -305,8 +302,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 }
             }
         }
-
-
         // Going to get a list of all the layers currently in the system
         // then iterate through all existing objects to check for duplicates, if no duplicates are found then add both the tool version
         // and the layer version to  jsonLayersAndToolsToBeAdded array,
@@ -336,8 +331,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 }
             }       
         }
-
-        
         // now to add these layers and tools into the main jsonObjectHolder object so they will be exported correctly
         for (let layerTool in jsonLayersAndToolsToBeAdded) {
             jsonObjectHolder.layers.push(jsonLayersAndToolsToBeAdded[layerTool].jsonLayerInfo)
@@ -346,10 +339,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                 if (jsonObjectHolder.tools[tool].type == "layers" ){
                     jsonObjectHolder.tools[tool].display.push(jsonLayersAndToolsToBeAdded[layerTool].jsonToolLayerInfo);
                 }
-
-                
             }
-
         }
         // can find co-ordinates and zoom here, but only if it's changed
         if (smk.$viewer.map._animateToCenter){
@@ -374,7 +364,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
     // Takes all the Layer information that comes from drawings or GeoJSON and converts it to GeoJSON for export 
     function fillDrawingsWithGeoJSON ( smk, jsonObjectHolder){
-
         let arrayOfGeometryCollections = []
         let arrayOfMultiPoints = []
 
@@ -388,31 +377,25 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                     let drawingObj = getLeaftletDrawing(drawing, smk )
                     //check if drawing exists, and then convert it to geoJSON before adding it to the jsonObjectHolder
                     if (drawingObj != null) {
-
-                        //console.log("The leaflet drawing is: ", drawingObj)
                         let geoJSONDrawingObj = convertLeafletDrawingToGeoJSON(drawingObj);
-
                         jsonObjectHolder.drawings.push( geoJSONDrawingObj );
                     }
                 
                 } else if (typeof smk.$viewer.map._layers[drawing].options.style !== "undefined" && typeof smk.$viewer.map._layers[drawing]._latlngs !== "undefined") {
                     // these should be all the layers imported through the geojson import tool in layerimport AKA were originally in GeoJSON
- 
                     // need to handle geometry collections differently than straight geoJSON features
                     if (smk.$viewer.map._layers[drawing].options.originalGeoJSONType == "GeometryCollection"){
-                        
                         // check if arrayOfGeometryCollection already has a geometry collection in it
                         // if it does we need to find which element contains the other geometry collection pieces
                         if (arrayOfGeometryCollections.length != 0) {
                             for ( let element in arrayOfGeometryCollections) {
                                 if (  checkForMatchingGeometryCollectionIDsAndHour(arrayOfGeometryCollections[element], smk.$viewer.map._layers[drawing])) {
-                                    //console.log(" part of the same geometry collection")
                                     arrayOfGeometryCollections[element].arrayOfGeoCollectionElements.push(smk.$viewer.map._layers[drawing])
                                 } else {
                                     // only should be added if we've already checked the other elements in the array to make sure there was nothing there
                                     if (element == arrayOfGeometryCollections.length - 1) {
-                                    //console.log("must be a part of a different geometry collection")
-                                    arrayOfGeometryCollections.push(  createJSONGeometryCollectionObject(smk.$viewer.map._layers[drawing])   );
+                                        //must be a part of a different geometry collection
+                                        arrayOfGeometryCollections.push(  createJSONGeometryCollectionObject(smk.$viewer.map._layers[drawing])   );
                                     }
                                 }
                             }                          
@@ -429,30 +412,28 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
 
                 // handles addition of point and multi point markers that only have a _latlng not a _latlngs
                 } else if (typeof smk.$viewer.map._layers[drawing].options.style !== "undefined" && typeof smk.$viewer.map._layers[drawing]._latlng !== "undefined") {
-
-                if (smk.$viewer.map._layers[drawing].options.originalGeoJSONType == "MultiPoint") {
-                    //multi points require special handling of their GeoJSON once retrieved to be reassembled into their multiarray form rather than seperate multipoint arrays
-                    if (arrayOfMultiPoints.length != 0) {
-                        for ( let element in arrayOfMultiPoints) {
-                            if (  checkForMatchingMultiPointIDs(arrayOfMultiPoints[element], smk.$viewer.map._layers[drawing])) {
-                                arrayOfMultiPoints[element].arrayOfMultiPointElements.push(    smk.$viewer.map._layers[drawing]  )
-                            } else {
-                                // only should be added if we've already checked the other elements in the array to make sure there was nothing there
-                                if (element == arrayOfMultiPoints.length - 1) {
-                                
-                                arrayOfMultiPoints.push( createJSONMultiPointCollectionObject(smk.$viewer.map._layers[drawing] ));
+                    if (smk.$viewer.map._layers[drawing].options.originalGeoJSONType == "MultiPoint") {
+                        //multi points require special handling of their GeoJSON once retrieved to be reassembled into their multiarray form rather than seperate multipoint arrays
+                        if (arrayOfMultiPoints.length != 0) {
+                            for ( let element in arrayOfMultiPoints) {
+                                if (  checkForMatchingMultiPointIDs(arrayOfMultiPoints[element], smk.$viewer.map._layers[drawing])) {
+                                    arrayOfMultiPoints[element].arrayOfMultiPointElements.push(    smk.$viewer.map._layers[drawing]  )
+                                } else {
+                                    // only should be added if we've already checked the other elements in the array to make sure there was nothing there
+                                    if (element == arrayOfMultiPoints.length - 1) {
+                                    arrayOfMultiPoints.push( createJSONMultiPointCollectionObject(smk.$viewer.map._layers[drawing] ));
+                                    }
                                 }
-                            }
-                        }                          
+                            }                          
+                        } else {
+                            // if the array doesn't have any elements in it, we can add the first element to the array which contains this multipoint element
+                            // as well as it's ID and Time for identification
+                            arrayOfMultiPoints.push( createJSONMultiPointCollectionObject(smk.$viewer.map._layers[drawing] ));
+                        }
                     } else {
-                        // if the array doesn't have any elements in it, we can add the first element to the array which contains this multipoint element
-                        // as well as it's ID and Time for identification
-                        arrayOfMultiPoints.push( createJSONMultiPointCollectionObject(smk.$viewer.map._layers[drawing] ));
+                        let geoJSONFromImport = retrieveExistingGeoJSONFromLeaflet(smk.$viewer.map._layers[drawing]);
+                        jsonObjectHolder.drawings.push(geoJSONFromImport);
                     }
-                } else {
-                    let geoJSONFromImport = retrieveExistingGeoJSONFromLeaflet(smk.$viewer.map._layers[drawing]);
-                    jsonObjectHolder.drawings.push(geoJSONFromImport);
-                }
              }
         }
         // with all the multi point collections gathered together we need to assemble each element into the array (containing seperate multi points) into one multi point for each array element
@@ -824,7 +805,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         let geoJSONObject = null;
         let toolTipInfo = null;
 
-        if (typeof geoJSONFromLeaflet._tooltip != "undefined" ){
+        if (typeof geoJSONFromLeaflet._tooltip != "undefined" && geoJSONFromLeaflet._tooltip != null){
             toolTipInfo = geoJSONFromLeaflet._tooltip._content;
         }
 
@@ -843,7 +824,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "Polygon":
-                    geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandardForPolygons(geoJSONFromLeaflet._latlngs[0]), "Polygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
+                    geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandardForPolygons(geoJSONFromLeaflet._latlngs), "Polygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "MultiPoint":
@@ -875,7 +856,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "Polygon":
-                    geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandardForPolygons(geoJSONFromLeaflet._latlngs[0]), "Polygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
+                    geoJSONObject = new GeoJSONcreator("Feature", "Polygon", convertLeafletLatLngArrayToGeoJSONStandardForPolygons(geoJSONFromLeaflet._latlngs), "Polygon", toolTipInfo, geoJSONFromLeaflet.options.style, null, geoJSONFromLeaflet.options.featureCollectionTime, null, null, null)
                     rebuiltGeoJSON = geoJSONObject.getGeoJSONObjectWithStyle();
                     break;
                 case "MultiPoint":
@@ -900,29 +881,38 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
        //leaflet does lat, then lng, everything else is lng then lat
     // for multiple points
     function convertLeafletLatLngArrayToGeoJSONStandardForPolygons( latlngs ) {
-        let convertedLNGLATS = [];
+        
+        let holdingArray = [];
         let firstPoint = null;
         console.log("The latlngs object is: ", latlngs)
         //for points that don't have an array of latlngs and just have one
         console.log("Should have multiple latlngs")
         // in this case there are multiple to look for
-        for (let latlng in latlngs){
-            let convertedLNGLAT = [];
-            convertedLNGLAT.push(latlngs[latlng].lng);
-            convertedLNGLAT.push(latlngs[latlng].lat);
-            convertedLNGLATS.push(convertedLNGLAT);
-            // need to handle storage of the first geometry point so we don't forget it becuase leaflet likes to ignore the extra point
-            if ( latlng == 0){      
-                firstPoint = convertedLNGLAT;
+
+        for (let outerArr in latlngs){
+            let convertedLNGLATS = [];
+            for (let latlng in latlngs[outerArr]){
+                let convertedLNGLAT = [];
+                convertedLNGLAT.push(latlngs[outerArr][latlng].lng);
+                convertedLNGLAT.push(latlngs[outerArr][latlng].lat);
+                convertedLNGLATS.push(convertedLNGLAT);
+                // need to handle storage of the first geometry point so we don't forget it becuase leaflet likes to ignore the extra point
+                if ( latlng == 0){      
+                    firstPoint = convertedLNGLAT;
+                }
+                 //then if we're done the loop need to add that last element back on before we move on
+                 if ( latlng == (latlngs[outerArr].length - 1) ){
+                            
+                    convertedLNGLATS.push(firstPoint);
+                    firstPoint = null
+                }
+
             }
-             //then if we're done the loop need to add that last element back on before we move on
-             if ( latlng == (latlngs.length - 1) ){
-                        
-                convertedLNGLATS.push(firstPoint);
-                firstPoint = null
-            }
+            
+            holdingArray.push(convertedLNGLATS)
         }
-        return convertedLNGLATS;
+
+        return holdingArray;
     
     }
 
@@ -946,7 +936,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         return outerArray;
     }
 
-         //converted for and multi line strings
+         //converted for and multi line polygons
     function convertLatLngArrayToGeoJSONStandardForMultiPolygons( latlngs ) {
 
         let finalArray = []

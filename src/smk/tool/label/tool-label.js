@@ -101,13 +101,53 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
     function pushToArrayOfDrawings (smk, drawing, drawingType) {
         //checking for _content which would be there if a tooltip had occured
         let content = checkForContent( smk.$viewer.map._layers[drawing] );
-
-
         
         let drawingObj = { drawing: drawing, content: content, type: drawingType};
         return drawingObj
-        
     }   
+
+    function isGeoJSON( smk, layerID ){
+        let match = false;
+        if (typeof smk.$viewer.map._layers[layerID].options != "undefined" && typeof smk.$viewer.map._layers[layerID].options.originalGeoJSONType != "undefined"){
+            if (typeof smk.$viewer.map._layers[layerID]._latlng != "undefined" || typeof smk.$viewer.map._layers[layerID]._latlngs != "undefined"){
+                match = true;
+            }
+            
+        }
+
+        return match;
+    }
+
+    // with the original layer that has all the information, we want to open a tooltip attached to that, and close the tooltip at the layer opened by util.js
+    function transferToolTips ( smk, layerID){
+        let content;
+        let geoType;
+        if (typeof smk.$viewer.map._layers[layerID].feature.properties.content != "undefined"){
+            content = smk.$viewer.map._layers[layerID].feature.properties.content;
+        } else if (typeof smk.$viewer.map._layers[layerID].feature.geometry.properties != "undefined") {
+            // part of a geometry collection, so content is nested differently
+            content = smk.$viewer.map._layers[layerID].feature.geometry.properties.content;
+        } else{
+            // no content to add to tooltips, also means no content to close
+            return;
+        }
+        for (let layerToRemove in smk.$viewer.map._layers){
+            // the comparsion between layerToRemove and layerID is because the layer to remove is always a few layers higher, and we don't want to chance matching earlier content
+            if( layerToRemove > layerID && smk.$viewer.map._layers[layerToRemove]._tooltip._content == content){
+                content = smk.$viewer.map._layers[layerToRemove]._tooltip._content;
+                
+                smk.$viewer.map._layers[layerToRemove].closeTooltip();
+                smk.$viewer.map._layers[layerToRemove].unbindTooltip();
+
+                
+                smk.$viewer.map._layers[layerID].bindTooltip(content, {
+                    permanent: true
+                }).openTooltip();
+                break;
+            }
+        }
+    }
+
 
     SMK.TYPE.labelTool = labelTool
 
@@ -124,29 +164,42 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
            
         arrayOfDrawings = []
        
-         console.log(smk.$viewer.map.pm)
-         //Handles all the various drawn objects on the map
-         for (let drawing in smk.$viewer.map._layers) {
-            if (smk.$viewer.map._layers[drawing]._mRadius && smk.$viewer.map._layers[drawing]._latlng) {
+         console.log(smk.$viewer.map)
+         console.log(smk.$viewer.map._layers)
+         //Handles all the various layers on the map
 
-                arrayOfDrawings.push(pushToArrayOfDrawings(smk, drawing, "Circle"));
+
+         for (let layer in smk.$viewer.map._layers) {
+
+            /// handle various GeoJSON Drawn Labels
+            if(isGeoJSON(smk, layer)){
+                console.log(smk.$viewer.map._layers[layer]);
+                // Now that we know it's geoJSON we can close the label created by util.js on geojson creation by finding matching values, then open a tooltip for the correct layer
+                transferToolTips( smk, layer );
+
+                arrayOfDrawings.push(pushToArrayOfDrawings(smk, layer, smk.$viewer.map._layers[layer].options.originalGeoJSONType));
+
+
+            } else if (smk.$viewer.map._layers[layer]._mRadius && smk.$viewer.map._layers[layer]._latlng) {
+
+                arrayOfDrawings.push(pushToArrayOfDrawings(smk, layer, "Circle"));
                 
             // handle support for lines and polygons
-            } else if (smk.$viewer.map._layers[drawing]._latlngs && smk.$viewer.map._layers[drawing]._path) {
-                if ( smk.$viewer.map._layers[drawing]._path.attributes[6].nodeValue == "none") {
+            } else if (smk.$viewer.map._layers[layer]._latlngs && smk.$viewer.map._layers[layer]._path) {
+                if ( smk.$viewer.map._layers[layer]._path.attributes[6].nodeValue == "none") {
                     
                     
-                    arrayOfDrawings.push(pushToArrayOfDrawings(smk, drawing, "Line"));
+                    arrayOfDrawings.push(pushToArrayOfDrawings(smk, layer, "Line"));
 
                 } else {
                      //if nodeValue is not "none" then it's a polygon
-                     arrayOfDrawings.push(pushToArrayOfDrawings(smk, drawing, "Polygon"));
+                     arrayOfDrawings.push(pushToArrayOfDrawings(smk, layer, "Polygon"));
                 }
               
                 // handle exporting of markers
-            } else if (smk.$viewer.map._layers[drawing]._icon && smk.$viewer.map._layers[drawing]._latlng && smk.$viewer.map._layers[drawing]._shadow) {
+            } else if (smk.$viewer.map._layers[layer]._icon && smk.$viewer.map._layers[layer]._latlng && smk.$viewer.map._layers[layer]._shadow) {
                 
-                arrayOfDrawings.push(pushToArrayOfDrawings(smk, drawing, "Marker"));
+                arrayOfDrawings.push(pushToArrayOfDrawings(smk, layer, "Marker"));
                 
             }
         }

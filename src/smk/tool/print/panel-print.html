@@ -1,10 +1,14 @@
 <side-panel class="smk-print-panel" v-bind:showHeader="false">
     <div class="smk-print-description" v-html="content"></div>
-    <div class="titleCheck"> {{ titleCheck }} </div>
-    <a v-bind:href="jsonDownloadLink" download="map-config.json"> Map Layers Export </a>
+
     <div>
-    <input type="file" id="file" ref="myFiles" class="custom-file-input" 
-    @change="previewFiles" multiple>
+        <ul>
+            <li><button v-on:click="Print"  id="auto" class="toolButton ">Print Auto</button></li>
+            <li><button v-on:click="Print"  id="landscape" class="toolButton ">Landscape Print</button></li>
+            <li><button v-on:click="Print"  id="portrait" class="toolButton ">Portrait Print</button></li>
+            <li><button v-on:click="Print"  id="defaultPrint" class="toolButton ">Default Browser Print for non-GeoJSON Layers</button></li>
+        </ul>
     </div>
+
     
 </side-panel>
