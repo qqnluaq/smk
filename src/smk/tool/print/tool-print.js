@@ -83,15 +83,9 @@ include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html
         smk.on( this.id, {
             'activate': function () {
             
-            
-            
-            
             if (pressed == false) {
                 
             let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
-
-            
-            
             L.control.browserPrint(
                 {
                     title: 'Forest Health',
@@ -108,7 +102,6 @@ include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html
             pressed = true
             }
            
- 
             if ( !self.enabled ) return
         
             self.active = !self.active

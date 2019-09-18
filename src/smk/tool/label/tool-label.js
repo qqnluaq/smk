@@ -16,7 +16,6 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
         data: function() {
             return {
                 items: arrayOfDrawings,
-
             }
           },
           methods: {
@@ -29,9 +28,7 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
 
                 //need to check if a tooltip already exists as to update the Tooltip content rather than create it
                 if (SMK.MAP[1].$viewer.map._layers[id].getTooltip() ){
-                    console.log("Already an open tool tip")
                     SMK.MAP[1].$viewer.map._layers[id].setTooltipContent(content)
-
                 } else {
                 SMK.MAP[1].$viewer.map._layers[id].bindTooltip(content, {
                     permanent: true
@@ -49,7 +46,6 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
                 let id = event.srcElement.id
                 // if there is an existing tooltip don't open a new one
                 if (SMK.MAP[1].$viewer.map._layers[id].getTooltip() ){
-                    console.log("Already an open tool tip")
                 } else {
                     // if there isn't a tool tip this should be displayed so we know what layer we're working with.
                     SMK.MAP[1].$viewer.map._layers[id].bindTooltip("  Here. ").openTooltip();
@@ -59,24 +55,20 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
             removeLabelTemp: function (event) {
                 let id = event.srcElement.id
                 let currentTooltip = SMK.MAP[1].$viewer.map._layers[id].getTooltip()
-                console.log(currentTooltip._content)
                 //checking the tooltip string to see if it's the same one we just made by comparing exact text
                 if ( currentTooltip._content == "  Here. ") {
-
                     SMK.MAP[1].$viewer.map._layers[id].closeTooltip()
                     SMK.MAP[1].$viewer.map._layers[id].unbindTooltip()
                 }
             }
 
           }
-        
     } )
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     function labelTool( option ) {
         
         this.makePropWidget( 'icon', null ) //'help' )
-
         this.makePropPanel( 'content', null )
 
         SMK.TYPE.Tool.prototype.constructor.call( this, $.extend( {
@@ -87,7 +79,6 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
             content:        null
             
         }, option ) )
-
     }
 
     function checkForContent ( obj) {
@@ -101,7 +92,6 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
     function pushToArrayOfDrawings (smk, drawing, drawingType) {
         //checking for _content which would be there if a tooltip had occured
         let content = checkForContent( smk.$viewer.map._layers[drawing] );
-        
         let drawingObj = { drawing: drawing, content: content, type: drawingType};
         return drawingObj
     }   
@@ -112,9 +102,7 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
             if (typeof smk.$viewer.map._layers[layerID]._latlng != "undefined" || typeof smk.$viewer.map._layers[layerID]._latlngs != "undefined"){
                 match = true;
             }
-            
         }
-
         return match;
     }
 
@@ -139,7 +127,6 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
                 smk.$viewer.map._layers[layerToRemove].closeTooltip();
                 smk.$viewer.map._layers[layerToRemove].unbindTooltip();
 
-                
                 smk.$viewer.map._layers[layerID].bindTooltip(content, {
                     permanent: true
                 }).openTooltip();
@@ -164,54 +151,34 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
            
         arrayOfDrawings = []
        
-         console.log(smk.$viewer.map)
-         console.log(smk.$viewer.map._layers)
          //Handles all the various layers on the map
-
-
          for (let layer in smk.$viewer.map._layers) {
-
             /// handle various GeoJSON Drawn Labels
             if(isGeoJSON(smk, layer)){
-                console.log(smk.$viewer.map._layers[layer]);
                 // Now that we know it's geoJSON we can close the label created by util.js on geojson creation by finding matching values, then open a tooltip for the correct layer
                 transferToolTips( smk, layer );
-
                 arrayOfDrawings.push(pushToArrayOfDrawings(smk, layer, smk.$viewer.map._layers[layer].options.originalGeoJSONType));
-
-
             } else if (smk.$viewer.map._layers[layer]._mRadius && smk.$viewer.map._layers[layer]._latlng) {
-
                 arrayOfDrawings.push(pushToArrayOfDrawings(smk, layer, "Circle"));
-                
             // handle support for lines and polygons
             } else if (smk.$viewer.map._layers[layer]._latlngs && smk.$viewer.map._layers[layer]._path) {
                 if ( smk.$viewer.map._layers[layer]._path.attributes[6].nodeValue == "none") {
-                    
-                    
                     arrayOfDrawings.push(pushToArrayOfDrawings(smk, layer, "Line"));
-
                 } else {
                      //if nodeValue is not "none" then it's a polygon
                      arrayOfDrawings.push(pushToArrayOfDrawings(smk, layer, "Polygon"));
                 }
-              
                 // handle exporting of markers
             } else if (smk.$viewer.map._layers[layer]._icon && smk.$viewer.map._layers[layer]._latlng && smk.$viewer.map._layers[layer]._shadow) {
-                
                 arrayOfDrawings.push(pushToArrayOfDrawings(smk, layer, "Marker"));
-                
             }
         }
 
         if ( !self.enabled ) return
         
         self.active = !self.active
-
             }
         } )
-
     } )
-
     return labelTool
 } )

@@ -32,29 +32,17 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
             // title:          'sessionimport SMK',
             // position:       'menu'
             content:        null
-            
         }, option ) )
-
     }
-
-
-
 
     //if passed in a config file and a layerID returns the true/false value of it's visibility from tools.display
     function getLayerToolVisibility ( jsonConfig, layerId ) {
         for (let tool in jsonConfig.tools) {
-            ////console.log(jsonConfig.tools[tool])
             if (jsonConfig.tools[tool].type == "layers") {
-                
                 for ( let item in jsonConfig.tools[tool].display) {
-                    
                     if ( jsonConfig.tools[tool].display[item].id == layerId) {
-                        
-
                         return jsonConfig.tools[tool].display[item].isVisible;
-                    }
-                    
-                    
+                    }  
                 }
             }
         }
@@ -68,7 +56,6 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
         }
     }
 
-
     // return a list of all the layers currently in the map by id
     function getArrayOfJSONLayers( smk ) {
        let arrayOfJSONLayers = []
@@ -78,12 +65,8 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
         return (arrayOfJSONLayers);
     }
     
-
     //directly adds a wms layer to map passing the values to SMK.MAP[1] layers and tools, while also passing directly to the leaflet map
     function addWMSLayerToLeafletMap ( wmsLayer ) {
-        //console.log(wmsLayer)
-
-        
 
         let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
         var wmsMapLayer = L.tileLayer.wms( wmsLayer.serviceUrl ,{ 
@@ -95,17 +78,16 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
         //layer should be already correct format
         SMK.MAP[1].layers.push(wmsLayer);
          
-         
-         let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }';
-         jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo);
-         jsonToolLayerInfo.id = wmsLayer.id;
-         jsonToolLayerInfo.title = wmsLayer.title;
+        let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }';
+        jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo);
+        jsonToolLayerInfo.id = wmsLayer.id;
+        jsonToolLayerInfo.title = wmsLayer.title;
 
-         for (let tool in SMK.MAP[1].tools) {
-             if (SMK.MAP[1].tools[tool].type == "layers" ){
-                 SMK.MAP[1].tools[tool].display.push(jsonToolLayerInfo);
-             } 
-         }
+        for (let tool in SMK.MAP[1].tools) {
+            if (SMK.MAP[1].tools[tool].type == "layers" ){
+                SMK.MAP[1].tools[tool].display.push(jsonToolLayerInfo);
+            } 
+        }
     }
 
     function importLeafletDrawings( smk, drawing ) {
@@ -161,9 +143,7 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
         if (geoJSON.type == "Feature" || geoJSON.type == "FeatureCollection"){
             match = true;
         }
-
         return match;
-
     }
 
     function importStyledGeoJSON ( geoJSON ){
@@ -256,7 +236,6 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                     jsonOfSMKData = JSON.parse(jsonOfSMKData);
 
                     if ( jsonOfSMKData != null) {
-
                         // leaflet specific 
                         if (smk.$viewer.type == "leaflet") {
                             // import first needs to check all the layers in the map, and return a list of them, visible or not
@@ -293,11 +272,6 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                                     } else if ( isStyledGeoJSON( jsonOfSMKData.drawings[drawing]) ){
                                         importStyledGeoJSON(jsonOfSMKData.drawings[drawing]);
                                     }
-                                    
-
-                                    
-                                    
-                                    
                                 }  
                                 // handle changing baseMap based on import
                                 smk.$viewer.setBasemap(jsonOfSMKData.viewer.baseMap);
