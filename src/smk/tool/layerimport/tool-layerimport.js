@@ -86,7 +86,55 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     format: 'image/png',
                     transparent: true
                 }).addTo(map);
+                
+                // need to have all the SMK json information here so we can add it to SMKs layers and tools otherwise it's not really being properly intergrated into the system
+                // The below does add the information to smk, it does not refresh any of the smk tools to recognize it, which eventually needs to happen
 
+                //creating the json layer info in the same style as map-config.json
+                let jsonLayerInfo = '{  "type": null, "id": null, "title": null, "isVisible": true, "attribution": "", "metadataUrl": "", "opacity": 0.65,  "isQueryable": true, "attributes": [], "serviceUrl":null, "layerName": null, "styleName": null }';
+
+                let title = (layerName + "-" + styleName);
+                title = title.replace(/_/g, " ");
+                let id = layerName + "-" + styleName;
+
+                
+                jsonLayerInfo = JSON.parse(jsonLayerInfo);
+                jsonLayerInfo.type = "wms";
+                jsonLayerInfo.id = id;
+                jsonLayerInfo.title = title;
+                jsonLayerInfo.serviceUrl = this.service;
+                jsonLayerInfo.layerName = layerName;
+                jsonLayerInfo.styleName = styleName;
+
+                // creating the json attribute information in the same style as map-config.json, but we don't seem to have true atttribute data yet
+                let jsonAttribute = '{"id": null,"name": null,"title": null,"visible": true}';
+                jsonAttribute = JSON.parse(jsonAttribute);
+                
+                
+                for (let object in this.jsonFeatures) {
+
+                    jsonAttribute.id = this.jsonFeatures[object].id;
+                    jsonAttribute.name = this.jsonFeatures[object].id;
+                    jsonAttribute.title =this.jsonFeatures[object].id;
+
+                    jsonLayerInfo.attributes.push(jsonAttribute);
+                }
+                
+                console.log("json layer info is: ", jsonLayerInfo);
+                SMK.MAP[1].layers.push(jsonLayerInfo);
+                
+                // creating the json  tool information in the same style as map-config.json
+                let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }';
+                jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo);
+                jsonToolLayerInfo.id = id;
+                jsonToolLayerInfo.title = title;
+
+
+                for (let tool in SMK.MAP[1].tools) {
+                    if (SMK.MAP[1].tools[tool].type == "layers" ){
+                        SMK.MAP[1].tools[tool].display.push(jsonToolLayerInfo);
+                    }
+                }
 
                 //Now that the layer is properly in the system, we should go ahead and export all our data and rebuild with it
                 SMK.UTIL.rebuidMapWithSessionExportJSONObject( SMK.MAP[1] );
