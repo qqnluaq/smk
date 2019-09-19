@@ -72,55 +72,55 @@
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1552_1553",
               "type": "layer",
               "title": "Fire",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1554_1555",
               "type": "layer",
               "title": "Drought",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1556_1557",
               "type": "layer",
               "title": "Flooding",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1558_1559",
               "type": "layer",
               "title": "Frost Crack",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1560_1561",
               "type": "layer",
               "title": "Shoot Bud Frost Kill",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1562_1563",
               "type": "layer",
               "title": "Fumekill",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1566_1567",
               "type": "layer",
               "title": "Slide",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1568_1569",
               "type": "layer",
               "title": "Windthrow",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1564_1565",
               "type": "layer",
               "title": "Redbelt",
-              "isVisible": false
+              "isVisible": true
             }
           ]
         },
@@ -135,25 +135,25 @@
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1570_1571",
               "type": "layer",
               "title": "Unknown Animal",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1572_1573",
               "type": "layer",
               "title": "Bear",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1574_1575",
               "type": "layer",
               "title": "Porcupine",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1576_1577",
               "type": "layer",
               "title": "Deer",
-              "isVisible": false
+              "isVisible": true
             }
           ]
         },
@@ -168,79 +168,79 @@
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1578_1579",
               "type": "layer",
               "title": "Unknown Foliage Disease",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1592_1593",
               "type": "layer",
               "title": "Unknown Root Disease",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1580_1581",
               "type": "layer",
               "title": "Elytroderma Disease",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1582_1583",
               "type": "layer",
               "title": "Larch Needle Blight",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1584_1585",
               "type": "layer",
               "title": "Pine Needle Cast",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1586_1587",
               "type": "layer",
               "title": "Larch Needle Cast",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1588_1589",
               "type": "layer",
               "title": "Fir Fireweed Rust",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1590_1591",
               "type": "layer",
               "title": "Aspen and Poplar Leaf and Shoot Blights",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1594_1595",
               "type": "layer",
               "title": "Armillaria Root Disease",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1596_1597",
               "type": "layer",
               "title": "Blackstain Root Disease",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1598_1599",
               "type": "layer",
               "title": "Laminated Root Rot Cedar Form",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1600_1601",
               "type": "layer",
               "title": "White Pine Blister Rust",
-              "isVisible": false
+              "isVisible": true
             },
             {
               "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1602_1603",
               "type": "layer",
               "title": "Comandra Blister Rust",
-              "isVisible": false
+              "isVisible": true
             }
           ]
         },
@@ -262,67 +262,67 @@
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1608_1609",
                   "type": "layer",
                   "title": "Unknown Bark Beetle",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1616_1617",
                   "type": "layer",
                   "title": "Engraver Beetles",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1610_1611",
                   "type": "layer",
                   "title": "Western Balsam Bark Beetle",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1614_1615",
                   "type": "layer",
                   "title": "Fir Engraver Beetle",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1612_1613",
                   "type": "layer",
                   "title": "Douglas Fir Beetle",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1618_1619",
                   "type": "layer",
                   "title": "Lodgepole Pine Beetle",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1620_1621",
                   "type": "layer",
                   "title": "Mountain Pine Beetle",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1626_1627",
                   "type": "layer",
                   "title": "Western Pine Beetle",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1622_1623",
                   "type": "layer",
                   "title": "Spruce Beetle",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1624_1625",
                   "type": "layer",
                   "title": "Red Turpentine Beetle",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1684_1685",
                   "type": "layer",
                   "title": "Cottonwood Leaf Skeletonizer",
-                  "isVisible": false
+                  "isVisible": true
                 }
               ]
             },
@@ -331,31 +331,31 @@
               "type": "folder",
               "title": "Budworms",
               "isVisible": true,
-              "isExpanded": false,
+              "isExpanded": true,
               "items": [
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1636_1637",
                   "type": "layer",
                   "title": "Two-year Budworm",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1640_1641",
                   "type": "layer",
                   "title": "Spruce Budworm",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1646_1647",
                   "type": "layer",
                   "title": "Western Blackheaded Budworm",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1670_1671",
                   "type": "layer",
                   "title": "Western Spruce Budworm",
-                  "isVisible": false
+                  "isVisible": true
                 }
               ]
             },
@@ -370,67 +370,67 @@
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1644_1645",
                   "type": "layer",
                   "title": "Green Striped Forest Looper",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1652_1653",
                   "type": "layer",
                   "title": "Western Hemlock Looper",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1674_1675",
                   "type": "layer",
                   "title": "Western False Hemlock Looper",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1688_1689",
                   "type": "layer",
                   "title": "Phantom Hemlock Looper",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1690_1691",
                   "type": "layer",
                   "title": "Saddleback looper",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1682_1683",
                   "type": "layer",
                   "title": "Larch Looper",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1666_1667",
                   "type": "layer",
                   "title": "Douglas Fir Tussock Moth",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1680_1681",
                   "type": "layer",
                   "title": "Larch Budmoth",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1668_1669",
                   "type": "layer",
                   "title": "Satin Moth",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1634_1635",
                   "type": "layer",
                   "title": "Birch Leaf Skeletonizer",
-                  "isVisible": false
+                  "isVisible": true
                 },
                 {
                   "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1672_1673",
                   "type": "layer",
                   "title": "Large Aspen Tortrix",
-                  "isVisible": false
+                  "isVisible": true
                 }
               ]
             },

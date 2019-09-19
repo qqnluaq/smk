@@ -21,6 +21,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 //ESRIURL: 'https://mpcm-catalogue.api.gov.bc.ca/catalogV2/PROD/',
                 //ESRIURL: 'https://apps.gov.bc.ca/pub/mpcm/services/catalog/PROD/',
                 ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/test/test/',
+                //ESRIURL: 'http://vivid-w130a.vividsolutions.com:8080/smks-api/LayerLibrary/test/test/',
                 KMLURL: 'https://openmaps.gov.bc.ca/kml/geo/layers/WHSE_IMAGERY_AND_BASE_MAPS.AIMG_HIST_INDEX_MAPS_POINT_loader.kml',
                 
                 featureListShow: false,
@@ -85,55 +86,12 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     format: 'image/png',
                     transparent: true
                 }).addTo(map);
-                
-                // need to have all the SMK json information here so we can add it to SMKs layers and tools otherwise it's not really being properly intergrated into the system
-                // The below does add the information to smk, it does not refresh any of the smk tools to recognize it, which eventually needs to happen
-
-                //creating the json layer info in the same style as map-config.json
-                let jsonLayerInfo = '{  "type": null, "id": null, "title": null, "isVisible": true, "attribution": "", "metadataUrl": "", "opacity": 0.65,  "isQueryable": true, "attributes": [], "serviceUrl":null, "layerName": null, "styleName": null }';
-
-                let title = (layerName + "-" + styleName);
-                title = title.replace(/_/g, " ");
-                let id = layerName + "-" + styleName;
-
-                
-                jsonLayerInfo = JSON.parse(jsonLayerInfo);
-                jsonLayerInfo.type = "wms";
-                jsonLayerInfo.id = id;
-                jsonLayerInfo.title = title;
-                jsonLayerInfo.serviceUrl = this.service;
-                jsonLayerInfo.layerName = layerName;
-                jsonLayerInfo.styleName = styleName;
-
-                // creating the json attribute information in the same style as map-config.json, but we don't seem to have true atttribute data yet
-                let jsonAttribute = '{"id": null,"name": null,"title": null,"visible": true}';
-                jsonAttribute = JSON.parse(jsonAttribute);
-                
-                
-                for (let object in this.jsonFeatures) {
-
-                    jsonAttribute.id = this.jsonFeatures[object].id;
-                    jsonAttribute.name = this.jsonFeatures[object].id;
-                    jsonAttribute.title =this.jsonFeatures[object].id;
-
-                    jsonLayerInfo.attributes.push(jsonAttribute);
-                }
-                
-                console.log("json layer info is: ", jsonLayerInfo);
-                SMK.MAP[1].layers.push(jsonLayerInfo);
-                
-                // creating the json  tool information in the same style as map-config.json
-                let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }';
-                jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo);
-                jsonToolLayerInfo.id = id;
-                jsonToolLayerInfo.title = title;
 
 
-                for (let tool in SMK.MAP[1].tools) {
-                    if (SMK.MAP[1].tools[tool].type == "layers" ){
-                        SMK.MAP[1].tools[tool].display.push(jsonToolLayerInfo);
-                    }
-                }
+                //Now that the layer is properly in the system, we should go ahead and export all our data and rebuild with it
+                SMK.UTIL.rebuidMapWithSessionExportJSONObject( SMK.MAP[1] );
+
+
             },
 
             //in theory this adds the selected feature to the map (Not functional)
@@ -188,9 +146,11 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
             fetchEsriLayerInfo: async function ( event ) {
                 let id  = event.srcElement.id;
                 console.log("Id is: ", id , " and we're going to call the data fetch from here to retrieve it");
-                let esriLayerData = [];
-                esriLayerData = await asyncGetEsriLayerData( this.ESRIURL, id);
-                console.log("esri layer data in detail is: ", esriLayerData);
+                
+                let esriLayerXML = await asyncGetEsriLayerData( this.ESRIURL, id);
+                console.log("esri layer XML in detail is: ", esriLayerXML);
+
+
             },
 
             importGeoJSON: function (event) {
@@ -319,7 +279,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
     // returns the xml of esri layer data
     async function asyncGetEsriLayerData ( serviceUrl, id ) {
-        let esriLayerInfo = [];
+        
         let URL = serviceUrl + id;
 
         const response = await fetch(URL, {});
@@ -328,9 +288,9 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(text,"text/xml");
 
-        esriLayerInfo.push(xmlDoc);
+        
 
-        return esriLayerInfo;
+        return xmlDoc;
 
     }
 
@@ -621,12 +581,30 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         smk.on( this.id, {
             'activate': function () {
 
+
+
+                /*
+                let serviceURL = 'https://maps.gov.bc.ca/arcgis/rest/services/mpcm/bcgw/MapServer'
+                let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
+                //let url = 'https://apps.gov.bc.ca/pub/mpcm/services/catalog/PROD/3543';
+                //let url = 'https://catalogue.data.gov.bc.ca/dataset/court-locations';
+                let dynamicLayers = '{"id":3543,"minScale":2000000,"maxScale":0,"definitionExpression":"OCCUPANT_TYPE_DESCRIPTION = \'Provincial courts of law\'","source":{"type":"dataLayer","dataSource":{"type":"table","workspaceId":"MPCM_ALL_PUB","dataSourceName":"WHSE_IMAGERY_AND_BASE_MAPS.GSR_PROVINCIAL_COURTS_SVW","gdbVersion":""}},"drawingInfo":{"renderer":{"type":"simple","symbol":{"type":"esriPMS","url":"a5b6cfd52e586162b91f88ed6c5a6151","imageData":"iVBORw0KGgoAAAANSUhEUgAAABcAAAAcCAYAAACK7SRjAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAqtJREFUSInFkl1IU3EYhx+3yTI/wq/SPvQmo88LKUJnipSBXYR2EYkYROSFGZLWTR9XBkmYCgUJEuqFCaE3XRiZRZY5FQklqpmoaZYjqaW56TlnO1sXbtO5U1up9d6d9zzv83/P7/w1rGJp/o38YFFchFWduSybhGTqqar3kG9NL4y/eCZ7dFliZ12u0fSbojWDNJXNOjdfG2C1ySvhxjLnCGHWooJFsVhlh8/B4lOHqapv8/sgt1wUre5mVkYiva8/MDE55TWwmAPQagOJXBesyC5sviiW4CAth3Q7qW3u8BpYGl/a/m3Eb4xSZN1ym3V+KDQsiKbWXk5mJZMQtx7DsNFjwMW52L274pk2zymybrkgScTGhJN/PI3S2w+ouPuIwrwM+gxjHgOCJAG42evVLQiiRGFeBiq16heb2+0cSd3D08532Ox2AFqe9bvfLeYAN2ueE9xs7tEkZfmWmEgiw4N53vsemzPXgREj6Uk7aO82eMWixE58nVaWG0aMmL5bqLiU4wGcK23AalvYXHDKlVjTlNlbHrspVDU4bKS8tpVrRceIiQ4DwGwRmBU8r57rttQ1veD86Uw2RM2zMxaBGzUPydi9OUQKcKjaXHLj5xn7uCTTNTpJe+8QZcXZfDKa6OobQrY5CAxUo3b+LEm0Ict23n77Qf6VOlL2JSBbHTQ9eYXhyzTIKrMYJdk9YnHV+MwseaWNS9sANADN3QMevcdvPiqyivKVrP8rFzorFJ/XpFxYvnw55VPuz4a/lQ+1l49F6EruW+DEX5vmSxJ7br70kAMOk74yB8jxwnXFuVoC7i3pyqK+0udX+85cX9WIrqQAOOBqiVDjc84vOSDqK1PRldzRQkGwmrNiR2X1isnny3YVNMmmju1+bf1ncv0tkwiJ/i+zyvf8J1FIJtnjySj9AAAAAElFTkSuQmCC","contentType":"image/png","width":17,"height":21,"angle":0,"xoffset":0,"yoffset":0},"label":"","description":""},"transparency":0,"labelingInfo":null}}'
+                dynamicLayers = JSON.parse(dynamicLayers)
+                let dynamicLayerArray = [];
+                dynamicLayerArray.push(dynamicLayers)
                 
-                
+                L.esri.dynamicMapLayer( {
+                    url:            serviceURL,
+                    opacity:        0.65,
+                    dynamicLayers:  dynamicLayers,
+                    maxZoom:        1,
+                    minZoom:        15
+                }).addTo(map);
+                */
+
+
                
                 
-                console.log("smk is: ", smk);
-                console.log("smk.$viewer.map is: ", smk.$viewer.map);
                 
                 if ( !self.enabled ) return
         

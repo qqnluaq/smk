@@ -213,6 +213,61 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
         SMK.UTIL.addGeoJSONFileToMap( geoJSON, color, stroke, fill, opacity, strokeWidth, lineCap, lineJoin, dashArray, dashOffset, fillColor, fillOpacity, fillRule );
     }
 
+
+
+    async function importSession( jsonOfSMKData ){
+
+        
+
+        await SMK.UTIL.rebuildSMKMAP( jsonOfSMKData );
+
+      
+
+        // leaflet specific 
+        if (SMK.MAP[1].$viewer.type == "leaflet") {
+            // import first needs to check all the layers in the map, and return a list of them, visible or not
+            let arrayOfJSONLayersInMap = getArrayOfJSONLayers( SMK.MAP[1] );
+            for (let maybeNewLayer in jsonOfSMKData.layers) {
+                for  (let existingLayer in arrayOfJSONLayersInMap){
+                    if (jsonOfSMKData.layers[maybeNewLayer].id == arrayOfJSONLayersInMap[existingLayer]) {
+                        break
+                    }
+                    //if there are no matches the layer should be added to the map the same way we would in tool-layerimport
+                    if (existingLayer == (arrayOfJSONLayersInMap.length - 1)){
+                        //handle the proper layer import here
+                        if ( jsonOfSMKData.layers[maybeNewLayer].type == "wms"){
+                            addWMSLayerToLeafletMap(jsonOfSMKData.layers[maybeNewLayer]);
+                        } 
+                    }
+                }
+            }
+            //handles visibility by looping through layers and setting visibility 
+            for (let layer in jsonOfSMKData.layers) {
+                let visible = getLayerToolVisibility(jsonOfSMKData, jsonOfSMKData.layers[layer].id );
+                SMK.MAP[1].$viewer.layerDisplayContext.setItemVisible( jsonOfSMKData.layers[layer].id, visible, false );
+                SMK.MAP[1].$viewer.updateLayersVisible();
+            }
+                // setting zoom and center for the map
+                let zoom = jsonOfSMKData.viewer.location.zoom; 
+                let center = jsonOfSMKData.viewer.location.center;
+                SMK.MAP[1].$viewer.currentBasemap[0]._map.setView(new L.LatLng(center[1], center[0]), zoom);
+                //Here we need to loop through the drawings section looking for circle type layers to draw them to the map (can later handle all types of drawings)
+                for (let drawing in jsonOfSMKData.drawings) {
+                    //first check if it's one of the simple leaflet drawing types (all lowercase names: marker, polygon, line, circle)
+                    if ( isSimpleLeafletDrawing(jsonOfSMKData.drawings[drawing])){
+                        importLeafletDrawings(SMK.MAP[1], jsonOfSMKData.drawings[drawing]);
+                    } else if ( isStyledGeoJSON( jsonOfSMKData.drawings[drawing]) ){
+                        importStyledGeoJSON(jsonOfSMKData.drawings[drawing]);
+                    }
+                }  
+                // handle changing baseMap based on import
+                SMK.MAP[1].$viewer.setBasemap(jsonOfSMKData.viewer.baseMap);
+                // esri support can be implemented below once available
+            }   else {  console.log("esri import support not yet implemented")  }
+
+    }
+
+
     SMK.TYPE.sessionimportTool = sessionimportTool
 
     $.extend( sessionimportTool.prototype, SMK.TYPE.Tool.prototype )
@@ -222,6 +277,8 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
     sessionimportTool.prototype.afterInitialize.push( function ( smk ) {
         smk.on( this.id, {
             'activate': function () {
+
+            
             
             //creating element that can be 'clicked' and then allowing the user to select a map-config file which is then parsed which causes:
             // tool visibility to be turned on or off, causes zoom and position to shift, and causes lines, circles and polygons to be drawn to the map
@@ -236,47 +293,8 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
                     jsonOfSMKData = JSON.parse(jsonOfSMKData);
 
                     if ( jsonOfSMKData != null) {
-                        // leaflet specific 
-                        if (smk.$viewer.type == "leaflet") {
-                            // import first needs to check all the layers in the map, and return a list of them, visible or not
-                            let arrayOfJSONLayersInMap = getArrayOfJSONLayers( smk );
-                            for (let maybeNewLayer in jsonOfSMKData.layers) {
-                                for  (let existingLayer in arrayOfJSONLayersInMap){
-                                    if (jsonOfSMKData.layers[maybeNewLayer].id == arrayOfJSONLayersInMap[existingLayer]) {
-                                        break
-                                    }
-                                    //if there are no matches the layer should be added to the map the same way we would in tool-layerimport
-                                    if (existingLayer == (arrayOfJSONLayersInMap.length - 1)){
-                                        //handle the proper layer import here
-                                        if ( jsonOfSMKData.layers[maybeNewLayer].type == "wms"){
-                                            addWMSLayerToLeafletMap(jsonOfSMKData.layers[maybeNewLayer]);
-                                        } 
-                                    }
-                                }
-                            }
-                            //handles visibility by looping through layers and setting visibility 
-                            for (let layer in jsonOfSMKData.layers) {
-                                let visible = getLayerToolVisibility(jsonOfSMKData, jsonOfSMKData.layers[layer].id );
-                                smk.$viewer.layerDisplayContext.setItemVisible( jsonOfSMKData.layers[layer].id, visible, false );
-                                smk.$viewer.updateLayersVisible();
-                            }
-                                // setting zoom and center for the map
-                                let zoom = jsonOfSMKData.viewer.location.zoom; 
-                                let center = jsonOfSMKData.viewer.location.center;
-                                smk.$viewer.currentBasemap[0]._map.setView(new L.LatLng(center[1], center[0]), zoom);
-                                //Here we need to loop through the drawings section looking for circle type layers to draw them to the map (can later handle all types of drawings)
-                                for (let drawing in jsonOfSMKData.drawings) {
-                                    //first check if it's one of the simple leaflet drawing types (all lowercase names: marker, polygon, line, circle)
-                                    if ( isSimpleLeafletDrawing(jsonOfSMKData.drawings[drawing])){
-                                        importLeafletDrawings(smk, jsonOfSMKData.drawings[drawing]);
-                                    } else if ( isStyledGeoJSON( jsonOfSMKData.drawings[drawing]) ){
-                                        importStyledGeoJSON(jsonOfSMKData.drawings[drawing]);
-                                    }
-                                }  
-                                // handle changing baseMap based on import
-                                smk.$viewer.setBasemap(jsonOfSMKData.viewer.baseMap);
-                                // esri support can be implemented below once available
-                            }   else {  console.log("esri import support not yet implemented")  }
+                        importSession( jsonOfSMKData );
+
 
                     }
                 }
