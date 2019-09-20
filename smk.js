@@ -2625,9 +2625,9 @@ window.include.SMK = true
             },
 
             BUILD: {
-                commit:     '392481f63fd9ec0e59870bc770cebe165047bf0f',
-                branch:     'weirdNewLayerImporting',
-                lastCommit: '"2019-09-19 12:33:20 -0700"'.replace( /^"|"$/g, '' ),
+                commit:     'db45ae047e826a2380e96425c5a92fa43b7b4199',
+                branch:     'master',
+                lastCommit: '"2019-09-19 15:50:45 -0700"'.replace( /^"|"$/g, '' ),
                 origin:     'https://github.com/cebergin/smk-client.git',
                 version:    '0.8.1',
             }

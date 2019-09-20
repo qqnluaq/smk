@@ -800,8 +800,6 @@ rebuildSMKMAP: async function(mapConfig) {
         
         this.rebuildSMKMAP(mapConfigJSON);
         
-        
-
 
     },
   
@@ -966,41 +964,61 @@ rebuildSMKMAP: async function(mapConfig) {
         return jsonObjectHolder
     },
 
-    // takes the empty JSON holder and the smk object and fills the smkJSON holder with the useful values of smk to create a JSON file that can be used as a map-config
-    // or at least as a similar file
-    // should come back and clean this up into a readable for loop going through smk and checking all it's properties against jsonObjectHolder's properties that way
 
-    // has to check state to see if the layers are enabled or disabled as well via checking smk.$viewer.visibleLayer
-    copyIntoJSONObject: function( smk ){
-        let jsonObjectHolder = this.createSMKJSONObject()
-        
-        jsonObjectHolder = this.copyFromsmk ( jsonObjectHolder, smk)
+    //jsonObjectHolder.tools[tool].display
+    //turns off every display element so it can be compared to their current state and turned on again if necessary
+    recursiveToggleDisplayOff: function (  displayArray ){
 
-        // check state and set it appropriately for the various tool displayers
-        // first turn everything off
-        for (let tool in jsonObjectHolder.tools) {
-            //////console.log(jsonObjectHolder.tools[y])
-            if (jsonObjectHolder.tools[tool].type == "layers") {
-                for ( let item in jsonObjectHolder.tools[tool].display) {
-                    //////console.log(jsonObjectHolder.tools[y].display[x])
-                    jsonObjectHolder.tools[tool].display[item].isVisible = false;
-                }
+        for ( let displayItem in displayArray){
+            displayArray[displayItem].isVisible = false;
+            if (typeof displayArray[displayItem].isExpanded != "undefined" && displayArray[displayItem].items > 0){
+                displayArray[displayItem].items = this.recursiveToggleDisplayOff(displayArray[displayItem].items)
             }
+        return displayArray;
         }
-        // then compare the tools display state to every visible layer, if there is a match then turn on the visibility
-        for (let x in smk.$viewer.visibleLayer) {
-            for (let y in jsonObjectHolder.tools) {
-                if (jsonObjectHolder.tools[y].type == "layers") {
-                    for ( let j in jsonObjectHolder.tools[y].display) {
-                        if ( x == jsonObjectHolder.tools[y].display[j].id ) { 
-                            jsonObjectHolder.tools[y].display[j].isVisible = true;
-                        }
+    },
 
-                        
+
+    // matches every item in the toolArray with items in the itemVisibilityArray, and assigns the visibility status of itemVisibility array to toolArray
+    recuresiveSetDisplayVisibility: function (toolArray, itemVisibilityArray){
+        for (let  tool in toolArray){
+            for (let item in itemVisibilityArray){
+                if (toolArray[tool].id == itemVisibilityArray[item].id){
+                    toolArray[tool].isVisible = itemVisibilityArray[item].isActuallyVisible;
+
+                    if ( typeof toolArray[tool].isExpanded != "undefined" && typeof itemVisibilityArray[item].isExpanded != "undefined"){
+                        toolArray[tool].isExpanded = itemVisibilityArray[item].isExpanded;
+                    }
+                    if (typeof toolArray[tool].items  != "undefined" && toolArray[tool].items.length > 0 && typeof itemVisibilityArray[item].items !="undefined" && itemVisibilityArray[item].items.length > 1){
+                        toolArray[tool].items = this.recuresiveSetDisplayVisibility(toolArray[tool].items, itemVisibilityArray[item].items );
                     }
                 }
             }
         }
+        return toolArray;
+    },
+
+    // takes the empty JSON holder and the smk object and fills the smkJSON holder with the useful values of smk to create a JSON file that can be used as a map-config
+    // or at least as a similar file
+    // should come back and clean this up into a readable for loop going through smk and checking all it's properties against jsonObjectHolder's properties that way
+    copyIntoJSONObject: function( smk ){
+        let jsonObjectHolder = this.createSMKJSONObject()
+        
+        jsonObjectHolder = this.copyFromsmk ( jsonObjectHolder, smk);
+
+        // check state and set it appropriately for the various tool displayers
+        // first turn everything off
+        for (let tool in jsonObjectHolder.tools) {
+            if (jsonObjectHolder.tools[tool].type == "layers") {
+                jsonObjectHolder.tools[tool].display = this.recursiveToggleDisplayOff(jsonObjectHolder.tools[tool].display);
+                jsonObjectHolder.tools[tool].display = this.recuresiveSetDisplayVisibility( jsonObjectHolder.tools[tool].display, SMK.MAP[1].$viewer.layerDisplayContext.root.items);
+            }
+        }
+        
+      
+        
+
+
         
         // Going to get a list of all the layers currently in the system
         // then iterate through all existing objects to check for duplicates, if no duplicates are found then add both the tool version

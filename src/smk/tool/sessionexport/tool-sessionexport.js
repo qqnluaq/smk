@@ -60,17 +60,6 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     SMK.TYPE.sessionexportTool = sessionexportTool
 
     $.extend( sessionexportTool.prototype, SMK.TYPE.Tool.prototype )
@@ -81,14 +70,9 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         smk.on( this.id, {
             'activate': function () {
 
-            
-           
             //This is creating an update to date link of the JSON file to download
             //often disabled during testing and should be re-enabled
             createJsonLink( SMK.MAP[1] );
-
-
-            
 
             }
         } )

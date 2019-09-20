@@ -21,6 +21,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 //ESRIURL: 'https://mpcm-catalogue.api.gov.bc.ca/catalogV2/PROD/',
                 //ESRIURL: 'https://apps.gov.bc.ca/pub/mpcm/services/catalog/PROD/',
                 ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/test/test/',
+                //ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/',
                 //ESRIURL: 'http://vivid-w130a.vividsolutions.com:8080/smks-api/LayerLibrary/test/test/',
                 KMLURL: 'https://openmaps.gov.bc.ca/kml/geo/layers/WHSE_IMAGERY_AND_BASE_MAPS.AIMG_HIST_INDEX_MAPS_POINT_loader.kml',
                 
@@ -29,7 +30,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 esriLayerListShow: false,
                 jsonFeatures: null,
                 styleName: null,
-                selected: 'GeoJSON',
+                selected: 'arcGIS',
                 color: '#0066ff',
                 stroke: true,
                 strokeWidth: 3,
@@ -106,16 +107,21 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 jsonLayerInfo.layerName = layerName;
                 jsonLayerInfo.styleName = styleName;
 
-                // creating the json attribute information in the same style as map-config.json, but we don't seem to have true atttribute data yet
-                let jsonAttribute = '{"id": null,"name": null,"title": null,"visible": true}';
-                jsonAttribute = JSON.parse(jsonAttribute);
+                // creating the json attribute information in the same style as map-config.json
+               
                 
                 
-                for (let object in this.jsonFeatures) {
+                for (let propertyID in this.jsonFeatures[0].properties) {
+                    // creating the json attribute information in the same style as map-config.json
+                    let jsonAttribute = '{"id": null,"name": null,"title": null,"visible": true}';
+                    jsonAttribute = JSON.parse(jsonAttribute);
 
-                    jsonAttribute.id = this.jsonFeatures[object].id;
-                    jsonAttribute.name = this.jsonFeatures[object].id;
-                    jsonAttribute.title =this.jsonFeatures[object].id;
+                    jsonAttribute.id = propertyID;
+                    jsonAttribute.name = propertyID;
+                    
+                    let attributeTitle = propertyID;
+                    attributeTitle = attributeTitle.replace(/_/g, " ");
+                    jsonAttribute.title = attributeTitle
 
                     jsonLayerInfo.attributes.push(jsonAttribute);
                 }
@@ -190,7 +196,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
             },
 
             // this function is going to add a dynamic layer to the map after fetching the relevant information
-            //currently waiting for the data source to send us the individual data, currently not functional
+            
             fetchEsriLayerInfo: async function ( event ) {
                 let id  = event.srcElement.id;
                 console.log("Id is: ", id , " and we're going to call the data fetch from here to retrieve it");
@@ -199,7 +205,13 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 console.log("esri layer XML in detail is: ", esriLayerXML);
 
 
+                /// actually all I need to do is build the dynamic object the way it is in map-config.json, and then since we're passing it in we don't even need
+                // to actually add it to the map, just assign the information to smk in a way that it can be exported later
+
+                addEsriLayerToSMK( esriLayerXML );
+
             },
+
 
             importGeoJSON: function (event) {
                 console.log("The file list object is: ", event.target.files);
@@ -241,6 +253,105 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
             content:        null
             
         }, option ) )
+
+    }
+
+    function getEsriLayerFromXML (esriXML){
+        let jsonLayerInfo = '{  "type": "esri-dynamic", "id": null, "title": null, "isVisible": true, "attribution": "Copyright 2019 DataBC, Government of British Columbia", "metadataUrl": "", "opacity": 0.65,  "minScale": "", "maxScale": "", "isQueryable": true, "attributes": [], "mpcmId": "", "mpcmWorkspace": "", "serviceUrl": "https://maps.gov.bc.ca/arcgis/rest/services/mpcm/bcgw/MapServer", "dynamicLayers": [] }';
+
+        jsonLayerInfo = JSON.parse(jsonLayerInfo);
+        
+        
+        for (let childNode in esriXML.childNodes[0].childNodes ) {
+            switch(esriXML.childNodes[0].childNodes[childNode].nodeName) {
+                case "layerId":
+                    jsonLayerInfo.mpcmId = esriXML.childNodes[0].childNodes[childNode].firstChild.textContent;
+                    break;
+                case "layerDisplayName":
+                    jsonLayerInfo.title = esriXML.childNodes[0].childNodes[childNode].firstChild.textContent;
+                    jsonLayerInfo.id = esriXML.childNodes[0].childNodes[childNode].firstChild.textContent;
+                    break;
+                case "maxScale":
+                    jsonLayerInfo.maxScale = esriXML.childNodes[0].childNodes[childNode].firstChild.textContent;
+                    break;
+                case "minScale":
+                    jsonLayerInfo.minScale = esriXML.childNodes[0].childNodes[childNode].firstChild.textContent;
+                    break;
+                case "workspaceName":
+                    jsonLayerInfo.mpcmWorkspace = esriXML.childNodes[0].childNodes[childNode].firstChild.textContent;
+                    break;
+                case "dynamicJson":
+                    jsonLayerInfo.dynamicLayers.push(esriXML.childNodes[0].childNodes[childNode].firstChild.textContent);
+                    break;
+                case "properties":
+                    for (let propertyNodes in esriXML.childNodes[0].childNodes[childNode].childNodes){
+                        if ( propertyNodes == "0" || propertyNodes == "1" || propertyNodes == "2"){
+                            let elementKey = esriXML.childNodes[0].childNodes[childNode].childNodes[propertyNodes].getElementsByTagName("key");
+                            if (elementKey[0].childNodes[0].textContent == "metadata.url"){
+                                let elementValue = esriXML.childNodes[0].childNodes[childNode].childNodes[propertyNodes].getElementsByTagName("value")
+                                jsonLayerInfo.metadataUrl = elementValue[0].childNodes[0].textContent;
+                            }  
+                        }
+                    }
+                    break;
+                case "fields":
+                    ///aka attributes
+                    console.log("Still need to do field handling")
+                    // need to loop over each attribute folder
+                    for (let fieldNodes in esriXML.childNodes[0].childNodes[childNode].childNodes){
+                        if(!isNaN(fieldNodes)){
+                            let fieldNameNode = esriXML.childNodes[0].childNodes[childNode].childNodes[fieldNodes].getElementsByTagName("fieldName");
+                            let fieldAliasNode = esriXML.childNodes[0].childNodes[childNode].childNodes[fieldNodes].getElementsByTagName("fieldAlias");
+
+                            let fieldName = fieldNameNode[0].childNodes[0].textContent;
+                            let fieldAlias = fieldAliasNode[0].childNodes[0].textContent;
+
+                            //create the individual attribute
+                            let jsonAttribute = '{"id": null,"name": null,"title": null,"visible": true}';
+                            jsonAttribute = JSON.parse(jsonAttribute);
+
+                            jsonAttribute.id = fieldName;
+                            jsonAttribute.name = fieldName;
+                            jsonAttribute.title  = fieldAlias
+                            
+                            jsonLayerInfo.attributes.push(jsonAttribute);
+
+                        }
+                        
+                    }
+                    break;
+                default:
+                 
+                 }    
+        }
+        
+
+        return jsonLayerInfo;
+    }
+
+    function addEsriLayerToSMK ( esriXML ){
+        //creating the json layer info in the same style as map-config.json
+        let jsonLayerInfo = getEsriLayerFromXML( esriXML );
+
+        console.log("json layer info is: ", jsonLayerInfo);
+        SMK.MAP[1].layers.push(jsonLayerInfo);
+
+        
+        // creating the json  tool information in the same style as map-config.json
+        let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }';
+        jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo);
+        jsonToolLayerInfo.id = jsonLayerInfo.id;
+        jsonToolLayerInfo.title = jsonLayerInfo.title;
+
+
+        for (let tool in SMK.MAP[1].tools) {
+            if (SMK.MAP[1].tools[tool].type == "layers" ){
+                SMK.MAP[1].tools[tool].display.push(jsonToolLayerInfo);
+            }
+        }
+
+        //Now that the layer is properly in the system, we should go ahead and export all our data and rebuild with it
+        SMK.UTIL.rebuidMapWithSessionExportJSONObject( SMK.MAP[1] );
 
     }
 
@@ -331,8 +442,31 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         let URL = serviceUrl + id;
 
         const response = await fetch(URL, {});
-        const text = await response.text();
+        let text = await response.text();
+        //console.log(text)
 
+        // removing opening quotes if they exist
+        if (text.charAt(0) === '"' && text.charAt(text.length -1) === '"') {
+            
+            //console.log(text.substr(1,text.length -2));
+
+            text = text.substr(1,text.length -2);
+        }
+
+        console.log("Post quotes removal",text);
+
+        text = text.replace(/\\/g, "");
+
+        console.log("Post forward slash removal",text);
+
+        //handling weird headers and setting them correctly 
+        let newHeaderXML = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+        let textIndex = text.indexOf(">");
+        text = text.slice(textIndex + 1);
+        text = newHeaderXML + text;
+
+        console.log("Post new header replacement",text);
+        
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(text,"text/xml");
 
@@ -598,10 +732,6 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
     }
 
-
-
-
-  
     
     //gets a list of all the feature layers from a layer name and WMS returning all the features available to that layer, these can be display
     //currently not required
@@ -628,32 +758,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         
         smk.on( this.id, {
             'activate': function () {
-
-
-
-                /*
-                let serviceURL = 'https://maps.gov.bc.ca/arcgis/rest/services/mpcm/bcgw/MapServer'
-                let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
-                //let url = 'https://apps.gov.bc.ca/pub/mpcm/services/catalog/PROD/3543';
-                //let url = 'https://catalogue.data.gov.bc.ca/dataset/court-locations';
-                let dynamicLayers = '{"id":3543,"minScale":2000000,"maxScale":0,"definitionExpression":"OCCUPANT_TYPE_DESCRIPTION = \'Provincial courts of law\'","source":{"type":"dataLayer","dataSource":{"type":"table","workspaceId":"MPCM_ALL_PUB","dataSourceName":"WHSE_IMAGERY_AND_BASE_MAPS.GSR_PROVINCIAL_COURTS_SVW","gdbVersion":""}},"drawingInfo":{"renderer":{"type":"simple","symbol":{"type":"esriPMS","url":"a5b6cfd52e586162b91f88ed6c5a6151","imageData":"iVBORw0KGgoAAAANSUhEUgAAABcAAAAcCAYAAACK7SRjAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAqtJREFUSInFkl1IU3EYhx+3yTI/wq/SPvQmo88LKUJnipSBXYR2EYkYROSFGZLWTR9XBkmYCgUJEuqFCaE3XRiZRZY5FQklqpmoaZYjqaW56TlnO1sXbtO5U1up9d6d9zzv83/P7/w1rGJp/o38YFFchFWduSybhGTqqar3kG9NL4y/eCZ7dFliZ12u0fSbojWDNJXNOjdfG2C1ySvhxjLnCGHWooJFsVhlh8/B4lOHqapv8/sgt1wUre5mVkYiva8/MDE55TWwmAPQagOJXBesyC5sviiW4CAth3Q7qW3u8BpYGl/a/m3Eb4xSZN1ym3V+KDQsiKbWXk5mJZMQtx7DsNFjwMW52L274pk2zymybrkgScTGhJN/PI3S2w+ouPuIwrwM+gxjHgOCJAG42evVLQiiRGFeBiq16heb2+0cSd3D08532Ox2AFqe9bvfLeYAN2ueE9xs7tEkZfmWmEgiw4N53vsemzPXgREj6Uk7aO82eMWixE58nVaWG0aMmL5bqLiU4wGcK23AalvYXHDKlVjTlNlbHrspVDU4bKS8tpVrRceIiQ4DwGwRmBU8r57rttQ1veD86Uw2RM2zMxaBGzUPydi9OUQKcKjaXHLj5xn7uCTTNTpJe+8QZcXZfDKa6OobQrY5CAxUo3b+LEm0Ict23n77Qf6VOlL2JSBbHTQ9eYXhyzTIKrMYJdk9YnHV+MwseaWNS9sANADN3QMevcdvPiqyivKVrP8rFzorFJ/XpFxYvnw55VPuz4a/lQ+1l49F6EruW+DEX5vmSxJ7br70kAMOk74yB8jxwnXFuVoC7i3pyqK+0udX+85cX9WIrqQAOOBqiVDjc84vOSDqK1PRldzRQkGwmrNiR2X1isnny3YVNMmmju1+bf1ncv0tkwiJ/i+zyvf8J1FIJtnjySj9AAAAAElFTkSuQmCC","contentType":"image/png","width":17,"height":21,"angle":0,"xoffset":0,"yoffset":0},"label":"","description":""},"transparency":0,"labelingInfo":null}}'
-                dynamicLayers = JSON.parse(dynamicLayers)
-                let dynamicLayerArray = [];
-                dynamicLayerArray.push(dynamicLayers)
-                
-                L.esri.dynamicMapLayer( {
-                    url:            serviceURL,
-                    opacity:        0.65,
-                    dynamicLayers:  dynamicLayers,
-                    maxZoom:        1,
-                    minZoom:        15
-                }).addTo(map);
-                */
-
-
-               
-                
-                
+          
                 if ( !self.enabled ) return
         
                 self.active = !self.active
