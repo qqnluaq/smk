@@ -5,46 +5,63 @@
     <select v-model="selected">
         <option value="arcGIS">arcGIS</option>
         <option value="wms">wms</option>
-        <option value="Shape">Shape</option>
-        <option value="KML">KML</option>
+        <!--<option value="Shape">Shape</option> -->
+       <!-- <option value="KML">KML</option> -->
         <option value="GeoJSON">GeoJSON</option>
     </select>
 
     <div v-if="selected === 'arcGIS'">
-        Yes this is the {{ selected}} input area
-        <label :id="ESRIURL"> {{ ESRIURL }} </label>
-        <button v-on:click="fetchLayersFromURL" :id="ESRIURL" :content="ESRIURL" class="toolButton ">Layer Service ESRI URL</button>
+        <!--<label :id="ESRIURL"> {{ ESRIURL }} </label> -->
+        <div v-if="arcGISFetched === false">
+        <button v-on:click="fetchLayersFromURL" :id="ESRIURL" :content="ESRIURL" class="toolButton ">Fetch arcGIS Layers</button>
+        </div>
+        <div v-if="loading">
+
+            Loading...
+        </div>
 
         <div v-if="esriLayerListShow">
+
             <ul>
                 <li v-for="item in items">
 
-                    <details>
-                        <summary>{{ item.jsonObject.label}} </summary>
+                    <div class="mainListItem">
+                        <details>
+                            <summary>{{ item.jsonObject.label}} </summary>
 
-                        <div id="layerDisplay">
+                            <div id="layerDisplay">
 
-                            <li class="sublayerOne" v-for="node in item.jsonObject.subLayers">
+                                <li class="sublayerOne" v-for="node in item.jsonObject.subLayers">
 
-                                <details>
-                                    <summary> {{ node.jsonObject.label }} </summary>
+                                    <div class="subListItem">
+                                        <details>
+                                            <summary> {{ node.jsonObject.label }} </summary>
 
-                                    <div>
-                                        <li class="sublayerTwo" v-for="subNode in node.jsonObject.subLayers">
-                                            <details>
-                                                <summary> {{ subNode.jsonObject.label }}</summary>
+                                            <div>
+                                                <li class="sublayerTwo" v-for="subNode in node.jsonObject.subLayers">
+                                                    <div class="subListItem">
+                                                        <details>
+                                                            <summary> {{ subNode.jsonObject.label }}</summary>
 
-                                                <div class="mpcmId">MPCM ID: {{subNode.jsonObject.mpcmId}}</div>
-                                                <button v-on:click="fetchEsriLayerInfo" :id="subNode.jsonObject.mpcmId" class="toolButton ">Import Layer</button>
+                                                            <div class="mpcmId">MPCM ID: {{subNode.jsonObject.mpcmId}}
+                                                            <div v-if="layerLoading">
+                                                                Importing...
+                                                            </div>
+                                                            <div v-else> 
+                                                            <button v-on:click="fetchEsriLayerInfo" :id="subNode.jsonObject.mpcmId" class="toolButton ">Import Layer</button>
+                                                            </div>
 
-                                            </details>
-                                        </li>
+                                                            </div>
+                                                        </details>
+                                                    </div>
+                                                </li>
+                                            </div>
+                                        </details>
                                     </div>
-                                </details>
-                            </li>
-                        </div>
-                    </details>
-
+                                </li>
+                            </div>
+                        </details>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -53,7 +70,7 @@
 
     <div v-if="selected === 'KML'">
         {{ selected}} input area
-        <input type="text" :id="KMLURL" v-model="KMLURL">
+        <input type="text" :id="KMLURL" class="linkEntry" v-model="KMLURL">
         <button v-on:click="fetchLayersFromURL" :id="KMLURL" :content="KMLURL" class="toolButton ">Input Layer Service KMLURL</button>
 
         <div class="geoJSONStyleOptions">
@@ -288,10 +305,19 @@
 
     </div>
 
-    <div v-if="selected === 'wms'">
-        {{ selected}} input area
-        <input type="text" :id="WMSURL" v-model="WMSURL">
-        <button v-on:click="fetchLayersFromURL" :id="WMSURL" :content="WMSURL" class="toolButton ">Input Layer Service WMSURL</button>
+    <div v-if="selected === 'wms'"> 
+        <div v-if="wmsFetched === false">
+        <div>
+        {{ selected}} input area:
+        <input type="text" :id="WMSURL" class="linkEntry" v-model="WMSURL">
+        </div>
+        
+        <button v-on:click="fetchLayersFromURL" :id="WMSURL" :content="WMSURL" class="toolButton ">Fetch WMS Layers</button>
+        </div>
+        <div v-if="loading">
+
+            Loading...
+        </div>
 
         <!-- Not currently accessible as this feature is not enabled -->
         <div v-if="featureListShow">
@@ -309,16 +335,25 @@
             <ul>
                 <li v-for="item in items">
 
-                    <details>
-                        <summary>{{ item.layerName }} </summary>
-                        <div id="layerDisplay">
+                    <div class="mainListItem">
+                        <details>
+                            <summary>{{ item.layerTitle }} </summary>
+                            <div id="layerDisplay">
 
-                            <li v-for="style in item.stylesArr">
-                                {{ style.name }} {{ style.title }}
-                                <button v-on:click="setLayerImport" :id="item.layerName" :styleName="style.name" :styleTitle="style.title" :fullItem="JSON.stringify(item)" class="toolButton">Import Layer & Style</button>
-                            </li>
-                        </div>
-                    </details>
+                                <li v-for="style in item.stylesArr">
+   
+                                    <div class="subListItem">
+                                            {{ style.title }}
+                                        <div v-if="layerLoading"></div>
+                                        <div v-else> 
+                                                <button v-on:click="setLayerImport" :id="item.layerName" :styleName="style.name" :styleTitle="style.title" :fullItem="JSON.stringify(item)" class="toolButton">Import Layer & Style</button>
+                                        </div>
+                                        
+                                    </div>
+                                </li>
+                            </div>
+                        </details>
+                    </div>
 
                 </li>
             </ul>

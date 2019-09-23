@@ -19,3 +19,33 @@ li.sublayerTwo {
 div.mpcmId {
   text-indent: 2em;
 }
+
+h3 {
+  display: block;
+  font-size: 1.17em;
+  font-weight: bold;
+  margin: auto;
+  width: 50%;
+  text-align: center;
+}
+
+.linkEntry{
+  width: 100%;
+  text-align: center;
+  width: 75%;
+  float: center;
+
+}
+
+.mainListItem{
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-size: 1.05em;
+}
+
+.subListItem{
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-size: 1.00em;
+
+}

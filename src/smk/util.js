@@ -436,6 +436,7 @@ include.module( 'util', null, function ( inc ) {
 
 
     ifContentExists: function ( leafletMapLayer, geoJSONFile) {
+            console.log( leafletMapLayer,  geoJSONFile)
             if (typeof geoJSONFile.properties != "undefined"){
                 if (geoJSONFile.properties.content != null) {
                     leafletMapLayer.bindTooltip(geoJSONFile.properties.content, {
@@ -721,10 +722,18 @@ rebuildSMKMAP: async function(mapConfig) {
         'base-url':     baseURL,
         'service-url':  null,
     }
-    document.body.parentNode.removeChild(document.body)
 
-    document.body = document.createElement("body");
-    document.body.setAttribute("id", "smk-map-frame");
+
+
+   // document.body.parentNode.removeChild(document.body);
+
+    let smkMAPDIV = document.getElementById("smk-map-frame");
+    smkMAPDIV.remove();
+
+    //document.body = document.createElement("body");
+    let divNode = document.createElement("DIV");  
+    divNode.setAttribute("id", "smk-map-frame");
+    document.body.appendChild(divNode);
 
     console.log(document.getElementById("smk-map-frame"))
 
@@ -2008,7 +2017,7 @@ rebuildSMKMAP: async function(mapConfig) {
 
 
 
-    ifContentExists: function ( drawing, drawingObj) {
+    ifDrawingContentExists: function ( drawing, drawingObj) {
         if (drawingObj.content != null) {
             drawing.bindTooltip(drawingObj.content, {
                 permanent: true
@@ -2024,7 +2033,7 @@ rebuildSMKMAP: async function(mapConfig) {
             case "circle":
                 latlng = L.GeoJSON.coordsToLatLng(drawing.geometry.coordinates);
                 drawingOnMap = L.circle(latlng, {radius: drawing.properties.radius}).addTo(smk.$viewer.currentBasemap[0]._map);
-                this.ifContentExists( drawingOnMap, drawing.properties);
+                this.ifDrawingContentExists( drawingOnMap, drawing.properties);
                 break;
             case "line":
                 for (let coord in drawing.geometry.coordinates){
@@ -2032,7 +2041,7 @@ rebuildSMKMAP: async function(mapConfig) {
                     latlngs.push(latlng);
                 }
                 drawingOnMap = L.polyline(latlngs, {color: 'blue'}).addTo(smk.$viewer.currentBasemap[0]._map);
-                this.ifContentExists( drawingOnMap, drawing.properties);
+                this.ifDrawingContentExists( drawingOnMap, drawing.properties);
                 break;
             case "polygon":
                 for (let coord in drawing.geometry.coordinates){
@@ -2040,12 +2049,12 @@ rebuildSMKMAP: async function(mapConfig) {
                     latlngs.push(latlng);
                 }
                 drawingOnMap = L.polygon(latlngs, {color: 'blue'}).addTo(smk.$viewer.currentBasemap[0]._map);
-                this.ifContentExists( drawingOnMap, drawing.properties);
+                this.ifDrawingContentExists( drawingOnMap, drawing.properties);
                 break;
             case "marker":
                 latlng = L.GeoJSON.coordsToLatLng(drawing.geometry.coordinates);
                 drawingOnMap = L.marker(latlng).addTo(smk.$viewer.currentBasemap[0]._map);
-                this.ifContentExists( drawingOnMap, drawing.properties);
+                this.ifDrawingContentExists( drawingOnMap, drawing.properties);
                 break;
             default:
                 console.log("Not a leaflet drawing")

@@ -121,7 +121,10 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
         }
         for (let layerToRemove in smk.$viewer.map._layers){
             // the comparsion between layerToRemove and layerID is because the layer to remove is always a few layers higher, and we don't want to chance matching earlier content
-            if( layerToRemove > layerID && smk.$viewer.map._layers[layerToRemove]._tooltip._content == content){
+            if( layerToRemove > layerID && typeof smk.$viewer.map._layers[layerToRemove]._tooltip != "undefined" 
+            && smk.$viewer.map._layers[layerToRemove]._tooltip != null
+            && typeof smk.$viewer.map._layers[layerToRemove]._tooltip._content != "undefined"
+            && smk.$viewer.map._layers[layerToRemove]._tooltip._content == content){
                 content = smk.$viewer.map._layers[layerToRemove]._tooltip._content;
                 
                 smk.$viewer.map._layers[layerToRemove].closeTooltip();

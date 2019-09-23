@@ -25,6 +25,10 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 //ESRIURL: 'http://vivid-w130a.vividsolutions.com:8080/smks-api/LayerLibrary/test/test/',
                 KMLURL: 'https://openmaps.gov.bc.ca/kml/geo/layers/WHSE_IMAGERY_AND_BASE_MAPS.AIMG_HIST_INDEX_MAPS_POINT_loader.kml',
                 
+                layerLoading: false,
+                arcGISFetched: false,
+                wmsFetched: false,
+                loading: false,
                 featureListShow: false,
                 layerListShow: false,
                 esriLayerListShow: false,
@@ -50,14 +54,17 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
           },
           methods: {
         
-            //imports a layer to the leaflet map directly (doesn't currently let smk know the layer has been added)
+            //imports a layer to the leaflet map directly and then updates the layers via rebuild map
             setLayerImport: async function  ( event ) {
                 
+
                 console.log("The event is: ",event);
                 console.log("The id is: ",event.srcElement.id);
                 console.log("The style name is: ",event.srcElement.attributes.item(1).nodeValue);
                 console.log("The style title is: ",event.srcElement.attributes.item(2).nodeValue);
                 console.log("The full object is: ",event.srcElement.attributes.item(3).nodeValue);
+
+                this.layerLoading = true;
                 
                 let layerName = event.srcElement.id;
                 let styleName = event.srcElement.attributes.item(1).nodeValue;
@@ -94,8 +101,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 //creating the json layer info in the same style as map-config.json
                 let jsonLayerInfo = '{  "type": null, "id": null, "title": null, "isVisible": true, "attribution": "", "metadataUrl": "", "opacity": 0.65,  "isQueryable": true, "attributes": [], "serviceUrl":null, "layerName": null, "styleName": null }';
 
-                let title = (layerName + "-" + styleName);
-                title = title.replace(/_/g, " ");
+                let title = layerObject.layerTitle;
                 let id = layerName + "-" + styleName;
 
                 
@@ -142,6 +148,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     }
                 }
 
+                this.layerLoading = false;
                 //Now that the layer is properly in the system, we should go ahead and export all our data and rebuild with it
                 SMK.UTIL.rebuidMapWithSessionExportJSONObject( SMK.MAP[1] );
 
@@ -164,6 +171,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 if ( this.selected == 'wms') {
                     //console.log ("The url is", event.srcElement.id)
                     this.service = event.srcElement.id;
+                    this.wmsFetched = false;
                     
                     //currently this is stripping out everything after the ? if it exists to insist on doing a get capabilities request
                     if (this.service.includes("?")) {
@@ -174,18 +182,27 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     //console.log("after trim and concat is: ", this.service)
                     
                     // retrieving all the layers and their styles
+                    this.loading = true;
                     let wmsANDLayerArr = await asyncGetLayersFromWMS ( this.service );
+                    
+                    this.loading = false;
+                    this.wmsFetched = true;
                     this.service = wmsANDLayerArr[0];
                     this.items = wmsANDLayerArr[1];
                     this.layerListShow = true;
                 }
                 if (this.selected == 'arcGIS') {
+                    this.arcGISFetched = false;
 
                     //currently hardcoding to only use this service, in the future will allow for other services to be selected earlier on
                     this.service = "https://maps.gov.bc.ca/arcgis/rest/services/mpcm/bcgw/MapServer";
 
+                    this.loading = true;
                     // waits while fetching all the information from the service and URL, could take some time for that to render
                     let jsonArrayOfDyanmicLayerIDNames = await asyncGetLayersFromEsriDynamic( this.service, this.ESRIURL );
+                    this.loading = false;
+                    this.arcGISFetched = true;
+
                     this.items = jsonArrayOfDyanmicLayerIDNames;
                     this.esriLayerListShow = true;
                     
@@ -201,7 +218,9 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 let id  = event.srcElement.id;
                 console.log("Id is: ", id , " and we're going to call the data fetch from here to retrieve it");
                 
+                this.layerLoading = true;
                 let esriLayerXML = await asyncGetEsriLayerData( this.ESRIURL, id);
+                this.layerLoading = false;
                 console.log("esri layer XML in detail is: ", esriLayerXML);
 
 
@@ -485,24 +504,40 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         array.forEach( function (item) {
             if (item.nodeName == 'Layer') {
                 let arrayOfJSONStyles = [];
-                let numberOfChildren = item.getElementsByTagName('Style').length;
-                let x = 0;
+                let numberOfChildren = item.getElementsByTagName('Style');
+                let styleNo = 0;
                 // Loop through every available style for a given layer, adding them to an array 
-                while (x < numberOfChildren) {
+                while (styleNo < numberOfChildren.length) {
+                    
                     let jSONStyles = '{  "name": null, "title": null   }';
 
                     jSONStyles = JSON.parse(jSONStyles);
-                    jSONStyles.name = ((item.getElementsByTagName("Style")[x].getElementsByTagName("Name")[0].childNodes[0].nodeValue));
-                    jSONStyles.title = ((item.getElementsByTagName("Style")[x].getElementsByTagName("Title")[0].childNodes[0].nodeValue));
+                    jSONStyles.name = ((item.getElementsByTagName("Style")[styleNo].getElementsByTagName("Name")[0].childNodes[0].nodeValue));
+                    jSONStyles.title = ((item.getElementsByTagName("Style")[styleNo].getElementsByTagName("Title")[0].childNodes[0].nodeValue));
 
-                    arrayOfJSONStyles.push(jSONStyles);
-                    x++;
+                    // avoid adding duplicate values
+                    if (arrayOfJSONStyles.length == 0){
+                        // first one can be added
+                        arrayOfJSONStyles.push(jSONStyles);
+                    } else {
+                        for (let existingStyle in arrayOfJSONStyles){
+                            if (arrayOfJSONStyles[existingStyle].name == jSONStyles.name && arrayOfJSONStyles[existingStyle].title == jSONStyles.title){
+                                //match, don't push
+                                break;
+                            } else if (existingStyle == arrayOfJSONStyles.length - 1 ){
+                                //checked all existing styles, no match was found so add it
+                                arrayOfJSONStyles.push(jSONStyles);
+                            }
+                        }
+                    }
+                    styleNo++;
                 }
                 
                 // this JSON object will contain the name of the layer and the array of JSON object styles belonging to that layer
-                let nameAndStyleJSON = '{ "layerName": null, "stylesArr": null    }'
+                let nameAndStyleJSON = '{ "layerName": null, "layerTitle": null, "stylesArr": null    }'
                 nameAndStyleJSON = JSON.parse(nameAndStyleJSON);
                 nameAndStyleJSON.layerName = item.getElementsByTagName("Name")[0].childNodes[0].nodeValue;
+                nameAndStyleJSON.layerTitle = item.getElementsByTagName("Title")[0].childNodes[0].nodeValue;
                 nameAndStyleJSON.stylesArr = arrayOfJSONStyles;
 
                 layerNames.push(nameAndStyleJSON);

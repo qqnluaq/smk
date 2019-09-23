@@ -1,1 +1,11 @@
 .leaflet-control-browser-print {display: none;}
+
+.printListItem{
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.05em;
+  }
+
+  .printtoolButton {
+    margin: 1em;
+  }
