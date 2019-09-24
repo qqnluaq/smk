@@ -13,7 +13,7 @@
     <div v-if="selected === 'arcGIS'">
         <!--<label :id="ESRIURL"> {{ ESRIURL }} </label> -->
         <div v-if="arcGISFetched === false">
-        <button v-on:click="fetchLayersFromURL" :id="ESRIURL" :content="ESRIURL" class="toolButton ">Fetch arcGIS Layers</button>
+        <button v-on:click="fetchLayersFromURL" :id="ESRIURL" :content="ESRIURL" class="layerToolButton">Fetch arcGIS Layers</button>
         </div>
         <div v-if="loading">
 
@@ -48,7 +48,7 @@
                                                                 Importing...
                                                             </div>
                                                             <div v-else> 
-                                                            <button v-on:click="fetchEsriLayerInfo" :id="subNode.jsonObject.mpcmId" class="toolButton ">Import Layer</button>
+                                                            <button v-on:click="fetchEsriLayerInfo" :id="subNode.jsonObject.mpcmId" class="specficLayerToolButton">Import Layer</button>
                                                             </div>
 
                                                             </div>
@@ -71,7 +71,7 @@
     <div v-if="selected === 'KML'">
         {{ selected}} input area
         <input type="text" :id="KMLURL" class="linkEntry" v-model="KMLURL">
-        <button v-on:click="fetchLayersFromURL" :id="KMLURL" :content="KMLURL" class="toolButton ">Input Layer Service KMLURL</button>
+        <button v-on:click="fetchLayersFromURL" :id="KMLURL" :content="KMLURL" class="layerToolButton">Input Layer Service KMLURL</button>
 
         <div class="geoJSONStyleOptions">
             <details>
@@ -312,7 +312,7 @@
         <input type="text" :id="WMSURL" class="linkEntry" v-model="WMSURL">
         </div>
         
-        <button v-on:click="fetchLayersFromURL" :id="WMSURL" :content="WMSURL" class="toolButton ">Fetch WMS Layers</button>
+        <button v-on:click="fetchLayersFromURL" :id="WMSURL" :content="WMSURL" class="layerToolButton">Fetch WMS Layers</button>
         </div>
         <div v-if="loading">
 
@@ -346,7 +346,7 @@
                                             {{ style.title }}
                                         <div v-if="layerLoading"></div>
                                         <div v-else> 
-                                                <button v-on:click="setLayerImport" :id="item.layerName" :styleName="style.name" :styleTitle="style.title" :fullItem="JSON.stringify(item)" class="toolButton">Import Layer & Style</button>
+                                                <button v-on:click="setLayerImport" :id="item.layerName" :styleName="style.name" :styleTitle="style.title" :fullItem="JSON.stringify(item)" class="subListToolButton">Import Layer & Style</button>
                                         </div>
                                         
                                     </div>

@@ -724,18 +724,24 @@ rebuildSMKMAP: async function(mapConfig) {
     }
 
 
-
-   // document.body.parentNode.removeChild(document.body);
-
+    // need to have a variant if this is attached to the document body, or if it's attached to a div
     let smkMAPDIV = document.getElementById("smk-map-frame");
-    smkMAPDIV.remove();
 
-    //document.body = document.createElement("body");
-    let divNode = document.createElement("DIV");  
-    divNode.setAttribute("id", "smk-map-frame");
-    document.body.appendChild(divNode);
+    if (smkMAPDIV.nodeName == "BODY"){
 
-    console.log(document.getElementById("smk-map-frame"))
+        smkMAPDIV.remove();
+        document.body = document.createElement("body");
+        document.body.setAttribute("id", "smk-map-frame");
+
+    } else {
+
+        smkMAPDIV.remove();
+        let divNode = document.createElement("DIV"); 
+        divNode.setAttribute("id", "smk-map-frame");
+        document.body.appendChild(divNode);
+    }
+    
+
 
     let map = SMK.MAP[ smkAttr[ 'id' ] ] = new SMK.TYPE.SmkMap( smkAttr  );
     

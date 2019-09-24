@@ -18,9 +18,8 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 service: '',
                 WMSURL: 'https://openmaps.gov.bc.ca/geo/pub/ows',
                 //WMSURL: 'https://openmaps.gov.bc.ca/geo/pub/REG_LEGAL_AND_ADMIN_BOUNDARIES.QSOI_BC_REGIONS/ows?service=WMS&request=GetCapabilities',
-                //ESRIURL: 'https://mpcm-catalogue.api.gov.bc.ca/catalogV2/PROD/',
-                //ESRIURL: 'https://apps.gov.bc.ca/pub/mpcm/services/catalog/PROD/',
-                ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/test/test/',
+                ESRIURL: 'https://apps.gov.bc.ca/pub/mpcm/services/catalog/PROD/',
+                //ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/test/test/',
                 //ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/',
                 //ESRIURL: 'http://vivid-w130a.vividsolutions.com:8080/smks-api/LayerLibrary/test/test/',
                 KMLURL: 'https://openmaps.gov.bc.ca/kml/geo/layers/WHSE_IMAGERY_AND_BASE_MAPS.AIMG_HIST_INDEX_MAPS_POINT_loader.kml',
@@ -300,7 +299,10 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     jsonLayerInfo.mpcmWorkspace = esriXML.childNodes[0].childNodes[childNode].firstChild.textContent;
                     break;
                 case "dynamicJson":
-                    jsonLayerInfo.dynamicLayers.push(esriXML.childNodes[0].childNodes[childNode].firstChild.textContent);
+                    let dynamicJSON = esriXML.childNodes[0].childNodes[childNode].firstChild.textContent;
+                    dynamicJSON = JSON.parse(dynamicJSON);  
+                    dynamicJSON = JSON.stringify(dynamicJSON);
+                    jsonLayerInfo.dynamicLayers.push(dynamicJSON);
                     break;
                 case "properties":
                     for (let propertyNodes in esriXML.childNodes[0].childNodes[childNode].childNodes){
