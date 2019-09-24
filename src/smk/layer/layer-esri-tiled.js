@@ -42,14 +42,24 @@ include.module( 'layer.layer-esri-tiled-js', [ 'layer.layer-js', 'terraformer' ]
     EsriTiledLayer.prototype.getFeaturesInArea = function ( area, view, option ) {
         var self = this
 
-        var serviceUrl  = this.config.serviceUrl + '/identify'
+        L.esri.identifyFeatures( { url: this.config.serviceUrl } )
+            .on( SMK.MAP[1].$viewer.map )
+            .at( area )
+            .run( function ( err, features, resp ) {
+                console.log(err,features,resp)
+            } )    
+        
+
+        var serviceUrl  = this.config.serviceUrl + '/query'
         // var dynamicLayers = '[' + this.config.dynamicLayers.join( ',' ) + ']'
         var esriFeature = Terraformer.ArcGIS.convert( area )
 
         var data = {
             f:              'json',
             // dynamicLayers:  dynamicLayers,
-            sr:             4326,
+            // sr:             4326,
+            inSR:           4326,
+            outSR:          4326,
             tolerance:      0,
             mapExtent:      view.extent.join( ',' ),
             imageDisplay:   [ view.screen.width, view.screen.height, 96 ].join( ',' ),
@@ -57,7 +67,10 @@ include.module( 'layer.layer-esri-tiled-js', [ 'layer.layer-js', 'terraformer' ]
             returnZ:        false,
             returnM:        false,
             geometryType:   'esriGeometryPolygon',
-            geometry:       JSON.stringify( esriFeature.geometry )
+            geometry:       JSON.stringify( Object.assign( { spatialReference:{wkid:4326}},esriFeature.geometry )),
+            outFields:      '*',
+            mosaicRule:     '',
+
         }
 
         return SMK.UTIL.makePromise( function ( res, rej ) {
