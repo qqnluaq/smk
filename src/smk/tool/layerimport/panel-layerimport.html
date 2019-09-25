@@ -1,6 +1,7 @@
 <side-panel class="smk-layerimport-panel" v-bind:showHeader="false">
-    <h3 v-if="service">{{ service }} </h3>
-    <h3 v-else>Enter Layer Service:</h3>
+    
+    <div class="smk-header">
+    <h3>Select Layer Service:</h3>
 
     <select v-model="selected">
         <option value="arcGIS">arcGIS</option>
@@ -9,63 +10,47 @@
        <!-- <option value="KML">KML</option> -->
         <option value="GeoJSON">GeoJSON</option>
     </select>
+    </div>
 
-    <div v-if="selected === 'arcGIS'">
-        <!--<label :id="ESRIURL"> {{ ESRIURL }} </label> -->
+
+    <div v-if="selected === 'arcGIS'" >
+        
         <div v-if="arcGISFetched === false">
         <button v-on:click="fetchLayersFromURL" :id="ESRIURL" :content="ESRIURL" class="layerToolButton">Fetch arcGIS Layers</button>
         </div>
-        <div v-if="loading">
+        <div v-if="loading"> Loading... </div>
+        <div v-else-if="esriLayerListShow"></div>
+        <div v-else> Fetch when ready. </div>
 
-            Loading...
-        </div>
+        <div v-if="esriLayerListShow" class="submitHeader">
+                <div v-if="layerLoading">Loading... Current file being transfered is {{ transferFileNumber }} out of {{ checkedLayersArcGIS.length }}</div>
+                <div v-else>
+                    <button v-on:click="fetchEsriLayerInfo">Import Layer</button>
+                </div>
+                <div v-if="checkedLayersArcGIS.length > 4"> Due to {{checkedLayersArcGIS.length}} layers being imported their visibility is turned off.</div>
+        </div>  
 
-        <div v-if="esriLayerListShow">
-
-            <ul>
-                <li v-for="item in items">
-
-                    <div class="mainListItem">
-                        <details>
-                            <summary>{{ item.jsonObject.label}} </summary>
-
-                            <div id="layerDisplay">
-
-                                <li class="sublayerOne" v-for="node in item.jsonObject.subLayers">
-
-                                    <div class="subListItem">
-                                        <details>
-                                            <summary> {{ node.jsonObject.label }} </summary>
-
-                                            <div>
-                                                <li class="sublayerTwo" v-for="subNode in node.jsonObject.subLayers">
-                                                    <div class="subListItem">
-                                                        <details>
-                                                            <summary> {{ subNode.jsonObject.label }}</summary>
-
-                                                            <div class="mpcmId">MPCM ID: {{subNode.jsonObject.mpcmId}}
-                                                            <div v-if="layerLoading">
-                                                                Importing...
-                                                            </div>
-                                                            <div v-else> 
-                                                            <button v-on:click="fetchEsriLayerInfo" :id="subNode.jsonObject.mpcmId" class="specficLayerToolButton">Import Layer</button>
-                                                            </div>
-
-                                                            </div>
-                                                        </details>
-                                                    </div>
-                                                </li>
-                                            </div>
-                                        </details>
-                                    </div>
+        <div v-if="esriLayerListShow && !layerLoading" class="smk-folder">
+            <ul class="nobullets">
+                <li v-for="item in items" class="smk-folder">
+                    <details>
+                        <summary><input type="checkbox" :id="item.jsonObject.label" v-on:change="onCheckTopLevelCheckBoxes">{{ item.jsonObject.label}} </summary>
+                        <li class="smk-folder" v-for="node in item.jsonObject.subLayers">
+                            <details>
+                                <summary><input type="checkbox" :id="node.jsonObject.label" v-on:change="onCheckMidLevelCheckBoxes"> {{ node.jsonObject.label }} </summary>
+                                <li class="smk-folder" v-for="subNode in node.jsonObject.subLayers">
+                                    <div class="smk-item">
+                                        <input type="checkbox" :id="subNode.jsonObject.mpcmId" v-on:change="onCheckAddIDTocheckedArcGISLayers">
+                                        <span class="smk-layer-title">{{ subNode.jsonObject.label }} </span>  <!--MPCM ID: {{subNode.jsonObject.mpcmId}} -->
+                                        
+                                    </div> 
                                 </li>
-                            </div>
-                        </details>
-                    </div>
+                            </details>
+                        </li>                          
+                    </details>
                 </li>
             </ul>
         </div>
-
     </div>
 
     <div v-if="selected === 'KML'">
@@ -307,51 +292,35 @@
 
     <div v-if="selected === 'wms'"> 
         <div v-if="wmsFetched === false">
-        <div>
-        {{ selected}} input area:
-        <input type="text" :id="WMSURL" class="linkEntry" v-model="WMSURL">
+            <div> 
+                {{ selected}} input area:  <input type="text" :id="WMSURL" class="linkEntry" v-model="WMSURL">  
+                <button v-on:click="fetchLayersFromURL" :id="WMSURL" :content="WMSURL" class="layerToolButton">Fetch WMS Layers</button>
+            </div>
         </div>
-        
-        <button v-on:click="fetchLayersFromURL" :id="WMSURL" :content="WMSURL" class="layerToolButton">Fetch WMS Layers</button>
-        </div>
-        <div v-if="loading">
+        <div v-if="loading"> Loading... </div>
+       
+        <div v-if="layerListShow" class="submitHeader">
+                <div v-if="layerLoading">Loading... Current file being transfered is {{ transferFileNumber }} out of {{ checkedLayersWMS.length }}</div>
+                <div v-else>
+                    <button v-on:click="setLayerImport">Import Layer</button>
+                </div>
+                <div v-if="checkedLayersWMS.length > 4"> Due to {{checkedLayersWMS.length}} layers being imported their visibility is turned off.</div>
+                
+        </div>  
 
-            Loading...
-        </div>
 
-        <!-- Not currently accessible as this feature is not enabled -->
-        <div v-if="featureListShow">
-            Feature list show has been enabled {{ layerName }}
-            <li v-for="feature in jsonFeatures">
-
-                {{ feature.id }}
-                <button v-on:click="setFeatureImport" :id="feature.id" class="toolButton">Import Feature</button>
-
-            </li>
-
-        </div>
-
-        <div v-if="layerListShow">
-            <ul>
+        <div v-if="layerListShow && !layerLoading">
+            <ul class="nobullets">
                 <li v-for="item in items">
-
-                    <div class="mainListItem">
+                    <div class="smk-folder">
                         <details>
-                            <summary>{{ item.layerTitle }} </summary>
-                            <div id="layerDisplay">
-
-                                <li v-for="style in item.stylesArr">
-   
-                                    <div class="subListItem">
-                                            {{ style.title }}
-                                        <div v-if="layerLoading"></div>
-                                        <div v-else> 
-                                                <button v-on:click="setLayerImport" :id="item.layerName" :styleName="style.name" :styleTitle="style.title" :fullItem="JSON.stringify(item)" class="subListToolButton">Import Layer & Style</button>
-                                        </div>
-                                        
-                                    </div>
-                                </li>
-                            </div>
+                            <summary><input type="checkbox" :id="item.layerTitle" v-on:change="onCheckMidLevelCheckBoxes"> {{ item.layerTitle }} </summary>
+                            <li class="smk-folder"  v-for="style in item.stylesArr">
+                                <div class="smk-item">
+                                    <input type="checkbox" v-on:change="onCheckAddTocheckedWMSLayers" :id="item.layerName" :styleName="style.name" :styleTitle="style.title" :fullItem="JSON.stringify(item)" class="subListToolButton">
+                                    <span class="smk-layer-title">   {{ style.title }} </span>
+                                </div>
+                            </li>
                         </details>
                     </div>
 

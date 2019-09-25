@@ -18,12 +18,15 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 service: '',
                 WMSURL: 'https://openmaps.gov.bc.ca/geo/pub/ows',
                 //WMSURL: 'https://openmaps.gov.bc.ca/geo/pub/REG_LEGAL_AND_ADMIN_BOUNDARIES.QSOI_BC_REGIONS/ows?service=WMS&request=GetCapabilities',
-                ESRIURL: 'https://apps.gov.bc.ca/pub/mpcm/services/catalog/PROD/',
-                //ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/test/test/',
+                //ESRIURL: 'https://apps.gov.bc.ca/pub/mpcm/services/catalog/PROD/',
+                ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/test/test/',
                 //ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/',
                 //ESRIURL: 'http://vivid-w130a.vividsolutions.com:8080/smks-api/LayerLibrary/test/test/',
                 KMLURL: 'https://openmaps.gov.bc.ca/kml/geo/layers/WHSE_IMAGERY_AND_BASE_MAPS.AIMG_HIST_INDEX_MAPS_POINT_loader.kml',
                 
+                checkedLayersArcGIS: [],
+                checkedLayersWMS: [],
+
                 layerLoading: false,
                 arcGISFetched: false,
                 wmsFetched: false,
@@ -31,9 +34,17 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 featureListShow: false,
                 layerListShow: false,
                 esriLayerListShow: false,
+
+
                 jsonFeatures: null,
                 styleName: null,
+                //current file number being transfered:
+                transferFileNumber: null,
+
+                //default menu item displayed
                 selected: 'arcGIS',
+
+                //default geoJSON values
                 color: '#0066ff',
                 stroke: true,
                 strokeWidth: 3,
@@ -52,102 +63,238 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
             }
           },
           methods: {
-        
-            //imports a layer to the leaflet map directly and then updates the layers via rebuild map
-            setLayerImport: async function  ( event ) {
+
+
+            //this function handles the higher tier checkboxes which are not layer to be added directly, but have subcheckboxes to check on or off
+            // this function will only attempt to check the checkboxes one layer lower than them, any of those will then call the checkboxes below them with checkmidtier
+            onCheckTopLevelCheckBoxes: function ( event ) {
+                let checked  = event.srcElement.checked;
+                
+                //first go up to the details element as the parent element
+                let parentElementDetails = event.srcElement.parentElement.parentElement;
+                console.log("onCheckCheckBoxes");
+                // then iterate through all the child elements that are lists with class smk-folder
+                
+                for (let listItem in parentElementDetails.childNodes){
+                    if(!isNaN(listItem)){
+                        if (parentElementDetails.childNodes[listItem].className == "smk-folder"){
+                            
+                            let detailsElement = parentElementDetails.childNodes[listItem].childNodes[0];
+
+                            let summaryElement = detailsElement.childNodes[0];
+
+                            let inputElement = summaryElement.childNodes[0];
+
+                            if (inputElement.checked ==  checked ){
+                                //box is already set correctly, no click
+                            } else {
+                                inputElement.click();
+                            }       
+                        }
+                    }
+                }
+            },
+
+
+
+             //this function handles the mid tier checks
+            onCheckMidLevelCheckBoxes: function ( event ) {
+                let checked  = event.srcElement.checked;
+                
+                //first go up to the details element as the parent element
+                let parentElementDetails = event.srcElement.parentElement.parentElement;
+                console.log("onCheckCheckBoxes");
+                // then iterate through all the child elements that are lists with class smk-folder
                 
 
-                console.log("The event is: ",event);
-                console.log("The id is: ",event.srcElement.id);
-                console.log("The style name is: ",event.srcElement.attributes.item(1).nodeValue);
-                console.log("The style title is: ",event.srcElement.attributes.item(2).nodeValue);
-                console.log("The full object is: ",event.srcElement.attributes.item(3).nodeValue);
+                for (let listItem in parentElementDetails.childNodes){
+                    if(!isNaN(listItem)){
+                        if (parentElementDetails.childNodes[listItem].className == "smk-folder"){
+                            
+                            let divElement = parentElementDetails.childNodes[listItem].childNodes[0];
 
-                this.layerLoading = true;
+                            let inputElement = divElement.childNodes[0];
+
+                            if (inputElement.checked ==  checked ){
+                                //box is already set correctly, no click
+                            } else {
+                                inputElement.click();
+                            }  
+                        }
+                    }
+                }
+            },
+
+            // this function adds the mpcm Layer ID to the checkedArcGISLayers array 
+            onCheckAddIDTocheckedArcGISLayers: function( event ) {
+                let mpcmId  = event.srcElement.id;
+
+                // if we're hitting a checkbox and the item is already in the array, then we're removing it from the array because we've become unchecked
+                if (this.checkedLayersArcGIS.includes(mpcmId)){
+                    for ( let id in this.checkedLayersArcGIS){
+                        if ( this.checkedLayersArcGIS[id] == mpcmId ){
+
+                            this.checkedLayersArcGIS = this.checkedLayersArcGIS.filter(item => item !== mpcmId);
+
+                            break;
+                        }
+                    }
+                } else {
+                    // otherwise this must be a check and we're adding this element to the array
+                    this.checkedLayersArcGIS.push(mpcmId);
+                }
+
+                
+                console.log("onCheckAddIDTocheckedArcGISLayers");
+            },
+        
+
+            // this function adds the mpcm Layer ID to the checkedArcGISLayers array 
+            onCheckAddTocheckedWMSLayers: function( event ) {
+                // need to get all the values that setLayerImport will later need to add the layer correctly
+                let isObjectPresent = false;
+                //once they're all collected in a nice json object that object can be assigned to the checkedLayersWMS array
+
+                console.log("The id is: ",event.srcElement.id);
+                console.log("The style name is: ",event.srcElement.attributes.item(2).nodeValue);
+                console.log("The style title is: ",event.srcElement.attributes.item(3).nodeValue);
+                console.log("The full object is: ",event.srcElement.attributes.item(4).nodeValue);
+
                 
                 let layerName = event.srcElement.id;
-                let styleName = event.srcElement.attributes.item(1).nodeValue;
-                let layerObject = event.srcElement.attributes.item(3).nodeValue;
+                let styleName = event.srcElement.attributes.item(2).nodeValue;
+                let styleTitle = event.srcElement.attributes.item(3).nodeValue;
+                let layerObject = event.srcElement.attributes.item(4).nodeValue;
                 layerObject = JSON.parse(layerObject);
- 
-                // this does load the features from the wms server, it seems features are not the same as attributes however which this does not get (I think, needs checking)                
-                let url = this.service;
-                const json = await asyncGetFeaturesFromWMS( layerName, url);
-                console.log("The json feature list is: ");
-                console.log(json);
-                this.jsonFeatures = json.features;
 
-                /*
-                this.layerListShow = false;
-                this.featureListShow = true;
-                */
 
-                this.styleName = styleName;
-                this.layerName = layerName;
-                
-                //directly adds a layer to the map
-                let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
-                var wmsLayer = L.tileLayer.wms( this.service ,{ 
-                    layers: this.layerName,
-                    styles: this.styleName,
-                    format: 'image/png',
-                    transparent: true
-                }).addTo(map);
-                
-                // need to have all the SMK json information here so we can add it to SMKs layers and tools otherwise it's not really being properly intergrated into the system
-                // The below does add the information to smk, it does not refresh any of the smk tools to recognize it, which eventually needs to happen
-
-                //creating the json layer info in the same style as map-config.json
-                let jsonLayerInfo = '{  "type": null, "id": null, "title": null, "isVisible": true, "attribution": "", "metadataUrl": "", "opacity": 0.65,  "isQueryable": true, "attributes": [], "serviceUrl":null, "layerName": null, "styleName": null }';
-
-                let title = layerObject.layerTitle;
-                let id = layerName + "-" + styleName;
-
-                
-                jsonLayerInfo = JSON.parse(jsonLayerInfo);
-                jsonLayerInfo.type = "wms";
-                jsonLayerInfo.id = id;
-                jsonLayerInfo.title = title;
-                jsonLayerInfo.serviceUrl = this.service;
-                jsonLayerInfo.layerName = layerName;
-                jsonLayerInfo.styleName = styleName;
-
-                // creating the json attribute information in the same style as map-config.json
-               
-                
-                
-                for (let propertyID in this.jsonFeatures[0].properties) {
-                    // creating the json attribute information in the same style as map-config.json
-                    let jsonAttribute = '{"id": null,"name": null,"title": null,"visible": true}';
-                    jsonAttribute = JSON.parse(jsonAttribute);
-
-                    jsonAttribute.id = propertyID;
-                    jsonAttribute.name = propertyID;
-                    
-                    let attributeTitle = propertyID;
-                    attributeTitle = attributeTitle.replace(/_/g, " ");
-                    jsonAttribute.title = attributeTitle
-
-                    jsonLayerInfo.attributes.push(jsonAttribute);
+                // if item is already present it needs to be removed because this only triggers on a new checkbox
+                if (this.checkedLayersWMS.length > 0){
+                    for ( let jsonObject in this.checkedLayersWMS){
+                        if(this.checkedLayersWMS[jsonObject].styleName == styleName){
+                            isObjectPresent = true;
+                            this.checkedLayersWMS = this.checkedLayersWMS.filter(item => item.styleName !== styleName);
+                            break;
+                        }
+                    }
                 }
                 
-                console.log("json layer info is: ", jsonLayerInfo);
-                SMK.MAP[1].layers.push(jsonLayerInfo);
+                if (!isObjectPresent){
+                    let jsonLayerObject = '{ "layerName": "", "styleName": "", "styleTitle": "", "layerObject": "" }'
+                    jsonLayerObject = JSON.parse(jsonLayerObject);
+
+                    jsonLayerObject.layerName = layerName;
+                    jsonLayerObject.styleName = styleName;
+                    jsonLayerObject.styleTitle = styleTitle;
+                    jsonLayerObject.layerObject = layerObject
+
+                    // otherwise this must be a check and we're adding this element to the array
+                    this.checkedLayersWMS.push(jsonLayerObject);
+                }
+            },
+
+            //imports a layer to the leaflet map directly and then updates the layers via rebuild map
+            setLayerImport: async function  () {
                 
-                // creating the json  tool information in the same style as map-config.json
-                let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }';
-                jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo);
-                jsonToolLayerInfo.id = id;
-                jsonToolLayerInfo.title = title;
+                this.layerLoading = true;
+                
+                //This is what will need to be looped through to add the the multiple layers to the map/////////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // it will need to be adjusted to get these(layerName, styleName, layerObject) values from the checkedLayersWMS array instead of the event values
 
 
-                for (let tool in SMK.MAP[1].tools) {
-                    if (SMK.MAP[1].tools[tool].type == "layers" ){
-                        SMK.MAP[1].tools[tool].display.push(jsonToolLayerInfo);
+                for (let jsonLayerInfoFromCheck in this.checkedLayersWMS){
+
+                    //used to inform users of progress
+                    this.transferFileNumber = jsonLayerInfoFromCheck;
+
+                    let layerName = this.checkedLayersWMS[jsonLayerInfoFromCheck].layerName;
+                    let styleName = this.checkedLayersWMS[jsonLayerInfoFromCheck].styleName
+                    let layerObject = this.checkedLayersWMS[jsonLayerInfoFromCheck].layerObject
+                    
+    
+                    
+
+
+                                   
+                    let url = this.service;
+                    const json = await asyncGetFeaturesFromWMS( layerName, url);
+                    console.log("The json feature list is: ");
+                    console.log(json);
+                    this.jsonFeatures = json.features;
+
+                    this.styleName = styleName;
+                    this.layerName = layerName;
+                    
+                    //directly adds a layer to the map, should no longer be needed
+                    /*
+                    let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
+                    var wmsLayer = L.tileLayer.wms( this.service ,{ 
+                        layers: this.layerName,
+                        styles: this.styleName,
+                        format: 'image/png',
+                        transparent: true
+                    }).addTo(map); 
+                    */
+                    
+                    
+                    // The below does add the information to smk
+
+                    //creating the json layer info in the same style as map-config.json
+                    let jsonLayerInfo = '{  "type": null, "id": null, "title": null, "isVisible": true, "attribution": "", "metadataUrl": "", "opacity": 0.65,  "isQueryable": true, "attributes": [], "serviceUrl":null, "layerName": null, "styleName": null }';
+
+                    let title = layerObject.layerTitle;
+                    let id = layerName + "-" + styleName;
+
+                    
+                    jsonLayerInfo = JSON.parse(jsonLayerInfo);
+                    jsonLayerInfo.type = "wms";
+                    jsonLayerInfo.id = id;
+                    jsonLayerInfo.title = title;
+                    jsonLayerInfo.serviceUrl = this.service;
+                    jsonLayerInfo.layerName = layerName;
+                    jsonLayerInfo.styleName = styleName;
+
+                    // creating the json attribute information in the same style as map-config.json
+                    for (let propertyID in this.jsonFeatures[0].properties) {
+                        // creating the json attribute information in the same style as map-config.json
+                        let jsonAttribute = '{"id": null,"name": null,"title": null,"visible": true}';
+                        jsonAttribute = JSON.parse(jsonAttribute);
+
+                        jsonAttribute.id = propertyID;
+                        jsonAttribute.name = propertyID;
+                        
+                        let attributeTitle = propertyID;
+                        attributeTitle = attributeTitle.replace(/_/g, " ");
+                        jsonAttribute.title = attributeTitle
+
+                        jsonLayerInfo.attributes.push(jsonAttribute);
+                    }
+                    
+                    console.log("json layer info is: ", jsonLayerInfo);
+                    SMK.MAP[1].layers.push(jsonLayerInfo);
+                    
+                    // creating the json  tool information in the same style as map-config.json
+                    let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }';
+                    jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo);
+                    jsonToolLayerInfo.id = id;
+                    jsonToolLayerInfo.title = title;
+                    // if too many layers are visible at once things tend to slow down, so if there are more than four they're defaulted not visible
+                    if (this.checkedLayersWMS.length > 4){
+                        jsonToolLayerInfo.isVisible = false;
+                    }
+
+
+                    for (let tool in SMK.MAP[1].tools) {
+                        if (SMK.MAP[1].tools[tool].type == "layers" ){
+                            SMK.MAP[1].tools[tool].display.push(jsonToolLayerInfo);
+                        }
                     }
                 }
 
                 this.layerLoading = false;
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
                 //Now that the layer is properly in the system, we should go ahead and export all our data and rebuild with it
                 SMK.UTIL.rebuidMapWithSessionExportJSONObject( SMK.MAP[1] );
 
@@ -171,6 +318,17 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     //console.log ("The url is", event.srcElement.id)
                     this.service = event.srcElement.id;
                     this.wmsFetched = false;
+                    this.layerLoading = false;
+                    this.arcGISFetched = false;
+                    this.wmsFetched = false;
+                    this.loading = false;
+                    this.featureListShow = false;
+                    this.layerListShow = false;
+                    this.esriLayerListShow = false;
+                    this.checkedLayersArcGIS = [];
+                    this.checkedLayersWMS = [];
+
+
                     
                     //currently this is stripping out everything after the ? if it exists to insist on doing a get capabilities request
                     if (this.service.includes("?")) {
@@ -191,7 +349,16 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     this.layerListShow = true;
                 }
                 if (this.selected == 'arcGIS') {
+                    this.wmsFetched = false;
+                    this.layerLoading = false;
                     this.arcGISFetched = false;
+                    this.wmsFetched = false;
+                    this.loading = false;
+                    this.featureListShow = false;
+                    this.layerListShow = false;
+                    this.esriLayerListShow = false;
+                    this.checkedLayersArcGIS = [];
+                    this.checkedLayersWMS = [];
 
                     //currently hardcoding to only use this service, in the future will allow for other services to be selected earlier on
                     this.service = "https://maps.gov.bc.ca/arcgis/rest/services/mpcm/bcgw/MapServer";
@@ -207,6 +374,14 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     
                 }
                 if (this.selected == 'KML'){
+                    this.wmsFetched = false;
+                    this.layerLoading = false;
+                    this.arcGISFetched = false;
+                    this.wmsFetched = false;
+                    this.loading = false;
+                    this.featureListShow = false;
+                    this.layerListShow = false;
+                    this.esriLayerListShow = false;
                     await asyncAddKMLLayerToMap( this.KMLURL);
                 }
             },
@@ -214,20 +389,37 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
             // this function is going to add a dynamic layer to the map after fetching the relevant information
             
             fetchEsriLayerInfo: async function ( event ) {
-                let id  = event.srcElement.id;
-                console.log("Id is: ", id , " and we're going to call the data fetch from here to retrieve it");
+                
+                let lotsOfLayers = false;
                 
                 this.layerLoading = true;
-                let esriLayerXML = await asyncGetEsriLayerData( this.ESRIURL, id);
+                if (this.checkedLayersArcGIS.length > 5){
+                    console.log("Due to importing more than five layers at a time they're being started turned off for stability.");
+                    lotsOfLayers = true;
+                }
+
+                for (let id in this.checkedLayersArcGIS) {
+                    console.log("Id is: ", id , " and we're going to call the data fetch from here to retrieve it");
+                    
+                    this.transferFileNumber = id;
+
+                    let esriLayerXML = await asyncGetEsriLayerData( this.ESRIURL, this.checkedLayersArcGIS[id]);
+                    
+                    console.log("esri layer XML in detail is: ", esriLayerXML);
+
+
+                    /// actually all I need to do is build the dynamic object the way it is in map-config.json, and then since we're passing it in we don't even need
+                    // to actually add it to the map, just assign the information to smk in a way that it can be exported later
+
+                    addEsriLayerToSMK( esriLayerXML, lotsOfLayers );
+
+                    
+
+                }
+                
                 this.layerLoading = false;
-                console.log("esri layer XML in detail is: ", esriLayerXML);
-
-
-                /// actually all I need to do is build the dynamic object the way it is in map-config.json, and then since we're passing it in we don't even need
-                // to actually add it to the map, just assign the information to smk in a way that it can be exported later
-
-                addEsriLayerToSMK( esriLayerXML );
-
+                //Now that the layer is properly in the system, we should go ahead and export all our data and rebuild with it
+                SMK.UTIL.rebuidMapWithSessionExportJSONObject( SMK.MAP[1] );
             },
 
 
@@ -300,9 +492,15 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     break;
                 case "dynamicJson":
                     let dynamicJSON = esriXML.childNodes[0].childNodes[childNode].firstChild.textContent;
-                    dynamicJSON = JSON.parse(dynamicJSON);  
-                    dynamicJSON = JSON.stringify(dynamicJSON);
-                    jsonLayerInfo.dynamicLayers.push(dynamicJSON);
+                    // sometimes the json being recieved is not correctly formed, in that case it's dynamic content is skipped
+                    // this should be considered a temporary fix as relevant data is being lost
+                    try{
+                        dynamicJSON = JSON.parse(dynamicJSON);  
+                        dynamicJSON = JSON.stringify(dynamicJSON);
+                        jsonLayerInfo.dynamicLayers.push(dynamicJSON);
+                    } catch (error){
+                        console.error(error);
+                    }
                     break;
                 case "properties":
                     for (let propertyNodes in esriXML.childNodes[0].childNodes[childNode].childNodes){
@@ -350,7 +548,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         return jsonLayerInfo;
     }
 
-    function addEsriLayerToSMK ( esriXML ){
+    function addEsriLayerToSMK ( esriXML, tooManyLayers ){
         //creating the json layer info in the same style as map-config.json
         let jsonLayerInfo = getEsriLayerFromXML( esriXML );
 
@@ -363,6 +561,9 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
         jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo);
         jsonToolLayerInfo.id = jsonLayerInfo.id;
         jsonToolLayerInfo.title = jsonLayerInfo.title;
+        if (tooManyLayers){
+            jsonToolLayerInfo.isVisible = false;
+        }
 
 
         for (let tool in SMK.MAP[1].tools) {
@@ -371,8 +572,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
             }
         }
 
-        //Now that the layer is properly in the system, we should go ahead and export all our data and rebuild with it
-        SMK.UTIL.rebuidMapWithSessionExportJSONObject( SMK.MAP[1] );
+        
 
     }
 

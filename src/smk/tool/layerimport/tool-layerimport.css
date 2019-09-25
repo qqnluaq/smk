@@ -1,33 +1,10 @@
-div {
-    font-family: "Times New Roman", Times, serif;
-    font-size: 1em;
-  }
-
-.layerDisplay {
-    font-family: "Times New Roman", Times, serif;
-    font-size: 1em;
-}
-
-li.sublayerOne {
-  text-indent: 1.0em;
-}
-li.sublayerTwo {
-  text-indent: 1.50em;
-}
 
 
-div.mpcmId {
-  text-indent: 2em;
-}
-
-h3 {
-  display: block;
-  font-size: 1.17em;
-  font-weight: bold;
-  margin: auto;
-  width: 50%;
-  text-align: center;
-}
+.nobullets {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+ }
 
 .linkEntry{
   width: 100%;
@@ -37,37 +14,50 @@ h3 {
 
 }
 
-.mainListItem{
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  font-size: 1.05em;
-}
-
-.subListItem{
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  font-size: 1.00em;
-  display: block;
-  text-align: left;
-
-}
-
-
-.mpcmId{
-  display: block;
-  text-align: left;
-  margin-top: 0.5em;
-
-}
-
-
 .layerToolButton {
   float: right
 }
 
+.smk-layerimport-panel .smk-header {
+  white-space: nowrap;
+}
 
+.smk-layerimport-panel .smk-item {
+  font-size: 14px;
+}
 
-.subListToolButton{
-  margin-top: 0.5em;
-  float: center;
+.smk-layerimport-panel .smk-folder {
+  margin-left: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.smk-layerimport-panel .smk-folder .smk-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.smk-layers-panel {
+  padding: 0;
+}
+
+.smk-layerimport-panel .smk-folder .smk-item .smk-layer-title {
+  display: inline-block;
+  margin-left: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.smk-layerimport-panel .smk-folder .smk-folder-expand:hover {
+  border: 1px solid transparent;
+}
+
+.submitHeader {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  background-color: white;
+  border: 2px solid rgb(1, 2, 1);
+ 
 }
