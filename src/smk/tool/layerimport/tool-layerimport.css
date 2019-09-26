@@ -57,7 +57,21 @@
   position: -webkit-sticky; /* Safari */
   position: sticky;
   top: 0;
-  background-color: white;
+  background-color: black;
   border: 2px solid rgb(1, 2, 1);
+  color: aliceblue;
+  z-index: 1;
  
+}
+
+.geoJSONStyleOptions{
+
+  line-height: 200%;
+
+
+}
+
+.geoJSONSubmit{
+
+  line-height: 200%;
 }

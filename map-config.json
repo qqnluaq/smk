@@ -1,10 +1,9 @@
 {
-  "_id": "dec0721e-2768-4b97-8ee8-97b4bb3d115a",
-  "_rev": "55-194678a934f51f140154178521b75348",
   "lmfId": "forest-health-map-viewer",
   "lmfRevision": 1,
   "version": "0.8.1-MVP",
   "name": "Forest Health Map Viewer",
+  "project": null,
   "createdBy": "User",
   "createdDate": "05-09-2019 13:01:40",
   "modifiedBy": "",
@@ -16,6 +15,9 @@
   },
   "viewer": {
     "type": "leaflet",
+    "device": "auto",
+    "deviceAutoBreakpoint": 500,
+    "themes": [],
     "location": {
       "extent": [
         -142.33886718750003,
@@ -30,758 +32,12 @@
       "zoom": 5
     },
     "baseMap": "Imagery",
-    "activeTool": "about",
     "clusterOption": {
       "showCoverageOnHover": true
     },
-    "device": "auto",
-    "themes": [],
-    "deviceAutoBreakpoint": 500,
+    "activeTool": "about",
     "panelWidth": 600
   },
-  "tools": [
-    {
-      "type": "about",
-      "enabled": true,
-      "title": "Forest Health Map Viewer",
-      "position": "list-menu",
-      "content": "<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">The objective of the Forest Health Program is to protect and manage B.C.'s forest resources from the impacts of a wide range of forest health factors which include bark beetles, defoliators, pathogens, animal damage, and abiotic factors such as wildfire damage and drought.&nbsp;</p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">The program is responsive to the influence of climate change and the threat of introduced invasive species on forests. Additionally, the program detects and mitigates problems that degrade forest health and establishes best management practices to minimize damage to B.C.'s forests.&nbsp;&nbsp;</p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">Identify and learn more about common forest pests:&nbsp;<a href=\"https://www2.gov.bc.ca/assets/gov/farming-natural-resources-and-industry/forestry/forest-health/forest-health-docs/field_guide_to_forest_damage_in_bc_web.pdf\" title=\"Field Guide to Forest Damage in B.C. (PDF, 6.6MB)\" target=\"_blank\">Field Guide to Forest Damage in B.C. (PDF, 6.6MB)</a></p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">View the results of forest health damage monitoring through B.C.’s annual aerial sketch mapping program:&nbsp;<a href=\"https://www2.gov.bc.ca/gov/content/industry/forestry/managing-our-forest-resources/forest-health/aerial-overview-surveys\" title=\"Aerial Overview Surveys\" target=\"_blank\">Aerial Overview Surveys</a></p><p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">Ground based monitoring is also conducted using sivliculture surveys and specialized pest-specific surveys. &nbsp;</p><p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">Monitoring information is used to assess the potential damage may have to forest resource values and identify opportunities to reduce these impacts.</p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">For more information see&nbsp;<a href=\"https://www2.gov.bc.ca/gov/content/industry/forestry/managing-our-forest-resources/forest-health\" title=\"Forest Health BC\" target=\"_blank\">Forest Health BC</a></p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">Contact us if you have further questions about Forest Health in B.C.</p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\"><strong>Office<span style=\"color: rgb(73, 73, 73); font-family: inherit; font-size: 16px;\">: 778-974-5592</span></strong></p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\"><strong>Email:&nbsp;<a href=\"Forests.ForestPracticesBranchOffice@gov.bc.ca\" title=\"Forests.ForestPracticesBranchOffice@gov.bc.ca\" style=\"font-family: inherit; font-size: 16px;\">Forests.ForestPracticesBranchOffice@gov.bc.ca</a></strong></p>"
-    },
-    {
-      "type": "coordinate",
-      "enabled": true
-    },
-    {
-      "type": "attribution",
-      "enabled": true
-    },
-    {
-      "type": "layers",
-      "enabled": true,
-      "title": "Layers",
-      "position": "toolbar",
-      "display": [
-        {
-          "id": "30089670-48b9-4de9-84e6-60ad01656fe3",
-          "type": "folder",
-          "title": "Natural Disaster",
-          "isVisible": true,
-          "isExpanded": false,
-          "items": [
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1552_1553",
-              "type": "layer",
-              "title": "Fire",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1554_1555",
-              "type": "layer",
-              "title": "Drought",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1556_1557",
-              "type": "layer",
-              "title": "Flooding",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1558_1559",
-              "type": "layer",
-              "title": "Frost Crack",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1560_1561",
-              "type": "layer",
-              "title": "Shoot Bud Frost Kill",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1562_1563",
-              "type": "layer",
-              "title": "Fumekill",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1566_1567",
-              "type": "layer",
-              "title": "Slide",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1568_1569",
-              "type": "layer",
-              "title": "Windthrow",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1564_1565",
-              "type": "layer",
-              "title": "Redbelt",
-              "isVisible": true
-            }
-          ]
-        },
-        {
-          "id": "25732bd3-3f2e-4e0e-91f6-6531e4c201d6",
-          "type": "folder",
-          "title": "Animal Infestation",
-          "isVisible": true,
-          "isExpanded": false,
-          "items": [
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1570_1571",
-              "type": "layer",
-              "title": "Unknown Animal",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1572_1573",
-              "type": "layer",
-              "title": "Bear",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1574_1575",
-              "type": "layer",
-              "title": "Porcupine",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1576_1577",
-              "type": "layer",
-              "title": "Deer",
-              "isVisible": true
-            }
-          ]
-        },
-        {
-          "id": "352b6494-ff92-4f7f-8e22-0bc9f107621d",
-          "type": "folder",
-          "title": "Disease",
-          "isVisible": true,
-          "isExpanded": false,
-          "items": [
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1578_1579",
-              "type": "layer",
-              "title": "Unknown Foliage Disease",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1592_1593",
-              "type": "layer",
-              "title": "Unknown Root Disease",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1580_1581",
-              "type": "layer",
-              "title": "Elytroderma Disease",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1582_1583",
-              "type": "layer",
-              "title": "Larch Needle Blight",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1584_1585",
-              "type": "layer",
-              "title": "Pine Needle Cast",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1586_1587",
-              "type": "layer",
-              "title": "Larch Needle Cast",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1588_1589",
-              "type": "layer",
-              "title": "Fir Fireweed Rust",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1590_1591",
-              "type": "layer",
-              "title": "Aspen and Poplar Leaf and Shoot Blights",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1594_1595",
-              "type": "layer",
-              "title": "Armillaria Root Disease",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1596_1597",
-              "type": "layer",
-              "title": "Blackstain Root Disease",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1598_1599",
-              "type": "layer",
-              "title": "Laminated Root Rot Cedar Form",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1600_1601",
-              "type": "layer",
-              "title": "White Pine Blister Rust",
-              "isVisible": true
-            },
-            {
-              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1602_1603",
-              "type": "layer",
-              "title": "Comandra Blister Rust",
-              "isVisible": true
-            }
-          ]
-        },
-        {
-          "id": "d08c26c7-17f5-47ff-959d-73c13f0c5e19",
-          "type": "folder",
-          "title": "Insects",
-          "isVisible": true,
-          "isExpanded": false,
-          "items": [
-            {
-              "id": "2c6864e2-b765-4fc0-89be-ce9e699a74cd",
-              "type": "folder",
-              "title": "Beetles",
-              "isVisible": true,
-              "isExpanded": false,
-              "items": [
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1608_1609",
-                  "type": "layer",
-                  "title": "Unknown Bark Beetle",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1616_1617",
-                  "type": "layer",
-                  "title": "Engraver Beetles",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1610_1611",
-                  "type": "layer",
-                  "title": "Western Balsam Bark Beetle",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1614_1615",
-                  "type": "layer",
-                  "title": "Fir Engraver Beetle",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1612_1613",
-                  "type": "layer",
-                  "title": "Douglas Fir Beetle",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1618_1619",
-                  "type": "layer",
-                  "title": "Lodgepole Pine Beetle",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1620_1621",
-                  "type": "layer",
-                  "title": "Mountain Pine Beetle",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1626_1627",
-                  "type": "layer",
-                  "title": "Western Pine Beetle",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1622_1623",
-                  "type": "layer",
-                  "title": "Spruce Beetle",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1624_1625",
-                  "type": "layer",
-                  "title": "Red Turpentine Beetle",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1684_1685",
-                  "type": "layer",
-                  "title": "Cottonwood Leaf Skeletonizer",
-                  "isVisible": true
-                }
-              ]
-            },
-            {
-              "id": "b07494ef-ddef-41e6-a041-cb9332a26263",
-              "type": "folder",
-              "title": "Budworms",
-              "isVisible": true,
-              "isExpanded": true,
-              "items": [
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1636_1637",
-                  "type": "layer",
-                  "title": "Two-year Budworm",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1640_1641",
-                  "type": "layer",
-                  "title": "Spruce Budworm",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1646_1647",
-                  "type": "layer",
-                  "title": "Western Blackheaded Budworm",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1670_1671",
-                  "type": "layer",
-                  "title": "Western Spruce Budworm",
-                  "isVisible": true
-                }
-              ]
-            },
-            {
-              "id": "503d1a1e-f7ca-45e7-bbc2-6888e239f899",
-              "type": "folder",
-              "title": "Moths",
-              "isVisible": true,
-              "isExpanded": false,
-              "items": [
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1644_1645",
-                  "type": "layer",
-                  "title": "Green Striped Forest Looper",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1652_1653",
-                  "type": "layer",
-                  "title": "Western Hemlock Looper",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1674_1675",
-                  "type": "layer",
-                  "title": "Western False Hemlock Looper",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1688_1689",
-                  "type": "layer",
-                  "title": "Phantom Hemlock Looper",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1690_1691",
-                  "type": "layer",
-                  "title": "Saddleback looper",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1682_1683",
-                  "type": "layer",
-                  "title": "Larch Looper",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1666_1667",
-                  "type": "layer",
-                  "title": "Douglas Fir Tussock Moth",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1680_1681",
-                  "type": "layer",
-                  "title": "Larch Budmoth",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1668_1669",
-                  "type": "layer",
-                  "title": "Satin Moth",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1634_1635",
-                  "type": "layer",
-                  "title": "Birch Leaf Skeletonizer",
-                  "isVisible": true
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1672_1673",
-                  "type": "layer",
-                  "title": "Large Aspen Tortrix",
-                  "isVisible": true
-                }
-              ]
-            },
-            {
-              "id": "d28cd636-d210-4030-ad18-5c2437e63978",
-              "type": "folder",
-              "title": "Leaf Miners",
-              "isVisible": true,
-              "isExpanded": false,
-              "items": [
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1692_1693",
-                  "type": "layer",
-                  "title": "Willow leafminer",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1660_1661",
-                  "type": "layer",
-                  "title": "Hemlock Needle Miner",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1654_1655",
-                  "type": "layer",
-                  "title": "Birch Leaf Miner",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1648_1649",
-                  "type": "layer",
-                  "title": "Pine Needle Sheath Miner",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1630_1631",
-                  "type": "layer",
-                  "title": "Aspen Leaf Miner",
-                  "isVisible": false
-                }
-              ]
-            },
-            {
-              "id": "edff3a71-832a-463f-bc65-0f2321367cc6",
-              "type": "folder",
-              "title": "Sawflies",
-              "isVisible": true,
-              "isExpanded": false,
-              "items": [
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1686_1687",
-                  "type": "layer",
-                  "title": "Lodgepole Pine Sawfly",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1658_1659",
-                  "type": "layer",
-                  "title": "Larch Sawfly",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1662_1663",
-                  "type": "layer",
-                  "title": "Alder Sawfly",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1678_1679",
-                  "type": "layer",
-                  "title": "Hemlock Sawfly",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1664_1665",
-                  "type": "layer",
-                  "title": "Conifer Sawflies",
-                  "isVisible": false
-                }
-              ]
-            },
-            {
-              "id": "0f714362-1be1-4385-b082-2d9b07a14328",
-              "type": "folder",
-              "title": "Caterpillars",
-              "isVisible": true,
-              "isExpanded": false,
-              "items": [
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1650_1651",
-                  "type": "layer",
-                  "title": "Northern Tent Caterpillar",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1642_1643",
-                  "type": "layer",
-                  "title": "Forest Tent Caterpillar",
-                  "isVisible": false
-                }
-              ]
-            },
-            {
-              "id": "2589afe2-5c0f-4b4d-ab3f-fde718ed6105",
-              "type": "folder",
-              "title": "Others",
-              "isVisible": true,
-              "isExpanded": false,
-              "items": [
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1628_1629",
-                  "type": "layer",
-                  "title": "Unknown Defoliating Insects",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1604_1605",
-                  "type": "layer",
-                  "title": "Balsam Woolly Adelgid",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1606_1607",
-                  "type": "layer",
-                  "title": "Spruce Aphid",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1638_1639",
-                  "type": "layer",
-                  "title": "Larch Casebearer",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1632_1633",
-                  "type": "layer",
-                  "title": "Aspen Leaf Roller",
-                  "isVisible": false
-                },
-                {
-                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1656_1657",
-                  "type": "layer",
-                  "title": "Filament Bearer",
-                  "isVisible": false
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1676_1677",
-          "type": "layer",
-          "title": "Unidentified Aspen Defoliation",
-          "isVisible": false
-        },
-        {
-          "id": "pub:WHSE_FOREST_VEGETATION.BEC_BIOGEOCLIMATIC_POLY-1409_1410",
-          "type": "layer",
-          "title": "BEC Analysis Zones",
-          "isVisible": false
-        },
-        {
-          "id": "pub:WHSE_FOREST_VEGETATION.VEG_COMP_LYR_R1_POLY-1746",
-          "type": "layer",
-          "title": "VRI - Vegetated Land Cover Outlined",
-          "isVisible": false
-        },
-        {
-          "id": "pub:WHSE_FOREST_VEGETATION.VEG_COMP_LYR_R1_POLY-1542",
-          "type": "layer",
-          "title": "VRI - Non Vegetated Land Cover Outlined",
-          "isVisible": false
-        },
-        {
-          "id": "pub:WHSE_BASEMAPPING.DRA_DGTL_ROAD_ATLAS_MPAR_SP-3241",
-          "type": "layer",
-          "title": "Digital Road Atlas",
-          "isVisible": false
-        }
-      ]
-    },
-    {
-      "type": "pan",
-      "enabled": true
-    },
-    {
-      "type": "zoom",
-      "enabled": true,
-      "mouseWheel": true,
-      "doubleClick": true,
-      "box": true,
-      "control": true
-    },
-    {
-      "type": "measure",
-      "enabled": true,
-      "position": "toolbar"
-    },
-    {
-      "type": "markup",
-      "enabled": true
-    },
-    {
-      "type": "scale",
-      "enabled": true,
-      "showFactor": true,
-      "showBar": true
-    },
-    {
-      "type": "minimap",
-      "enabled": true,
-      "baseMap": "Topographic"
-    },
-    {
-      "type": "directions",
-      "enabled": true,
-      "title": "Directions",
-      "position": "toolbar"
-    },
-    {
-      "type": "location",
-      "enabled": false
-    },
-    {
-      "type": "baseMaps",
-      "enabled": true,
-      "title": "Base Maps",
-      "position": "toolbar",
-      "choices": [
-        "Streets",
-        "Imagery",
-        "Topographic",
-        "ShadedRelief",
-        "DarkGray",
-        "Gray",
-        "Oceans",
-        "NationalGeographic"
-      ]
-    },
-    {
-      "type": "select",
-      "enabled": false,
-      "title": "Selections",
-      "position": "list-menu",
-      "style": {
-        "strokeStyle": "",
-        "strokeColor": "#000000",
-        "fillColor": "#000000",
-        "markerSize": [
-          20,
-          20
-        ],
-        "markerOffset": [
-          10,
-          10
-        ]
-      }
-    },
-    {
-      "type": "identify",
-      "enabled": true,
-      "title": "Identify Panel",
-      "position": "toolbar",
-      "style": {
-        "strokeWidth": 1,
-        "strokeStyle": "1, 1",
-        "strokeColor": "#0000ff",
-        "strokeOpacity": 0.8,
-        "fillColor": "#0000ff",
-        "fillOpacity": 0.5,
-        "markerSize": [
-          20,
-          20
-        ],
-        "markerOffset": [
-          10,
-          0
-        ]
-      },
-      "styleOpacity": 1,
-      "tolerance": 5
-    },
-    {
-      "type": "search",
-      "enabled": true
-    },
-    {
-      "type": "list-menu",
-      "enabled": false
-    },
-    {
-      "type": "toolbar",
-      "enabled": true
-    },
-    {
-      "type": "shortcut-menu",
-      "enabled": false
-    },
-    {
-      "type": "dropdown",
-      "enabled": false
-    },
-    {
-      "type": "query",
-      "enabled": true,
-      "title": "Query",
-      "icon": "search",
-      "instance": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-QUERY_LYR--search-infestations",
-      "position": "toolbar"
-    },
-	    {
-      "type": "print",
-      "enabled": true,
-      "order": 7,
-      "position": "list-menu",
-      "icon": "print",
-      "title": "Print"
-    },
-    {
-      "type": "sessionimport",
-      "enabled": true,
-      "order": 8,
-      "position": "list-menu",
-      "icon": "input",
-      "title": "Session Import"
-    },
-    {
-      "type": "sessionexport",
-      "enabled": true,
-      "order": 9,
-      "position": "list-menu",
-      "icon": "backup",
-      "title": "Session Export"
-    },
-	{
-      "type": "layerimport",
-      "enabled": true,
-      "order": 11,
-      "position": "list-menu",
-      "icon": "landscape",
-      "title": "Layer Import"
-    },
-	{
-      "type": "label",
-      "enabled": true,
-      "order": 10,
-      "position": "list-menu",
-      "icon": "label",
-      "title": "Label"
-    }
-  ],
   "layers": [
     {
       "type": "wms",
@@ -822,7 +78,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -948,7 +205,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -1074,7 +332,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -1200,7 +459,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -1326,7 +586,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -1452,7 +713,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -1578,7 +840,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -1704,7 +967,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -1830,7 +1094,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -1956,7 +1221,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -2082,7 +1348,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -2208,7 +1475,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -2334,7 +1602,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -2460,7 +1729,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -2586,7 +1856,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -2712,7 +1983,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -2838,7 +2110,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -2964,7 +2237,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -3090,7 +2364,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -3216,7 +2491,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -3342,7 +2618,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -3468,7 +2745,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -3594,7 +2872,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -3720,7 +2999,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -3846,7 +3126,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -3972,7 +3253,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -4098,7 +3380,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -4224,7 +3507,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -4350,7 +3634,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -4476,7 +3761,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -4602,7 +3888,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -4728,7 +4015,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -4854,7 +4142,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -4980,7 +4269,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -5106,7 +4396,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -5232,7 +4523,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -5358,7 +4650,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -5484,7 +4777,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -5610,7 +4904,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -5736,7 +5031,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -5862,7 +5158,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -5988,7 +5285,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -6114,7 +5412,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -6240,7 +5539,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -6366,7 +5666,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -6492,7 +5793,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -6618,7 +5920,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -6744,7 +6047,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -6870,7 +6174,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -6996,7 +6301,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -7122,7 +6428,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -7248,7 +6555,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -7374,7 +6682,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -7500,7 +6809,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -7626,7 +6936,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -7752,7 +7063,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -7878,7 +7190,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -8004,7 +7317,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -8130,7 +7444,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -8256,7 +7571,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -8382,7 +7698,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -8508,7 +7825,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -8634,7 +7952,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -8760,7 +8079,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -8886,7 +8206,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -9012,7 +8333,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -9138,7 +8460,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -9264,7 +8587,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -9390,7 +8714,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -9516,7 +8841,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -9642,7 +8968,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -9779,7 +9106,8 @@
           "id": "MAP_LABEL",
           "name": "MAP_LABEL",
           "title": "Label",
-          "visible": false
+          "visible": false,
+          "isTitle": true
         },
         {
           "id": "BGC_LABEL",
@@ -12199,7 +11527,8 @@
           "id": "PEST_SPECIES_COMMON_NAME",
           "name": "PEST_SPECIES_COMMON_NAME",
           "title": "Common Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "PEST_SPECIES_LATIN_NAME",
@@ -12461,7 +11790,8 @@
           "id": "ROAD_NAME_FULL",
           "name": "ROAD_NAME_FULL",
           "title": "Road Name",
-          "visible": true
+          "visible": true,
+          "isTitle": true
         },
         {
           "id": "ROAD_NAME_ID",
@@ -12554,5 +11884,812 @@
       "layerName": "pub:WHSE_BASEMAPPING.DRA_DGTL_ROAD_ATLAS_MPAR_SP",
       "styleName": "3241"
     }
-  ]
+  ],
+  "tools": [
+    {
+      "type": "about",
+      "enabled": true,
+      "order": 1,
+      "position": "list-menu",
+      "icon": "help",
+      "title": "Forest Health Map Viewer",
+      "content": "<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">The objective of the Forest Health Program is to protect and manage B.C.'s forest resources from the impacts of a wide range of forest health factors which include bark beetles, defoliators, pathogens, animal damage, and abiotic factors such as wildfire damage and drought.&nbsp;</p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">The program is responsive to the influence of climate change and the threat of introduced invasive species on forests. Additionally, the program detects and mitigates problems that degrade forest health and establishes best management practices to minimize damage to B.C.'s forests.&nbsp;&nbsp;</p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">Identify and learn more about common forest pests:&nbsp;<a href=\"https://www2.gov.bc.ca/assets/gov/farming-natural-resources-and-industry/forestry/forest-health/forest-health-docs/field_guide_to_forest_damage_in_bc_web.pdf\" title=\"Field Guide to Forest Damage in B.C. (PDF, 6.6MB)\" target=\"_blank\">Field Guide to Forest Damage in B.C. (PDF, 6.6MB)</a></p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">View the results of forest health damage monitoring through B.C.ï¿½s annual aerial sketch mapping program:&nbsp;<a href=\"https://www2.gov.bc.ca/gov/content/industry/forestry/managing-our-forest-resources/forest-health/aerial-overview-surveys\" title=\"Aerial Overview Surveys\" target=\"_blank\">Aerial Overview Surveys</a></p><p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">Ground based monitoring is also conducted using sivliculture surveys and specialized pest-specific surveys. &nbsp;</p><p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">Monitoring information is used to assess the potential damage may have to forest resource values and identify opportunities to reduce these impacts.</p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">For more information see&nbsp;<a href=\"https://www2.gov.bc.ca/gov/content/industry/forestry/managing-our-forest-resources/forest-health\" title=\"Forest Health BC\" target=\"_blank\">Forest Health BC</a></p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\">Contact us if you have further questions about Forest Health in B.C.</p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\"><strong>Office<span style=\"color: rgb(73, 73, 73); font-family: inherit; font-size: 16px;\">: 778-974-5592</span></strong></p>\n<p style=\"margin-top: 1em; margin-bottom: 1em; color: rgb(73, 73, 73); font-family: Myriad-Pro, Calibri, Arial, &quot;sans serif&quot;; font-size: 16px; background-color: rgb(255, 255, 255);\"><strong>Email:&nbsp;<a href=\"Forests.ForestPracticesBranchOffice@gov.bc.ca\" title=\"Forests.ForestPracticesBranchOffice@gov.bc.ca\" style=\"font-family: inherit; font-size: 16px;\">Forests.ForestPracticesBranchOffice@gov.bc.ca</a></strong></p>"
+    },
+    {
+      "type": "baseMaps",
+      "enabled": true,
+      "order": 3,
+      "position": "toolbar",
+      "icon": "map",
+      "title": "Base Maps",
+      "choices": [
+        "Streets",
+        "Imagery",
+        "Topographic",
+        "ShadedRelief",
+        "DarkGray",
+        "Gray",
+        "Oceans",
+        "NationalGeographic"
+      ]
+    },
+    {
+      "type": "coordinate",
+      "enabled": true,
+      "order": 3
+    },
+    {
+      "type": "directions",
+      "enabled": true,
+      "order": 4,
+      "position": "toolbar",
+      "icon": "directions_car",
+      "title": "Directions"
+    },
+    {
+      "type": "identify",
+      "enabled": true,
+      "order": 5,
+      "position": "toolbar",
+      "icon": "info_outline",
+      "title": "Identify Panel",
+      "style": {
+        "strokeWidth": 1,
+        "strokeStyle": "1, 1",
+        "strokeColor": "#0000ff",
+        "strokeOpacity": 0.8,
+        "fillColor": "#0000ff",
+        "fillOpacity": 0.5,
+        "markerSize": [
+          20,
+          20
+        ],
+        "markerOffset": [
+          10,
+          0
+        ]
+      },
+      "styleOpacity": 1,
+      "tolerance": 5
+    },
+    {
+      "type": "layers",
+      "enabled": true,
+      "order": 3,
+      "position": "toolbar",
+      "icon": "layers",
+      "title": "Layers",
+      "display": [
+        {
+          "id": "30089670-48b9-4de9-84e6-60ad01656fe3",
+          "type": "folder",
+          "title": "Natural Disaster",
+          "isVisible": false,
+          "isExpanded": false,
+          "items": [
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1552_1553",
+              "type": "layer",
+              "title": "Fire",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1554_1555",
+              "type": "layer",
+              "title": "Drought",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1556_1557",
+              "type": "layer",
+              "title": "Flooding",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1558_1559",
+              "type": "layer",
+              "title": "Frost Crack",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1560_1561",
+              "type": "layer",
+              "title": "Shoot Bud Frost Kill",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1562_1563",
+              "type": "layer",
+              "title": "Fumekill",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1566_1567",
+              "type": "layer",
+              "title": "Slide",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1568_1569",
+              "type": "layer",
+              "title": "Windthrow",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1564_1565",
+              "type": "layer",
+              "title": "Redbelt",
+              "isVisible": false
+            }
+          ]
+        },
+        {
+          "id": "25732bd3-3f2e-4e0e-91f6-6531e4c201d6",
+          "type": "folder",
+          "title": "Animal Infestation",
+          "isVisible": false,
+          "isExpanded": false,
+          "items": [
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1570_1571",
+              "type": "layer",
+              "title": "Unknown Animal",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1572_1573",
+              "type": "layer",
+              "title": "Bear",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1574_1575",
+              "type": "layer",
+              "title": "Porcupine",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1576_1577",
+              "type": "layer",
+              "title": "Deer",
+              "isVisible": false
+            }
+          ]
+        },
+        {
+          "id": "352b6494-ff92-4f7f-8e22-0bc9f107621d",
+          "type": "folder",
+          "title": "Disease",
+          "isVisible": false,
+          "isExpanded": false,
+          "items": [
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1578_1579",
+              "type": "layer",
+              "title": "Unknown Foliage Disease",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1592_1593",
+              "type": "layer",
+              "title": "Unknown Root Disease",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1580_1581",
+              "type": "layer",
+              "title": "Elytroderma Disease",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1582_1583",
+              "type": "layer",
+              "title": "Larch Needle Blight",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1584_1585",
+              "type": "layer",
+              "title": "Pine Needle Cast",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1586_1587",
+              "type": "layer",
+              "title": "Larch Needle Cast",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1588_1589",
+              "type": "layer",
+              "title": "Fir Fireweed Rust",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1590_1591",
+              "type": "layer",
+              "title": "Aspen and Poplar Leaf and Shoot Blights",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1594_1595",
+              "type": "layer",
+              "title": "Armillaria Root Disease",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1596_1597",
+              "type": "layer",
+              "title": "Blackstain Root Disease",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1598_1599",
+              "type": "layer",
+              "title": "Laminated Root Rot Cedar Form",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1600_1601",
+              "type": "layer",
+              "title": "White Pine Blister Rust",
+              "isVisible": false
+            },
+            {
+              "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1602_1603",
+              "type": "layer",
+              "title": "Comandra Blister Rust",
+              "isVisible": false
+            }
+          ]
+        },
+        {
+          "id": "d08c26c7-17f5-47ff-959d-73c13f0c5e19",
+          "type": "folder",
+          "title": "Insects",
+          "isVisible": false,
+          "isExpanded": false,
+          "items": [
+            {
+              "id": "2c6864e2-b765-4fc0-89be-ce9e699a74cd",
+              "type": "folder",
+              "title": "Beetles",
+              "isVisible": false,
+              "isExpanded": false,
+              "items": [
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1608_1609",
+                  "type": "layer",
+                  "title": "Unknown Bark Beetle",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1616_1617",
+                  "type": "layer",
+                  "title": "Engraver Beetles",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1610_1611",
+                  "type": "layer",
+                  "title": "Western Balsam Bark Beetle",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1614_1615",
+                  "type": "layer",
+                  "title": "Fir Engraver Beetle",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1612_1613",
+                  "type": "layer",
+                  "title": "Douglas Fir Beetle",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1618_1619",
+                  "type": "layer",
+                  "title": "Lodgepole Pine Beetle",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1620_1621",
+                  "type": "layer",
+                  "title": "Mountain Pine Beetle",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1626_1627",
+                  "type": "layer",
+                  "title": "Western Pine Beetle",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1622_1623",
+                  "type": "layer",
+                  "title": "Spruce Beetle",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1624_1625",
+                  "type": "layer",
+                  "title": "Red Turpentine Beetle",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1684_1685",
+                  "type": "layer",
+                  "title": "Cottonwood Leaf Skeletonizer",
+                  "isVisible": false
+                }
+              ]
+            },
+            {
+              "id": "b07494ef-ddef-41e6-a041-cb9332a26263",
+              "type": "folder",
+              "title": "Budworms",
+              "isVisible": false,
+              "isExpanded": true,
+              "items": [
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1636_1637",
+                  "type": "layer",
+                  "title": "Two-year Budworm",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1640_1641",
+                  "type": "layer",
+                  "title": "Spruce Budworm",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1646_1647",
+                  "type": "layer",
+                  "title": "Western Blackheaded Budworm",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1670_1671",
+                  "type": "layer",
+                  "title": "Western Spruce Budworm",
+                  "isVisible": false
+                }
+              ]
+            },
+            {
+              "id": "503d1a1e-f7ca-45e7-bbc2-6888e239f899",
+              "type": "folder",
+              "title": "Moths",
+              "isVisible": false,
+              "isExpanded": false,
+              "items": [
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1644_1645",
+                  "type": "layer",
+                  "title": "Green Striped Forest Looper",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1652_1653",
+                  "type": "layer",
+                  "title": "Western Hemlock Looper",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1674_1675",
+                  "type": "layer",
+                  "title": "Western False Hemlock Looper",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1688_1689",
+                  "type": "layer",
+                  "title": "Phantom Hemlock Looper",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1690_1691",
+                  "type": "layer",
+                  "title": "Saddleback looper",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1682_1683",
+                  "type": "layer",
+                  "title": "Larch Looper",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1666_1667",
+                  "type": "layer",
+                  "title": "Douglas Fir Tussock Moth",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1680_1681",
+                  "type": "layer",
+                  "title": "Larch Budmoth",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1668_1669",
+                  "type": "layer",
+                  "title": "Satin Moth",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1634_1635",
+                  "type": "layer",
+                  "title": "Birch Leaf Skeletonizer",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1672_1673",
+                  "type": "layer",
+                  "title": "Large Aspen Tortrix",
+                  "isVisible": false
+                }
+              ]
+            },
+            {
+              "id": "d28cd636-d210-4030-ad18-5c2437e63978",
+              "type": "folder",
+              "title": "Leaf Miners",
+              "isVisible": false,
+              "isExpanded": false,
+              "items": [
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1692_1693",
+                  "type": "layer",
+                  "title": "Willow leafminer",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1660_1661",
+                  "type": "layer",
+                  "title": "Hemlock Needle Miner",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1654_1655",
+                  "type": "layer",
+                  "title": "Birch Leaf Miner",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1648_1649",
+                  "type": "layer",
+                  "title": "Pine Needle Sheath Miner",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1630_1631",
+                  "type": "layer",
+                  "title": "Aspen Leaf Miner",
+                  "isVisible": false
+                }
+              ]
+            },
+            {
+              "id": "edff3a71-832a-463f-bc65-0f2321367cc6",
+              "type": "folder",
+              "title": "Sawflies",
+              "isVisible": false,
+              "isExpanded": false,
+              "items": [
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1686_1687",
+                  "type": "layer",
+                  "title": "Lodgepole Pine Sawfly",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1658_1659",
+                  "type": "layer",
+                  "title": "Larch Sawfly",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1662_1663",
+                  "type": "layer",
+                  "title": "Alder Sawfly",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1678_1679",
+                  "type": "layer",
+                  "title": "Hemlock Sawfly",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1664_1665",
+                  "type": "layer",
+                  "title": "Conifer Sawflies",
+                  "isVisible": false
+                }
+              ]
+            },
+            {
+              "id": "0f714362-1be1-4385-b082-2d9b07a14328",
+              "type": "folder",
+              "title": "Caterpillars",
+              "isVisible": false,
+              "isExpanded": false,
+              "items": [
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1650_1651",
+                  "type": "layer",
+                  "title": "Northern Tent Caterpillar",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1642_1643",
+                  "type": "layer",
+                  "title": "Forest Tent Caterpillar",
+                  "isVisible": false
+                }
+              ]
+            },
+            {
+              "id": "2589afe2-5c0f-4b4d-ab3f-fde718ed6105",
+              "type": "folder",
+              "title": "Others",
+              "isVisible": false,
+              "isExpanded": false,
+              "items": [
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1628_1629",
+                  "type": "layer",
+                  "title": "Unknown Defoliating Insects",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1604_1605",
+                  "type": "layer",
+                  "title": "Balsam Woolly Adelgid",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1606_1607",
+                  "type": "layer",
+                  "title": "Spruce Aphid",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1638_1639",
+                  "type": "layer",
+                  "title": "Larch Casebearer",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1632_1633",
+                  "type": "layer",
+                  "title": "Aspen Leaf Roller",
+                  "isVisible": false
+                },
+                {
+                  "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1656_1657",
+                  "type": "layer",
+                  "title": "Filament Bearer",
+                  "isVisible": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-1676_1677",
+          "type": "layer",
+          "title": "Unidentified Aspen Defoliation",
+          "isVisible": false
+        },
+        {
+          "id": "pub:WHSE_FOREST_VEGETATION.BEC_BIOGEOCLIMATIC_POLY-1409_1410",
+          "type": "layer",
+          "title": "BEC Analysis Zones",
+          "isVisible": false
+        },
+        {
+          "id": "pub:WHSE_FOREST_VEGETATION.VEG_COMP_LYR_R1_POLY-1746",
+          "type": "layer",
+          "title": "VRI - Vegetated Land Cover Outlined",
+          "isVisible": false
+        },
+        {
+          "id": "pub:WHSE_FOREST_VEGETATION.VEG_COMP_LYR_R1_POLY-1542",
+          "type": "layer",
+          "title": "VRI - Non Vegetated Land Cover Outlined",
+          "isVisible": false
+        },
+        {
+          "id": "pub:WHSE_BASEMAPPING.DRA_DGTL_ROAD_ATLAS_MPAR_SP-3241",
+          "type": "layer",
+          "title": "Digital Road Atlas",
+          "isVisible": false
+        }
+      ]
+    },
+    {
+      "type": "list-menu",
+      "enabled": false
+    },
+    {
+      "type": "location",
+      "enabled": false
+    },
+    {
+      "type": "markup",
+      "enabled": true,
+      "order": 3
+    },
+    {
+      "type": "measure",
+      "enabled": true,
+      "order": 6,
+      "position": "toolbar",
+      "icon": "straighten",
+      "title": "Measurement"
+    },
+    {
+      "type": "minimap",
+      "enabled": true,
+      "order": 1,
+      "baseMap": "Topographic"
+    },
+    {
+      "type": "pan",
+      "enabled": true
+    },
+    {
+      "type": "scale",
+      "enabled": true,
+      "order": 2,
+      "showFactor": true,
+      "showBar": true
+    },
+    {
+      "type": "search",
+      "enabled": true,
+      "order": 2,
+      "position": "toolbar",
+      "icon": "search",
+      "title": "Search for Location"
+    },
+    {
+      "type": "select",
+      "enabled": false,
+      "order": 6,
+      "position": "list-menu",
+      "icon": "select_all",
+      "title": "Selections",
+      "style": {
+        "strokeStyle": "",
+        "strokeColor": "#000000",
+        "fillColor": "#000000",
+        "markerSize": [
+          20,
+          20
+        ],
+        "markerOffset": [
+          10,
+          10
+        ]
+      }
+    },
+    {
+      "type": "shortcut-menu",
+      "enabled": false,
+      "order": 10
+    },
+    {
+      "type": "toolbar",
+      "enabled": true
+    },
+    {
+      "type": "zoom",
+      "enabled": true,
+      "order": 1,
+      "mouseWheel": true,
+      "doubleClick": true,
+      "box": true,
+      "control": true
+    },
+    {
+      "type": "print",
+      "enabled": true,
+      "order": 7,
+      "position": "list-menu",
+      "icon": "print",
+      "title": "Print"
+    },
+    {
+      "type": "sessionimport",
+      "enabled": true,
+      "order": 8,
+      "position": "list-menu",
+      "icon": "input",
+      "title": "Session Import"
+    },
+    {
+      "type": "sessionexport",
+      "enabled": true,
+      "order": 9,
+      "position": "list-menu",
+      "icon": "backup",
+      "title": "Session Export"
+    },
+    {
+      "type": "label",
+      "enabled": true,
+      "order": 10,
+      "position": "list-menu",
+      "icon": "label",
+      "title": "Label"
+    },
+    {
+      "type": "layerimport",
+      "enabled": true,
+      "order": 11,
+      "position": "list-menu",
+      "icon": "landscape",
+      "title": "Layer Import"
+    },
+    {
+      "type": "attribution",
+      "enabled": true
+    },
+    {
+      "type": "dropdown",
+      "enabled": false
+    },
+    {
+      "type": "query",
+      "enabled": true,
+      "title": "Query",
+      "icon": "search",
+      "instance": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-QUERY_LYR--search-infestations",
+      "position": "toolbar"
+    },
+    {
+      "type": "identify-feature",
+      "enabled": true,
+      "position": "toolbar",
+      "title": "Identify Panel"
+    },
+    {
+      "type": "search-location",
+      "enabled": true,
+      "position": "toolbar"
+    },
+    {
+      "type": "directions-route",
+      "enabled": true,
+      "position": "toolbar"
+    },
+    {
+      "type": "query-results",
+      "instance": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-QUERY_LYR--search-infestations",
+      "enabled": true,
+      "position": "toolbar"
+    },
+    {
+      "type": "query-feature",
+      "instance": "pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-QUERY_LYR--search-infestations",
+      "enabled": true,
+      "position": "toolbar"
+    },
+	{
+      "type": "help",
+      "enabled": true,
+      "order": 12,
+      "position": "list-menu",
+      "icon": "help_outline",
+      "title": "Help Menu"
+    }
+  ],
+  "_id": "dec0721e-2768-4b97-8ee8-97b4bb3d115a",
+  "_rev": "55-194678a934f51f140154178521b75348",
+  "drawings": []
 }

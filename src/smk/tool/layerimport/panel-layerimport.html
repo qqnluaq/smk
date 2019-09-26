@@ -27,7 +27,7 @@
                 <div v-else>
                     <button v-on:click="fetchEsriLayerInfo">Import Layer</button>
                 </div>
-                <div v-if="checkedLayersArcGIS.length > 4"> Due to {{checkedLayersArcGIS.length}} layers being imported their visibility is turned off.</div>
+                <div v-if="checkedLayersArcGIS.length > 4"> Due to {{checkedLayersArcGIS.length}} layers being selected for import their visibility is turned off.</div>
         </div>  
 
         <div v-if="esriLayerListShow && !layerLoading" class="smk-folder">
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class=stroke>
-                    Should the line stroke (on polygons and circles) be displayed?
+                    Line Stroke Display(on polygons and circles)?
                     <input type="checkbox" id="checkbox" v-model="stroke">
                     <label for="checkbox">{{ stroke }}</label>
                 </div>
@@ -103,7 +103,7 @@
                 </div>
 
                 <div class=fill>
-                    Should the path (on polygons and circles) be filled with color?
+                    Fill Enabled (on polygons and circles)?
                     <input type="checkbox" id="checkbox" v-model="fill">
                     <label for="checkbox">{{ fill }}</label>
                 </div>
@@ -197,7 +197,7 @@
                 </div>
 
                 <div class=stroke>
-                    Should the line stroke (on polygons and circles) be displayed?
+                    Line Stroke Display(on polygons and circles)?
                     <input type="checkbox" id="checkbox" v-model="stroke">
                     <label for="checkbox">{{ stroke }}</label>
                 </div>
@@ -213,7 +213,7 @@
                 </div>
 
                 <div class=fill>
-                    Should the path (on polygons and circles) be filled with color?
+                    Fill Enabled (on polygons and circles)?
                     <input type="checkbox" id="checkbox" v-model="fill">
                     <label for="checkbox">{{ fill }}</label>
                 </div>
@@ -282,10 +282,10 @@
             </details>
         </div>
 
+        <div class=geoJSONSubmit>
         {{ selected}} input area, please browse for a GeoJSON file once you're done styling.
         <input type="file" @change="importGeoJSON" >
-        <div v-if="geoJSONFileUploadSuccess">
-          Import of {{ geoJSONfileValue }} was successful.
+        <div v-if="geoJSONFileUploadSuccess"> Import of {{ geoJSONfileValue }} was successful. </div>
         </div>
 
     </div>
@@ -304,7 +304,7 @@
                 <div v-else>
                     <button v-on:click="setLayerImport">Import Layer</button>
                 </div>
-                <div v-if="checkedLayersWMS.length > 4"> Due to {{checkedLayersWMS.length}} layers being imported their visibility is turned off.</div>
+                <div v-if="checkedLayersWMS.length > 4"> Due to {{checkedLayersWMS.length}} layers being being selected for import their visibility is turned off.</div>
                 
         </div>  
 

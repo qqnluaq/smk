@@ -650,7 +650,8 @@
                     { type: 'sessionimport',enabled: false, order: 8,   position: 'list-menu',                        icon: 'input',          title: 'Session Import' },
                     { type: 'sessionexport',enabled: false, order: 9,   position: 'list-menu',                        icon: 'backup',         title: 'Session Export' },
                     { type: 'label',        enabled: false, order: 10,  position: 'list-menu',                        icon: 'label',          title: 'Label' },
-                    { type: 'layerimport',  enabled: false, order: 11,  position: 'list-menu',                        icon: 'landscape',      title: 'Layer Import' }
+                    { type: 'layerimport',  enabled: false, order: 11,  position: 'list-menu',                        icon: 'landscape',      title: 'Layer Import' },
+                    { type: 'help',         enabled: false, order: 12,  position: 'list-menu',                        icon: 'help_outline',   title: 'Help Menu' }
                 ]
             },
 

@@ -1055,6 +1055,26 @@ include.tag( "tool-dropdown",
     }
 )
 
+include.tag( "tool-help",
+    {
+        "loader": "group",
+        "tags": [
+            {
+                "url": "smk/tool/help/panel-help.html",
+                "loader": "template"
+            },
+            {
+                "url": "smk/tool/help/tool-help.css",
+                "loader": "style"
+            },
+            {
+                "url": "smk/tool/help/tool-help.js",
+                "loader": "script"
+            }
+        ]
+    }
+)
+
 include.tag( "tool-identify-esri3d",
     {
         "loader": "group",
@@ -2612,7 +2632,8 @@ window.include.SMK = true
                     { type: 'sessionimport',enabled: false, order: 8,   position: 'list-menu',                        icon: 'input',          title: 'Session Import' },
                     { type: 'sessionexport',enabled: false, order: 9,   position: 'list-menu',                        icon: 'backup',         title: 'Session Export' },
                     { type: 'label',        enabled: false, order: 10,  position: 'list-menu',                        icon: 'label',          title: 'Label' },
-                    { type: 'layerimport',  enabled: false, order: 11,  position: 'list-menu',                        icon: 'landscape',      title: 'Layer Import' }
+                    { type: 'layerimport',  enabled: false, order: 11,  position: 'list-menu',                        icon: 'landscape',      title: 'Layer Import' },
+                    { type: 'help',         enabled: false, order: 12,  position: 'list-menu',                        icon: 'help_outline',   title: 'Help Menu' }
                 ]
             },
 
@@ -2625,9 +2646,9 @@ window.include.SMK = true
             },
 
             BUILD: {
-                commit:     '11b0ed22106a8ca318801a2494f38d12e3dd1e66',
+                commit:     'c578b856511f4dc83d693f8215aa30e5f39864fc',
                 branch:     'master',
-                lastCommit: '"2019-09-24 14:22:31 -0700"'.replace( /^"|"$/g, '' ),
+                lastCommit: '"2019-09-25 15:13:05 -0700"'.replace( /^"|"$/g, '' ),
                 origin:     'https://github.com/cebergin/smk-client.git',
                 version:    '0.8.1',
             }
