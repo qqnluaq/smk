@@ -85,7 +85,10 @@
     },
     {
       "type": "search",
-      "enabled": false
+      "title": "Search",
+      "enabled": true,
+      "showTitle": true,
+      "position": "toolbar"
     },
     {
       "type": "list-menu",

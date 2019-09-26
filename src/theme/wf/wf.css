@@ -97,3 +97,17 @@
     padding-top: 1px;
     padding-bottom: 2px;
 }
+
+/* tool-search.css */
+
+.smk-theme-wf .smk-tool.smk-search-tool {
+    width: initial;
+    justify-content: center;
+}
+
+.smk-theme-wf .smk-tool.smk-search-tool input {
+    position: absolute;
+    top: -20px;
+}
+
+.smk-theme-wf .smk-sidepanel {

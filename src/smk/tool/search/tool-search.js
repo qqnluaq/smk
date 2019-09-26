@@ -40,7 +40,7 @@ include.module( 'tool-search', [ 'tool', 'sidepanel', 'widgets', 'tool-search.wi
     Vue.component( 'search-widget', {
         mixins: [ inc.widgets.emit ],
         template: inc[ 'tool-search.widget-search-html' ],
-        props: [ 'id', 'type', 'title', 'visible', 'enabled', 'active', 'icon', 'type', 'initialSearch' ],
+        props: [ 'id', 'type', 'title', 'visible', 'enabled', 'active', 'icon', 'type', 'initialSearch', 'showTitle' ],
         data: function () {
             return {
                 search: null
@@ -58,7 +58,8 @@ include.module( 'tool-search', [ 'tool', 'sidepanel', 'widgets', 'tool-search.wi
                 return Object.assign( c, {
                     'smk-tool-active': this.active,
                     'smk-tool-visible': this.visible,
-                    'smk-tool-enabled': this.enabled
+                    'smk-tool-enabled': this.enabled,
+                    'smk-tool-title': this.showTitle
                 } )
             }
         },
