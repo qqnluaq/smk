@@ -15,7 +15,7 @@ include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html
         props: [ 'content' ],
         methods: {
 
-        Print: function  ( event ) {
+        print: function  ( event ) {
 
             let id = event.srcElement.id;
             let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
@@ -82,6 +82,7 @@ include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html
         }
     }
 
+    //prepare print prepares for a browser print by closing the print panel so it's not in the browser print
     function preparePrint(){
         
         let mainSmkElement = document.getElementById("smk-map-frame");

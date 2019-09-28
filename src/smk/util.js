@@ -808,7 +808,7 @@ rebuildSMKMAP: async function(mapConfig) {
 
     //fetches the current state from copyIntoJSONObject, then rebuilds the map with that information
     // essentially rebuilds the map exactly as it is, but integrates added layers into the smk tools by re-initing
-    rebuidMapWithSessionExportJSONObject: function ( smk ){
+    rebuildMapWithSessionExportJSONObject: function ( smk ){
         let mapConfigJSON = this.copyIntoJSONObject(smk);
         
         mapConfigJSON = JSON.parse(JSON.stringify(mapConfigJSON));
@@ -995,7 +995,7 @@ rebuildSMKMAP: async function(mapConfig) {
 
 
     // matches every item in the toolArray with items in the itemVisibilityArray, and assigns the visibility status of itemVisibility array to toolArray
-    recuresiveSetDisplayVisibility: function (toolArray, itemVisibilityArray){
+    recursiveSetDisplayVisibility: function (toolArray, itemVisibilityArray){
         for (let  tool in toolArray){
             for (let item in itemVisibilityArray){
                 if (toolArray[tool].id == itemVisibilityArray[item].id){
@@ -1005,7 +1005,7 @@ rebuildSMKMAP: async function(mapConfig) {
                         toolArray[tool].isExpanded = itemVisibilityArray[item].isExpanded;
                     }
                     if (typeof toolArray[tool].items  != "undefined" && toolArray[tool].items.length > 0 && typeof itemVisibilityArray[item].items !="undefined" && itemVisibilityArray[item].items.length > 1){
-                        toolArray[tool].items = this.recuresiveSetDisplayVisibility(toolArray[tool].items, itemVisibilityArray[item].items );
+                        toolArray[tool].items = this.recursiveSetDisplayVisibility(toolArray[tool].items, itemVisibilityArray[item].items );
                     }
                 }
             }
@@ -1015,10 +1015,8 @@ rebuildSMKMAP: async function(mapConfig) {
 
     // takes the empty JSON holder and the smk object and fills the smkJSON holder with the useful values of smk to create a JSON file that can be used as a map-config
     // or at least as a similar file
-    // should come back and clean this up into a readable for loop going through smk and checking all it's properties against jsonObjectHolder's properties that way
     copyIntoJSONObject: function( smk ){
         let jsonObjectHolder = this.createSMKJSONObject()
-        
         jsonObjectHolder = this.copyFromsmk ( jsonObjectHolder, smk);
 
         // check state and set it appropriately for the various tool displayers
@@ -1026,57 +1024,10 @@ rebuildSMKMAP: async function(mapConfig) {
         for (let tool in jsonObjectHolder.tools) {
             if (jsonObjectHolder.tools[tool].type == "layers") {
                 jsonObjectHolder.tools[tool].display = this.recursiveToggleDisplayOff(jsonObjectHolder.tools[tool].display);
-                jsonObjectHolder.tools[tool].display = this.recuresiveSetDisplayVisibility( jsonObjectHolder.tools[tool].display, SMK.MAP[1].$viewer.layerDisplayContext.root.items);
+                jsonObjectHolder.tools[tool].display = this.recursiveSetDisplayVisibility( jsonObjectHolder.tools[tool].display, SMK.MAP[1].$viewer.layerDisplayContext.root.items);
             }
         }
         
-      
-        
-
-
-        
-        // Going to get a list of all the layers currently in the system
-        // then iterate through all existing objects to check for duplicates, if no duplicates are found then add both the tool version
-        // and the layer version to  jsonLayersAndToolsToBeAdded array,
-        //this allows for layers that have been added through tool-layer import to be carried into the main system
-        let arrayOfJSONLayersAndTools = this.getArrayOfJSONLayers( smk )
-        // need to first loop through all layers, to check for matches, if there is a match then don't add it
-        
-        // this object is going to store all the new layers that we'll add in the step during a for loop where no matches were found for that layer
-        let jsonLayersAndToolsToBeAdded = []
-        for (let newLayers in arrayOfJSONLayersAndTools) {
-            for (let layer in jsonObjectHolder.layers) {
-                //console.log("existing layer is: ", jsonObjectHolder.layers[layer].id)
-                //console.log("possible new layer is: ", arrayOfJSONLayersAndTools[newLayers].jsonLayerInfo.id)
-                if (jsonObjectHolder.layers[layer].id == arrayOfJSONLayersAndTools[newLayers].jsonLayerInfo.id) {
-                    //console.log("Match, this layer should not be added")
-                    break;
-                } 
-                // this should mean we're in the last length of the loop and there has not been a match, and therefore this layer should be added
-                //console.log("Layer number is: ", layer)
-                //console.log("total length is: ", jsonObjectHolder.layers.length)
-                if (layer == (jsonObjectHolder.layers.length - 1)) {
-                    //console.log("this one should be added")
-                    //console.log("NOT MATCH existing layer is: ", jsonObjectHolder.layers[layer].id)
-                    //console.log("NOT MATCH possible new layer is: ", arrayOfJSONLayersAndTools[newLayers].jsonLayerInfo.id)
-
-                    jsonLayersAndToolsToBeAdded.push(arrayOfJSONLayersAndTools[newLayers]);
-                }
-            }       
-        }
-        // now to add these layers and tools into the main jsonObjectHolder object so they will be exported correctly
-        for (let layerTool in jsonLayersAndToolsToBeAdded) {
-            jsonObjectHolder.layers.push(jsonLayersAndToolsToBeAdded[layerTool].jsonLayerInfo)
-
-            for (let tool in jsonObjectHolder.tools) {
-                if (jsonObjectHolder.tools[tool].type == "layers" ){
-                    jsonObjectHolder.tools[tool].display.push(jsonLayersAndToolsToBeAdded[layerTool].jsonToolLayerInfo);
-                }
-            }
-        }
-
-
-
         // can find co-ordinates and zoom here, but only if it's changed
         if (smk.$viewer.map._animateToCenter){
             //////console.log(smk.$viewer.map._animateToCenter)
@@ -1163,11 +1114,13 @@ rebuildSMKMAP: async function(mapConfig) {
                             arrayOfMultiPoints.push( this.createJSONMultiPointCollectionObject(smk.$viewer.map._layers[drawing] ));
                         }
                     } else {
+                        //the else just deals with regular points which are of course less complicated than multipoints
                         let geoJSONFromImport = this.retrieveExistingGeoJSONFromLeaflet(smk.$viewer.map._layers[drawing]);
                         jsonObjectHolder.drawings.push(geoJSONFromImport);
                     }
              }
         }
+
         // with all the multi point collections gathered together we need to assemble each element into the array (containing seperate multi points) into one multi point for each array element
         if (arrayOfMultiPoints.length != 0) {
             for (let multiPointElement in arrayOfMultiPoints){
@@ -1180,7 +1133,7 @@ rebuildSMKMAP: async function(mapConfig) {
         // Once all the geomtry collections are, well collected they need to be built into their correct geoJSON, 
         if (arrayOfGeometryCollections.length != 0) {
             for (let element in arrayOfGeometryCollections){
-                let geoJSONFromImport = this.reassambleGeoJSONGeometryCollection(arrayOfGeometryCollections[element]);
+                let geoJSONFromImport = this.reassembleGeoJSONGeometryCollection(arrayOfGeometryCollections[element]);
                 jsonObjectHolder.drawings.push(geoJSONFromImport);
             }
         }
@@ -1352,6 +1305,7 @@ rebuildSMKMAP: async function(mapConfig) {
         return jsonArrayElements
     },
 
+
     reassembleMultiPoints: function ( multiPointElements){
         let multiPointGeoJSONIndividual = [];
 
@@ -1360,10 +1314,12 @@ rebuildSMKMAP: async function(mapConfig) {
         }
         for (let singleMultiPoint in multiPointGeoJSONIndividual){
             if (singleMultiPoint != 0) {
-
-            multiPointGeoJSONIndividual[0].geometry.coordinates[0].push(multiPointGeoJSONIndividual[singleMultiPoint].geometry.coordinates[0]);
+            
+            //by putting all the points in the same section of the GeoJSON you reassmble the multipoint correctly
+            multiPointGeoJSONIndividual[0].geometry.coordinates.push(multiPointGeoJSONIndividual[singleMultiPoint].geometry.coordinates[0]);
             }
         }
+        //that's also why we only return the first point, as it has all the other points inside it
         return multiPointGeoJSONIndividual[0];
     },
 
@@ -1532,16 +1488,12 @@ rebuildSMKMAP: async function(mapConfig) {
         console.log("Wait.")
     },
 
-    reassambleGeoJSONGeometryCollection: function ( element ){
+    reassembleGeoJSONGeometryCollection: function ( element ){
         let geoJSONGeomtryCollectionObj = '{ "type": "Feature", "geometry": { "type": "GeometryCollection", "geometries": [] }, "geometryCollectionIDPointAndMultiPoint": null, "geometryCollectionHour": null }';
         geoJSONGeomtryCollectionObj = JSON.parse(geoJSONGeomtryCollectionObj);
         
-
         let geometryCollectionID = element.arrayOfGeoCollectionElements[0].options.creationID;
         let hour = element.arrayOfGeoCollectionElements[0].options.hour;
-        
-        let originalGeoJSONGeometryCollection = element.arrayOfGeoCollectionElements[0].options.originalGeometryCollectionObject;
-        
         
         for (let geoInformation in element.arrayOfGeoCollectionElements){
             
@@ -1930,84 +1882,7 @@ rebuildSMKMAP: async function(mapConfig) {
 
     },
 
-    //grab all the layer info needed required to recreate a layer on load, and return a JSON of that info that can be parse and inserted into
-    // the existing map_config.json structure
-    getArrayOfJSONLayers: function ( smk ) {
-
-        //final return value holder
-        let arrayOfJSONLayers = [];
-
-        let type = null;
-        let id = null;
-        let title = null;
-        let isVisible = true;
-        let attribution = '';
-        let metadataURL = '';
-        let opacity = 0.65;
-        let isQueryable = true;
-        let attributes = [];
-
-        let serviceUrl = null;
-        let layerName = null;
-        let styleName = null;
-
-        //this loop creates a JSON object for each WMS layer it finds, then add it to the array of all the JSON layer objects we have
-        for (let layer in smk.$viewer.map._layers ) {
-            //console.log(smk.$viewer.map._layers[layer])
-            if (smk.$viewer.map._layers[layer].options && typeof smk.$viewer.map._layers[layer].wmsParams != "undefined" &&  smk.$viewer.map._layers[layer].wmsParams.styles.length < 7 ) {
-
-                let jsonToolAndLayerInfoCombined = '{ "jsonLayerInfo": "", "jsonToolLayerInfo": ""}';
-                jsonToolAndLayerInfoCombined = JSON.parse(jsonToolAndLayerInfoCombined);
-
-                //console.log('The service URL is: ', smk.$viewer.map._layers[layer]._url)
-                //console.log('The layer is: ', smk.$viewer.map._layers[layer].options.layers)
-                //console.log('The style is: ', smk.$viewer.map._layers[layer].options.styles)
-
-                type = smk.$viewer.map._layers[layer].wmsParams.service;
-                serviceUrl = smk.$viewer.map._layers[layer]._url;
-                layerName = smk.$viewer.map._layers[layer].options.layers;
-                styleName = smk.$viewer.map._layers[layer].options.styles;
-
-                //console.log("layer name is: ", layerName)
-                //console.log("The style name is: ", styleName)
-
-                id = (layerName + "-" + styleName);
-
-                //This title name is a placeholder
-                title = (layerName + "-" + styleName);
-                title = title.replace(/_/g, " ");
-                //console.log("placeholder title is: ", title)
-                //console.log("ID is: ", id)
-
-                let jsonLayerInfo = '{  "type": null, "id": null, "title": null, "isVisible": true, "attribution": "", "metadataUrl": "", "opacity": 0.65,  "isQueryable": true, "attributes": [], "serviceUrl":null, "layerName": null, "styleName": null }';
-
-                jsonLayerInfo = JSON.parse(jsonLayerInfo);
-                jsonLayerInfo.type = type.toLowerCase();
-                jsonLayerInfo.id = id;
-                jsonLayerInfo.title = title;
-                jsonLayerInfo.serviceUrl = serviceUrl;
-                jsonLayerInfo.layerName = layerName;
-                jsonLayerInfo.styleName = styleName;
-
-                //console.log("json layer info is: ", jsonLayerInfo)
-
-                let jsonToolLayerInfo = '{  "id": "", "type": "layer", "title": "", "isVisible": true }';
-                jsonToolLayerInfo  = JSON.parse(jsonToolLayerInfo);
-                jsonToolLayerInfo.id = id;
-                jsonToolLayerInfo.title = title ;
-
-                jsonToolAndLayerInfoCombined.jsonLayerInfo = jsonLayerInfo;
-                jsonToolAndLayerInfoCombined.jsonToolLayerInfo = jsonToolLayerInfo;
-
-                 // Should be adding to the array here
-                arrayOfJSONLayers.push(jsonToolAndLayerInfoCombined);
-            }
-            
-        }
-        
-        return (arrayOfJSONLayers);
-        
-    },
+    
 
 
 

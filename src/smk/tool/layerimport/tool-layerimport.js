@@ -296,7 +296,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 //Now that the layer is properly in the system, we should go ahead and export all our data and rebuild with it
-                SMK.UTIL.rebuidMapWithSessionExportJSONObject( SMK.MAP[1] );
+                SMK.UTIL.rebuildMapWithSessionExportJSONObject( SMK.MAP[1] );
 
 
             },
@@ -419,7 +419,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 
                 this.layerLoading = false;
                 //Now that the layer is properly in the system, we should go ahead and export all our data and rebuild with it
-                SMK.UTIL.rebuidMapWithSessionExportJSONObject( SMK.MAP[1] );
+                SMK.UTIL.rebuildMapWithSessionExportJSONObject( SMK.MAP[1] );
             },
 
 

@@ -110,9 +110,9 @@ include.module( 'tool-label', [ 'tool', 'widgets', 'tool-label.panel-label-html'
     function transferToolTips ( smk, layerID){
         let content;
         let geoType;
-        if (typeof smk.$viewer.map._layers[layerID].feature.properties != "undefined" && typeof smk.$viewer.map._layers[layerID].feature.properties.content != "undefined"){
+        if (typeof smk.$viewer.map._layers[layerID].feature != "undefined" && typeof smk.$viewer.map._layers[layerID].feature.properties != "undefined" && typeof smk.$viewer.map._layers[layerID].feature.properties.content != "undefined"){
             content = smk.$viewer.map._layers[layerID].feature.properties.content;
-        } else if (typeof smk.$viewer.map._layers[layerID].feature.geometry.properties != "undefined") {
+        } else if (typeof smk.$viewer.map._layers[layerID].feature != "undefined" && typeof smk.$viewer.map._layers[layerID].feature.geometry.properties != "undefined") {
             // part of a geometry collection, so content is nested differently
             content = smk.$viewer.map._layers[layerID].feature.geometry.properties.content;
         } else{

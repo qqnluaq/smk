@@ -1,12 +1,7 @@
 include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.panel-sessionexport-html' ], function ( inc ) {
     "use strict";
 
-    
     var jsonDownloadValue = "Normal"
-    
-
-    
-    
 
     Vue.component( 'sessionexport-widget', {
         extends: inc.widgets.toolButton,
@@ -19,7 +14,7 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         
         data: function() {
             return {
-              jsonDownloadLink: jsonDownloadValue,
+              
 
             }
           }
@@ -55,10 +50,9 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         a.href = window.URL.createObjectURL(blob);
         a.download = 'map-config.json';
         a.innerHTML = 'download JSON';
-        jsonDownloadValue = a;
+        
         a.dispatchEvent(new MouseEvent(`click`, {bubbles: true, cancelable: true, view: window}));
     }
-
 
     SMK.TYPE.sessionexportTool = sessionexportTool
 
@@ -73,19 +67,16 @@ include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.p
         smk.on( this.id, {
             'activate': function () {
 
-            //This is creating an update to date link of the JSON file to download
-            //often disabled during testing and should be re-enabled
-
             if ( !self.enabled ) return
         
             self.active = !self.active
             
+            //This is creating an update to date link of the JSON file to download
             createJsonLink( SMK.MAP[1] );
 
             if ( !self.enabled ) return
-        
-            self.active = !self.active
 
+            self.active = !self.active
             }
         } )
 
