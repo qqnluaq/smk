@@ -1130,7 +1130,7 @@ rebuildSMKMAP: async function(mapConfig) {
         } 
 
         
-        // Once all the geomtry collections are, well collected they need to be built into their correct geoJSON, 
+        // Once all the geomtry collections are collected they need to be built into their correct geoJSON, 
         if (arrayOfGeometryCollections.length != 0) {
             for (let element in arrayOfGeometryCollections){
                 let geoJSONFromImport = this.reassembleGeoJSONGeometryCollection(arrayOfGeometryCollections[element]);
@@ -1338,7 +1338,6 @@ rebuildSMKMAP: async function(mapConfig) {
                    // will not interfere, eg we will only check markers outside feature elements versus markers inside feature elements
 
                    // we can assume that points appear by themselves, or as part of a collection which contains other non point elements
-                  
 
                    let arrayOfFeatureCollections = []
                    for ( let drawing in jsonObjectHolder.drawings){
@@ -1346,48 +1345,33 @@ rebuildSMKMAP: async function(mapConfig) {
                         featureCollection = JSON.parse(featureCollection);
                         let featureCollectionID = null
 
-                        
                         switch(jsonObjectHolder.drawings[drawing].geometry.type) {
                             case "Point":
-                                
                                 featureCollectionID = this.getFeatureElementFeatureCollectionTime( jsonObjectHolder.drawings[drawing])
-                                
                                 arrayOfFeatureCollections = this.buildingAFeatureCollection ( arrayOfFeatureCollections, featureCollection, featureCollectionID, jsonObjectHolder.drawings[drawing])
                                 break;
-                            case "LineString":
-                                
-                                featureCollectionID = this.getFeatureElementFeatureCollectionTime( jsonObjectHolder.drawings[drawing])
-                                
+                            case "LineString":                                
+                                featureCollectionID = this.getFeatureElementFeatureCollectionTime( jsonObjectHolder.drawings[drawing])                                
                                 arrayOfFeatureCollections = this.buildingAFeatureCollection ( arrayOfFeatureCollections, featureCollection, featureCollectionID, jsonObjectHolder.drawings[drawing])
                                 break;
-                            case "Polygon":
-                                
-                                featureCollectionID = this.getFeatureElementFeatureCollectionTime( jsonObjectHolder.drawings[drawing])
-                                
+                            case "Polygon":                               
+                                featureCollectionID = this.getFeatureElementFeatureCollectionTime( jsonObjectHolder.drawings[drawing])                              
                                 arrayOfFeatureCollections = this.buildingAFeatureCollection ( arrayOfFeatureCollections, featureCollection, featureCollectionID, jsonObjectHolder.drawings[drawing])
                                 break;
-                            case "MultiPoint":
-                                
-                                featureCollectionID = this.getFeatureElementFeatureCollectionTime( jsonObjectHolder.drawings[drawing])
-                                
+                            case "MultiPoint":                                
+                                featureCollectionID = this.getFeatureElementFeatureCollectionTime( jsonObjectHolder.drawings[drawing])                               
                                 arrayOfFeatureCollections = this.buildingAFeatureCollection ( arrayOfFeatureCollections, featureCollection, featureCollectionID, jsonObjectHolder.drawings[drawing])
                                 break;
-                            case "MultiLineString":
-                                
-                                featureCollectionID = this.getFeatureElementFeatureCollectionTime( jsonObjectHolder.drawings[drawing])
-                                
+                            case "MultiLineString":                                
+                                featureCollectionID = this.getFeatureElementFeatureCollectionTime( jsonObjectHolder.drawings[drawing])                                
                                 arrayOfFeatureCollections = this.buildingAFeatureCollection ( arrayOfFeatureCollections, featureCollection, featureCollectionID, jsonObjectHolder.drawings[drawing])
                                 break;
-                            case "MultiPolygon":
-                                
-                                featureCollectionID = this.getFeatureElementFeatureCollectionTime( jsonObjectHolder.drawings[drawing])
-                                
+                            case "MultiPolygon":                                
+                                featureCollectionID = this.getFeatureElementFeatureCollectionTime( jsonObjectHolder.drawings[drawing])                                
                                 arrayOfFeatureCollections = this.buildingAFeatureCollection ( arrayOfFeatureCollections, featureCollection, featureCollectionID, jsonObjectHolder.drawings[drawing])
                                 break;
-                            case "GeometryCollection":
-                            
-                                featureCollectionID = this.getFeatureElementFeatureCollectionTimeForGeometryCollection( jsonObjectHolder.drawings[drawing].geometry )
-                                
+                            case "GeometryCollection":                            
+                                featureCollectionID = this.getFeatureElementFeatureCollectionTimeForGeometryCollection( jsonObjectHolder.drawings[drawing].geometry )                               
                                 arrayOfFeatureCollections = this.buildingAFeatureCollection ( arrayOfFeatureCollections, featureCollection, featureCollectionID, jsonObjectHolder.drawings[drawing])
                                 break;
                             default:
@@ -1421,6 +1405,7 @@ rebuildSMKMAP: async function(mapConfig) {
                            tempDrawings.push(jsonObjectHolder.drawings[drawing])
                        }
                    }
+
                    jsonObjectHolder.drawings = tempDrawings;
                    // once they're all removed the json object holder drawings can have the feature element collections added
                    for (let featureCollectionFromArray in arrayOfFeatureCollections){
@@ -1440,8 +1425,6 @@ rebuildSMKMAP: async function(mapConfig) {
         if (featureCollectionID == null || featureCollectionID == "No Collection"){
             return arrayOfFeatureCollections
         }
-
-        
 
         if (arrayOfFeatureCollections.length != 0) {
             for (let featureCollection in arrayOfFeatureCollections){
@@ -1465,10 +1448,7 @@ rebuildSMKMAP: async function(mapConfig) {
             featureCollectionJSON.properties.featureCollectionID = featureCollectionID
             featureCollectionJSON.features.push(geoJSONFeature)
             arrayOfFeatureCollections.push( featureCollectionJSON)
-        }
-
-
-        
+        }       
         return arrayOfFeatureCollections
     },
 
@@ -1693,8 +1673,8 @@ rebuildSMKMAP: async function(mapConfig) {
         return outerArray;
     },
 
-         //converted for and multi line polygons
-        convertLatLngArrayToGeoJSONStandardForMultiPolygons: function ( latlngs ) {
+    //converted for and multi line polygons
+    convertLatLngArrayToGeoJSONStandardForMultiPolygons: function ( latlngs ) {
 
         let finalArray = []
         let firstPoint = null
@@ -1879,10 +1859,7 @@ rebuildSMKMAP: async function(mapConfig) {
 
         }
 
-
     },
-
-    
 
 
 
