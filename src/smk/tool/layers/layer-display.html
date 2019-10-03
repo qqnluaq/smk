@@ -22,9 +22,15 @@
                 v-on:click="$$emit( 'set-item-visible', { id: item.id, visible: !item.isVisible, deep: $event.shiftKey } )"
             >{{ item.isVisible && item.isEnabled ? 'visibility' : 'visibility_off' }}</i>
 
-            <span class="smk-layer-title"
+
+
+
+            <span v-if="item.minScale !==undefined" class="smk-layer-title"
                 v-bind:title="'ID: ' + ( item.id )"
-            >{{ item.title }}</span>
+            >{{ item.title }}  <span class ="smk-layer-scale">[Visible if scale is below 1:{{ item.minScale }}]</span>  </span>
+            <span v-else class="smk-layer-title"
+                v-bind:title="'ID: ' + ( item.id )"
+            >{{ item.title }}   </span>
         </div>
 
         <div class="smk-legend" 

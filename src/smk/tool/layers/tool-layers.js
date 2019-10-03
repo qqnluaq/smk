@@ -83,6 +83,8 @@ include.module( 'tool-layers', [ 'tool', 'widgets', 'tool-layers.panel-layers-ht
                 if ( !self.enabled ) return
 
                 self.active = !self.active
+
+                
             },
 
             'config': function ( ev ) {
