@@ -326,8 +326,82 @@ include.module( 'util', null, function ( inc ) {
                 .map( function ( v ) { return ( '' + v ).toLowerCase().replace( /[^a-z0-9]+/g, '-' ).replace( /^[-]|[-]$/g, '' ) } )
                 .map( function ( v ) { return v ? v : '~' } )
                 .join( '=' )
+        },
+
+        encodeUrl: function ( url, data ) {
+            if ( !data ) return url
+
+            var params = Object.keys( data )
+                .filter( function ( k ) { return data[ k ] } )
+                .map( function ( k ) {
+                    return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ] )
+                } )
+                .join( '&' )
+
+            if ( /[?]\S+$/.test( url ) )
+                return url + '&' + params 
+
+            if ( /[?]$/.test( url ) )
+                return url + params
+
+            return url + '?' + params
+        },
+
+        fetchJsonP: function ( url, data, opt ) {
+            opt = Object.assign( {
+                timeout: 10000,
+            }, opt )
+
+            data[ '_' ] = Math.round( Math.random() * 1e10 )
+
+            if ( !data.callback )
+                data.callback = 'callback_' + Math.round( Math.random() * 1e10 )
+
+            var id 
+            var cancel 
+            var req = SMK.UTIL.encodeUrl( url, data )
+            var promise = new Promise( function ( res, rej ) {
+                function cleanup() {
+                    if ( id ) clearTimeout( id )
+                    id = null
+
+                    if ( script.parentNode )
+                        script.parentNode.removeChild( script )
+
+                    window[ data.callback ] = null
+                }
+
+                window[ data.callback ] = function ( payload ) {
+                    cleanup()
+                    res( payload )
+                }
+
+                cancel = function () {
+                    cleanup()
+                    rej( new Error( 'cancelled' ) )
+                }
+
+                var script = $( '<script>' ).get( 0 )
+                script.type = 'text/javascript'
+                script.async = true
+                script.src = req
+
+                document.getElementsByTagName( 'head' )[ 0 ].appendChild( script )
+            } )
+
+            if ( opt.timeout )
+                id = setTimeout( cancel, opt.timeout )
+
+            return fetchResponse( promise, cancel )
         }
 
     } )
+
+    function fetchResponse( promise, abort ) {
+        return {
+            response: promise, 
+            abort: abort
+        }
+    }
 
 } )

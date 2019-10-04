@@ -122,19 +122,40 @@ include.module( 'layer.layer-wms-js', [ 'layer.layer-js' ], function () {
             srsName:        'EPSG:4326',
             typename:       this.config.layerName,
             outputformat:   "application/json",
+            // outputformat:   "text/javascript",
             filter:         filter,
         }
 
-        return SMK.UTIL.makePromise( function ( res, rej ) {
-            $.ajax( {
-                url:        self.config.serviceUrl,
-                method:     'GET',
-                data:       data,
-                dataType:   'json',
-            } ).then( res, rej )
+        var h = new Headers()
+        h.append( 'Access-Control-Allow-Origin', '*' )
+
+        return fetch( SMK.UTIL.encodeUrl( self.config.serviceUrl, data ), {
+            // method: 'GET',
+            // mode: 'cors',
+            // cache: 'no-cache',
+            // redirect: 'follow'
+            headers: h
         } )
+        // return SMK.UTIL.fetchJsonP( self.config.serviceUrl, data ).response
+        .then( function ( res ) {
+            // if ( !res.ok )
+                // throw new Error( 'fetching ' + self.config.serviceUrl + ': ' + res.statusText )
+
+            return res.json() 
+            
+
+        } )
+
+        // return SMK.UTIL.makePromise( function ( res, rej ) {
+        //     $.ajax( {
+        //         url:        self.config.serviceUrl,
+        //         method:     'GET',
+        //         data:       data,
+        //         dataType:   'json',
+        //     } ).then( res, rej )
+        // } )
         .then( function ( data ) {
-            // console.log( data )
+        //     // console.log( data )
 
             if ( !data ) throw new Error( 'no features' )
             if ( !data.features || data.features.length == 0 ) throw new Error( 'no features' )
