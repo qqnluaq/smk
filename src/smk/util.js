@@ -878,6 +878,40 @@ rebuildSMKMAP: async function(mapConfig) {
         return content;
     },
 
+        //going to compare all the tools in the toolsArray against themselves, if they don't have duplicate they can be added to the filteredToolsArray
+        removeDuplicateTools: function ( toolsArray){
+            let filteredToolsArray = [];
+            //sometimes smk likes to duplicate tools, this way we can remove them
+            for (let tempTool in toolsArray){
+                let matchCount = 0;
+                for (let possibleDuplicateTool in toolsArray){
+                    if ( JSON.stringify(toolsArray[tempTool]) == JSON.stringify(toolsArray[possibleDuplicateTool]) ){
+                        
+                        // break on null tools, don't want to add them to our array
+                        if (toolsArray[possibleDuplicateTool] == null){
+                            break;
+                        }
+    
+                        matchCount = (matchCount + 1)
+                        // it's expected that match count will generally equal one for most tools as we're comparing it versus the same array (in fact it would be very weird if not everything hit one)
+                        // however if something hit's two that means there is a duplicate and we should add it and delete the duplicate
+                        if (matchCount == 2){
+                            filteredToolsArray.push(toolsArray[tempTool])
+                            toolsArray[possibleDuplicateTool] = null;
+                            break;
+                        }
+                    }
+    
+                    if (possibleDuplicateTool == toolsArray.length - 1){
+                        // we're in the last leg of the toolsArray, meaning we didn't find a match. Since we didn't find a match we should add this tool to the tools array
+                        filteredToolsArray.push(toolsArray[tempTool])
+                    }
+                }
+            }
+    
+            return filteredToolsArray
+        },
+
     // copy over the current values from smk into our json object holder
     copyFromsmk: function( jsonObjectHolder, smk) {
 
@@ -967,6 +1001,10 @@ rebuildSMKMAP: async function(mapConfig) {
         if ( jsonObjectHolder.hasOwnProperty("tools")  && smk.hasOwnProperty("tools")){
             //////console.log ("both have a tools property")
             jsonObjectHolder.tools = JSON.parse(JSON.stringify(smk.tools)); //
+
+            jsonObjectHolder.tools = SMK.UTIL.removeDuplicateTools(jsonObjectHolder.tools);
+
+
         }
         if ( jsonObjectHolder.hasOwnProperty("_id")  && smk.hasOwnProperty('_id')){
             //////console.log ("both have a _id property")
@@ -978,6 +1016,8 @@ rebuildSMKMAP: async function(mapConfig) {
         }
         return jsonObjectHolder
     },
+
+
 
 
     //jsonObjectHolder.tools[tool].display
