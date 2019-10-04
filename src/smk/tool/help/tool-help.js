@@ -17,7 +17,36 @@ include.module( 'tool-help',  [ 'tool', 'widgets', 'tool-help.panel-help-html'],
             return {
                 toolbar: SMK.MAP[1].$toolbar.model.tools,
                 defaultTools: [ "about", "baseMaps", "coordinate", "directions", "identify",  "layers", "location", "markup", "measure", "menu", "minimap","pan", "scale", "search", "version","zoom", "print", "sessionimport", "sessionexport", "label", "layerimport", "help"],
-                customTools: ["query--pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-QUERY_LYR--search-infestations"]
+                customTools: ["query--pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-QUERY_LYR--search-infestations"],
+                defaultToolWikiLinks: {
+                    "about": [true, "https://github.com/CEBergin/smk-client/wiki/USER---About-Tool"],
+                    "baseMaps": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Base-Maps"],
+                    "coordinate": [false, "No Wiki Link"],
+                    "directions": [false,"No Longer Supported"],
+                    "identify":[true,  "https://github.com/CEBergin/smk-client/wiki/USER---Identify-Tool"],
+                    "layers": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Layers"],
+                    "location": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Search-For-Location"] ,
+                    "markup": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Drawing-Tools"],
+                    "measure":[true, "https://github.com/CEBergin/smk-client/wiki/USER---Measurement-Tool"],
+                    "menu": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Overall-SMK-Functionality"],
+                    "minimap": [false,"It's in the bottom right hand corner. It's a mini-map."],
+                    "pan": [false,"No Wiki Link"],
+                    "scale": [false,"No Wiki Link"],
+                    "search": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Search-For-Location"],
+                    "version": [false,"No Wiki Link"],
+                    "zoom": [false,"No Wiki Link"],
+                    "print": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Print-Functionality"],
+                    "sessionimport":[true, "https://github.com/CEBergin/smk-client/wiki/USER---Session-Import-&-Session-Export"],
+                    "sessionexport":[true, "https://github.com/CEBergin/smk-client/wiki/USER---Session-Import-&-Session-Export"],
+                    "label":[true, "https://github.com/CEBergin/smk-client/wiki/USER-Label"],
+                    "layerimport": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Layer-Import"],
+                    "help": [false, "Wait, if you don't know how this works, how did you get here?"]
+
+                }
+
+
+
+
             }
           },
         methods: {

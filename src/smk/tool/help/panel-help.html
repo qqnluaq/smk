@@ -16,7 +16,13 @@
                 <div v-if="defaultTools.includes(tool.id)">
                     <details>
                             <summary> <i class="material-icons">{{ tool.widget.icon }}</i> <span class="smk-help-title">{{ tool.id }} </span> </summary>
-                            <div class="smk-item">   This will be a link to the wiki page on {{ tool.id }} </div>   
+
+                            <div class="smk-item" v-if="defaultToolWikiLinks[tool.id][0]">
+                                
+                            <a :href="defaultToolWikiLinks[tool.id][1]">{{ defaultToolWikiLinks[tool.id][1] }}</a>     
+                            </div>
+
+                            <div class="smk-item" v-else>   {{ defaultToolWikiLinks[tool.id]}}  </div>   
                     </details>
                 </div>
                 <div v-else>
