@@ -10,7 +10,7 @@ include.module( 'feature-list', [ 'tool', 'widgets', 'sidepanel',
     Vue.component( 'feature-list-panel', {
         extends: inc.widgets.toolPanel,
         template: inc[ 'feature-list.panel-feature-list-html' ],
-        props: [ 'layers', 'highlightId', 'canRemove', 'canClear', 'command', 'showSwipe' ],
+        props: [ 'layers', 'highlightId', 'canRemove', 'canClear' ],
         computed: {
             featureCount: {
                 get: function () {
@@ -29,7 +29,8 @@ include.module( 'feature-list', [ 'tool', 'widgets', 'sidepanel',
             },
             formatValue: function ( val ) {
                 if ( /^https?[:][/]{2}[^/]/.test( ( '' + val ).trim() ) ) {
-                    return '<a href="'+ val + '" target="_blank">' + val + '</a>'
+                    //return '<a href="'+ val + '" target="_blank">' + val + '</a>'
+                    return '<a href="'+ val + '" target="_blank">' + 'Click to Open' + '</a>'
                 }
 
                 return val
@@ -62,7 +63,6 @@ include.module( 'feature-list', [ 'tool', 'widgets', 'sidepanel',
     function FeatureList( option ) {
         this.makePropPanel( 'layers', [] )
         this.makePropPanel( 'highlightId', null )
-        this.makePropPanel( 'command', {} )
 
         SMK.TYPE.PanelTool.prototype.constructor.call( this, $.extend( {
             debugView: false
@@ -93,16 +93,7 @@ include.module( 'feature-list', [ 'tool', 'widgets', 'sidepanel',
 
             'remove': function ( ev ) {
                 self.featureSet.remove( [ ev.featureId ] )
-            },
-
-            'swipe-up': function ( ev ) {
-                console.log( 'swipe-up' )
-            },
-
-            'swipe-down': function ( ev ) {
-                console.log( 'swipe-down' )
             }
-
         } )
 
         // = : = : = : = : = : = : = : = : = : = : = : = : = : = : = : = : = : = : =
@@ -150,7 +141,7 @@ include.module( 'feature-list', [ 'tool', 'widgets', 'sidepanel',
     Vue.component( 'feature-panel', {
         extends: inc.widgets.toolPanel,
         template: inc[ 'feature-list.panel-feature-html' ],
-        props: [ 'feature', 'layer', 'attributeComponent', 'tool', 'resultPosition', 'resultCount', 'instance', 'command' ],
+        props: [ 'feature', 'layer', 'attributeComponent', 'tool', 'resultPosition', 'resultCount', 'instance' ],
         data: function () {
             return {
                 'attributeView': 'default'
@@ -167,7 +158,6 @@ include.module( 'feature-list', [ 'tool', 'widgets', 'sidepanel',
         this.makePropPanel( 'resultCount', null )
         this.makePropPanel( 'instance', null )
         this.makePropPanel( 'attributeView', 'default' )
-        this.makePropPanel( 'command', {} )
 
         SMK.TYPE.Tool.prototype.constructor.call( this, $.extend( {
             // debugView: false
