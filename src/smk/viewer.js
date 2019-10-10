@@ -464,11 +464,11 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
                 } )
                 .then( function ( features ) {
                     features.forEach( function ( f, i ) {
-                        if ( ly.config.titleAttribute ) {
-                            var m = ly.config.titleAttribute.match( /^(.+?)(:[/](.+)[/])?$/ )
+                        if ( ly.config.attributes[0].id ) {
+                            var m = ly.config.attributes[0].id.match( /^(.+?)(:[/](.+)[/])?$/ )
                             if ( m ) {
                                 if ( !m[ 2 ] )
-                                    f.title = f.properties[ m[ 1 ] ]
+                                    f.title = ly.config.attributes[0].title+": "+f.properties[ m[ 1 ] ]
                                 else
                                     try {
                                         f.title = f.properties[ m[ 1 ] ].match( new RegExp( m[ 3 ] ) )[ 1 ]
