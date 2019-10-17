@@ -16,7 +16,7 @@ include.module( 'tool-help',  [ 'tool', 'widgets', 'tool-help.panel-help-html'],
         data: function() {
             return {
                 toolbar: SMK.MAP[1].$toolbar.model.tools,
-                defaultTools: [ "about", "baseMaps", "coordinate", "directions", "identify",  "layers", "location", "markup", "measure", "menu", "minimap","pan", "scale", "search", "version","zoom", "print", "sessionimport", "sessionexport", "label", "layerimport", "help"],
+                defaultTools: [ "about", "baseMaps", "coordinate", "directions", "identify",  "layers", "location", "markup", "measure", "menu", "minimap","pan", "scale", "search", "version","zoom", "print", "sessionimport", "sessionexport", "label", "layerimport", "help", "mapimageexport"],
                 customTools: ["query--pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-QUERY_LYR--search-infestations"],
                 defaultToolWikiLinks: {
                     "about": [true, "https://github.com/CEBergin/smk-client/wiki/USER---About-Tool"],
@@ -40,7 +40,8 @@ include.module( 'tool-help',  [ 'tool', 'widgets', 'tool-help.panel-help-html'],
                     "sessionexport":[true, "https://github.com/CEBergin/smk-client/wiki/USER---Session-Import-&-Session-Export"],
                     "label":[true, "https://github.com/CEBergin/smk-client/wiki/USER-Label"],
                     "layerimport": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Layer-Import"],
-                    "help": [false, "Wait, if you don't know how this works, how did you get here?"]
+                    "help": [false, "Wait, if you don't know how this works, how did you get here?"],
+                    "mapimageexport": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Map-Image-Export"]
 
                 }
 

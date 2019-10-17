@@ -176,6 +176,12 @@ t.group( 'tool-layerimport' )
 t.group( 'tool-help' )
     .dir( 'smk/tool/help/*' )
 
+t.group( 'tool-zoomto' )
+    .dir( 'smk/tool/zoomto/*' )
+
+    t.group( 'tool-mapimageexport' )
+    .dir( 'smk/tool/mapimageexport/*' )
+
 // ==================================================================================
 // leaflet
 // ==================================================================================

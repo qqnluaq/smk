@@ -13,33 +13,44 @@ include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html
         extends: inc.widgets.toolPanel,
         template: inc[ 'tool-print.panel-print-html' ],
         props: [ 'content' ],
+        data: function() {
+            return {
+                modeToUse: L.control.browserPrint.mode.auto(), 
+                printID: "Auto",
+            }
+          },
         methods: {
 
         print: function  ( event ) {
 
-            let id = event.srcElement.id;
-            let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
-            let modeToUse;
-           
-            switch(id) {
-                case "auto":
-                    modeToUse = L.control.browserPrint.mode.auto();
-                    map.printControl.print(modeToUse);
+            this.printID = event.srcElement.id;
+
+            switch(this.printID) {
+                case "Auto":
+                    this.modeToUse = L.control.browserPrint.mode.auto();
                     break;
-                case "landscape":
-                    modeToUse = L.control.browserPrint.mode.landscape();
-                    map.printControl.print(modeToUse);
+                case "Landscape":
+                    this.modeToUse = L.control.browserPrint.mode.landscape();
                     break;
-                case "portrait":
-                    modeToUse = L.control.browserPrint.mode.portrait();
-                    map.printControl.print(modeToUse);
+                case "Portrait":
+                    this.modeToUse = L.control.browserPrint.mode.portrait();
                     break;
-                case "defaultPrint":
+                case "DefaultPrint":
                     preparePrint();
+                    break;
+                case "Custom":
+                    this.modeToUse = L.control.browserPrint.mode.custom();
+                    changeCursorToPrintSelector();
                     break;
                 default:
                     console.log("These are buttons, do I really need a default case? May as well.");
               } 
+        },
+
+        printOK: function ( event ){
+
+            let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
+            map.printControl.print(this.modeToUse);
         }
 
         }
@@ -103,6 +114,18 @@ include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html
     }
 
 
+
+    function changeCursorToPrintSelector(){
+
+        let browserPrint = document.getElementsByClassName("leaflet-control-browser-print leaflet-bar leaflet-control");
+        console.log(browserPrint);
+        let customButtom =browserPrint[0].childNodes[5].childNodes[0];
+        console.log(customButtom);
+        customButtom.click()
+
+    }
+
+
     SMK.TYPE.PrintTool = PrintTool
 
     $.extend( PrintTool.prototype, SMK.TYPE.Tool.prototype )
@@ -124,10 +147,10 @@ include.module( 'tool-print',  [ 'tool', 'widgets', 'tool-print.panel-print-html
                     title: 'Forest Health',
                     closePopupsOnPrint: false,
                     printModes: [
-                        L.control.browserPrint.mode.landscape("TABLOID VIEW", "tabloid"),
+                        L.control.browserPrint.mode.landscape("TABLOID VIEW", "Letter"),
                         "Portrait",
-                        L.control.browserPrint.mode.auto("Automatico", "B4"),
-                        L.control.browserPrint.mode.custom("Séléctionnez la zone", "B5")
+                        L.control.browserPrint.mode.auto("Automatic", "Letter"),
+                        L.control.browserPrint.mode.custom("Select a Zone", "Letter")
                     ],
                     manualMode: false
                 }).addTo(map);

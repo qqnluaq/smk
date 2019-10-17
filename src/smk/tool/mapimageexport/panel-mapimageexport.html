@@ -1,0 +1,73 @@
+<side-panel class="smk-mapimageexport-panel" v-bind:showHeader="false">
+    <div class="smk-mapimageexport-description" v-html="content"></div>
+
+    <div>
+        <ul class="nobullets">
+            <li class="mapimageexportListItem">
+                <span class="smk-mapimageexport-desc">Choose your export format:</span>
+                <select v-model="mapimageexportID">
+                    <option disabled value="">Please select one</option>
+                    <option>PDF</option>
+                    <option>PNG8</option>
+                    <option>PNG32</option>
+                    <option>JPG</option>
+                    <option>GIF</option>
+                    <option>EPS</option>
+                    <option>SVG</option>
+                    <option>SVGZ</option>
+                  </select>
+            </li>
+
+            <li class="mapimageexportListItem">
+                <span class="smk-mapimageexport-desc">Choose your layout template</span>
+                <select v-model="mapTemplate">
+                    <option disabled value="">Please select one</option>
+                    <!--<option>A Landscape</option>
+                    <option>A Portrait</option>
+                    <option>A3 Landscape</option>
+                    <option>A3 Portrait</option>
+                    <option>A4 Landscape</option>
+                    <option>A4 Portrait</option>
+                    <option>B Landscape</option>
+                    <option>B Portrait</option>
+                    <option>C Landscape</option>
+                    <option>C Portrait</option>
+                    <option>D Landscape</option>
+                    <option>D Portrait</option> -->
+                    <option>Letter ANSI A Landscape</option>
+                    <option>Letter ANSI A Portrait</option>
+                    <option>Tabloid ANSI B Landscape</option>
+                    <option>Tabloid ANSI B Portrait</option>
+                    <option>MAP_ONLY</option>
+                  </select>
+                
+            </li>
+            
+            <li class="mapimageexportListItem">
+                <span class="smk-mapimageexport-desc">Choose your image size:</span>
+                <input v:model="resolution[0]" type="number" value="1950">
+                <input v:model="resolution[1]" type="number" value="1080">
+            </li>
+
+            <li class="mapimageexportListItem">
+                <span class="smk-mapimageexport-desc">Choose your image DPI:</span>
+                <input v:model="dpi" type="number" value="300" min=1 max=3000>
+            </li>
+
+
+        </ul>
+    </div>
+
+    <div class="smk-mapimageexport-submit" v-if="imageFetching">Loading...</div>
+    <div  v-else class="smk-mapimageexport-submit">
+        <button v-on:click="mapimageexportOK"  id="OK" class="smk-mapimageexport-submit-button">Export Map Image</button>
+    </div>
+    
+    <div class="smk-mapimageexport-dl" v-if="downloadLinkAvailable"><a v-bind:href="downloadLink">{{downloadLink}}</a></div>
+    <div  v-else class="smk-mapimageexport-dl"></div>
+
+    <div class="smk-mapimageexport-dl" v-if="downloadLinkAvailableError">{{downloadLinkError}}</div>
+    <div  v-else class="smk-mapimageexport-dl"></div>
+    
+
+</side-panel>
