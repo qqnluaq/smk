@@ -1,6 +1,7 @@
 include.module( 'tool-zoomto', [ 'tool', 'widgets', 'tool-zoomto.panel-zoomto-html', 'togeojson', 'proj4' ], function ( inc ) {
     "use strict";
 
+    /* jshint -W040 */
 
     Vue.component( 'zoomto-widget', {
         extends: inc.widgets.toolButton,

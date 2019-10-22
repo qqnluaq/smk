@@ -1,9 +1,5 @@
 
 
-  .smk-help-panel .smk-header {
-    white-space: nowrap;
-  }
-  
   .smk-help-panel .smk-item {
     font-size: 14px;
   }
@@ -36,12 +32,20 @@
   text-transform: capitalize;
 }
 
-  .smk-helpimport-panel .smk-folder .smk-folder-expand:hover {
+.smk-helpimport-panel .smk-folder .smk-folder-expand:hover {
     border: 1px solid transparent;
-  }
+}
 
   p {
     
     text-align: left;
     margin: 1em;
   }
+
+  .smk-mapimagexport-numberinput{
+    width: 20%;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+
+  }
+

@@ -2,9 +2,7 @@ include.module( 'tool-help',  [ 'tool', 'widgets', 'tool-help.panel-help-html'],
     "use strict";
 
     
-
-    let pressed = false;
-
+    /* jshint -W040 */
     Vue.component( 'help-widget', {
         extends: inc.widgets.toolButton,
     } )
@@ -15,8 +13,8 @@ include.module( 'tool-help',  [ 'tool', 'widgets', 'tool-help.panel-help-html'],
         props: [ 'content' ],
         data: function() {
             return {
-                toolbar: SMK.MAP[1].$toolbar.model.tools,
-                defaultTools: [ "about", "baseMaps", "coordinate", "directions", "identify",  "layers", "location", "markup", "measure", "menu", "minimap","pan", "scale", "search", "version","zoom", "print", "sessionimport", "sessionexport", "label", "layerimport", "help", "mapimageexport"],
+                tools: SMK.MAP[1].tools,
+                defaultTools: [ "about", "baseMaps", "coordinate", "directions", "identify",  "layers", "location", "markup", "measure", "menu", "minimap","pan", "scale", "search", "version","zoom", "print", "sessionimport", "sessionexport", "label", "layerimport", "help", "mapimageexport", "zoomto", "list-menu"],
                 customTools: ["query--pub:WHSE_FOREST_VEGETATION.PEST_INFESTATION_POLY-QUERY_LYR--search-infestations"],
                 defaultToolWikiLinks: {
                     "about": [true, "https://github.com/CEBergin/smk-client/wiki/USER---About-Tool"],
@@ -41,7 +39,9 @@ include.module( 'tool-help',  [ 'tool', 'widgets', 'tool-help.panel-help-html'],
                     "label":[true, "https://github.com/CEBergin/smk-client/wiki/USER-Label"],
                     "layerimport": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Layer-Import"],
                     "help": [false, "Wait, if you don't know how this works, how did you get here?"],
-                    "mapimageexport": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Map-Image-Export"]
+                    "mapimageexport": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Map-Image-Export"],
+                    "list-menu": [false, "It's the dropdown menu that contain sub menus."],
+                    "zoomto": [true, "https://github.com/CEBergin/smk-client/wiki/USER---Zoom-To"]
 
                 }
 

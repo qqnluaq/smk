@@ -1,4 +1,4 @@
-<side-panel class="smk-layers-panel" 
+<side-panel class="smk-layers-panel"
     v-bind:busy="busy"
     v-bind:message="busy ? 'Loading data' : ( !items || items.length == 0 ) ? 'No layers are configured' : ''"
     v-bind:status="busy ? 'progress' : ( !items || items.length == 0 ) ? 'warning' : ''"
@@ -7,10 +7,10 @@
         <i class="smk-all-visibility material-icons smk-command smk-icon"
             v-bind:title="'Toggle visibility of all layers.\nSHIFT-click to toggle visibility on each layer.'"
             v-on:click="$$emit( 'set-all-layers-visible', { visible: !allVisible, deep: $event.shiftKey } )"
-        >{{ allVisible ? 'visibility' : 'visibility_off' }}</i>
+        >{{ allVisible ? 'check_box' : 'check_box_outline_blank' }}</i>
 
-        <input class="smk-filter" placeholder="Filter layers" 
-            v-model="filter" 
+        <input class="smk-filter" placeholder="Filter layers"
+            v-model="filter"
             v-on:input="$$emit( 'config', getConfigState() )"
         >
 
@@ -20,8 +20,8 @@
             v-on:change="!busy && $$emit( 'config', getConfigState() )"
         >Legend</label>
     </template>
-    
-    <layer-display 
+
+    <layer-display
         v-bind:items="items"
         id="layers"
     ></layer-display>

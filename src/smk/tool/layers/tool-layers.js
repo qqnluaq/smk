@@ -9,13 +9,6 @@ include.module( 'tool-layers', [ 'tool', 'widgets', 'tool-layers.panel-layers-ht
         template: inc[ 'tool-layers.layer-display-html' ],
         props: [ 'id', 'items' ],
         mixins: [ inc.widgets.emit ],
-        data: function() {
-            return {
-                zoom: SMK.MAP[1].$viewer.map._zoom
-            }
-          },
-
-    
     } )
 
     Vue.component( 'layers-panel', {
@@ -83,8 +76,6 @@ include.module( 'tool-layers', [ 'tool', 'widgets', 'tool-layers.panel-layers-ht
                 if ( !self.enabled ) return
 
                 self.active = !self.active
-
-                
             },
 
             'config': function ( ev ) {

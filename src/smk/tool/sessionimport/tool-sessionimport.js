@@ -1,25 +1,28 @@
+/* jshint esversion: 9 */
 include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.panel-sessionimport-html' ], function ( inc ) {
     "use strict";
     
+    /* jshint -W040 */
+
     // used to store data passed in from importing
-    var jsonOfSMKData = null
+    var jsonOfSMKData = null;
 
     Vue.component( 'sessionimport-widget', {
         extends: inc.widgets.toolButton,
-    } )
+    } );
 
     Vue.component( 'sessionimport-panel', {
         extends: inc.widgets.toolPanel,
         template: inc[ 'tool-sessionimport.panel-sessionimport-html' ],
         props: [ 'content' ]
-    } )
+    } );
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     function sessionimportTool( option ) {
         
-        this.makePropWidget( 'icon', null ) //'help' )
+        this.makePropWidget( 'icon', null ); //'help' )
 
-        this.makePropPanel( 'content', null )
+        this.makePropPanel( 'content', null );
 
         SMK.TYPE.Tool.prototype.constructor.call( this, $.extend( {
             widgetComponent:'sessionimport-widget',
@@ -27,7 +30,7 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
             // title:          'sessionimport SMK',
             // position:       'menu'
             content:        null
-        }, option ) )
+        }, option ) );
     }
 
 
@@ -78,14 +81,14 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
             let center = backupJSONSMKDATA.viewer.location.center;
             SMK.MAP[1].$viewer.currentBasemap[0]._map.setView(new L.LatLng(center[1], center[0]), zoom);
 
-            }   else {  console.log("esri import support not yet implemented")  }
+            }   else {  console.log("esri import support not yet implemented");  }
     }
 
 
-    SMK.TYPE.sessionimportTool = sessionimportTool
+    SMK.TYPE.sessionimportTool = sessionimportTool;
 
-    $.extend( sessionimportTool.prototype, SMK.TYPE.Tool.prototype )
-    sessionimportTool.prototype.afterInitialize = []
+    $.extend( sessionimportTool.prototype, SMK.TYPE.Tool.prototype );
+    sessionimportTool.prototype.afterInitialize = [];
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     sessionimportTool.prototype.afterInitialize.push( function ( smk ) {
@@ -109,15 +112,15 @@ include.module( 'tool-sessionimport', [ 'tool', 'widgets', 'tool-sessionimport.p
 
 
                     }
-                }
+                };
             
-            }
+            };
             input.click();
 
             }
-        } )
+        } );
 
-    } )
+    } );
 
-    return sessionimportTool
-} )
+    return sessionimportTool;
+} );

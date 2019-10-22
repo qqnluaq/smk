@@ -19,7 +19,7 @@
             </li>
 
             <li class="mapimageexportListItem">
-                <span class="smk-mapimageexport-desc">Choose your layout template</span>
+                <span class="smk-mapimageexport-desc">Choose your layout template:</span>
                 <select v-model="mapTemplate">
                     <option disabled value="">Please select one</option>
                     <!--<option>A Landscape</option>
@@ -45,8 +45,8 @@
             
             <li class="mapimageexportListItem">
                 <span class="smk-mapimageexport-desc">Choose your image size:</span>
-                <input v:model="resolution[0]" type="number" value="1950">
-                <input v:model="resolution[1]" type="number" value="1080">
+                <input class="smk-mapimagexport-numberinput" v:model="resolution[0]" type="number" value="1950">
+                <input class="smk-mapimagexport-numberinput" v:model="resolution[1]" type="number" value="1080">
             </li>
 
             <li class="mapimageexportListItem">
@@ -58,16 +58,26 @@
         </ul>
     </div>
 
-    <div class="smk-mapimageexport-submit" v-if="imageFetching">Loading...</div>
-    <div  v-else class="smk-mapimageexport-submit">
-        <button v-on:click="mapimageexportOK"  id="OK" class="smk-mapimageexport-submit-button">Export Map Image</button>
-    </div>
-    
-    <div class="smk-mapimageexport-dl" v-if="downloadLinkAvailable"><a v-bind:href="downloadLink">{{downloadLink}}</a></div>
-    <div  v-else class="smk-mapimageexport-dl"></div>
+    <div class="smk-mapimageexport-download-submit">
 
-    <div class="smk-mapimageexport-dl" v-if="downloadLinkAvailableError">{{downloadLinkError}}</div>
-    <div  v-else class="smk-mapimageexport-dl"></div>
+
+        <div class="smk-mapimageexport-dl" v-if="downloadLinkAvailable">
+            <button class="smk-mapimageexport-download-button"><a  class="smk-mapimageexport-href" v-bind:href="downloadLink" download>Download</a></button>
+        </div>
+        <div  v-else class="smk-mapimageexport-dl"></div>
+        
+        <div class="smk-mapimageexport-dl" v-if="downloadLinkAvailableError">{{downloadLinkError}}</div>
+        <div  v-else class="smk-mapimageexport-dl"></div>
+
+
+
+        <div class="smk-mapimageexport-submit" v-if="imageFetching">Loading...</div>
+        <div  v-else class="smk-mapimageexport-submit">
+            <button v-on:click="mapimageexportOK"  id="OK" class="smk-mapimageexport-submit-button">Export Map Image</button>
+        </div>
+        
+        
+    </div>
     
 
 </side-panel>

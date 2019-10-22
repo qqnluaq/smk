@@ -4,9 +4,9 @@
         v-if="item.inFilter"
     >
         <div class="smk-item"
-            v-bind:class="{ 
+            v-bind:class="{
                 'smk-visible': item.isVisible,
-                'smk-expanded': item.isExpanded, 
+                'smk-expanded': item.isExpanded,
                 'smk-disabled': !item.isEnabled,
                 'smk-obscured': !item.isActuallyVisible
             }"
@@ -20,20 +20,14 @@
             <i class="smk-visibility material-icons smk-command smk-icon"
                 v-bind:title="'Toggle visibility of \'' + item.title + '\'' + ( item.type == 'folder' ? '\nSHIFT-click to toggle visibility on internal layers.' : '' ) "
                 v-on:click="$$emit( 'set-item-visible', { id: item.id, visible: !item.isVisible, deep: $event.shiftKey } )"
-            >{{ item.isVisible && item.isEnabled ? 'visibility' : 'visibility_off' }}</i>
+            >{{ item.isVisible && item.isEnabled ? 'check_box' : 'check_box_outline_blank' }}</i>
 
-
-
-
-            <span v-if="item.minScale !==undefined" class="smk-layer-title"
+            <span class="smk-layer-title"
                 v-bind:title="'ID: ' + ( item.id )"
-            >{{ item.title }}  <span class ="smk-layer-scale">[Visible if scale is below 1:{{ item.minScale }}]</span>  </span>
-            <span v-else class="smk-layer-title"
-                v-bind:title="'ID: ' + ( item.id )"
-            >{{ item.title }}   </span>
+            >{{ item.title }}</span>
         </div>
 
-        <div class="smk-legend" 
+        <div class="smk-legend"
             v-if="item.showLegend && item.legends && item.isActuallyVisible"
         >
             <span v-if="item.showLegend == 'waiting'">Requesting</span>
@@ -43,6 +37,7 @@
                 <span>{{ legend.title }}</span>
             </div>
         </div>
+
         <layer-display
             v-if="item.isExpanded"
             v-bind:items="item.items"

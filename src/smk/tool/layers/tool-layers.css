@@ -23,9 +23,6 @@
     outline: 0;
 }
 
-
-
-
 .smk-layers-panel .smk-all-visibility {
     padding: 0;
 }
@@ -86,10 +83,4 @@
 
 .smk-layers-panel .smk-folder .smk-folder-expand:hover {
     border: 1px solid transparent;
-}
-
-.smk-layers-panel .smk-layer-scale {
-    padding-left: 5px;
-   
-
 }

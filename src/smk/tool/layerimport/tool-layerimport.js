@@ -1,12 +1,20 @@
+/*jshint esversion: 9 */
+
 include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel-layerimport-html', 'togeojson' ], function ( inc ) {
     "use strict";
 
-    // global variable for keeping track of how often multiPointCollections have activatied
-    var multiPointCollectionCounter = 0;
+    /* jshint -W083 */
+    /* jshint -W067 */
+    /* jshint -W040 */
+    /* jshint -W016 */
+    /* jshint -W117 */
+    /* jshint -W020 */
+
+   
 
     Vue.component( 'layerimport-widget', {
         extends: inc.widgets.toolButton,
-    } )
+    } );
 
     Vue.component( 'layerimport-panel', {
         extends: inc.widgets.toolPanel,
@@ -18,8 +26,8 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 service: '',
                 WMSURL: 'https://openmaps.gov.bc.ca/geo/pub/ows',
                 //WMSURL: 'https://openmaps.gov.bc.ca/geo/pub/REG_LEGAL_AND_ADMIN_BOUNDARIES.QSOI_BC_REGIONS/ows?service=WMS&request=GetCapabilities',
-                ESRIURL: 'https://apps.gov.bc.ca/pub/mpcm/services/catalog/PROD/',
-                //ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/test/test/',
+                //ESRIURL: 'https://apps.gov.bc.ca/pub/mpcm/services/catalog/PROD/',
+                ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/test/test/',
                 //ESRIURL: 'http://localhost:8080/smks-api/LayerLibrary/',
                 //ESRIURL: 'http://vivid-w130a.vividsolutions.com:8080/smks-api/LayerLibrary/test/test/',
                 KMLURL: 'https://openmaps.gov.bc.ca/kml/geo/layers/WHSE_IMAGERY_AND_BASE_MAPS.AIMG_HIST_INDEX_MAPS_POINT_loader.kml',
@@ -60,7 +68,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 geoJSONfileValue: null,
                 geoJSONFileUploadSuccess: false
                 
-            }
+            };
           },
           methods: {
 
@@ -180,13 +188,13 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 }
                 
                 if (!isObjectPresent){
-                    let jsonLayerObject = '{ "layerName": "", "styleName": "", "styleTitle": "", "layerObject": "" }'
+                    let jsonLayerObject = '{ "layerName": "", "styleName": "", "styleTitle": "", "layerObject": "" }';
                     jsonLayerObject = JSON.parse(jsonLayerObject);
 
                     jsonLayerObject.layerName = layerName;
                     jsonLayerObject.styleName = styleName;
                     jsonLayerObject.styleTitle = styleTitle;
-                    jsonLayerObject.layerObject = layerObject
+                    jsonLayerObject.layerObject = layerObject;
 
                     // otherwise this must be a check and we're adding this element to the array
                     this.checkedLayersWMS.push(jsonLayerObject);
@@ -209,8 +217,8 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     this.transferFileNumber = jsonLayerInfoFromCheck;
 
                     let layerName = this.checkedLayersWMS[jsonLayerInfoFromCheck].layerName;
-                    let styleName = this.checkedLayersWMS[jsonLayerInfoFromCheck].styleName
-                    let layerObject = this.checkedLayersWMS[jsonLayerInfoFromCheck].layerObject
+                    let styleName = this.checkedLayersWMS[jsonLayerInfoFromCheck].styleName;
+                    let layerObject = this.checkedLayersWMS[jsonLayerInfoFromCheck].layerObject;
                     
     
                     
@@ -266,7 +274,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                         
                         let attributeTitle = propertyID;
                         attributeTitle = attributeTitle.replace(/_/g, " ");
-                        jsonAttribute.title = attributeTitle
+                        jsonAttribute.title = attributeTitle;
 
                         jsonLayerInfo.attributes.push(jsonAttribute);
                     }
@@ -440,20 +448,20 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                             
                             
                         };
-                        this.geoJSONfileValue = event.target.files[file].name
+                        this.geoJSONfileValue = event.target.files[file].name;
                         reader.readAsText(event.target.files[file]);
                 }
                 }
             }
           }
-    } )
+    } );
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     function layerimportTool( option ) {
         
-        this.makePropWidget( 'icon', null ) //'help' )
+        this.makePropWidget( 'icon', null ); 
 
-        this.makePropPanel( 'content', null )
+        this.makePropPanel( 'content', null );
 
         SMK.TYPE.Tool.prototype.constructor.call( this, $.extend( {
             widgetComponent:'layerimport-widget',
@@ -462,7 +470,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
             // position:       'menu'
             content:        null
             
-        }, option ) )
+        }, option ) );
 
     }
 
@@ -507,7 +515,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                         if ( propertyNodes == "0" || propertyNodes == "1" || propertyNodes == "2"){
                             let elementKey = esriXML.childNodes[0].childNodes[childNode].childNodes[propertyNodes].getElementsByTagName("key");
                             if (elementKey[0].childNodes[0].textContent == "metadata.url"){
-                                let elementValue = esriXML.childNodes[0].childNodes[childNode].childNodes[propertyNodes].getElementsByTagName("value")
+                                let elementValue = esriXML.childNodes[0].childNodes[childNode].childNodes[propertyNodes].getElementsByTagName("value");
                                 jsonLayerInfo.metadataUrl = elementValue[0].childNodes[0].textContent;
                             }  
                         }
@@ -515,7 +523,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     break;
                 case "fields":
                     ///aka attributes
-                    console.log("Still need to do field handling")
+                    console.log("Still need to do field handling");
                     // need to loop over each attribute folder
                     for (let fieldNodes in esriXML.childNodes[0].childNodes[childNode].childNodes){
                         if(!isNaN(fieldNodes)){
@@ -531,7 +539,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
                             jsonAttribute.id = fieldName;
                             jsonAttribute.name = fieldName;
-                            jsonAttribute.title  = fieldAlias
+                            jsonAttribute.title  = fieldAlias;
                             
                             jsonLayerInfo.attributes.push(jsonAttribute);
 
@@ -732,11 +740,11 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                             }
                         }
                     }
-                    styleNo++;
+                    styleNo = (styleNo + 1);
                 }
                 
                 // this JSON object will contain the name of the layer and the array of JSON object styles belonging to that layer
-                let nameAndStyleJSON = '{ "layerName": null, "layerTitle": null, "stylesArr": null    }'
+                let nameAndStyleJSON = '{ "layerName": null, "layerTitle": null, "stylesArr": null    }';
                 nameAndStyleJSON = JSON.parse(nameAndStyleJSON);
                 nameAndStyleJSON.layerName = item.getElementsByTagName("Name")[0].childNodes[0].nodeValue;
                 nameAndStyleJSON.layerTitle = item.getElementsByTagName("Title")[0].childNodes[0].nodeValue;
@@ -861,7 +869,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     layer.setLabel(name);
 
                     parent.setSubLayers(layer);
-                    id++;
+                    id = (id + 1);
 
                     // Each root node folder may have layer and/or folders within
                     // we'll need to add each of them here.
@@ -869,7 +877,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     let subfolderElement = folder.getElementsByTagName("folders").item(0);
 
                     if(subfolderElement != null) {
-                        subfoldersNodes = subfolderElement.childNodes;
+                        let subfolderNodes = subfolderElement.childNodes;
                         id = processFolders(subfolderNodes, layer, id);
                     }
 
@@ -904,12 +912,12 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                     layer.setLabel(layerElement.getElementsByTagName("layerDisplayName").item(0).textContent);
                     
                     parent.setSubLayers(layer);
-                    id++;
+                    id = (id + 1);
             	}
 
             }
         }
-        return id
+        return id;
     }
 
     //returns a json structure from the esri xml document
@@ -943,7 +951,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
                 rootLayer.setLabel(folder.getElementsByTagName("folderName").item(0).textContent);
 
                 jSONDataArr.push(rootLayer);
-                itemId++;
+                itemId = (itemId + 1);
 
                 let subfolderElement = folder.getElementsByTagName("folders").item(0);
                 if (subfolderElement != null) {
@@ -965,7 +973,7 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
         }
 
-        return jSONDataArr
+        return jSONDataArr;
 
     }
 
@@ -984,27 +992,27 @@ include.module( 'tool-layerimport', [ 'tool', 'widgets', 'tool-layerimport.panel
 
     }
     
-    SMK.TYPE.layerimportTool = layerimportTool
+    SMK.TYPE.layerimportTool = layerimportTool;
 
-    $.extend( layerimportTool.prototype, SMK.TYPE.Tool.prototype )
-    layerimportTool.prototype.afterInitialize = []
+    $.extend( layerimportTool.prototype, SMK.TYPE.Tool.prototype );
+    layerimportTool.prototype.afterInitialize = [];
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     layerimportTool.prototype.afterInitialize.push( function ( smk ) {
-        var self = this
+        var self = this;
         
         smk.on( this.id, {
             'activate': function () {
           
-                if ( !self.enabled ) return
+                if ( !self.enabled ) return;
         
-                self.active = !self.active
+                self.active = !self.active;
                 
             }
 
-        } )
+        } );
 
-    } )
+    } );
 
-    return layerimportTool
-} )
+    return layerimportTool;
+} );

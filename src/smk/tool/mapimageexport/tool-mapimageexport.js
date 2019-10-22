@@ -1,13 +1,14 @@
+/* jshint esversion: 9 */
 include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexport.panel-mapimageexport-html', 'proj4' ], function ( inc ) {
     "use strict";
 
-    
+    /* jshint -W040 */
 
     let pressed = false;
 
     Vue.component( 'mapimageexport-widget', {
         extends: inc.widgets.toolButton,
-    } )
+    } );
 
     Vue.component( 'mapimageexport-panel', {
         extends: inc.widgets.toolPanel,
@@ -24,7 +25,7 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
                 downloadLinkError: null,
                 resolution: [1950, 1080],
                 dpi: 300,
-            }
+            };
           },
         methods: {
 
@@ -60,14 +61,14 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
         }
 
         }
-    } )
+    } );
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     function mapimageexportTool( option ) {
         
-        this.makePropWidget( 'icon', null ) //'help' )
+        this.makePropWidget( 'icon', null ); //'help' )
 
-        this.makePropPanel( 'content', null )
+        this.makePropPanel( 'content', null );
 
         SMK.TYPE.Tool.prototype.constructor.call( this, $.extend( {
             widgetComponent:'mapimageexport-widget',
@@ -76,7 +77,7 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
             // position:       'menu'
             content:        null
             
-        }, option ) )
+        }, option ) );
 
     }
   
@@ -86,7 +87,7 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
     async function prepareImageDownload ( fileType, template, dpi, resolution){
 
         let map = SMK.MAP[1].$viewer.currentBasemap[0]._map;
-        let jsonLayersMapRequestFormat
+        let jsonLayersMapRequestFormat;
         // get the current map-config by calling util to get the map-config as json
 
         //calculate the extent // needs calculating
@@ -100,9 +101,9 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
         console.log(xmin, ymin, xmax, ymax, scale);
 
         //get the basemap 
-        let baseMapUrl = getCurrentBaseMapUrl()
+        let baseMapUrl = getCurrentBaseMapUrl();
 
-        let baseMapTitle = "Base Map"
+        let baseMapTitle = "Base Map";
         let baseMapLayers = [];
         baseMapLayers.push( { "url": baseMapUrl});
 
@@ -159,24 +160,24 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
                ]
            }
         }
-     }
+     };
 
      for (let layer in jsonLayersMapRequestFormat){
-        jsonShell.operationalLayers.push(jsonLayersMapRequestFormat[layer])
+        jsonShell.operationalLayers.push(jsonLayersMapRequestFormat[layer]);
      }
      
 
      // now that the shell is completed, a request can be sent
-     let responseFile = await sendExportWebMapRequest(jsonShell, fileType, template)
+     let responseFile = await sendExportWebMapRequest(jsonShell, fileType, template);
 
     
 
-     return responseFile
+     return responseFile;
     }
 
 
     function getScale(){
-        let zoom = Math.round(SMK.MAP[1].$viewer.map.getZoom())
+        let zoom = Math.round(SMK.MAP[1].$viewer.map.getZoom());
         let scale;
         if (zoom > 1){
             //I've been finding the exact zoom level is usually closer than you would expect
@@ -243,7 +244,7 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
         let longlat = "+proj=longlat +datum=WGS84 +no_defs ";
         let albers = ("+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45 +lon_0=-126 +x_0=1000000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs ");
 
-        let bounds = SMK.MAP[1].$viewer.map.getBounds()
+        let bounds = SMK.MAP[1].$viewer.map.getBounds();
 
         let northEastLatLng = bounds._northEast;
         let southWestLatLng = bounds._southWest;
@@ -260,12 +261,12 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
         let convertedAlbersMin = (proj4(longlat, albers,[parseFloat(minXWestLng), parseFloat(minYSouthLat)]));
 
 
-        console.log(convertedAlbersMax)
-        console.log(convertedAlbersMin)
+        console.log(convertedAlbersMax);
+        console.log(convertedAlbersMin);
         
-        let convertedAlbers = { "maxX": convertedAlbersMax[0], "maxY": convertedAlbersMax[1], "minX": convertedAlbersMin[0], "minY": convertedAlbersMin[1]}
+        let convertedAlbers = { "maxX": convertedAlbersMax[0], "maxY": convertedAlbersMax[1], "minX": convertedAlbersMin[0], "minY": convertedAlbersMin[1]};
 
-        return convertedAlbers
+        return convertedAlbers;
     }
 
 
@@ -296,7 +297,7 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
          }
        
 
-        return baseMapUrl
+        return baseMapUrl;
 
     }
 
@@ -313,7 +314,7 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
         formData.append("f", "json");
 
         for (let formDataValue of formData.values()){
-            console.log(formDataValue)
+            console.log(formDataValue);
         }
 
         try {
@@ -355,7 +356,7 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
         let mapConfigJSON = SMK.UTIL.copyIntoJSONObject(SMK.MAP[1]);
 
         let visibleLayers = [];
-        let fullVisibleLayerDetails = []
+        let fullVisibleLayerDetails = [];
         // need to loop through all the esri-dynamic layers that are set to visible and display them
 
         //iterate through tools to find all the currently visible layers
@@ -379,7 +380,7 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
             let dynamicLayer = fullVisibleLayerDetails[fullVisibleLayer].dynamicLayers[0];
             dynamicLayer = decodeURI(dynamicLayer);
             dynamicLayer = JSON.parse(dynamicLayer);
-            console.log(dynamicLayer)
+            console.log(dynamicLayer);
             
             let dataShellJSON = {
                 "id": dynamicLayer.id,
@@ -407,12 +408,12 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
                 ]
            };
          
-            jsonLayersNewFormat.push(dataShellJSON)
+            jsonLayersNewFormat.push(dataShellJSON);
 
         }
         
         
-        return jsonLayersNewFormat
+        return jsonLayersNewFormat;
     }
 
 
@@ -430,26 +431,26 @@ include.module( 'tool-mapimageexport',  [ 'tool', 'widgets', 'tool-mapimageexpor
 
 
 
-    SMK.TYPE.mapimageexportTool = mapimageexportTool
+    SMK.TYPE.mapimageexportTool = mapimageexportTool;
 
-    $.extend( mapimageexportTool.prototype, SMK.TYPE.Tool.prototype )
-    mapimageexportTool.prototype.afterInitialize = []
+    $.extend( mapimageexportTool.prototype, SMK.TYPE.Tool.prototype );
+    mapimageexportTool.prototype.afterInitialize = [];
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     mapimageexportTool.prototype.afterInitialize.push( function ( smk ) {
-        var self = this
+        var self = this;
         
         smk.on( this.id, {
             'activate': function () {
 
-            if ( !self.enabled ) return
+            if ( !self.enabled ) return;
         
-            self.active = !self.active
+            self.active = !self.active;
 
             }
-        } )
+        } );
 
-    } )
+    } );
 
-    return mapimageexportTool
-} )
+    return mapimageexportTool;
+} );

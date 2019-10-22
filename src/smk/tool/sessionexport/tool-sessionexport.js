@@ -1,6 +1,8 @@
 include.module( 'tool-sessionexport', [ 'tool', 'widgets', 'tool-sessionexport.panel-sessionexport-html' ], function ( inc ) {
     "use strict";
 
+    /* jshint -W040 */
+
     var jsonDownloadValue = "Normal"
 
     Vue.component( 'sessionexport-widget', {

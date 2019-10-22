@@ -6,6 +6,10 @@
     cursor: default;
 
     margin-top: 5px;
+    
+    background: #c9c9c963;
+    padding: 3px;
+    border-radius: 3px;
 }
 
 .smk-status .smk-coordinate .smk-ordinate label {
