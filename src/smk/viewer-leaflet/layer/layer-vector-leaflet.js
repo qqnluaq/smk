@@ -140,7 +140,13 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
             } )
             .then( function ( data ) {
                 console.log( 'loaded', url )
-                layer.addData( data )
+
+                if ( !data.crs ) return data
+
+                return SMK.UTIL.reproject( data, data.crs )
+            } )
+            .then( function ( geojson ) {
+                layer.addData( geojson )
                 return layer
             } )
             .then( function ( layer ) {
@@ -171,6 +177,8 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     function convertStyle( styleConfig, type ) {
+        if ( !styleConfig ) return
+        
         if ( type == 'Point' || type == 'MultiPoint' )
             return {
                 radius:      styleConfig.strokeWidth / 2,

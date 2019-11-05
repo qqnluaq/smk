@@ -136,10 +136,11 @@
         params.forEach( function ( p, i ) {
             var source1 = source + ' -> arg[' + config + ',' + i + ']'
             try {
-                var m = decodeURIComponent( p ).match( paramPattern )
+                // var m = decodeURIComponent( p ).match( paramPattern )
+                var m = p.match( paramPattern )
                 if ( !m ) return
 
-                configs = configs.concat( parseOption( m[ 1 ], source1 ) || [] )
+                configs = configs.concat( parseOption( m[ 1 ], source1 ) || [] )                
             }
             catch ( e ) {
                 if ( !e.parseSource ) e.parseSource = source1
@@ -175,7 +176,12 @@
 
         source += ' -> option[' + option + ']'
         try {
-            var obj = optionHandler[ option ]( m[ 3 ], source )
+            var args = [ m[ 3 ], source ].concat( m[ 3 ].split( ',' ).map( function ( a ) { 
+                return decodeURIComponent( a )
+            } ) )
+
+            var obj = optionHandler[ option ].apply( optionHandler, args ) //( m[ 3 ], source, args )
+
             if ( !obj.$sources )
                 obj.$sources = [ source ]
 
@@ -342,55 +348,69 @@
             }
         },
 
-        'layer': function ( arg, source ) {
-            var args = arg.split( ',' )
-            if ( args.length < 2 ) throw new Error( '-layer needs at least 2 arguments' )
+        'layer': function ( arg, source, type ) {
+            var args = [].slice.call( arguments )
+            args.splice( 2, 1 )
 
-            var layerId = 'layer-' + arg.replace( /[^a-z0-9]+/ig, '-' ).replace( /(^[-]+)|([-]+$)/g, '' ).toLowerCase()
+            type = 'layer-' + type
+            if ( !( type in this ) ) return
 
-            var type = args[ 0 ].trim().toLowerCase()
-            switch ( type ) {
-                case 'esri-dynamic':
-                    if ( args.length < 3 ) throw new Error( '-layer=esri-dynamic needs at least 3 arguments' )
-                    return {
-                        layers: [ {
-                            id:         layerId,
-                            type:       'esri-dynamic',
-                            isVisible:  true,
-                            serviceUrl: args[ 1 ],
-                            mpcmId:     args[ 2 ],
-                            title:      args[ 3 ] || ( 'ESRI Dynamic ' + args[ 2 ] ),
-                        } ]
-                }
+            return this[ type ].apply( this, args )
+        },
+            // var args = arg.split( ',' )
+            // if ( args.length < 2 ) throw new Error( '-layer needs at least 2 arguments' )
 
-                case 'wms':
-                    if ( args.length < 3 ) throw new Error( '-layer=wms needs at least 3 arguments' )
-                    return {
-                        layers: [ {
-                            id:         layerId,
-                            type:       'wms',
-                            isVisible:  true,
-                            serviceUrl: args[ 1 ],
-                            layerName:  args[ 2 ],
-                            styleName:  args[ 3 ],
-                            title:      args[ 4 ] || ( 'WMS ' + args[ 2 ] ),
-                        } ]
-                }
+            // var layerId = 'layer-' + arg.replace( /[^a-z0-9]+/ig, '-' ).replace( /(^[-]+)|([-]+$)/g, '' ).toLowerCase()
 
-                case 'vector':
-                    return {
-                        layers: [ {
-                            id:         layerId,
-                            type:       'vector',
-                            isVisible:  true,
-                            dataUrl:    args[ 1 ],
-                            title:      args[ 2 ] || ( 'Vector ' + args[ 1 ] ),
-                        } ]
-                    }
+            // var type = args[ 0 ].trim().toLowerCase()
+            // switch ( type ) {
+        'layer-esri-dynamic': function ( arg, source, url, mpcmId, title ) {
+            if ( !url ) throw new Error( '-layer=esri-dynamic needs at least 2 arguments' )
 
-                default: throw new Error( 'unknown layer type: ' + type )
+            return {
+                layers: [ {
+                    id:         SMK.UTIL.makeId( mpcmId || title || url ),
+                    type:       'esri-dynamic',
+                    isVisible:  true,
+                    serviceUrl: url,
+                    mpcmId:     mpcmId,
+                    title:      title || ( 'ESRI Dynamic [' + ( mpcmId || url ) + ']' ),
+                } ]
             }
         },
+
+        'layer-wms': function ( arg, source, url, name, style, title ) {
+            if ( !url ) throw new Error( '-layer=wms needs at least 2 arguments' )
+
+            return {
+                layers: [ {
+                    id:         SMK.UTIL.makeId( name || title || url ),
+                    type:       'wms',
+                    isVisible:  true,
+                    serviceUrl: url,
+                    layerName:  name,
+                    styleName:  style,
+                    title:      title || ( 'WMS [' + ( name || url ) + ']'  ),
+                } ]
+            }
+        },
+
+        'layer-vector': function ( arg, source, url, title ) {
+            if ( !url ) throw new Error( '-layer=vector needs at least 2 arguments' )
+
+            return {
+                layers: [ {
+                    id:         SMK.UTIL.makeId( title || url ),
+                    type:       'vector',
+                    isVisible:  true,
+                    dataUrl:    url,
+                    title:      title || ( 'Vector [' + url + ']' ),
+                } ]
+            }
+        },
+                // default: throw new Error( 'unknown layer type: ' + type )
+            // }
+        // },
 
         'show-tool': function ( arg ) {
             var args = arg.split( ',' )
@@ -617,6 +637,15 @@
 
                 return promise.then( onThen, onFail )
             }
+
+        util.makeId = function () {
+            var a = [].slice.call( arguments )
+            return a
+                .filter( function ( v ) { return v !== undefined } )
+                .map( function ( v ) { return ( '' + v ).toLowerCase().replace( /[^a-z0-9]+/g, '-' ).replace( /^[-]|[-]$/g, '' ) } )
+                .map( function ( v ) { return v ? v : '~' } )
+                .join( '=' )
+        }
 
     }
 
