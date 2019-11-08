@@ -1,0 +1,51 @@
+
+
+  .smk-help-panel .smk-item {
+    font-size: 14px;
+  }
+  
+  .smk-help-panel .smk-folder {
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .smk-help-panel .smk-folder .smk-item {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .smk-help-panel {
+    padding: 0;
+  }
+  
+  .smk-help-panel .smk-folder .smk-item .smk-help-title {
+    display: inline-block;
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    
+  }
+  
+.smk-help-title{
+  text-transform: capitalize;
+}
+
+.smk-helpimport-panel .smk-folder .smk-folder-expand:hover {
+    border: 1px solid transparent;
+}
+
+  p {
+    
+    text-align: left;
+    margin: 1em;
+  }
+
+  .smk-mapimagexport-numberinput{
+    width: 20%;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+
+  }
+

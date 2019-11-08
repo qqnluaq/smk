@@ -1,0 +1,77 @@
+
+
+.nobullets {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+ }
+
+.linkEntry{
+  width: 100%;
+  text-align: center;
+  width: 75%;
+  float: center;
+
+}
+
+.layerToolButton {
+  float: right
+}
+
+.smk-layerimport-panel .smk-header {
+  white-space: nowrap;
+}
+
+.smk-layerimport-panel .smk-item {
+  font-size: 14px;
+}
+
+.smk-layerimport-panel .smk-folder {
+  margin-left: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.smk-layerimport-panel .smk-folder .smk-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.smk-layers-panel {
+  padding: 0;
+}
+
+.smk-layerimport-panel .smk-folder .smk-item .smk-layer-title {
+  display: inline-block;
+  margin-left: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.smk-layerimport-panel .smk-folder .smk-folder-expand:hover {
+  border: 1px solid transparent;
+}
+
+.submitHeader {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  background-color: black;
+  border: 2px solid rgb(1, 2, 1);
+  color: aliceblue;
+  z-index: 1;
+ 
+}
+
+.geoJSONStyleOptions{
+
+  line-height: 200%;
+
+
+}
+
+.geoJSONSubmit{
+
+  line-height: 200%;
+}

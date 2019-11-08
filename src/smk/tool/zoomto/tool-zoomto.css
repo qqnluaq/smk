@@ -1,0 +1,154 @@
+
+
+.nobullets {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+ }
+
+.linkEntry{
+  width: 100%;
+  text-align: center;
+  width: 75%;
+  float: center;
+
+}
+
+.smk-zoomto-buttons{
+ margin: 0.2em;
+}
+
+.smk-zoomto-selectbuttons {
+    display: inline-block;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #FFFFFF;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: monospace;
+    font-weight: 300;
+    color: #e6efff;
+    background-color: #3e444d;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.smk-zoomto-selectbuttons:hover {
+    color: #202429;
+    background-color: #d0e0f5;
+
+    
+}
+
+
+.zoomtoButton {
+    
+    display: block;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid #FFFFFF;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: monospace;
+    font-weight: 300;
+    color: #e6efff;
+    background-color: #3e444d;
+    text-align: center;
+    transition: all 0.2s;
+
+    float: right;
+    position: sticky;
+    right: 0;
+    border: 2px solid rgb(1, 2, 1);
+   
+}
+
+.zoomtoButton:hover {
+  color: #202429;
+  background-color: #d0e0f5;
+
+}
+
+.zoombuttonholder{
+  position: relative;
+
+}
+
+
+.smk-zoomto-panel .smk-header {
+  white-space: nowrap;
+}
+
+.smk-zoomto-panel  {
+  font-size: 14px;
+  font-family: monospace;
+}
+
+.smk-zoomto-panel  {
+  margin-left: 6px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.smk-zoomto-panel  {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.smk-zoomto-panel {
+  padding: 0;
+}
+
+.smk-zoomto-panel .smk-zoomto-zoomlevel{
+  display: inline-block;
+  margin-left: 7px;
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+
+.smk-zoomto-panel .smk-zoomto-textentryfields {
+  display: block;
+  margin-left: 2px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+
+.smk-zoomto-panel .smk-zoomto-title {
+  margin: auto;
+  font-size: 1.1em;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 2px;
+}
+
+.smk-zoomto-panel .smk-zoomto-categorytitle {
+  display: inline-block;
+  margin-left: 6px;
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+.smk-zoomto-panel .smk-zoomto-category {
+  display: inline-block;
+  margin-left: 7px;
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+
+
+  
+ 
+
+
+.smk-zoomto-selectedSection {
+  display: inline-block;
+  border-style: solid;
+  border-width: 0.1em;
+  border-color: #edfaff;
+  margin-top: 1em;
+
+
+}

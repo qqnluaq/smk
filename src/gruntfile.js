@@ -106,6 +106,7 @@ module.exports = function( grunt ) {
                 sub: true,
                 browser: true,
                 devel: true,
+				esversion: 8,
 
                 '-W018': true, // confusing use of !
 
@@ -118,6 +119,7 @@ module.exports = function( grunt ) {
                     include: true,
                     require: true,
                     turf: true,
+                    lprint: true,
                     Terraformer: true,
                     proj4: true,
                     L: true,

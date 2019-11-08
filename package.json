@@ -6,21 +6,22 @@
   "homepage": "https://bcgov.github.io/smk-client/",
   "repository": "github:bcgov/smk-client",
   "dependencies": {
-    "grunt": "^1.0.3",
+    "grunt": "^1.0.4",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-connect": "^1.0.0",
+    "grunt-contrib-uglify-es": "github:gruntjs/grunt-contrib-uglify#harmony",
     "grunt-zip": "^0.17.1"
   },
   "devDependencies": {
     "connect-livereload": "^0.6.0",
-    "glob": "^7.1.2",
-    "grunt-gitinfo": "^0.1.8",
-    "grunt-contrib-copy": "^1.0.0",
+    "glob": "^7.1.5",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-uglify": "^3.3.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-jshint": "^2.1.0",
+    "grunt-contrib-uglify-es": "github:gruntjs/grunt-contrib-uglify#harmony",
     "grunt-contrib-watch": "^1.1.0",
+    "grunt-gitinfo": "^0.1.8",
     "jshint-stylish": "^2.2.1",
     "load-grunt-tasks": "~4.0.0"
   }

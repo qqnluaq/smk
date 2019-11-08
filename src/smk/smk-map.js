@@ -67,6 +67,7 @@ include.module( 'smk-map', [ 'jquery', 'util', 'theme-base' ], function () {
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         function loadConfigs() {
+
             return SMK.UTIL.waitAll( self.$option.config.map( function ( c ) {
                 if ( !c.url )
                     return SMK.UTIL.resolved( c )

@@ -1,0 +1,15 @@
+<side-panel class="smk-label-panel" v-bind:showHeader="false">
+    <ul class="nobullets" id="example-1">
+        <li v-for="item in items">
+          <div class="smk-label-shell">
+            <input type="text"class="smk-label-input" :id="item.drawing" v-model="item.content" @mouseover="showLabelTemp" @mouseleave="removeLabelTemp" > 
+            <div class="smk-label-buttons">
+              <button v-on:click="setLabel":id="item.drawing" :content="item.content" class="smk-label-toolButton">Set Label</button>
+              <button v-on:click="destroyLabel":id="item.drawing" :content="item.content" class="smk-label-toolButton">Remove Label</button>
+              <button v-on:click="setCoordinates":id="item.drawing" :content="item.content" class="smk-label-toolButton">Set Co-Ordinates</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+</side-panel>

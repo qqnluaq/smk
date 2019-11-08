@@ -1,0 +1,43 @@
+<side-panel class="smk-help-panel" v-bind:showHeader="false">
+    <div class="smk-help-description" v-html="content"></div>
+
+
+
+
+
+    <div>
+        <ul class="nobullets">
+            <li class="smk-folder" v-for="tool in tools">
+
+                <div v-if="defaultTools.includes(tool.type) && tool.enabled==true">
+                    <details>
+                            <summary> <i class="material-icons">{{ tool.icon }}</i> <span class="smk-help-title">{{ tool.type }} </span> </summary>
+
+                            <div class="smk-item" v-if="defaultToolWikiLinks[tool.type][0]">
+                                
+                            <a :href="defaultToolWikiLinks[tool.type][1]">{{ defaultToolWikiLinks[tool.type][1] }}</a>     
+                            </div>
+
+                            <div class="smk-item" v-else>   {{ defaultToolWikiLinks[tool.type][1]}}  </div>   
+                    </details>
+                </div>
+                <div v-else>
+                    <div v-if="customTools.includes(tool.type)">
+                        <details>
+                            <summary> <i class="material-icons">{{ tool.icon }}</i> <span class="smk-help-title"> Search Infestations Tool </span> </summary>
+                            <p>The Search Infestations Tool is a custom tool for SMK Forest Health that allows user to search with a common name, and a severity. Once the search completes the features will be labelled on the map with a number displaying how many features are at that location.</p>
+                            <p>The maximum number of features that can be found at once is ten-thousand so if you’re frequently hitting that limit you may want to pare down your search parameters. Ideally you’ll be using a name and a severity.</p>     
+                            <p>Once you’ve found a feature and obtained the information you want from it, hit the back arrow in the upper left to return to the search screen and press reset to reset the search terms.</p>
+                        </details>
+                    </div>
+                    <div v-else>
+                            <!--{{ tool.type }}  is not a default tool and needs special handling. -->
+                    </div>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+
+    
+</side-panel>

@@ -10,13 +10,21 @@ var t = new tg.TagSet()
 
 t.script( 'jquery', 'lib/jquery-3.3.1.min.js' )
 
-// t.script( 'vue', 'lib/vue-2.5.11.js' )
-t.script( 'vue', 'lib/vue-2.5.11.min.js' )
+ t.script( 'vue', 'lib/vue-2.5.11.js' )
+//t.script( 'vue', 'lib/vue-2.5.11.min.js' )
 t.script( 'vue-config', 'smk/vue-config.js' )
 
 t.script( 'turf', 'lib/turf-5.1.6.min.js' )
 
 t.script( 'proj4', 'lib/proj4-2.4.4.min.js' )
+
+t.script( 'lprint', 'lib/leaflet.browser.print.min.js' )
+
+t.script( 'togeojson', 'lib/togeojson-master/togeojson.js' )
+
+
+
+
 
 t.sequence( 'terraformer' )
     .script( 'lib/terraformer/terraformer-1.0.7.js' )
@@ -150,6 +158,30 @@ t.group( 'tool-version' )
 t.group( 'tool-zoom' )
     .dir( 'smk/tool/zoom/*' )
 
+t.group( 'tool-print' )
+    .dir( 'smk/tool/print/*' )
+
+t.group( 'tool-sessionimport' )
+    .dir( 'smk/tool/sessionimport/*' )
+
+t.group( 'tool-sessionexport' )
+    .dir( 'smk/tool/sessionexport/*' )
+
+t.group( 'tool-label' )
+    .dir( 'smk/tool/label/*' )
+
+t.group( 'tool-layerimport' )
+    .dir( 'smk/tool/layerimport/*' )
+
+t.group( 'tool-help' )
+    .dir( 'smk/tool/help/*' )
+
+t.group( 'tool-zoomto' )
+    .dir( 'smk/tool/zoomto/*' )
+
+    t.group( 'tool-mapimageexport' )
+    .dir( 'smk/tool/mapimageexport/*' )
+
 // ==================================================================================
 // leaflet
 // ==================================================================================
@@ -159,6 +191,7 @@ t.group( 'layer-leaflet' )
     .dir( 'lib/leaflet/marker-cluster*' )
     .script( 'lib/leaflet/NonTiledLayer-src.js' )
     .script( "lib/leaflet/leaflet-heat.js" )
+
 
 t.script( 'feature-list-leaflet', 'smk/viewer-leaflet/feature-list-leaflet.js' )
 t.script( 'feature-list-clustering-leaflet', 'smk/viewer-leaflet/feature-list-clustering-leaflet.js' )

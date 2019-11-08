@@ -1,0 +1,8 @@
+<side-panel class="smk-sessionimport-panel" v-bind:showHeader="false">
+    <div class="smk-sessionimport-description" v-html="content"></div>
+    <div>
+    <input type="file" id="file" ref="myFiles" class="custom-file-input" 
+    @change="previewFiles" multiple>
+    </div>
+    
+</side-panel>

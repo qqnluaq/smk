@@ -79,7 +79,7 @@ include.module( 'tool-layers', [ 'tool', 'widgets', 'tool-layers.panel-layers-ht
             },
 
             'config': function ( ev ) {
-                // console.log( ev )
+                console.log( ev )
                 Object.assign( self.config, ev )
 
                 smk.$viewer.layerDisplayContext.setLegendsVisible( ev.legend, smk.$viewer.layerId, smk.$viewer )
@@ -104,6 +104,9 @@ include.module( 'tool-layers', [ 'tool', 'widgets', 'tool-layers.panel-layers-ht
             },
 
             'set-item-visible': function ( ev ) {
+                console.log( ev.id)
+                console.log (ev.visible)
+                console.log (ev.deep)
                 smk.$viewer.layerDisplayContext.setItemVisible( ev.id, ev.visible, ev.deep )
                 smk.$viewer.updateLayersVisible()
             },

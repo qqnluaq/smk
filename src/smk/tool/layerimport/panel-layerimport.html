@@ -1,0 +1,332 @@
+<side-panel class="smk-layerimport-panel" v-bind:showHeader="false">
+    
+    <div class="smk-header">
+    <h3>Select Layer Service:</h3>
+
+    <select v-model="selected">
+        <option value="arcGIS">arcGIS</option>
+        <option value="wms">wms</option>
+        <!--<option value="Shape">Shape</option> -->
+       <option value="KML">KML</option>
+        <option value="GeoJSON">GeoJSON</option>
+    </select>
+    </div>
+
+
+    <div v-if="selected === 'arcGIS'" >
+        
+        <div v-if="arcGISFetched === false">
+        <button v-on:click="fetchLayersFromURL" :id="ESRIURL" :content="ESRIURL" class="layerToolButton">Fetch arcGIS Layers</button>
+        </div>
+        <div v-if="loading"> Loading... </div>
+        <div v-else-if="esriLayerListShow"></div>
+        <div v-else> Fetch when ready. </div>
+
+        <div v-if="esriLayerListShow" class="submitHeader">
+                <div v-if="layerLoading">Loading... Current file being transfered is {{ transferFileNumber }} out of {{ checkedLayersArcGIS.length }}</div>
+                <div v-else>
+                    <button v-on:click="fetchEsriLayerInfo">Import Layer</button>
+                </div>
+                <div v-if="checkedLayersArcGIS.length > 4"> Due to {{checkedLayersArcGIS.length}} layers being selected for import their visibility is turned off.</div>
+        </div>  
+
+        <div v-if="esriLayerListShow && !layerLoading" class="smk-folder">
+            <ul class="nobullets">
+                <li v-for="item in items" class="smk-folder">
+                    <details>
+                        <summary><input type="checkbox" :id="item.jsonObject.label" v-on:change="onCheckTopLevelCheckBoxes">{{ item.jsonObject.label}} </summary>
+                        <li class="smk-folder" v-for="node in item.jsonObject.subLayers">
+                            <details>
+                                <summary><input type="checkbox" :id="node.jsonObject.label" v-on:change="onCheckMidLevelCheckBoxes"> {{ node.jsonObject.label }} </summary>
+                                <li class="smk-folder" v-for="subNode in node.jsonObject.subLayers">
+                                    <div class="smk-item">
+                                        <input type="checkbox" :id="subNode.jsonObject.mpcmId" v-on:change="onCheckAddIDTocheckedArcGISLayers">
+                                        <span class="smk-layer-title">{{ subNode.jsonObject.label }} </span>  <!--MPCM ID: {{subNode.jsonObject.mpcmId}} -->
+                                        
+                                    </div> 
+                                </li>
+                            </details>
+                        </li>                          
+                    </details>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div v-if="selected === 'KML'">
+        {{ selected}} input area
+        <input type="text" :id="KMLURL" class="linkEntry" v-model="KMLURL">
+        <button v-on:click="fetchLayersFromURL" :id="KMLURL" :content="KMLURL" class="layerToolButton">Input Layer Service KMLURL</button>
+
+        <div class="geoJSONStyleOptions">
+            <details>
+                <summary>GeoJSON Styling Options (If no network link in KML file) </summary>
+
+                <div class="strokeColor">
+                    Stroke Color:
+                    <input type="color" name="favcolor" v-model="color" value="#0066ff">
+                </div>
+
+                <div class=stroke>
+                    Line Stroke Display(on polygons and circles)?
+                    <input type="checkbox" id="checkbox" v-model="stroke">
+                    <label for="checkbox">{{ stroke }}</label>
+                </div>
+
+                <div class=strokeWidth>
+                    Stroke Width:
+                    <select v-model="strokeWidth">
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6</option>
+                        <option value=6>6</option>
+                        <option value=7>7</option>
+                        <option value=8>8</option>
+                        <option value=9>9</option>
+                        <option value=10>10</option>
+                    </select>
+                </div>
+
+                <div class=opacity>
+                    Stroke Opacity Selection:
+                    <select v-model="opacity">
+                        <option value=0>0</option>
+                        <option value=0.2>0.2</option>
+                        <option value=0.4>0.4</option>
+                        <option value=0.6>0.6</option>
+                        <option value=0.8>0.8</option>
+                        <option value=1.0>1.0</option>
+                    </select>
+                </div>
+
+                <div class=fill>
+                    Fill Enabled (on polygons and circles)?
+                    <input type="checkbox" id="checkbox" v-model="fill">
+                    <label for="checkbox">{{ fill }}</label>
+                </div>
+
+                <div class=fillOpacity>
+                    Fill Opacity Selection:
+                    <select v-model="fillOpacity">
+                        <option value=0>0</option>
+                        <option value=0.2>0.2</option>
+                        <option value=0.4>0.4</option>
+                        <option value=0.6>0.6</option>
+                        <option value=0.8>0.8</option>
+                        <option value=1.0>1.0</option>
+                    </select>
+                </div>
+
+                
+                <div class=fillColor>
+                    Fill Color:
+                    <input type="color" name="favcolor" v-model="fillColor" value="#0066fe">
+                </div>
+
+                <div class=lineCap>
+                    Line Cap:
+                    <select v-model="lineCap">
+                        <option value='round'>Round</option>
+                        <option value='square'>Square</option>
+                        <option value='butt'>Butt</option>
+                    </select>
+                </div>
+
+                <div class=lineJoin>
+                    Line Join:
+                    <select v-model="lineJoin">
+                        <option value='miter'>Miter</option>
+                        <option value='round'>Round</option>
+                        <option value='bevel'>Bevel</option>
+                        <option value='mitir-clip'>Mitir Clip</option>
+                        <option value='arcs'>Arcs</option>
+                    </select>
+                </div>
+
+                <div class=dashArray>
+                    Dash Array:
+                    <select v-model="dashArray">
+                        <option value=null>Solid</option>
+                        <option value='4'>Dashes and gaps of the same size</option>
+                        <option value='4 1'>Dashes and gaps of different sizes</option>
+                        <option value='4 1 2'>Dashes and gaps of various sizes with an odd number of values</option>
+                        <option value='4 1 2 3'>Dashes and gaps of various sizes with an even number of values</option>
+                    </select>
+                </div>
+
+                <div class=dashOffset>
+                    Dash Offset:
+                    <select v-model="dashOffset">
+                        <option value=null>No Offset</option>
+                        <option value='1'>Dash Offset of positive 1</option>
+                        <option value='3'>Offset of positive 3</option>
+                        <option value='-3'>Offset of negative 3</option>
+                    </select>
+                </div>
+
+                <div class=fillRule>
+                    Define how the inside of a shape is determined
+                    <select v-model="fillRule">
+                        <option value='evenodd'>evenodd</option>
+                        <option value='nonzero'>nonzero</option>
+                    </select>
+                </div>
+
+
+            </details>
+        </div>
+
+
+
+    </div>
+    <div v-if="selected === 'Shape'">
+        {{ selected}} input area
+    </div>
+    <div v-if="selected === 'GeoJSON'">
+
+        <div class="geoJSONStyleOptions">
+            <details>
+                <summary>GeoJSON Styling Options </summary>
+
+                <div class="strokeColor">
+                    Stroke Color:
+                    <input type="color" name="favcolor" v-model="color" value="#0066ff">
+                </div>
+
+                <div class=stroke>
+                    Line Stroke Display(on polygons and circles)?
+                    <input type="checkbox" id="checkbox" v-model="stroke">
+                    <label for="checkbox">{{ stroke }}</label>
+                </div>
+
+                <div class=strokeWidth>
+                    Stroke Width(Min: 1, Max: 100):
+                    <input type=number v-model="strokeWidth" min="1" max="100" value=3>    
+                </div>
+
+                <div class=opacity>
+                    Stroke Opacity Selection(Min: 0, Max: 1):
+                    <input type=number v-model="opacity" min="0" max="1" value=0.65 step="0.05">   
+                </div>
+
+                <div class=fill>
+                    Fill Enabled (on polygons and circles)?
+                    <input type="checkbox" id="checkbox" v-model="fill">
+                    <label for="checkbox">{{ fill }}</label>
+                </div>
+
+                <div class=fillOpacity>
+                    Fill Opacity Selection(Min: 0, Max:1):
+                    <input type=number v-model="fillOpacity" min="0" max="1" value=0.2 step="0.1">   
+                </div>
+
+                
+                <div class=fillColor>
+                    Fill Color:
+                    <input type="color" name="favcolor" v-model="fillColor" value="#0066fe">
+                </div>
+
+                <div class=lineCap>
+                    Line Cap:
+                    <select v-model="lineCap">
+                        <option value='round'>Round</option>
+                        <option value='square'>Square</option>
+                        <option value='butt'>Butt</option>
+                    </select>
+                </div>
+
+                <div class=lineJoin>
+                    Line Join:
+                    <select v-model="lineJoin">
+                        <option value='miter'>Miter</option>
+                        <option value='round'>Round</option>
+                        <option value='bevel'>Bevel</option>
+                        <option value='mitir-clip'>Mitir Clip</option>
+                        <option value='arcs'>Arcs</option>
+                    </select>
+                </div>
+
+                <div class=dashArray>
+                    Dash Array:
+                    <select v-model="dashArray">
+                        <option value=null>Solid</option>
+                        <option value='4'>Dashes and gaps of the same size</option>
+                        <option value='4 1'>Dashes and gaps of different sizes</option>
+                        <option value='4 1 2'>Dashes and gaps of various sizes with an odd number of values</option>
+                        <option value='4 1 2 3'>Dashes and gaps of various sizes with an even number of values</option>
+                    </select>
+                </div>
+
+                <div class=dashOffset>
+                    Dash Offset:
+                    <select v-model="dashOffset">
+                        <option value=null>No Offset</option>
+                        <option value='1'>Dash Offset of positive 1</option>
+                        <option value='3'>Offset of positive 3</option>
+                        <option value='-3'>Offset of negative 3</option>
+                    </select>
+                </div>
+
+                <div class=fillRule>
+                    Define how the inside of a shape is determined
+                    <select v-model="fillRule">
+                        <option value='evenodd'>evenodd</option>
+                        <option value='nonzero'>nonzero</option>
+                    </select>
+                </div>
+
+
+            </details>
+        </div>
+
+        <div class=geoJSONSubmit>
+        {{ selected}} input area, please browse for a GeoJSON file once you're done styling.
+        <input type="file" @change="importGeoJSON" >
+        <div v-if="geoJSONFileUploadSuccess"> Import of {{ geoJSONfileValue }} was successful. </div>
+        </div>
+
+    </div>
+
+    <div v-if="selected === 'wms'"> 
+        <div v-if="wmsFetched === false">
+            <div> 
+                {{ selected}} input area:  <input type="text" :id="WMSURL" class="linkEntry" v-model="WMSURL">  
+                <button v-on:click="fetchLayersFromURL" :id="WMSURL" :content="WMSURL" class="layerToolButton">Fetch WMS Layers</button>
+            </div>
+        </div>
+        <div v-if="loading"> Loading... </div>
+       
+        <div v-if="layerListShow" class="submitHeader">
+                <div v-if="layerLoading">Loading... Current file being transfered is {{ transferFileNumber }} out of {{ checkedLayersWMS.length }}</div>
+                <div v-else>
+                    <button v-on:click="setLayerImport">Import Layer</button>
+                </div>
+                <div v-if="checkedLayersWMS.length > 4"> Due to {{checkedLayersWMS.length}} layers being being selected for import their visibility is turned off.</div>
+                
+        </div>  
+
+
+        <div v-if="layerListShow && !layerLoading">
+            <ul class="nobullets">
+                <li v-for="item in items">
+                    <div class="smk-folder">
+                        <details>
+                            <summary><input type="checkbox" :id="item.layerTitle" v-on:change="onCheckMidLevelCheckBoxes"> {{ item.layerTitle }} </summary>
+                            <li class="smk-folder"  v-for="style in item.stylesArr">
+                                <div class="smk-item">
+                                    <input type="checkbox" v-on:change="onCheckAddTocheckedWMSLayers" :id="item.layerName" :styleName="style.name" :styleTitle="style.title" :fullItem="JSON.stringify(item)" class="subListToolButton">
+                                    <span class="smk-layer-title">   {{ style.title }} </span>
+                                </div>
+                            </li>
+                        </details>
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</side-panel>

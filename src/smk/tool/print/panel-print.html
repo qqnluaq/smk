@@ -1,0 +1,35 @@
+<side-panel class="smk-print-panel" v-bind:showHeader="false">
+    <div class="smk-print-description" v-html="content"></div>
+
+    <div class="smk-print-titlemode">Current Mode: {{ printID }}</div>
+
+    <div>
+        <ul class="nobullets">
+            <li class="printListItem">
+                <span class="smk-print-desc">Tracks all active map layers and tries to fit them in print page in Portrait or Landscape page dimensions</span>
+                <button v-on:click="print"  id="Auto" class="smk-print-button-select">Print Auto</button> 
+            </li>
+
+            <li class="printListItem">
+                <span class="smk-print-desc">Print currently visual part of the map with Landscape page dimensions</span>
+                <button v-on:click="print"  id="Landscape" class="smk-print-button-select">Landscape Print</button>
+            </li>
+
+            <li class="printListItem">
+                <span class="smk-print-desc">Print currently visual part of the map with Portrait page dimensions</span>
+                <button v-on:click="print"  id="Portrait" class="smk-print-button-select">Portrait Print</button>
+            </li>
+
+            <li class="printListItem">
+                <span class="smk-print-desc">Allows you to select a rectangle for printing.</span>
+                <button v-on:click="print"  id="Custom" class="smk-print-button-select">Custom Print</button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="smk-print-submit">
+        <button v-on:click="printOK"  id="OK" class="smk-print-submit-button">Print!</button>
+
+    </div>
+    
+</side-panel>

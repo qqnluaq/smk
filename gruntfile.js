@@ -7,7 +7,7 @@ module.exports = function( grunt ) {
                 options: {
                     protocol:   'https',
                     hostname:   '*',
-                    port:       8443,
+                    port:       9443,
                     base:       '.',
                     keepalive:  true,
                     debug:      true,
