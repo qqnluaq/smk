@@ -365,10 +365,10 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
             var p = self.createViewerLayer( cid, lys, maxZOrder - i )
                 .then( function ( ly ) {
-                    self.addViewerLayer( ly )
+                    var whenLoaded = self.addViewerLayer( ly )
                     self.positionViewerLayer( ly, maxZOrder - i )
                     self.visibleLayer[ cid ] = ly
-                    return ly
+                    return whenLoaded
                 } )
                 .catch( function ( e ) {
                     console.warn( 'Failed to create layer ' + cid + ':', e )

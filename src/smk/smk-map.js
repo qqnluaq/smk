@@ -48,6 +48,7 @@ include.module( 'smk-map', [ 'jquery', 'util', 'theme-base', 'sidepanel' ], func
                 .then( initViewer )
                 .then( initTools )
                 .then( showMap )
+                .then( waitUntilLoaded )                
                 .catch( function ( e ) {
                     console.error( e )
 
@@ -419,8 +420,14 @@ include.module( 'smk-map', [ 'jquery', 'util', 'theme-base', 'sidepanel' ], func
 
             if ( self.viewer.activeTool in self.$tool )
                 self.$tool[ self.viewer.activeTool ].active = true
+        }
 
+        function waitUntilLoaded() {
             return self.$viewer.updateLayersVisible()
+                .then( function () {
+                    console.log('layers loaded')
+                    return self
+                } )
         }
     }
 

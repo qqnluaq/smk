@@ -229,7 +229,26 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', 'featu
     //
     ViewerLeaflet.prototype.addViewerLayer = function ( viewerLayer ) {
         // console.log( 'add', viewerLayer._smk_id )
+        // var whenLoaded = SMK.UTIL.makePromise( function ( res, rej ) {
+        //     viewerLayer.once( 'load', res )
+        // } )
+
+        console.log('add',viewerLayer._smk_id)
         this.map.addLayer( viewerLayer )
+
+        return SMK.UTIL.makePromise( function ( res, rej ) {
+            // console.log('isloading',viewerLayer.isLoading(),viewerLayer)
+            viewerLayer.on( 'load', function () {
+                console.log('load',viewerLayer._smk_id)
+                res()
+            } )
+
+            viewerLayer.on( 'loading', function () {
+                console.log('loading',viewerLayer._smk_id)
+                // res()
+            } )
+        } )
+        // return whenLoaded
     }
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     ViewerLeaflet.prototype.getPanelPadding = function ( panelVisible ) {
