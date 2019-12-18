@@ -1,4 +1,4 @@
-include.module( 'layer-leaflet.layer-esri-tiled-leaflet-js', [ 'layer.layer-esri-tiled-js' ], function () {
+include.module( 'layer-leaflet.layer-esri-tiled-leaflet-js', [ 'layer.layer-esri-tiled-js', 'util' ], function () {
     "use strict";
 
     function EsriTiledLeafletLayer() {
@@ -18,11 +18,11 @@ include.module( 'layer-leaflet.layer-esri-tiled-leaflet-js', [ 'layer.layer-esri
 
         var minZoom
         if ( layers[ 0 ].config.minScale )
-            minZoom = this.getZoomBracketForScale( layers[ 0 ].config.minScale )[ 1 ]
+            minZoom = layers[ 0 ].config.zoomMin || SMK.UTIL.getZoomBracketForScale( layers[ 0 ].config.minScale )[ 1 ]
 
         var maxZoom
         if ( layers[ 0 ].config.maxScale )
-            maxZoom = this.getZoomBracketForScale( layers[ 0 ].config.maxScale )[ 1 ]
+            maxZoom = layers[ 0 ].config.zoomMax || SMK.UTIL.getZoomBracketForScale( layers[ 0 ].config.maxScale )[ 1 ]
 
         var layer = L.esri.tiledMapLayer({
             url: serviceUrl

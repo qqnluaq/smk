@@ -1,4 +1,4 @@
-include.module( 'layer-leaflet.layer-esri-feature-leaflet-js', [ 'layer.layer-esri-feature-js' ], function () {
+include.module( 'layer-leaflet.layer-esri-feature-leaflet-js', [ 'layer.layer-esri-feature-js', 'util' ], function () {
     "use strict";
 
     function EsriFeatureLeafletLayer() {
@@ -21,11 +21,11 @@ include.module( 'layer-leaflet.layer-esri-feature-leaflet-js', [ 'layer.layer-es
             url: layers[ 0 ].config.serviceUrl
         }
 
-        // if ( layers[ 0 ].config.scaleMin )
-        //     cfg.minZoom = this.getZoomBracketForScale( layers[ 0 ].config.scaleMin )[ 1 ]
+        if ( layers[ 0 ].config.scaleMin )
+            cfg.minZoom = layers[ 0 ].config.zoomMin || SMK.UTIL.getZoomBracketForScale( layers[ 0 ].config.scaleMin )[ 1 ]
 
-        // if ( layers[ 0 ].config.scaleMax )
-        //     cfg.maxZoom = this.getZoomBracketForScale( layers[ 0 ].config.scaleMax )[ 1 ]
+        if ( layers[ 0 ].config.scaleMax )
+            cfg.maxZoom = layers[ 0 ].config.zoomMax || SMK.UTIL.getZoomBracketForScale( layers[ 0 ].config.scaleMax )[ 1 ]
 
         if ( layers[ 0 ].config.where )
             cfg.where = layers[ 0 ].config.where

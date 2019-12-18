@@ -1,4 +1,4 @@
-include.module( 'layer-leaflet.layer-esri-dynamic-leaflet-js', [ 'layer.layer-esri-dynamic-js' ], function () {
+include.module( 'layer-leaflet.layer-esri-dynamic-leaflet-js', [ 'layer.layer-esri-dynamic-js', 'util' ], function () {
     "use strict";
 
     function EsriDynamicLeafletLayer() {
@@ -21,11 +21,11 @@ include.module( 'layer-leaflet.layer-esri-dynamic-leaflet-js', [ 'layer.layer-es
 
         var minZoom
         if ( layers[ 0 ].config.minScale )
-            minZoom = this.getZoomBracketForScale( layers[ 0 ].config.minScale )[ 1 ]
+            minZoom = layers[ 0 ].config.zoomMin || SMK.UTIL.getZoomBracketForScale( layers[ 0 ].config.minScale )[ 1 ]
 
         var maxZoom
         if ( layers[ 0 ].config.maxScale )
-            maxZoom = this.getZoomBracketForScale( layers[ 0 ].config.maxScale )[ 1 ]
+            maxZoom = layers[ 0 ].config.zoomMax || SMK.UTIL.getZoomBracketForScale( layers[ 0 ].config.maxScale )[ 1 ]
 
         var layer
         if ( dynamicLayers ) {

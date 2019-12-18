@@ -346,8 +346,37 @@ include.module( 'util', null, function ( inc ) {
                 d = Math.floor( d / 16 )
                 return ( c == 'x' ? r : ( r & 0x3 | 0x8 ) ).toString( 16 )
             } )
-        }
+        },
 
+        getZoomBracketForScale: function ( scale ) {
+            if ( scale > zoomScale[ 1 ] ) return [ 0, 1 ]
+            if ( scale < zoomScale[ 19 ] ) return [ 19, 20 ]
+            for ( var z = 2; z < 20; z += 1 )
+                if ( scale > zoomScale[ z ] ) return [ z - 1, z ]
+        }
     } )
+
+    // for(s=1;s<25;s++){v.map.setZoom(s,{animate:false});console.log(s,v.getScale())}
+    var zoomScale = []
+    zoomScale[  1 ] = 173451547.7127784
+    zoomScale[  2 ] = 89690013.7670628
+    zoomScale[  3 ] = 45203253.08071528
+    zoomScale[  4 ] = 22617698.02495323
+    zoomScale[  5 ] = 11314385.218894083
+    zoomScale[  6 ] = 5659653.605577067
+    zoomScale[  7 ] = 2829913.245708334
+    zoomScale[  8 ] = 1414856.836779603
+    zoomScale[  9 ] = 707429.7690058348
+    zoomScale[ 10 ] = 353715.05331990693
+    zoomScale[ 11 ] = 176857.5477505768
+    zoomScale[ 12 ] = 88428.77649887519
+    zoomScale[ 13 ] = 44214.496444883276
+    zoomScale[ 14 ] = 22107.221783884223
+    zoomScale[ 15 ] = 11053.61708610345
+    zoomScale[ 16 ] = 5526.806585855153
+    zoomScale[ 17 ] = 2763.4019883053297
+    zoomScale[ 18 ] = 1381.6944712225031
+    zoomScale[ 19 ] = 690.8367988270104
+
 
 } )
