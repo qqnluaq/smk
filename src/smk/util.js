@@ -347,8 +347,140 @@ include.module( 'util', null, function ( inc ) {
                 d = Math.floor( d / 16 )
                 return ( c == 'x' ? r : ( r & 0x3 | 0x8 ) ).toString( 16 )
             } )
-        }
+        },
+
+encodeUrl: function ( url, data ) {
+    if ( !data ) return url
+
+    var params = Object.keys( data )
+        .filter( function ( k ) { return data[ k ] } )
+        .map( function ( k ) {
+            return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ] )
+        } )
+        .join( '&' )
+
+    if ( /[?]\S+$/.test( url ) )
+        return url + '&' + params
+
+    if ( /[?]$/.test( url ) )
+        return url + params
+
+    return url + '?' + params
+},
+
+fetchText: function ( url, data, opt ) {
+    opt = Object.assign( {
+        timeout: 10000,        
+    }, opt )
+
+    data[ '_' ] = Math.round( Math.random() * 1e10 )
+
+    var abort = new window.AbortController()
+    
+    var id
+    if ( opt.timeout )
+        id = setTimeout( function() { 
+            abort.abort() 
+        }, opt.timeout )
+
+    var resetTimeout = function () {
+        if ( id ) clearTimeout( id )
+        id = null
+    }
+
+    var req = this.encodeUrl( url, data )
+
+    var init = {
+        method: 'GET',
+        signal: abort.signal,
+    }
+
+    var response = fetch( req, init ).then( function ( response ) {
+        resetTimeout()
+
+        if ( !response.ok ) 
+            throw new Error( 'request to ' + url + ' failed: [' + response.status + '] ' + response.statusText )
+
+        return response.text()
+    } )
+    .catch( function ( err ) {
+        resetTimeout()
+        return Promise.reject( err )
+    } )
+
+    return fetchResponse( response, function () { 
+        resetTimeout()
+        abort.abort() 
+    } )
+},
+
+fetchJson: function ( url, data, opt ) {
+    var textResponse = this.fetchText( url, data, opt )
+
+    var jsonResponse = textResponse.response.then( function ( text ) {
+        return JSON.parse( text )
+    } )
+
+    return fetchResponse( jsonResponse, textResponse.abort )
+},
+
+// fetchJsonP: function ( url, data, opt ) {
+//     opt = Object.assign( {
+//         timeout: 10000,
+//     }, opt )
+
+//     data[ '_' ] = Math.round( Math.random() * 1e10 )
+
+//     if ( !data.callback )
+//         data.callback = 'callback_' + Util.hash( url ) + Util.hash( data )
+
+//     var id 
+//     var cancel 
+//     var req = Util.encodeUrl( url, data )
+//     var promise = new Promise( function ( res, rej ) {
+//         function cleanup() {
+//             if ( id ) clearTimeout( id )
+//             id = null
+
+//             if ( script.parentNode )
+//                 script.parentNode.removeChild( script )
+
+//             window[ data.callback ] = null
+//         }
+
+//         window[ data.callback ] = function ( payload ) {
+//             cleanup()
+//             res( payload )
+//         }
+
+//         cancel = function () {
+//             cleanup()
+//             rej( new Error( 'cancelled' ) )
+//         }
+
+//         var script = L.DomUtil.create( 'script' )
+//         script.type = 'text/javascript'
+//         script.async = true
+//         script.src = req
+
+//         document.getElementsByTagName( 'head' )[ 0 ].appendChild( script )
+//     } )
+
+//     if ( opt.timeout )
+//         id = setTimeout( cancel, opt.timeout )
+
+//     return fetchResponse( promise, cancel )
+// }
+
+
 
     } )
+
+function fetchResponse( promise, abort ) {
+    return {
+        response: promise, 
+        abort: abort
+    }
+}
 
 } )
