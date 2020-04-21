@@ -131,6 +131,9 @@ t.group( 'tool-menu' )
 t.group( 'tool-minimap' )
     .dir( 'smk/tool/minimap/*' )
 
+t.group( 'tool-offline' )
+    .dir( 'smk/tool/offline/*' )
+
 t.group( 'tool-pan' )
     .dir( 'smk/tool/pan/*' )
 
@@ -198,6 +201,8 @@ t.sequence( 'leaflet' )
     .script( 'lib/leaflet/leaflet-1.5.1.min.js' )
     .style( 'lib/leaflet/leaflet-1.5.1.css' )
     // .script( 'lib/leaflet/esri-leaflet-2.3.0.min.js' )
+    .script( 'lib/leaflet/idb-5.0.2.js' )
+    .script( 'lib/leaflet/leaflet-offline-2.0.0-b2.js' )
     .script( 'lib/leaflet/esri-leaflet-2.3.2.js' )
     // .script( 'lib/leaflet/esri-leaflet-renderers.js' )
     .script( 'lib/leaflet/esri-leaflet-renderers-2.0.6.js' )

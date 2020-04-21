@@ -71,6 +71,7 @@ module.exports = function( grunt ) {
                     Terraformer:true,
                     proj4:      true,
                     L:          true,
+                    LeafletOffline: true
                 },
             },
         },

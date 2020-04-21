@@ -25,7 +25,7 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
             zoomControl:        false,
             boxZoom:            false,
             doubleClickZoom:    false,
-            zoomSnap:           0,
+            // zoomSnap:           0,
             // minZoom:            smk.viewer.minZoom
         } )
 

@@ -351,6 +351,17 @@ include.module( 'util', null, function ( inc ) {
                 d = Math.floor( d / 16 )
                 return ( c == 'x' ? r : ( r & 0x3 | 0x8 ) ).toString( 16 )
             } )
+        },
+
+        clone: function ( obj ) {
+            var serial
+            try {
+                serial = JSON.stringify( obj )
+            }
+            catch( e ) {
+                throw new Error( 'unable to clone: ' + e )
+            }
+            return JSON.parse( serial )
         }
 
     } )
