@@ -68,6 +68,8 @@ tg.forEachDir( 'smk/component/*/', function ( fn, bn ) {
 t.group( 'component' )
     .dir( 'smk/component/*' )
 
+t.script( 'tile-cache-idb',     'smk/tile-cache-idb.js' )
+
 // ==================================================================================
 // smk tools
 // ==================================================================================
@@ -202,7 +204,8 @@ t.sequence( 'leaflet' )
     .style( 'lib/leaflet/leaflet-1.5.1.css' )
     // .script( 'lib/leaflet/esri-leaflet-2.3.0.min.js' )
     .script( 'lib/leaflet/idb-5.0.2.js' )
-    .script( 'lib/leaflet/leaflet-offline-2.0.0-b2.js' )
+    .script( 'lib/leaflet/leaflet-continuous-zoom.js')
+    // .script( 'lib/leaflet/leaflet-offline-2.0.0-b2.js' )
     .script( 'lib/leaflet/esri-leaflet-2.3.2.js' )
     // .script( 'lib/leaflet/esri-leaflet-renderers.js' )
     .script( 'lib/leaflet/esri-leaflet-renderers-2.0.6.js' )

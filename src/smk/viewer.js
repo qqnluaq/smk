@@ -1,4 +1,4 @@
-include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', 'query', 'turf', 'layer-display' ], function () {
+include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', 'query', 'turf', 'layer-display', 'tile-cache-idb' ], function () {
     "use strict";
 
     var ViewerEvent = SMK.TYPE.Event.define( [
@@ -234,6 +234,8 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         this.changedLayerVisibility( function () {
             self.delayedUpdateLayersVisible()
         } )
+
+        this.tileCache = {}
     }
 
     Viewer.prototype.addLayer = function ( layerConfig ) {
@@ -722,5 +724,54 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
                 } )
         } ) )
     }
+    // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+    //
+    Viewer.prototype.getCachedLayerIds = function ( cacheMode ) {
+        var self = this
 
+        return this.layerIds.filter( function ( id ) {
+            return self.layerId[ id ].config.cache == cacheMode
+        } )
+    }
+
+    Viewer.prototype.getTileLayerMixin = function ( layerId, cacheMode ) {
+        var cache = this.getTileCache( cacheMode )
+
+        var offline = {
+            createTile: function ( coords, done ) {
+                var tile = L.TileLayer.prototype.createTile.call( this, coords, done )   
+
+                cache.setTileUrl( layerId, coords, tile )
+                    .then( function ( tileInfo ) { 
+                        // tile.src = src 
+                        done( null, tile )
+                    } )
+                    // .catch( function ( e ) { 
+                        // done( null, tile )
+                    // } )
+
+                return tile
+            }
+        }
+
+        return offline
+    }
+
+    var cacheProvider = {
+        offline: SMK.TYPE.TileCacheIDB 
+    }
+
+    Viewer.prototype.getTileCache = function ( cacheMode ) {
+        if ( !cacheMode || !( cacheMode in cacheProvider ) )
+            return {
+                setTileUrl: function ( layerId, coords, tile ) {
+                    return SMK.UTIL.resolved()
+                }
+            }
+
+        if ( !this.tileCache[ cacheMode ] )            
+            this.tileCache[ cacheMode ] = new ( cacheProvider[ cacheMode ] )( 'tileStore' )
+
+        return this.tileCache[ cacheMode ]
+    }
 } )

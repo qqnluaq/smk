@@ -1,5 +1,6 @@
 <tool-panel class="smk-offline-panel"
     v-bind="$$projectProps( 'tool-panel' )"
+    v-bind:message="loading ? 'Loading ' + loading.progress + ' of ' + loading.total : null"
 >
     <template slot="header">
         <slot></slot>
@@ -17,13 +18,16 @@
         >Clear Tiles</command-button>
     </template>
 
-    <div v-if="loading">Loading {{ loading.progress }} of {{ loading.total }}</div>
-    <div>Number of tiles stored: {{ tileStat.count }}</div>
-    <div>Zoom levels: {{ Object.keys( tileStat.zoom ).sort( function ( a, b ) { return a - b } ).join( ', ' ) }}</div>
-    <div>Total size of tiles: {{ tileStat.size }} bytes</div>
-    <div></div>
     <template v-if="viewStat">
         <div>View zoom: {{ viewStat.zoom }}</div>
-        <div>View extent: {{ viewStat.extent }}</div>
     </template>
+
+    <div v-for="t in tileStat">
+        <h3>{{ t.id }}</h3>
+        <div>Total tile count: {{ t.count }}</div>
+        <div>Count per zoom level: <span v-for="c,z in t.zoom">{{ c }}&nbsp;at&nbsp;zoom&nbsp;{{ z }}, </span></div>
+        <div>Total size of tiles: {{ t.size }} bytes</div>
+        <div v-if="t.count">Avg size per tile: {{ Math.round( t.size / t.count ) }} bytes</div>    
+    </div>
+
 </tool-panel>

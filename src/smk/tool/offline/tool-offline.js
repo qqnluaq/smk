@@ -15,7 +15,7 @@ include.module( 'tool-offline', [
         extends: SMK.COMPONENT.ToolPanelBase,
         template: inc[ 'tool-offline.panel-offline-html' ],
         props: {
-            tileStat: Object,
+            tileStat: Array,
             viewStat: Object,
             loading: Object
         },
@@ -37,49 +37,11 @@ include.module( 'tool-offline', [
         function ( smk ) {
             var self = this
 
-            this.getLayer = function () {
-                return smk.$viewer.visibleLayer[ "osm-streets-tiled-offline" ]
-            }
+            this.offlineCache = smk.$viewer.getTileCache( 'offline' )
+            self.offlineLayerIds = smk.$viewer.getCachedLayerIds( 'offline' )
 
             this.changedActive( function () {
                 if ( self.active ) {
-                    var ly = self.getLayer()
-                    if ( !ly ) return
-
-                    if ( !self.tileUrl ) {
-                        self.tileUrl = ly._url
-                        self.saveTilesCtrl = L.control.savetiles( ly, {
-                            // saveWhatYouSee: true
-                        } )
-                        self.saveTilesCtrl._map = smk.$viewer.map
-
-                        ly.on( 'savestart', function ( ev ) {
-                            console.log('savestart',ev._tilesforSave.length)
-    
-                            self.busy = true
-                            self.loading = {
-                                progress: 0,
-                                total: ev._tilesforSave.length
-                            }
-                            // progress = 0
-                            // document.getElementById('total').innerHTML = e._tilesforSave.length
-                        } )
-    
-                        ly.on( 'savetileend', function ( ev ) {
-                            console.log('savetileend')
-                            self.loading.progress += 1
-                            // progress += 1
-                            // document.getElementById('progress').innerHTML = progress
-                        } )
-    
-                        ly.on( 'saveend', function ( ev ) {
-                            console.log('saveend')
-                            self.loading = null
-                            self.busy = false
-                            self.update( smk )
-                        } )    
-                    }
-
                     self.update( smk )
                 }
                 else {
@@ -88,20 +50,47 @@ include.module( 'tool-offline', [
 
             smk.on( this.id, {  
                 'save-tiles': function ( ev ) {
-                    var ly = self.getLayer()
-                    if ( !ly ) return
+                    self.loading = {
+                        progress: 0,
+                        total: 0
+                    }
+                    self.busy = true
+                    var promises = []
 
-                    // self.busy = true
-                    self.saveTilesCtrl._saveTiles()
-                    // self.busy = false
-                    // self.update( smk )
+                    self.offlineLayerIds.forEach( function ( id ) {
+                        if ( !smk.$viewer.visibleLayer[ id ] ) return
+
+                        var tis = SMK.TYPE.TileCacheIDB.convertLayerBoundsToTileInfos( 
+                            smk.$viewer.visibleLayer[ id ], 
+                            smk.$viewer.map.getBounds(), 
+                            smk.$viewer.map.getZoom() 
+                        )
+
+                        self.loading.total += tis.length 
+
+                        tis.forEach( function ( ti ) {
+                            promises.push( self.offlineCache.putTile( id, ti )
+                                .then( function () { self.loading.progress += 1 } )
+                                .catch( function () { self.loading.progress += 1 } )
+                            )
+                        } )
+                    } )
+
+                    Promise.all( promises ).then( function () {
+                        self.busy = false
+                        self.loading = null
+                        self.update( smk )
+                    } )
                 },
 
                 'clear-tiles': function () {
                     self.busy = true
-                    LeafletOffline.truncate()
-                    self.busy = false
-                    self.update( smk )
+                    Promise.all( self.offlineLayerIds.map( function ( id ) {
+                        return self.offlineCache.clearTiles( id )
+                    } ) ).then( function () {
+                        self.busy = false
+                        self.update( smk )
+                    } )
                 }
             } )
 
@@ -123,41 +112,34 @@ include.module( 'tool-offline', [
                     smk.$viewer.map.removeLayer( self.cachedTiles )
                 }
             } )
-    
         },
         {
             update: function ( smk ) {
                 var self = this
-                this.tileStat = {
-                    count: 0,
-                    zoom: {},
-                    size: 0
-                }             
+
+                this.tileStat = []
                 this.cachedTiles.clearLayers()
 
-                var ly = self.getLayer()
-                if ( !ly ) return
+                this.offlineLayerIds.forEach( function ( id ) {
+                    var stat = {
+                        id: id,
+                        count: 0,
+                        zoom: {},
+                        size: 0
+                    }
+                    self.tileStat.push( stat )
 
-                return LeafletOffline.getStorageInfo( self.tileUrl )
-                    .then( function ( tiles ) {
-                        console.log(tiles.length)
-                        tiles.reduce( function ( accum, t ) {
-                            accum.zoom[ t.z ] = ( accum.zoom[ t.z ] || 0 ) + 1
-                            accum.size += t.blob.size
-                            
-                            return accum
-                        }, self.tileStat )
-                        self.tileStat.count = tiles.length
-
-                        return LeafletOffline.getStoredTilesAsJson( ly, tiles )
-                    } )
-                    .then( function ( geojson ) {
-                        if ( !geojson ) return
-
-                        self.cachedTiles.addLayer( L.geoJSON( geojson ) )//, {
-                            // style: self.styleFeature()
-                        // } ))
-                    } )
+                    self.offlineCache.getAllTiles( id ).then( function ( tileInfos ) {
+                        stat.count = tileInfos.length
+                        tileInfos.forEach( function ( t ) {
+                            stat.zoom[ t.z ] = ( stat.zoom[ t.z ] || 0 ) + 1
+                            stat.size += t.blob.size
+                        } )
+                        
+                        var geojson = SMK.TYPE.TileCacheIDB.convertTileInfosToGeojson( smk.$viewer.visibleLayer[ id ], tileInfos )
+                        self.cachedTiles.addLayer( L.geoJSON( geojson ) )
+                    } )    
+                } )
             }
         }
     )

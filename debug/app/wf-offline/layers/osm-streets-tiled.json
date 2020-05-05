@@ -1,18 +1,18 @@
 {
   "layers": [
     {
-      "type": "tiled",
+      "type": "tms",
       "id": "osm-streets-tiled",
       "title": "OSM Streets Tiled",
       "serviceUrl": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       "isVisible": false
     },
     {
-      "type": "tiled",
+      "type": "tms",
       "id": "osm-streets-tiled-offline",
       "title": "OSM Streets Tiled (offline)",
       "serviceUrl": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      "offline": true
+      "cache": "offline"
     }
   ]
 }
