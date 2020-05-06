@@ -12,34 +12,41 @@ include.module( 'layer-leaflet.layer-esri-tiled-leaflet-js', [ 'layer.layer-esri
     //
     SMK.TYPE.Layer[ 'esri-tiled' ][ 'leaflet' ].create = function ( layers, zIndex ) {
         if ( layers.length != 1 ) throw new Error( 'only 1 config allowed' )
+        var ly = layers[ 0 ]        
 
-        var serviceUrl  = layers[ 0 ].config.serviceUrl
-        var opacity     = layers[ 0 ].config.opacity
+        var serviceUrl  = ly.config.serviceUrl
+        var layerMixin = this.getTileLayerMixin( ly.id, ly.config.cache )
+        // var opacity     = ly.config.opacity
 
         var minZoom
-        if ( layers[ 0 ].config.minScale )
-            minZoom = this.getZoomBracketForScale( layers[ 0 ].config.minScale )[ 1 ]
+        if ( ly.config.minScale )
+            minZoom = this.getZoomBracketForScale( ly.config.minScale )[ 1 ]
 
         var maxZoom
-        if ( layers[ 0 ].config.maxScale )
-            maxZoom = this.getZoomBracketForScale( layers[ 0 ].config.maxScale )[ 1 ]
+        if ( ly.config.maxScale )
+            maxZoom = this.getZoomBracketForScale( ly.config.maxScale )[ 1 ]
 
-        var layer = L.esri.tiledMapLayer({
-            url: serviceUrl
-        } );
+        var layer = new ( L.esri.TiledMapLayer.extend( {
+            includes: layerMixin
+        } ) )( { url: serviceUrl } )
+    
+        // var layer = L.esri.tiledMapLayer({
+        // var layer = new TileLayerEsriOffline({
+        //     url: serviceUrl,
+        //     nativeZooms: [ 5, 7, 9, 11, 13 ]
+        // } );
         
         layer.on( 'load', function ( ev ) {
             if ( layer._currentImage )
                 layer._currentImage.setZIndex( zIndex )
 
-            layers[ 0 ].loading = false
+            ly.loading = false
         } )
 
         layer.on( 'loading', function ( ev ) {
-            layers[ 0 ].loading = true
+            ly.loading = true
         } )
 
         return layer
     }
-
 } )

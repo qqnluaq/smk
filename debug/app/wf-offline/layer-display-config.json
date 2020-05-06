@@ -42,7 +42,7 @@
         
                         { "id": "drive-bc-active-events", "isVisible": false },
 
-                        { "#id": "bc-roads", "isVisible": true }
+                        { "id": "bc-roads", "isVisible": true }
                     ]
                 },
                 { 
@@ -51,9 +51,18 @@
                     "title": "Offline",
                     "isVisible": false,
                     "items": [
+                        { "id": "active-wildfires-esri-offline", "isVisible": true },                       
+                        { "id": "bcws-activefires-publicview-inactive-esri-offline", "isVisible": false },                        
+                        { "id": "danger-rating-offline", "isVisible": false },                       
+                        { "id": "evacuation-orders-and-alerts-esri-offline", "isVisible": true },
+                        { "id": "fire-perimeters-esri-offline", "isVisible": true },
                         { "id": "bc-fire-centres-esri-offline", "isVisible": true },
-                              
-                        { "id": "osm-streets-tiled-offline", "isVisible": true }        
+                        { "id": "bans-and-prohibitions-offline", "isVisible": false },
+                        { "id": "area-restrictions-offline", "isVisible": false },
+                        { "id": "closed-recreation-sites-esri-offline", "isVisible": false },
+                        { "id": "drive-bc-active-events-offline", "isVisible": false },
+                        { "id": "osm-streets-tiled-offline", "isVisible": false },        
+                        { "id": "bc-roads-offline", "isVisible": true }
                     ]
                 }
             ]

@@ -19,7 +19,7 @@ include.module( 'layer-leaflet.layer-tms-leaflet-js', [ 'layer.layer-tms-js' ], 
 
         var config = SMK.UTIL.clone( ly.config )
         delete config.serviceUrl 
-        delete config.offline 
+        delete config.cache
 
         var layer = new ( L.TileLayer.extend( {
             includes: layerMixin,

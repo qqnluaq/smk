@@ -1,0 +1,19 @@
+{
+  "layers": [
+    {
+      "type": "wms-tiled",
+      "id": "bc-roads",
+      "title": "BC Roads",
+      "serviceUrl": "https://maps.gov.bc.ca/arcserver/services/Province/roads_wm/MapServer/WMSServer?",
+      "layers": "0"
+    },
+    {
+      "type": "wms-tiled",
+      "id": "bc-roads-offline",
+      "title": "BC Roads",
+      "serviceUrl": "https://maps.gov.bc.ca/arcserver/services/Province/roads_wm/MapServer/WMSServer?",
+      "layers": "0",
+      "cache": "offline"
+    }
+  ]
+}
