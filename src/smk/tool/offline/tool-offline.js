@@ -60,10 +60,11 @@ include.module( 'tool-offline', [
                     self.offlineLayerIds.forEach( function ( id ) {
                         if ( !smk.$viewer.visibleLayer[ id ] ) return
 
+                        var ly = smk.$viewer.visibleLayer[ id ]
                         var tis = SMK.TYPE.TileCacheIDB.convertLayerBoundsToTileInfos( 
-                            smk.$viewer.visibleLayer[ id ], 
+                            ly, 
                             smk.$viewer.map.getBounds(), 
-                            smk.$viewer.map.getZoom() 
+                            ly._clampZoom( smk.$viewer.map.getZoom() )
                         )
 
                         self.loading.total += tis.length 
@@ -139,7 +140,7 @@ include.module( 'tool-offline', [
                         } )                       
                         
                         if ( !smk.$viewer.visibleLayer[ id ] ) return
-                        
+
                         var geojson = SMK.TYPE.TileCacheIDB.convertTileInfosToGeojson( smk.$viewer.visibleLayer[ id ], tileInfos )
                         self.cachedTiles.addLayer( L.geoJSON( geojson ) )
                     } )    
