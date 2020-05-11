@@ -42,7 +42,8 @@
       "xscaleMin": 500000,
       "xscaleMax": 0,
       "popupTemplate": "@wf-feature",
-      "cache": "offline"
+      "cache": "offline",
+      "zoomLevels": [ 3, 5, 7, 9, 11 ]
     }
   ]
 }

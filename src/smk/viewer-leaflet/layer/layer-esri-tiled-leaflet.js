@@ -26,9 +26,10 @@ include.module( 'layer-leaflet.layer-esri-tiled-leaflet-js', [ 'layer.layer-esri
         if ( ly.config.maxScale )
             maxZoom = this.getZoomBracketForScale( ly.config.maxScale )[ 1 ]
 
-        var layer = new ( L.esri.TiledMapLayer.extend( {
-            includes: layerMixin
-        } ) )( { url: serviceUrl } )
+        var layer = new ( L.esri.TiledMapLayer.extend( { includes: layerMixin } ) )( { 
+            url:            serviceUrl,
+            nativeZooms:    ly.config.zoomLevels
+        } )
     
         // var layer = L.esri.tiledMapLayer({
         // var layer = new TileLayerEsriOffline({

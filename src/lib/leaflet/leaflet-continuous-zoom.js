@@ -63,5 +63,12 @@ L.TileLayer.include({
 			zoom = minNativeZoom;
 		}
 		return zoom;
-	}
+    },
+    
+    _clampZoom: function ( zoom ) {
+        var c = L.GridLayer.prototype._clampZoom( zoom )    
+        var nz = this._mapNativeZoom( c ) 
+        // console.log( '_clampZoom', zoom, c, nz )
+        return nz
+    }
 });

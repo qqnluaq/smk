@@ -28,8 +28,8 @@
       "title": "Danger Rating",
       "#serviceUrl": "https://delivery.openmaps.gov.bc.ca/geo/pub/ows",
       "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
-      "layers": "pub:WHSE_LAND_AND_NATURAL_RESOURCE.PROT_DANGER_RATING_SP",
-      "styles": "7734",
+      "layerName": "pub:WHSE_LAND_AND_NATURAL_RESOURCE.PROT_DANGER_RATING_SP",
+      "styleName": "7734",
       "isQueryable": true,
       "#metadataUrl": "https://catalogue.data.gov.bc.ca/dataset/diagnostic-facilities",
       "#scaleMin": 500000,
@@ -42,7 +42,8 @@
               "title": "Danger Rating"
           }
       ],
-      "cache": "offline"
+      "cache": "offline",
+      "zoomLevels": [ 3, 5, 7, 9, 11 ]
     },
 
     {

@@ -739,6 +739,8 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
         var offline = {
             createTile: function ( coords, done ) {
+                // coords.z = this._getZoomForUrl()
+                // console.log(coords)
                 var tile = L.TileLayer.prototype.createTile.call( this, coords, done )   
 
                 cache.setTileUrl( layerId, coords, tile )
@@ -770,7 +772,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             }
 
         if ( !this.tileCache[ cacheMode ] )            
-            this.tileCache[ cacheMode ] = new ( cacheProvider[ cacheMode ] )( 'tileStore' )
+            this.tileCache[ cacheMode ] = new ( cacheProvider[ cacheMode ] )()
 
         return this.tileCache[ cacheMode ]
     }

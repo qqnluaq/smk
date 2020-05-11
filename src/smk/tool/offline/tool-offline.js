@@ -130,11 +130,15 @@ include.module( 'tool-offline', [
                     self.tileStat.push( stat )
 
                     self.offlineCache.getAllTiles( id ).then( function ( tileInfos ) {
+                        if ( tileInfos.length == 0 ) return 
+
                         stat.count = tileInfos.length
                         tileInfos.forEach( function ( t ) {
                             stat.zoom[ t.z ] = ( stat.zoom[ t.z ] || 0 ) + 1
                             stat.size += t.blob.size
-                        } )
+                        } )                       
+                        
+                        if ( !smk.$viewer.visibleLayer[ id ] ) return
                         
                         var geojson = SMK.TYPE.TileCacheIDB.convertTileInfosToGeojson( smk.$viewer.visibleLayer[ id ], tileInfos )
                         self.cachedTiles.addLayer( L.geoJSON( geojson ) )
