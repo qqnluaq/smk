@@ -41,30 +41,27 @@ include.module( 'layer.layer-js', [ 'jquery', 'util', 'event' ], function () {
     SMK.TYPE.Layer = Layer
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
-    Layer.prototype.initialize = function ( id ) {
+    Layer.prototype.initialize = function ( viewer ) {
         var self = this
 
-        // this.id = id
-        // this.parentId = parentId
-        // this.index = index
+        if ( SMK.UTIL.type( this.config.zoomLevels ) == 'array' && this.config.zoomLevels.length > 0 ) {
+            this.config.zoomLevels = this.config.zoomLevels
+                .sort( function ( a, b ) { return a - b } )
+                .reduce( function ( acc, v ) { if ( acc.length > 0 && v == acc[ acc.length - 1 ] ) return acc; acc.push( v ); return acc }, [] )
+            this.config.zoomMin = this.config.zoomLevels[ 0 ]
+            this.config.zoomMax = this.config.zoomLevels[ this.config.zoomLevels.length - 1 ]
+        }
+        else if ( this.config.zoomMax || this.config.zoomMin ) {
+        }
+        else if ( this.config.scaleMax || this.config.scaleMin || this.config.maxScale || this.config.minScale ) {
+            this.config.zoomMin = this.config.zoomMax = null 
 
-        // seems obsolete
-        // if ( this.config.attributes ) {
-        //     this.attribute = {}
-
-        //     this.config.attributes.forEach( function ( at ) {
-        //         if ( at.name in self.attribute )
-        //             console.warn( 'attribute ' + at.name + ' is duplicated in ' + self.id )
-
-        //         self.attribute[ at.name ] = at
-
-        //         if ( self.config.geometryAttribute && self.config.geometryAttribute == at.name )
-        //             at.isGeometry = true
-
-        //         if ( self.config.titleAttribute && self.config.titleAttribute == at.name )
-        //             at.isTitle = true
-        //     } )
-        // }
+            if ( this.config.minScale || this.config.scaleMin )
+                this.config.zoomMin = viewer.getZoomBracketForScale( this.config.scaleMin || this.config.minScale )[ 1 ]
+                
+            if ( this.config.maxScale || this.config.scaleMax )
+                this.config.zoomMax = viewer.getZoomBracketForScale( this.config.scaleMax || this.config.maxScale )[ 0 ]
+        }
     }
 
     Layer.prototype.hasChildren = function () { return false }
@@ -93,12 +90,12 @@ include.module( 'layer.layer-js', [ 'jquery', 'util', 'event' ], function () {
     }
 
     // I know this looks backwards. But it makes sense if you think of the scale values as denominators.
-    Layer.prototype.inScaleRange = function ( view ) {
-        // console.log( this.config.title, this.config.minScale, view.scale, this.config.maxScale )
-        if ( this.config.maxScale && view.scale < this.config.maxScale ) return false
-        if ( this.config.minScale && view.scale > this.config.minScale ) return false
-        return true
-    }
+    // Layer.prototype.inScaleRange = function ( view ) {
+    //     // console.log( this.config.title, this.config.minScale, view.scale, this.config.maxScale )
+    //     if ( this.config.maxScale && view.scale < this.config.maxScale ) return false
+    //     if ( this.config.minScale && view.scale > this.config.minScale ) return false
+    //     return true
+    // }
 
     Layer.prototype.getConfig = function () {
         return this.config

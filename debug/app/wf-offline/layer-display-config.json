@@ -61,7 +61,7 @@
                         { "id": "area-restrictions-offline", "isVisible": false },
                         { "id": "closed-recreation-sites-esri-offline", "isVisible": false },
                         { "id": "drive-bc-active-events-offline", "isVisible": false },
-                        { "id": "osm-streets-tiled-offline", "isVisible": false },        
+                        { "#id": "osm-streets-tiled-offline", "isVisible": false },        
                         { "id": "bc-roads-offline", "isVisible": true }
                     ]
                 }

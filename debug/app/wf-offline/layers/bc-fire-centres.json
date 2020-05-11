@@ -11,9 +11,7 @@
       "styleName": "3458,4837",
       "where": "include;include",
       "isQueryable": false,
-      "#metadataUrl": "https://catalogue.data.gov.bc.ca/dataset/diagnostic-facilities",
-      "#scaleMin": 500000,
-      "#scaleMax": 3000000
+      "#metadataUrl": "https://catalogue.data.gov.bc.ca/dataset/diagnostic-facilities"
     },
 
     {
@@ -25,8 +23,6 @@
       "serviceUrl": "https://tiles.arcgis.com/tiles/ubm4tcTYICKBpist/arcgis/rest/services/BCWS_FireCenterBdys2/MapServer",
       "metadataUrl": "https://catalogue.data.gov.bc.ca/dataset/diagnostic-facilities",
       "opacity": 1,
-      "xscaleMin": 500000,
-      "xscaleMax": 0,
       "popupTemplate": "@wf-feature"
     },
 
@@ -39,11 +35,10 @@
       "serviceUrl": "https://tiles.arcgis.com/tiles/ubm4tcTYICKBpist/arcgis/rest/services/BCWS_FireCenterBdys2/MapServer",
       "metadataUrl": "https://catalogue.data.gov.bc.ca/dataset/diagnostic-facilities",
       "opacity": 1,
-      "xscaleMin": 500000,
-      "xscaleMax": 0,
       "popupTemplate": "@wf-feature",
       "cache": "offline",
-      "zoomLevels": [ 3, 5, 7, 9, 11 ]
+      "zoomLevels": [ 5, 7, 9, 11 ],
+      "zoomMaxVisibleAbove": true
     }
   ]
 }

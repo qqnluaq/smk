@@ -24,7 +24,7 @@ include.module( 'layer-display', [ 'jquery', 'util', 'event' ], function () {
 
     SMK.TYPE.LayerDisplay = LayerDisplay
 
-    LayerDisplay.prototype.getVisible = function ( viewScale ) {
+    LayerDisplay.prototype.getVisible = function ( viewZoom ) {
         return this.isVisible
     }
 
@@ -85,8 +85,10 @@ include.module( 'layer-display', [ 'jquery', 'util', 'event' ], function () {
         if ( forceVisible )
             this.isVisible = true
 
-        defLayerProperty( 'scaleMin' )
-        defLayerProperty( 'scaleMax' )
+        defLayerProperty( 'zoomMin' )
+        defLayerProperty( 'zoomMax' )
+        defLayerProperty( 'zoomMinVisibleBelow' )
+        defLayerProperty( 'zoomMaxVisibleAbove' )
 
         if ( !( 'class' in option ) )
             defLayerProperty( 'class' )
@@ -119,13 +121,13 @@ include.module( 'layer-display', [ 'jquery', 'util', 'event' ], function () {
             } )
     }
 
-    LayerDisplay.layer.prototype.getVisible = function ( viewScale ) {
-        if ( !viewScale || !this.isVisible ) return this.isVisible
+    LayerDisplay.layer.prototype.getVisible = function ( viewZoom ) {
+        if ( !viewZoom || !this.isVisible ) return this.isVisible
         if ( !this.isEnabled ) return false
 
         // console.log( this.id, this.scale.min, viewScale, this.scale.max )
-        if ( this.scaleMin && this.scaleMin < viewScale ) return false
-        if ( this.scaleMax && this.scaleMax > viewScale ) return false
+        if ( this.zoomMin && !this.zoomMinVisibleBelow && viewZoom < this.zoomMin ) return false
+        if ( this.zoomMax && !this.zoomMaxVisibleAbove && viewZoom > this.zoomMax ) return false
         return true
     }
 
@@ -296,12 +298,12 @@ include.module( 'layer-display', [ 'jquery', 'util', 'event' ], function () {
     }
 
     LayerDisplayContext.prototype.isItemVisible = function ( id ) {
-        var scale = this.view && this.view.scale
+        var zoom = this.view && this.view.zoom
 
         if ( !( id in this.itemId ) ) return false
 
         return this.itemId[ id ].reduce( function ( accum, ld ) {
-            return accum && ld.getVisible( scale ) 
+            return accum && ld.getVisible( zoom ) 
         }, true )
     }
 

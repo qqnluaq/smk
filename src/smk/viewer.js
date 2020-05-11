@@ -275,7 +275,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
                     throw new Error( 'layer type "' + config.type + '" not defined for viewer "' + self.type + '"' )
 
                 var ly = new SMK.TYPE.Layer[ config.type ][ self.type ]( config )
-                ly.initialize()
+                ly.initialize( self )
 
                 return ly
             }
@@ -568,7 +568,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             if ( !self.isDisplayContextItemVisible( id ) ) return
             // if ( !self.layerDisplayContext.isItemVisible( id ) ) return
             if ( ly.config.isQueryable === false ) return
-            if ( !ly.inScaleRange( view ) ) return
+            // if ( !ly.inScaleRange( view ) ) return
 
             var option = {
                 tolerance: ly.config.tolerance || tolerance,

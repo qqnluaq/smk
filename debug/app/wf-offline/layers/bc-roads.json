@@ -14,7 +14,8 @@
       "serviceUrl": "https://maps.gov.bc.ca/arcserver/services/Province/roads_wm/MapServer/WMSServer?",
       "layerName": "0",
       "cache": "offline",
-      "zoomLevels": [ 3, 5, 7, 9, 11 ]
+      "zoomLevels": [ 5, 7, 9, 11 ],
+      "zoomMaxVisibleAbove": true
     }
   ]
 }

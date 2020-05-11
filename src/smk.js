@@ -664,7 +664,9 @@
                     baseMap: 'Topographic',
                     clusterOption: {
                         showCoverageOnHover: false
-                    }
+                    },
+                    zoomMin: 4,
+                    zoomMax: 19
                 },
                 tools: [
                     { type: 'about',        enabled: false, order: 1, position: 'list-menu',                        icon: 'help',           title: 'About SMK' },

@@ -14,28 +14,26 @@ include.module( 'layer-leaflet.layer-esri-tiled-leaflet-js', [ 'layer.layer-esri
         if ( layers.length != 1 ) throw new Error( 'only 1 config allowed' )
         var ly = layers[ 0 ]        
 
-        var serviceUrl  = ly.config.serviceUrl
-        var layerMixin = this.getTileLayerMixin( ly.id, ly.config.cache )
-        // var opacity     = ly.config.opacity
-
-        var minZoom
-        if ( ly.config.minScale )
-            minZoom = this.getZoomBracketForScale( ly.config.minScale )[ 1 ]
-
-        var maxZoom
-        if ( ly.config.maxScale )
-            maxZoom = this.getZoomBracketForScale( ly.config.maxScale )[ 1 ]
-
-        var layer = new ( L.esri.TiledMapLayer.extend( { includes: layerMixin } ) )( { 
-            url:            serviceUrl,
+        var opt = {
+            url:            ly.config.serviceUrl,
             nativeZooms:    ly.config.zoomLevels
-        } )
-    
-        // var layer = L.esri.tiledMapLayer({
-        // var layer = new TileLayerEsriOffline({
-        //     url: serviceUrl,
-        //     nativeZooms: [ 5, 7, 9, 11, 13 ]
-        // } );
+        }
+
+        if ( ly.config.zoomMin ) {
+            opt.minZoom = ly.config.zoomMin
+            if ( ly.config.zoomMinVisibleBelow )
+                opt.minNativeZoom = ly.config.zoomMin
+        }
+
+        if ( ly.config.zoomMax ) {
+            opt.maxZoom = ly.config.zoomMax
+            if ( ly.config.zoomMaxVisibleAbove )
+                opt.maxNativeZoom = ly.config.zoomMax
+        }
+
+        var layerMixin = this.getTileLayerMixin( ly.id, ly.config.cache )
+
+        var layer = new ( L.esri.TiledMapLayer.extend( { includes: layerMixin } ) )( opt )
         
         layer.on( 'load', function ( ev ) {
             if ( layer._currentImage )

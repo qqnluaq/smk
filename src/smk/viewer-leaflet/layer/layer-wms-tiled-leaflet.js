@@ -21,10 +21,22 @@ include.module( 'layer-leaflet.layer-wms-tiled-leaflet-js', [ 'layer.layer-wms-t
             attribution:    ly.config.attribution,
             opacity:        ly.config.opacity,
             cql_filter:     ly.config.where || 'include',
-            nativeZooms:    ly.config.zoomLevels,
+            nativeZooms:    ly.config.zoomLevels,            
             format:         'image/png',
             transparent:    true,
-            zIndex:         zIndex
+            zIndex:         zIndex,
+        }
+
+        if ( ly.config.zoomMin ) {
+            opt.minZoom = ly.config.zoomMin
+            if ( ly.config.zoomMinVisibleBelow )
+                opt.minNativeZoom = ly.config.zoomMin
+        }
+
+        if ( ly.config.zoomMax ) {
+            opt.maxZoom = ly.config.zoomMax
+            if ( ly.config.zoomMaxVisibleAbove )
+                opt.maxNativeZoom = ly.config.zoomMax
         }
 
         if ( !opt.styles ) delete opt.styles

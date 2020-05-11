@@ -11,38 +11,41 @@ include.module( 'layer-leaflet.layer-esri-feature-leaflet-js', [ 'layer.layer-es
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     SMK.TYPE.Layer[ 'esri-feature' ][ 'leaflet' ].create = function ( layers, zIndex ) {
-        var self = this
-
         if ( layers.length != 1 ) throw new Error( 'only 1 config allowed' )
+        var ly = layers[ 0 ]
 
-        // var opacity     = layers[ 0 ].config.opacity
-
-        var cfg = {
-            url: layers[ 0 ].config.serviceUrl
+        var opt = {
+            url: ly.config.serviceUrl
         }
 
-        if ( layers[ 0 ].config.scaleMin )
-            cfg.minZoom = this.getZoomBracketForScale( layers[ 0 ].config.scaleMin )[ 1 ]
+        if ( ly.config.zoomMin ) {
+            opt.minZoom = ly.config.zoomMin
+            // if ( ly.config.zoomMinVisibleBelow )
+            //     opt.minNativeZoom = ly.config.zoomMin
+        }
 
-        if ( layers[ 0 ].config.scaleMax )
-            cfg.maxZoom = this.getZoomBracketForScale( layers[ 0 ].config.scaleMax )[ 1 ]
+        if ( ly.config.zoomMax ) {
+            opt.maxZoom = ly.config.zoomMax
+            // if ( ly.config.zoomMaxVisibleAbove )
+            //     opt.maxNativeZoom = ly.config.zoomMax
+        }
 
-        if ( layers[ 0 ].config.where )
-            cfg.where = layers[ 0 ].config.where
+        if ( ly.config.where )
+            opt.where = ly.config.where
 
-        if ( layers[ 0 ].config.drawingInfo ) {
-            cfg.drawingInfo = layers[ 0 ].config.drawingInfo
-            if ( cfg.drawingInfo.renderer && cfg.drawingInfo.renderer.symbol && cfg.drawingInfo.renderer.symbol.url )
-                // cfg.drawingInfo.renderer.symbol.url = this.resolveUrl( cfg.drawingInfo.renderer.symbol.url )
-                cfg.drawingInfo.renderer.symbol.url = ( new URL( cfg.drawingInfo.renderer.symbol.url, document.location ) ).toString()
+        if ( ly.config.drawingInfo ) {
+            opt.drawingInfo = ly.config.drawingInfo
+            if ( opt.drawingInfo.renderer && opt.drawingInfo.renderer.symbol && opt.drawingInfo.renderer.symbol.url )
+                // opt.drawingInfo.renderer.symbol.url = this.resolveUrl( opt.drawingInfo.renderer.symbol.url )
+                opt.drawingInfo.renderer.symbol.url = ( new URL( opt.drawingInfo.renderer.symbol.url, document.location ) ).toString()
         }
         
-        var layer = L.esri.featureLayer( cfg )
+        var layer = L.esri.featureLayer( opt )
         
-        if ( layers[ 0 ].legendCacheResolve ) {
+        if ( ly.legendCacheResolve ) {
             layer.legend( function ( err, leg ) {
-                layers[ 0 ].legendCacheResolve( err ? null : leg.layers[ 0 ].legend )
-                layers[ 0 ].legendCacheResolve = null
+                ly.legendCacheResolve( err ? null : leg.layers[ 0 ].legend )
+                ly.legendCacheResolve = null
             } )
         }
 
@@ -50,11 +53,11 @@ include.module( 'layer-leaflet.layer-esri-feature-leaflet-js', [ 'layer.layer-es
             if ( layer._currentImage )
                 layer._currentImage.setZIndex( zIndex )
 
-            layers[ 0 ].loading = false
+            ly.loading = false
         } )
 
         layer.on( 'loading', function ( ev ) {
-            layers[ 0 ].loading = true
+            ly.loading = true
         } )
 
         return layer
