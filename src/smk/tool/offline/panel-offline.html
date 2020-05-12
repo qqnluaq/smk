@@ -22,6 +22,8 @@
         <div>View zoom: {{ viewStat.zoom }}</div>
     </template>
 
+    <div>Total size of cache: {{ tileStat.concat( vectorStat ).reduce( function ( a, t ) { return a + t.size }, 0 ) }} bytes</div>
+
     <div v-for="t in tileStat">
         <h3>{{ t.id }}</h3>
         <div>Total tile count: {{ t.count }}</div>
