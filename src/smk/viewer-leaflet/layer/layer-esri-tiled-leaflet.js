@@ -19,17 +19,17 @@ include.module( 'layer-leaflet.layer-esri-tiled-leaflet-js', [ 'layer.layer-esri
             nativeZooms:    ly.config.zoomLevels
         }
 
-        if ( ly.config.zoomMin ) {
-            opt.minZoom = ly.config.zoomMin
+        if ( ly.config.zoomMin ) 
             if ( ly.config.zoomMinVisibleBelow )
                 opt.minNativeZoom = ly.config.zoomMin
-        }
+            else
+                opt.minZoom = ly.config.zoomMin
 
-        if ( ly.config.zoomMax ) {
-            opt.maxZoom = ly.config.zoomMax
+        if ( ly.config.zoomMax )
             if ( ly.config.zoomMaxVisibleAbove )
                 opt.maxNativeZoom = ly.config.zoomMax
-        }
+            else
+                opt.maxZoom = ly.config.zoomMax
 
         var layerMixin = this.getTileLayerMixin( ly.id, ly.config.cache )
 
