@@ -78,6 +78,23 @@
             "title": "Status"
         }
       ]
+    },
+
+    {
+        "type": "vector",
+        "id": "evacuation-orders-and-alerts-esri-offline",
+        "title": "Fire Evacuation Orders and Alerts",
+        "cache": "offline",
+        "cacheSource": "evacuation-orders-and-alerts-esri",
+        "#style": {
+            "markerUrl": "./layers/cardlock/images/gas.png",
+            "markerSize": [ 22, 22 ],
+            "markerOffset": [ 11, 11 ]
+        },
+        "#legend": {
+            "point": true
+        }
     }
+
   ]
 }

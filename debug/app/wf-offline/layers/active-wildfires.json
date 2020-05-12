@@ -351,6 +351,23 @@
           }
         }
       ]
+    },
+
+    {
+        "type": "vector",
+        "id": "active-wildfires-esri-offline",
+        "title": "BC Wildfires - Active Fires",
+        "cache": "offline",
+        "cacheSource": "active-wildfires-esri",
+        "#style": {
+            "markerUrl": "./layers/cardlock/images/gas.png",
+            "markerSize": [ 22, 22 ],
+            "markerOffset": [ 11, 11 ]
+        },
+        "#legend": {
+            "point": true
+        }
     }
+
   ]
 }

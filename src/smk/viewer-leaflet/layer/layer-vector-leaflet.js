@@ -183,6 +183,14 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
             layer.clearLayers()
         }
 
+        if ( layers[ 0 ].config.cache ) {
+            self.getCache( 'offline-vector' ).getAllFeatures( layers[ 0 ].id ).then( function ( features ) {
+                layer.addData( turf.featureCollection( features ) )
+            } )
+
+            return layer
+        }
+
         if ( layers[ 0 ].config.isInternal ) 
             return layer 
 
@@ -237,6 +245,8 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     function convertStyle( styleConfig, type ) {
+        if ( !styleConfig ) return 
+        
         if ( type == 'Point' || type == 'MultiPoint' )
             return {
                 radius:      styleConfig.strokeWidth / 2,
@@ -264,7 +274,7 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
     }
 
     function markerForStyle( viewer, latlng, styleConfig, layerConfig ) {
-        if ( styleConfig.markerUrl ) {
+        if ( styleConfig && styleConfig.markerUrl ) {
             return L.marker( latlng, {
                 icon: L.icon( {
                     iconUrl: viewer.resolveAttachmentUrl( styleConfig.markerUrl, null, 'png' ),

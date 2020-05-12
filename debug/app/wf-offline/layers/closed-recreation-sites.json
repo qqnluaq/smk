@@ -103,6 +103,23 @@
         },
         "transparency": 0
       }
+    },
+
+    {
+        "type": "vector",
+        "id": "closed-recreation-sites-esri-offline",
+        "title": "Closed Recreation Sites",
+        "cache": "offline",
+        "cacheSource": "closed-recreation-sites-esri",
+        "#style": {
+            "markerUrl": "./layers/cardlock/images/gas.png",
+            "markerSize": [ 22, 22 ],
+            "markerOffset": [ 11, 11 ]
+        },
+        "#legend": {
+            "point": true
+        }
     }
+
   ]
 }

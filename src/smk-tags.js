@@ -69,6 +69,7 @@ t.group( 'component' )
     .dir( 'smk/component/*' )
 
 t.script( 'tile-cache-idb',     'smk/tile-cache-idb.js' )
+t.script( 'feature-cache-idb',     'smk/feature-cache-idb.js' )
 
 // ==================================================================================
 // smk tools

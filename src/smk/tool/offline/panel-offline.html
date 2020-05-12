@@ -10,12 +10,12 @@
         <command-button class="smk-save-tiles"
             v-bind:disabled="busy"
             v-on:click="$$emit( 'save-tiles' )"
-        >Save Tiles</command-button>
+        >Save</command-button>
 
         <command-button class="smk-clear-tiles"
             v-bind:disabled="busy"
             v-on:click="$$emit( 'clear-tiles' )"
-        >Clear Tiles</command-button>
+        >Clear</command-button>
     </template>
 
     <template v-if="viewStat">
@@ -28,6 +28,13 @@
         <div>Count per zoom level: <span v-for="c,z in t.zoom">{{ c }}&nbsp;at&nbsp;zoom&nbsp;{{ z }}, </span></div>
         <div>Total size of tiles: {{ t.size }} bytes</div>
         <div v-if="t.count">Avg size per tile: {{ Math.round( t.size / t.count ) }} bytes</div>    
+    </div>
+
+    <div v-for="t in vectorStat">
+        <h3>{{ t.id }}</h3>
+        <div>Total feature count: {{ t.count }}</div>
+        <div>Total size of features: {{ t.size }} bytes</div>
+        <div v-if="t.count">Avg size per feature: {{ Math.round( t.size / t.count ) }} bytes</div>    
     </div>
 
 </tool-panel>

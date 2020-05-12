@@ -137,6 +137,23 @@
       ],
       "popupTemplate": "@wf-feature",
       "titleAttribute": "FIRE_NUMBER"
+    },
+
+    {
+        "type": "vector",
+        "id": "bcws-activefires-publicview-inactive-esri-offline",
+        "title": "BC Wildfires - Declared Out",
+        "cache": "offline",
+        "cacheSource": "bcws-activefires-publicview-inactive-esri",
+        "#style": {
+            "markerUrl": "./layers/cardlock/images/gas.png",
+            "markerSize": [ 22, 22 ],
+            "markerOffset": [ 11, 11 ]
+        },
+        "#legend": {
+            "point": true
+        }
     }
+
   ]
 }

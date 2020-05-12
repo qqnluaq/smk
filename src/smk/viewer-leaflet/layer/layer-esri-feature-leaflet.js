@@ -60,7 +60,56 @@ include.module( 'layer-leaflet.layer-esri-feature-leaflet-js', [ 'layer.layer-es
             ly.loading = true
         } )
 
+        layer.getAllFeatures = function () {
+            var fts = []
+            this.eachFeature( function ( ly ) {
+                console.log(ly)
+                var ft = SMK.UTIL.clone( ly.feature )
+                ft.style = convertStyle( ly.options )
+                fts.push( ft )
+            } )
+            return fts
+        }
+
         return layer
     }
 
+    function convertStyle( opt ) {
+        // options:
+        // clickable: true
+        // color: "rgb(26,26,26)"
+        // fillColor: "rgb(152,230,0)"
+        // fillOpacity: 1
+        // opacity: 1
+        // pane: "markerPane"
+        // proportionalPolygon: false
+        // radius: 4.498875
+        // stroke: true
+        // url: "https://services6.arcgis.com/ubm4tcTYICKBpist/arcgis/rest/services/BCWS_ActiveFires_PublicView/FeatureServer/0/"
+        // weight: 0.9997499999999999        
+
+        // color:       styleConfig.strokeColor,
+        // weight:      styleConfig.strokeWidth,
+        // opacity:     styleConfig.strokeOpacity,
+        // lineCap:     styleConfig.strokeCap,
+        // dashArray:   styleConfig.strokeDashes,
+        // // lineJoin:    styleConfig.,
+        // dashOffset:  styleConfig.strokeDashOffset,
+        // fill:        styleConfig.fill,
+        // fillColor:   styleConfig.fillColor,
+        // fillOpacity: styleConfig.fillOpacity,
+
+        return {
+            strokeColor:        opt.color,        
+            // strokeWidth:        opt.weight,  
+            strokeWidth:        opt.radius * 2,  
+            strokeOpacity:      opt.opacity, 
+            // strokeCap:          opt.    
+            // strokeDashes:       opt.        
+            // strokeDashOffset:   opt.            
+            // fill:               opt.stroke
+            fillColor:          opt.fillColor,
+            fillOpacity:        opt.fillOpacity,        
+        }
+    }
 } )

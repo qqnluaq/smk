@@ -1,4 +1,4 @@
-include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', 'query', 'turf', 'layer-display', 'tile-cache-idb' ], function () {
+include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', 'query', 'turf', 'layer-display', 'tile-cache-idb', 'feature-cache-idb' ], function () {
     "use strict";
 
     var ViewerEvent = SMK.TYPE.Event.define( [
@@ -235,7 +235,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             self.delayedUpdateLayersVisible()
         } )
 
-        this.tileCache = {}
+        this.cacheProvider = {}
     }
 
     Viewer.prototype.addLayer = function ( layerConfig ) {
@@ -735,11 +735,10 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
     }
 
     Viewer.prototype.getTileLayerMixin = function ( layerId, cacheMode ) {
-        var cache = this.getTileCache( cacheMode )
+        var cache = this.getCache( cacheMode + '-tile' )
 
         var offline = {
             createTile: function ( coords, done ) {
-                // coords.z = this._getZoomForUrl()
                 // console.log(coords)
                 var tile = L.TileLayer.prototype.createTile.call( this, coords, done )   
 
@@ -760,20 +759,22 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
     }
 
     var cacheProvider = {
-        offline: SMK.TYPE.TileCacheIDB 
+        'offline-tile': SMK.TYPE.TileCacheIDB,
+        'offline-vector': SMK.TYPE.FeatureCacheIDB,
+        'fallback': function () {
+            this.setTileUrl = function ( layerId, coords, tile ) {
+                return SMK.UTIL.resolved()
+            }                
+        }
     }
 
-    Viewer.prototype.getTileCache = function ( cacheMode ) {
+    Viewer.prototype.getCache = function ( cacheMode ) {
         if ( !cacheMode || !( cacheMode in cacheProvider ) )
-            return {
-                setTileUrl: function ( layerId, coords, tile ) {
-                    return SMK.UTIL.resolved()
-                }
-            }
+            cacheMode = 'fallback'
 
-        if ( !this.tileCache[ cacheMode ] )            
-            this.tileCache[ cacheMode ] = new ( cacheProvider[ cacheMode ] )()
+        if ( !this.cacheProvider[ cacheMode ] )            
+            this.cacheProvider[ cacheMode ] = new ( cacheProvider[ cacheMode ] )()
 
-        return this.tileCache[ cacheMode ]
+        return this.cacheProvider[ cacheMode ]
     }
 } )
