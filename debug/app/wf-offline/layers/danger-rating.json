@@ -3,9 +3,9 @@
     {
       "type": "wms",
       "id": "danger-rating",
-      "title": "Danger Rating",
-      "#serviceUrl": "https://delivery.openmaps.gov.bc.ca/geo/pub/ows",
-      "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
+      "title": "BC Wildfire Danger Rating",
+      "serviceUrl": "https://delivery.openmaps.gov.bc.ca/geo/pub/ows",
+      "#serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/ows",
       "layerName": "pub:WHSE_LAND_AND_NATURAL_RESOURCE.PROT_DANGER_RATING_SP",
       "styleName": "7734",
       "isQueryable": true,
@@ -47,9 +47,10 @@
     },
 
     {
+      "not": "used",
       "type": "esri-feature",
       "id": "danger-rating-esri",
-      "title": "Danger Rating (ESRI)",
+      "title": "BC Wildfire Danger Rating (ESRI)",
       "isQueryable": true,
       "attribution": "Copyright 117 DataBC, Government of British Columbia",
       "serviceUrl": "https://services6.arcgis.com/ubm4tcTYICKBpist/arcgis/rest/services/British_Columbia_Danger_Rating/FeatureServer/0",

@@ -164,6 +164,11 @@
       "type": "offline",
       "enabled": true,
       "position": "toolbar"
+    },
+    {
+      "type": "scale",
+      "enabled": true,
+      "showZoom": true
     }
   ]
 }

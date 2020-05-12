@@ -85,6 +85,9 @@ include.module( 'layer.layer-js', [ 'jquery', 'util', 'event' ], function () {
     Layer.prototype.getFeaturesAtPoint = function ( arg ) {
     }
 
+    Layer.prototype.getFeaturesInArea = function ( area, view, option ) {
+    }
+
     Layer.prototype.canMergeWith = function ( other ) {
         return false
     }
@@ -99,6 +102,6 @@ include.module( 'layer.layer-js', [ 'jquery', 'util', 'event' ], function () {
 
     Layer.prototype.getConfig = function () {
         return this.config
-    }
+    }  
     
 } )
