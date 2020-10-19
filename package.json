@@ -12,11 +12,12 @@
     "dist"
   ],
   "scripts": {
-    "build": "grunt release",
-    "debug": "grunt develop connect",
-    "serve": "grunt connect"
+    "start": "grunt develop watch",
+    "develop": "grunt develop",
+    "release": "grunt release"
   },
   "dependencies": {
+    "http-server": "^0.12.3"
   },
   "devDependencies": {
     "connect-livereload": "^0.6.0",

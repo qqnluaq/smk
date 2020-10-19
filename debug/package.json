@@ -1,0 +1,10 @@
+{
+  "name": "smk-debug",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "live-server `node -e 'console.log(require(\"path\").resolve(\"..\"))'` --wait=1000 --ignore=.*/**,node_modules/**,etc/**,temp,temp/**,dist,dist/**"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}
