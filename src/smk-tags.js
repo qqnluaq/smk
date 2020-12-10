@@ -16,20 +16,12 @@ t.script( 'vue', 'lib/vue-2.5.11.min.js' )
 t.script( 'turf', 'lib/turf-5.1.6.min.js' )
 
 t.script( 'libs', 'smk/libs.js' )
-// t.sequence( 'libs' )
-//     .tag( 'check-libs' )
-//     .script( 'smk/libs.js' )
-//     .tag( 'jquery' )
-//     .tag( 'vue' )
-//     .tag( 'vue-config' )
-//     .tag( 'turf' )
 
 t.group( 'vue-config' )
     .script( 'smk/vue-config.js' )
     .asset( 'smk/spinner.gif' )
 
 t.script( 'proj4', 'lib/proj4-2.4.4.min.js' )
-// t.script( 'proj4', 'https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.2/proj4.min.js', { external: true } )
 
 t.sequence( 'terraformer' )
     .script( 'lib/terraformer/terraformer-1.0.7.js' )
@@ -79,15 +71,6 @@ t.group( 'sidepanel' )
 
 t.group( 'status-message' )
     .dir( 'smk/status-message/**/*' )
-
-// t.group( 'feature-list' )
-    // .dir( 'smk/feature-list/**/*' )
-
-// t.group( 'widgets' )
-    // .dir( 'smk/widgets/*' )
-
-// t.group( 'widget-address-search' )
-    // .dir( 'smk/widgets/address-search/*' )
 
 t.group( 'api' )
     .dir( 'smk/api/*' )
@@ -174,8 +157,6 @@ t.group( 'tool-query' )
     .dir( 'smk/tool/query/*' )
 
 // broken
-// t.group( 'check-query-place' )
-//     .dir( 'smk/tool/query-place/check/*' )
 // t.group( 'tool-query-place' )
 //     .dir( 'smk/tool/query-place/*' )
 
@@ -218,18 +199,12 @@ t.group( 'viewer-leaflet' )
     .style( 'smk/viewer-leaflet/viewer-leaflet.css' )
 
 t.sequence( 'leaflet' )
-    // .script( 'lib/leaflet/leaflet-1.6.0.min.js' )
     .script( 'lib/leaflet/leaflet-1.6.0.js' )
     .style( 'lib/leaflet/leaflet-1.6.0.css', { inline: false } )
-    // .script( 'lib/leaflet/leaflet-1.5.1.min.js' )
-    // .style( 'lib/leaflet/leaflet-1.5.1.css' )
-    // .script( 'lib/leaflet/esri-leaflet-2.3.0.min.js' )
     .script( 'lib/leaflet/esri-leaflet-2.3.2.js' )
-    // .script( 'lib/leaflet/esri-leaflet-renderers.js' )
     .script( 'lib/leaflet/esri-leaflet-renderers-2.0.6.js' )
     .script( 'lib/leaflet/esri-leaflet-legend-compat-src-2.0.1.js')
     .dir( 'lib/leaflet/images/**' )
-
 
 t.group( 'tool-coordinate-leaflet' )
     .dir( 'smk/viewer-leaflet/tool/coordinate/**/*' )
@@ -303,7 +278,6 @@ t.sequence( 'esri3d' )
     // .script( 'https://unpkg.com/terraformer@1.0.7' )
     // .script( 'https://unpkg.com/terraformer-arcgis-parser@1.0.5' )
     // .script( 'https://unpkg.com/terraformer-wkt-parser@1.1.2' )
-
 
 t.group( 'tool-coordinate-esri3d' )
     .dir( 'smk/viewer-esri3d/tool/coordinate/**/*' )
