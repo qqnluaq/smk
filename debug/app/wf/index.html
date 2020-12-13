@@ -90,7 +90,30 @@
     'theme=wf', '?' -->
 
 
+    <script src="plugin-time-dimension/install.js"></script>
     <script>
+
+        var startTime = new Date()
+        startTime.setUTCMilliseconds(0)
+        startTime.setUTCSeconds(0)
+        startTime.setUTCMinutes(0)
+        startTime.setHours( Math.trunc( startTime.getHours() / 6 ) * 6 )        
+
+        var endTime = new Date( startTime )
+        endTime.setHours( endTime.getHours() + 48 )
+
+        var timeDimTool = {
+            tools: [ {
+                type: "time-dimension",
+                enabled: true,
+                timeDimensionOptions: {
+                    timeInterval: `${ startTime.toISOString() }/${ endTime.toISOString() }`,
+                    period: "PT1H",
+                    currentTime: startTime,
+                }
+            } ]
+        } 
+
         SMK.INIT( {
             'smk-container-sel': "#smk-map-frame",
             'smk-title-sel': "#header-title, head title",
@@ -108,9 +131,11 @@
                 './layers/fire-perimeters.json',
                 './layers/prescribed-fire.json',
                 './layers/weather.json',
-                './layers/smoke.json',
+                // './layers/smoke.json',
+                './layers/hourly-currentforecast-firesmoke.json',
                 // './layers/whse-land-and-natural-resource-prot-current-fire-polys-sp.json',
                 './layer-display-config.json', 
+                timeDimTool,
                 'theme=wf', '?' 
             ],
         } ).then( function () {

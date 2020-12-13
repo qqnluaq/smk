@@ -13,7 +13,12 @@
             "queries": null,
             "serviceUrl": "https://bluesky4.eos.ubc.ca/geoserver/CurrentForecast/wms",
             "layerName": "hourly",
-            "styleName": "CurrentForecast:firesmoke_legend"
+            "styleName": "CurrentForecast:firesmoke_legend",
+            "time": {
+                "updateTimeDimension": true,
+                "updateTimeDimensionMode": "replace",
+                "requestTimeFromCapabilities": true
+            }
         }
     ]
 }

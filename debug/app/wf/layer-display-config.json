@@ -34,7 +34,7 @@
 
                 { "id": "radar-1km-rrai--radarurpprecipr14-linear", "isVisible": false },
 
-                { "id": "hourly--currentforecast-firesmoke-legend", "isVisible": false }
+                { "id": "hourly-currentforecast-firesmoke", "isVisible": true }
             ]
         }
     ]

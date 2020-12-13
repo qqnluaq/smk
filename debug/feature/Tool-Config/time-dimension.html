@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Time Dimension</title>
+
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <script src="default-config.js"></script>
+<!--***************************************************************************
+    This example shows the default configuration for meaasure tool.
+-->
+    <div id="smk-map-frame"></div>
+    <script>
+        var startTime = new Date()
+        startTime.setUTCMilliseconds(0)
+        startTime.setUTCSeconds(0)
+        startTime.setUTCMinutes(0)
+        startTime.setHours( Math.trunc( startTime.getHours() / 6 ) * 6 )        
+
+        var endTime = new Date( startTime )
+        endTime.setHours( endTime.getHours() + 48 )
+
+        SMK.INIT( {           
+            containerSel: "#smk-map-frame",
+            config: defaultConfig.concat( {
+                tools: [ {
+                    type: "time-dimension",
+                    enabled: true,
+                    timeDimensionOptions: {
+                        // format should be "yyyy-mm-ddThh:mm:ssZ"
+                        timeInterval: `${ startTime.toISOString() }/${ endTime.toISOString() }`,
+                        // timeInterval: "2020-12-11T20:00:00Z/2020-12-13T22:00:00Z",
+                        period: "PT1H",
+                        currentTime: startTime,
+                        // currentTime: Date.parse("2020-12-11T20:00:00Z"),
+                        // timeInterval: "2020-12-11T14:00:00Z/2020-12-13T16:00:00Z",
+                        // period: "PT1H",
+                        // currentTime: Date.parse("2020-12-11T14:00:00Z"),
+                    }
+                } ],
+                "layers": [
+                    {
+                        "type": "image",
+                        "id": "hourly--currentforecast-firesmoke-legend",
+                        "title": "Smoke Forecast, Hourly",
+                        // "isQueryable": true,
+                        "opacity": 0.65,
+                        // "minScale": null,
+                        // "maxScale": null,
+                        // "titleAttribute": null,
+                        // "attributes": false,
+                        // "queries": null,
+                        "baseUrl": "https://firesmoke.ca/forecasts/current/images/hourly_<%= timestamp %>.png",
+                        "bounds": [[40.0, -144.5], [70.0, -52.5]],
+                        // "layerName": "hourly",
+                        // "styleName": "CurrentForecast:firesmoke_legend",
+                        "time": {
+                            "updateTimeDimension": true,
+                            "updateTimeDimensionMode": "replace",
+                            "requestTimeFromCapabilities": true
+                        }
+                    }
+                ]
+
+            }, '?' )
+        } )
+    </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+
