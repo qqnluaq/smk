@@ -1,12 +1,12 @@
 {
-  "version": "1.0.0-beta.5",
-  "name": "smk",
+  "version": "1.0.1",
+  "name": "@qqnluaq/smk",
   "title": "Simple Map Kit",
   "description": "A simple way to add a map your application.",
   "author": "Ben Jubb <benjubb@gmail.com>",
   "license": "APSL-2.0",
-  "homepage": "https://bcgov.github.io/smk/",
-  "repository": "github:bcgov/smk",
+  "homepage": "https://qqnluaq.github.io/smk/",
+  "repository": "github:qqnluaq/smk",
   "main": "dist/smk.js",
   "files": [
     "dist"
