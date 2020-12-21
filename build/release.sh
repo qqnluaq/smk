@@ -43,15 +43,15 @@ git branch -r | grep $BRANCH
 echo
 read -n1 -r -p "If branch $BRANCH is present, hit Ctrl+C now. Any other key to continue." key
 
-echo
+echo ------------------------------------------------------------------
 echo "Checkout branch $BRANCH..."
-echo
+echo ------------------------------------------------------------------
 
 git checkout -b $BRANCH
 
-echo
+echo ------------------------------------------------------------------
 echo "Building..."
-echo
+echo ------------------------------------------------------------------
 
 if npm run release ; then
     echo "Build was successful"
@@ -60,9 +60,9 @@ else
     exit 1
 fi
 
-echo
-echo "Creating git tag v$VERSION..."
-echo
+echo ------------------------------------------------------------------
+echo "Pushing to branch $BRANCH..."
+echo ------------------------------------------------------------------
 
 git add dist --force --all
 git commit -m "v$VERSION"
@@ -71,14 +71,27 @@ git tag v$VERSION --force
 git push --set-upstream origin $BRANCH
 git push --tags --force
 
-echo
+# echo ------------------------------------------------------------------
+# echo "Merging to branch documentation..."
+# echo ------------------------------------------------------------------
+
+# git branch --delete --force release/current
+# git push origin --delete release/current
+
+# git checkout documentation
+
+
+# git push --set-upstream origin release/current
+
+echo ------------------------------------------------------------------
 echo "Publish v$VERSION..."
-echo
+echo ------------------------------------------------------------------
 
 npm publish --access public
 
-echo
+echo ------------------------------------------------------------------
 echo "Checkout master..."
+echo ------------------------------------------------------------------
 
 git checkout master
 
