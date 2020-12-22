@@ -185,8 +185,10 @@
         defineAttr( 'containerSel', 'smk-container-sel' )
 
         defineAttr( 'config', 'smk-config', function () { return '?smk-' }, function ( val ) {
-            if ( Array.isArray( val ) ) return val
-            return val.split( /\s*[|]\s*/ ).filter( function ( i ) { return !!i } )
+            if ( typeof val == 'string' ) 
+                return val.split( /\s*[|]\s*/ ).filter( function ( i ) { return !!i } )
+
+            return val
         } )
 
         defineAttr( 'baseUrl', 'smk-base-url', function () {
@@ -199,7 +201,10 @@
 
         SMK.BOOT = ( SMK.BOOT || Promise.resolve() )
             .then( function () {
-                return parseConfig( attr.config )
+                return attr.config
+            } )
+            .then( function ( config ) {
+                return parseConfig( config )
             } )
             .then( function ( parsedConfig ) {
                 attr.parsedConfig = parsedConfig
