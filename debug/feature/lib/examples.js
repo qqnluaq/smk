@@ -6,6 +6,20 @@ var defaultExampleId
 var m = document.currentScript.src.match( /^(.+[/])/ )
 var templateUrl = ( new URL( 'examples.html', m[ 0 ] ) ).toString()
 
+var searchParam = { environment: 'dev', enable: 'ALL', zoom: '100', maxjobs: '2', expected: '0' };
+var search = '?'
+
+if ( location.search ) {
+    search = location.search + '&'
+
+    location.search.substr( 1 ).split( '&' ).forEach( function ( p ) {
+        var m = p.match( /(.+?)=(.*)/ )
+        if ( !m ) return
+
+        searchParam[ m[ 1 ] ] = m[ 2 ]
+    } )
+}
+
 var vmInit = fetch( templateUrl )
     .then( function ( resp ) {
         if ( !resp.ok ) throw new Error( 'fetching ' + templateUrl + ' failed' )
@@ -17,7 +31,12 @@ var vmInit = fetch( templateUrl )
             template: out,
             data: {
                 selectedExample: null,
-                examples: examples
+                examples: examples,
+                configViewer: searchParam.viewer || '',
+            },
+            watch: {
+                configViewer: function ( val ) {
+                }
             },
             methods: {
                 selectExample: function ( example ) {
@@ -27,6 +46,15 @@ var vmInit = fetch( templateUrl )
                     this.$nextTick( function () {
                         document.getElementById( 'sourceFocus' ).scrollIntoView( true )
                     } )
+                },
+                updateParameters: function () {
+                    var config = [
+                        [ 'viewer', this.configViewer ]
+                    ]
+                    document.location.search = '?' + config.map( function ( c ) {
+                        if ( !c[ 1 ] ) return null
+                        return c[ 0 ] + '=' + encodeURIComponent( c[ 1 ] )
+                    } ).filter( function ( p ) { return p != null } ).join( '&' )
                 }
             },
             computed: {
@@ -39,7 +67,9 @@ var vmInit = fetch( templateUrl )
                     get: function () {
                         if ( !this.selectedExample ) return
                         if ( this.selectedExample.parameters )
-                            return this.selectedExample.url + '?' + this.selectedExample.parameters
+                            return this.selectedExample.url + search + this.selectedExample.parameters
+                        if ( search != '?' )
+                            return this.selectedExample.url + search
                         return this.selectedExample.url
                     }
                 }

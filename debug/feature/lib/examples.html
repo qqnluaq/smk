@@ -1,16 +1,23 @@
 <div id="app">
-    <header>
+    <header>       
+        <h2>
+            <a href="..">SMK Feature</a>
+            <span class="title">/ {{ title }}</span>
+            <label>viewer: <select v-model="configViewer" v-on:change="updateParameters">
+                <option value="">(default)</option>
+                <option value="leaflet">Leaflet</option>
+                <option value="esri3d">ESRI 3D</option> 
+            </select></label>
+        </h2>
         <h1>
-            <div><a href="..">SMK Feature</a></div>
-            <div class="title">{{ title }}</div>
+            <ul>
+                <li v-for="ex in examples"
+                    v-bind:key="ex.id"
+                    v-on:click="selectExample(ex)"
+                    v-bind:class="{ 'selected': selectedExample && selectedExample.id == ex.id }"
+                >{{ ex.title }}</li>
+            </ul>
         </h1>
-        <ul>
-            <li v-for="ex in examples"
-                v-bind:key="ex.id"
-                v-on:click="selectExample(ex)"
-                v-bind:class="{ 'selected': selectedExample && selectedExample.id == ex.id }"
-            >{{ ex.title }}</li>
-        </ul>
     </header>
 
     <article>

@@ -17,35 +17,53 @@ header {
 }
 
 header h1 {
-    display: inline-block;
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+    border-top: 2px solid black;
+}
+
+header h2 {
     padding: 5px;
     margin: 0;
     font-size: 15px;
+    font-family: sans-serif;
+    font-weight: normal;
 }
 
-header h1 .title {
-    font-size: 20px;
+header h2 label { 
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 2px;
 }
 
-header ul {
+header h2 label select { 
+    border: none;
+}
+
+header h2 label select:focus {
+    outline: none;
+} 
+
+header h1 ul {
     display: inline-block;
     margin: 0;
     padding: 0;
-    border-left: 2px solid black;
+    font-weight: normal;
 }
 
-header ul li {
+header h1 ul li {
     display: inline-block;
     margin: 0;
     padding: 5px;
     border-right: 2px solid black;
 }
 
-header ul li.selected {
+header h1 ul li.selected {
     background-color: yellow;
 }
 
-header ul li:hover {
+header h1 ul li:hover {
     background-color: orange;
 }
 

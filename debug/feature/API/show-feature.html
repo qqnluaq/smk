@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="style.css"/>
     </head>
     <body>
-        <script src="default-config.js"></script>
+        <script src="map-config.js"></script>
 <!--***************************************************************************
     This example shows how to use the showFeature API to add features to map
     under application control.
@@ -21,8 +21,8 @@
     <script>
         SMK.INIT( {
             containerSel: "#smk-map-frame",
-            config: defaultConfig.concat( {
-            }, '?' )
+            config: mapConfig( {
+            } )
         } )
         .then( function ( smk ) {
             var featureCount = 0
