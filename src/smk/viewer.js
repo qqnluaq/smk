@@ -44,48 +44,87 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             title: 'Topographic',
             option: {
                 maxNativeZoom: 16
-            }
+            },
+            create: createBasemapEsri
         },
         Streets: {
             order: 2,
-            title: 'Streets'
+            title: 'Streets',
+            create: createBasemapEsri
         },
         Imagery: {
             order: 3,
             title: 'Imagery',
             option: {
                 maxNativeZoom: 14
-            }
+            },
+            labels: [ 'ImageryTransportation', 'ImageryLabels' ],
+            create: createBasemapEsri
         },
         Oceans: {
             order: 4,
-            title: 'Oceans'
+            title: 'Oceans',
+            labels: [ 'OceansLabels' ],
+            create: createBasemapEsri
         },
         NationalGeographic: {
             order: 5,
-            title: 'National Geographic'
+            title: 'National Geographic',
+            create: createBasemapEsri
         },
         ShadedRelief: {
             order: 6,
-            title: 'Shaded Relief'
+            title: 'Shaded Relief',
+            create: createBasemapEsri
         },
         DarkGray: {
             order: 7,
-            title: 'Dark Gray'
+            title: 'Dark Gray',
+            create: createBasemapEsri
         },
         Gray: {
             order: 8,
-            title: 'Gray'
+            title: 'Gray',
+            create: createBasemapEsri
         },
         StamenTonerLight: {
             order: 9,
-            title: 'Stamen Toner Light'
+            title: 'Stamen Toner Light',
+            create: createBasemapTiled,
+            url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
+            attribution: "Map tiles by <a href='http://stamen.com'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a>. Data by <a href='http://openstreetmap.org'>OpenStreetMap</a>, under <a href='http://www.openstreetmap.org/copyright'>ODbL</a>."
         },
         // Terrain: {
         //     order: 9,
         //     title: 'Terrain'
         // },
     }
+
+    Viewer.prototype.createBasemapLayer = function ( basemapId ) {
+        return this.basemap[ basemapId ].create( basemapId )
+    }
+
+    function createBasemapEsri( id ) {
+        /* jshint -W040 */
+        var opt = Object.assign( { detectRetina: true }, this.option )
+
+        var lys = []
+        lys.push( L.esri.basemapLayer( id, opt ) )
+
+        if ( this.labels )
+            this.labels.forEach( function ( lid ) {
+                lys.push( L.esri.basemapLayer( lid, opt ) )
+            } )
+
+        return lys
+    }
+
+    function createBasemapTiled( id ) {
+        /* jshint -W040 */
+        return [ L.tileLayer( this.url, { attribution: this.attribution } ) ]
+    }
+
+
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     // for(s=1;s<25;s++){v.map.setZoom(s,{animate:false});console.log(s,v.getScale())}

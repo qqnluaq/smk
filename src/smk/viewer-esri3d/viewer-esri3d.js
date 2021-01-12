@@ -263,12 +263,12 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
         'Terrain': true,
     }
 
-    ViewerEsri3d.prototype.createBasemapLayer = function ( basemapName ) {
-        return {
-            features: L.esri.basemapLayer( basemapName, { detectRetina: true } ),
-            labels: basemapHasLabels[ basemapName ] && L.esri.basemapLayer( basemapName + 'Labels' )
-        }
-    }
+    // ViewerEsri3d.prototype.createBasemapLayer = function ( basemapName ) {
+    //     return {
+    //         features: L.esri.basemapLayer( basemapName, { detectRetina: true } ),
+    //         labels: basemapHasLabels[ basemapName ] && L.esri.basemapLayer( basemapName + 'Labels' )
+    //     }
+    // }
 
     ViewerEsri3d.prototype.showPopup = function ( contentEl, location, option ) {
         if ( location == null )

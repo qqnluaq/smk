@@ -172,50 +172,50 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
     }
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
-    ViewerLeaflet.prototype.basemap.Topographic.create = createBasemapEsri
+    // ViewerLeaflet.prototype.basemap.Topographic.create = createBasemapEsri
 
-    ViewerLeaflet.prototype.basemap.Streets.create = createBasemapEsri
+    // ViewerLeaflet.prototype.basemap.Streets.create = createBasemapEsri
 
-    ViewerLeaflet.prototype.basemap.Imagery.create = createBasemapEsri
-    ViewerLeaflet.prototype.basemap.Imagery.labels = [ 'ImageryTransportation', 'ImageryLabels' ]
+    // ViewerLeaflet.prototype.basemap.Imagery.create = createBasemapEsri
+    // ViewerLeaflet.prototype.basemap.Imagery.labels = [ 'ImageryTransportation', 'ImageryLabels' ]
 
-    ViewerLeaflet.prototype.basemap.Oceans.create = createBasemapEsri
-    ViewerLeaflet.prototype.basemap.Oceans.labels = [ 'OceansLabels' ]
+    // ViewerLeaflet.prototype.basemap.Oceans.create = createBasemapEsri
+    // ViewerLeaflet.prototype.basemap.Oceans.labels = [ 'OceansLabels' ]
 
-    ViewerLeaflet.prototype.basemap.NationalGeographic.create = createBasemapEsri
+    // ViewerLeaflet.prototype.basemap.NationalGeographic.create = createBasemapEsri
 
-    ViewerLeaflet.prototype.basemap.ShadedRelief.create = createBasemapEsri
-    ViewerLeaflet.prototype.basemap.ShadedRelief.labels = [ 'ShadedReliefLabels' ]
+    // ViewerLeaflet.prototype.basemap.ShadedRelief.create = createBasemapEsri
+    // ViewerLeaflet.prototype.basemap.ShadedRelief.labels = [ 'ShadedReliefLabels' ]
 
-    ViewerLeaflet.prototype.basemap.DarkGray.create = createBasemapEsri
-    ViewerLeaflet.prototype.basemap.DarkGray.labels = [ 'DarkGrayLabels' ]
+    // ViewerLeaflet.prototype.basemap.DarkGray.create = createBasemapEsri
+    // ViewerLeaflet.prototype.basemap.DarkGray.labels = [ 'DarkGrayLabels' ]
 
-    ViewerLeaflet.prototype.basemap.Gray.create = createBasemapEsri
-    ViewerLeaflet.prototype.basemap.Gray.labels = [ 'GrayLabels' ]
+    // ViewerLeaflet.prototype.basemap.Gray.create = createBasemapEsri
+    // ViewerLeaflet.prototype.basemap.Gray.labels = [ 'GrayLabels' ]
 
-    ViewerLeaflet.prototype.basemap.StamenTonerLight.create = createBasemapTiled
-    ViewerLeaflet.prototype.basemap.StamenTonerLight.url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png'
-    ViewerLeaflet.prototype.basemap.StamenTonerLight.attribution = "Map tiles by <a href='http://stamen.com'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a>. Data by <a href='http://openstreetmap.org'>OpenStreetMap</a>, under <a href='http://www.openstreetmap.org/copyright'>ODbL</a>."
+    // ViewerLeaflet.prototype.basemap.StamenTonerLight.create = createBasemapTiled
+    // ViewerLeaflet.prototype.basemap.StamenTonerLight.url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png'
+    // ViewerLeaflet.prototype.basemap.StamenTonerLight.attribution = "Map tiles by <a href='http://stamen.com'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a>. Data by <a href='http://openstreetmap.org'>OpenStreetMap</a>, under <a href='http://www.openstreetmap.org/copyright'>ODbL</a>."
 
-    function createBasemapEsri( id ) {
-        /* jshint -W040 */
-        var opt = Object.assign( { detectRetina: true }, this.option )
+    // function createBasemapEsri( id ) {
+    //     /* jshint -W040 */
+    //     var opt = Object.assign( { detectRetina: true }, this.option )
 
-        var lys = []
-        lys.push( L.esri.basemapLayer( id, opt ) )
+    //     var lys = []
+    //     lys.push( L.esri.basemapLayer( id, opt ) )
 
-        if ( this.labels )
-            this.labels.forEach( function ( lid ) {
-                lys.push( L.esri.basemapLayer( lid, opt ) )
-            } )
+    //     if ( this.labels )
+    //         this.labels.forEach( function ( lid ) {
+    //             lys.push( L.esri.basemapLayer( lid, opt ) )
+    //         } )
 
-        return lys
-    }
+    //     return lys
+    // }
 
-    function createBasemapTiled( id ) {
-        /* jshint -W040 */
-        return [ L.tileLayer( this.url, { attribution: this.attribution } ) ]
-    }
+    // function createBasemapTiled( id ) {
+    //     /* jshint -W040 */
+    //     return [ L.tileLayer( this.url, { attribution: this.attribution } ) ]
+    // }
 
     ViewerLeaflet.prototype.setBasemap = function ( basemapId ) {
         var self = this
@@ -237,9 +237,9 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
         this.changedBaseMap( { baseMap: basemapId } )
     }
 
-    ViewerLeaflet.prototype.createBasemapLayer = function ( basemapId ) {
-        return this.basemap[ basemapId ].create( basemapId )
-    }
+    // ViewerLeaflet.prototype.createBasemapLayer = function ( basemapId ) {
+    //     return this.basemap[ basemapId ].create( basemapId )
+    // }
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     ViewerLeaflet.prototype.addViewerLayer = function ( viewerLayer ) {
