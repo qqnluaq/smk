@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>No Mouse Wheel</title>
+
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <script src="map-config.js"></script>
+<!--***************************************************************************
+    This example shows the configuration for zoom tool that disables the mouse wheel.
+    Zooming still possible with: control, box, and double-click.
+-->
+    <div id="smk-map-frame"></div>
+    <script>
+        SMK.INIT( {
+            containerSel: "#smk-map-frame",
+            config: mapConfig( { 
+                "tools": [ {
+                    "type": "zoom",
+                    "mouseWheel": false    
+                } ]
+            } )
+        } )
+    </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+

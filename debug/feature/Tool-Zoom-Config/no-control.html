@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>No Control</title>
+
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <script src="map-config.js"></script>
+<!--***************************************************************************
+    This example shows the configuration for zoom tool that disables the control.
+    Zooming still possible with: mouse wheel, box, and double-click.
+-->
+    <div id="smk-map-frame"></div>
+    <script>
+        SMK.INIT( {
+            containerSel: "#smk-map-frame",
+            config: mapConfig( { 
+                "tools": [ {
+                    "type": "zoom",
+                    "control": false    
+                } ]
+            } )
+        } )
+    </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>No Double-click</title>
+
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <script src="map-config.js"></script>
+<!--***************************************************************************
+    This example shows the configuration for zoom tool that disables double-click.
+    Zooming still possible with: control, box, and mouse wheel.
+-->
+    <div id="smk-map-frame"></div>
+    <script>
+        SMK.INIT( {
+            containerSel: "#smk-map-frame",
+            config: mapConfig( { 
+                "tools": [ {
+                    "type": "zoom",
+                    "doubleClick": false    
+                } ]
+            } )
+        } )
+    </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+
