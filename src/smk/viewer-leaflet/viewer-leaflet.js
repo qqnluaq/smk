@@ -312,26 +312,27 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
         default:
             var bbox = turf.bbox( feature )
             bounds = L.latLngBounds( [ bbox[ 1 ], bbox[ 0 ] ], [ bbox[ 3 ], bbox[ 2 ] ] )
-
-            // if ( self.highlight[ feature.id ] )
-                // bounds = self.highlight[ feature.id ].getBounds()
         }
-
         if ( !bounds ) return
-
-        // var old = self.featureSet.pick( null )
 
         var padding = this.getPanelPadding()
 
+        var maxZoom;
+        if ( !zoomIn ) {
+            maxZoom = this.map.getZoom()
+        }
+        else if ( zoomIn === true ) {
+            maxZoom = undefined 
+        }
+        else {
+            maxZoom = parseFloat( zoomIn )
+        }
+
         this.map
-            // .once( 'zoomend moveend', function () {
-                // if ( old )
-                    // self.featureSet.pick( old )
-            // } )
             .fitBounds( bounds, {
                 paddingTopLeft: padding.topLeft,
                 paddingBottomRight: padding.bottomRight,
-                maxZoom: zoomIn !== true ? this.map.getZoom() : undefined,
+                maxZoom: maxZoom,
                 animate: true
             } )
     }
