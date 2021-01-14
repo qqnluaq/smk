@@ -2,10 +2,19 @@ include.module( 'tool-search.tool-search-list-js', [
     'tool.tool-base-js',
     'tool.tool-widget-js',
     'tool.tool-panel-js',
+    'tool.tool-internal-layers-js',
     'tool-search.widget-search-html',
     'tool-search.panel-search-html'
 ], function ( inc ) {
     "use strict";
+
+    var precisionZoom = {
+        INTERSECTION:   15,
+        STREET:         13,
+        BLOCK:          14,
+        CIVIC_NUMBER:   15,
+        _OTHER_:        12
+    }
 
     var request
 
@@ -121,6 +130,7 @@ include.module( 'tool-search.tool-search-list-js', [
         function () {
             SMK.TYPE.ToolWidget.call( this, 'search-widget' )
             SMK.TYPE.ToolPanel.call( this, 'search-panel' )
+            SMK.TYPE.ToolInternalLayers.call( this )
 
             this.defineProp( 'results' )
             this.defineProp( 'highlightId' )
@@ -139,7 +149,15 @@ include.module( 'tool-search.tool-search-list-js', [
                 else
                     SMK.HANDLER.get( self.id, 'deactivated' )( smk, self )
             } )
+
+            this.changedGroup( function () {
+                self.visible = self.group
+            } )
     
+            this.changedVisible( function () {
+                self.setInternalLayerVisible( self.visible )
+            } )
+                
             smk.on( this.id, {
                 'activate': function ( ev ) {
                     if ( !ev.toggle )
@@ -188,20 +206,33 @@ include.module( 'tool-search.tool-search-list-js', [
 
             smk.$viewer.searched.addedFeatures( function ( ev ) {
                 self.results = ev.features
+
+                self.internalLayer[ '@search-results' ].clear()
+                self.internalLayer[ '@search-results' ].load( turf.featureCollection( ev.features ) )
             } )
 
-            // // smk.$viewer.selected.removedFeatures( function ( ev ) {
-            // // } )
+            smk.$viewer.searched.highlightedFeatures( function ( ev ) {
+                self.internalLayer[ '@search-result-highlight' ].clear()
+                if ( !ev.features || !ev.features.length ) return
+
+                self.internalLayer[ '@search-result-highlight' ].load( turf.featureCollection( ev.features ) )
+            } )
 
             smk.$viewer.searched.pickedFeature( function ( ev ) {
                 self.highlightId = ev.feature && ev.feature.id
-            } )
 
-            // // smk.$viewer.selected.highlightedFeatures( function ( ev ) {
-            // // } )
+                self.internalLayer[ '@search-result-selected' ].clear()
+                if ( !ev.feature ) return
+
+                self.internalLayer[ '@search-result-selected' ].load( ev.feature )
+                smk.$viewer.panToFeature( ev.feature, precisionZoom[ ev.feature.properties.matchPrecision ] || precisionZoom._OTHER_ )
+            } )
 
             smk.$viewer.searched.clearedFeatures( function ( ev ) {
                 self.results = []
+                self.internalLayer[ '@search-result-selected' ].clear()
+                self.internalLayer[ '@search-result-highlight' ].clear()
+                self.internalLayer[ '@search-results' ].clear()
             } )
         }
     )
