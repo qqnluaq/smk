@@ -76,21 +76,55 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
 
         if ( layers.length != 1 ) throw new Error( 'only 1 config allowed' )
 
-        var url = this.resolveAttachmentUrl( layers[ 0 ].config.dataUrl, layers[ 0 ].config.id, 'json' )
+        var symbols = [].concat( layers[ 0 ].config.style ).map( function ( st ) {
+            return SMK.UTIL.smkStyleToEsriSymbol( st, self )
+        } )
+        if ( symbols.length == 0 )
+            symbols = [ {} ]
 
-        return SMK.UTIL.makePromise( function ( res, rej ) {
-            $.get( url, null, null, 'json' ).then( function ( doc ) {
-                res( doc )
-            }, function () {
-                rej( 'request to ' + url + ' failed' )
+        return SMK.UTIL.resolved()
+            .then( function () {
+                if ( !layers[ 0 ].config.projection )
+                    return function ( data ) { return data }
+
+                return SMK.UTIL.getProjection( layers[ 0 ].config.projection )
+                    .then( function ( projection ) {
+                        return function ( data ) {
+                            return SMK.UTIL.reprojectGeoJSON( data, projection )
+                        }
+                    } )
             } )
-        } )
-        .then( function ( geojson ) {
-            var symbol = SMK.UTIL.smkStyleToEsriSymbol( layers[ 0 ].config.style, self )
-            return new E.layers.GraphicsLayer( {
-                graphics: SMK.UTIL.geoJsonToEsriGeometry( geojson, function ( t ) { return symbol[ t ] } )
+            .then( function ( reproject ) {
+                var layer = new E.layers.GraphicsLayer()   
+
+                layers[ 0 ].loadLayer = function ( data ) {        
+                    layer.addMany( SMK.UTIL.geoJsonToEsriGraphics( reproject( data ), symbols ) )
+                }
+        
+                if ( layers[ 0 ].loadCache ) {
+                    layers[ 0 ].loadLayer( layers[ 0 ].loadCache )
+                    layers[ 0 ].loadCache = null
+                }
+        
+                layers[ 0 ].clearLayer = function () {
+                    layer.removeAll()
+                }
+        
+                if ( layers[ 0 ].config.isInternal )
+                    return layer
+        
+                var url = self.resolveAttachmentUrl( layers[ 0 ].config.dataUrl, layers[ 0 ].config.id, 'json' )
+        
+                return SMK.UTIL.makePromise( function ( res, rej ) {
+                    $.get( url, null, null, 'json' ).then( res, function ( xhr, status, err ) {
+                        rej( 'Failed requesting ' + url + ': ' + xhr.status + ',' + err )
+                    } )
+                } )
+                .then( function ( data ) {
+                    layers[ 0 ].loadLayer( data )
+                    return layer
+                } )
             } )
-        } )
     }
 
 } )

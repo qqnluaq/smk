@@ -272,6 +272,7 @@ t.script( 'feature-list-esri3d', 'smk/viewer-esri3d/feature-list-esri3d.js' )
 
 t.sequence( 'esri3d' )
     .tag( 'leaflet' )
+    .tag( 'projections' )
     // .style( 'https://js.arcgis.com/4.18/esri/css/main.css', { external: true } )
     // .script( 'https://js.arcgis.com/4.18/', { external: true } )
     .style( 'https://js.arcgis.com/4.8/esri/css/main.css', { external: true } )

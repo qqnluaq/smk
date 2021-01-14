@@ -172,7 +172,7 @@ include.module( 'util', null, function ( inc ) {
                     coordinate: function ( c ) { return c }
                 }, cb )
 
-                this[ geojson.type ]( geojson, cb )
+                return this[ geojson.type ]( geojson, cb )
             },
 
             Point: function ( obj, cb ) {

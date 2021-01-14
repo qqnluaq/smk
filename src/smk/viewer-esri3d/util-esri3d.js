@@ -1,72 +1,66 @@
 include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc ) {
     "use strict";
 
+    var geojsonType = {
+        Point: function ( obj ) {
+            return [ Object.assign( { type: 'point' }, Terraformer.ArcGIS.convert( obj ) ) ]
+        },
+
+        MultiPoint: function ( obj ) {
+            return obj.coordinates.reduce( function ( acc, c ) {
+                return acc.concat( convertGeojson( { type: 'Point', coordinates: c } ) )
+            }, [] )
+        },
+
+        LineString: function ( obj ) {
+            return [ Object.assign( { type: 'polyline' }, Terraformer.ArcGIS.convert( obj ) ) ]
+        },
+
+        MultiLineString: function ( obj ) {
+            return [ Object.assign( { type: 'polyline' }, Terraformer.ArcGIS.convert( obj ) ) ]
+        },
+
+        Polygon: function ( obj ) {
+            return [ Object.assign( { type: 'polygon' }, Terraformer.ArcGIS.convert( obj ) ) ]
+        },
+
+        MultiPolygon: function ( obj ) {
+            return [ Object.assign( { type: 'polygon' }, Terraformer.ArcGIS.convert( obj ) ) ]
+        },
+
+        GeometryCollection: function ( obj ) {
+            return obj.geometries.reduce( function ( acc, g ) {
+                return acc.concat( convertGeojson( g ) )
+            }, [] )
+        },
+
+        FeatureCollection:  function ( obj, symbols ) {
+            return obj.features.reduce( function ( acc, f ) {
+                return acc.concat( convertGeojson( f, symbols ) )
+            }, [] )
+        },
+
+        Feature:  function ( obj, symbols ) {
+            return convertGeojson( obj.geometry ).reduce( function ( acc, g ) {
+                return acc.concat( symbols.reduce( function ( acc, s ) {
+                    return {
+                        attributes: Object.assign( { _geojsonGeometry: obj.geometry }, obj.properties ),
+                        geometry:   g,
+                        symbol:     s[ g.type ] //, obj.properties )
+                    }    
+                }, [] ) )
+            }, [] ) 
+        },
+    }
+
+    function convertGeojson( geojson, symbols ) {
+        return geojsonType[ geojson.type || 'Feature' ]( geojson, symbols )
+    }
+
     Object.assign( window.SMK.UTIL, {
-        geoJsonToEsriGeometry: ( function () {
-            var geoJsonHandler = {
-                Point: function ( obj ) {
-                    return [ Object.assign( { type: 'point' }, Terraformer.ArcGIS.convert( obj ) ) ]
-                },
-
-                MultiPoint: function ( obj ) {
-                    return obj.coordinates.map( function ( c ) {
-                        return geoJsonHandler.Point( { type: 'Point', coordinates: c } )
-                    } )
-                    .reduce( function( acc, val ) { return acc.concat( val ) }, [] )
-                },
-
-                LineString: function ( obj ) {
-                    return [ Object.assign( { type: 'polyline' }, Terraformer.ArcGIS.convert( obj ) ) ]
-                },
-
-                MultiLineString: function ( obj ) {
-                    return [ Object.assign( { type: 'polyline' }, Terraformer.ArcGIS.convert( obj ) ) ]
-                },
-
-                Polygon: function ( obj ) {
-                    return [ Object.assign( { type: 'polygon' }, Terraformer.ArcGIS.convert( obj ) ) ]
-                },
-
-                MultiPolygon: function ( obj ) {
-                    return [ Object.assign( { type: 'polygon' }, Terraformer.ArcGIS.convert( obj ) ) ]
-                },
-
-                GeometryCollection: function ( obj ) {
-                    return obj.geometries.map( function ( g ) {
-                        return geoJsonHandler[ g.type ]( g )
-                    } )
-                    .reduce( function( acc, val ) { return acc.concat( val ) }, [] )
-                },
-
-                FeatureCollection:  function ( obj, symbol ) {
-                    return obj.features.map( function ( f ) {
-                        return geoJsonHandler[ f.type ]( f, symbol )
-                    } )
-                    .reduce( function( acc, val ) { return acc.concat( val ) }, [] )
-                },
-
-                Feature:  function ( obj, symbol ) {
-                    var geoms = geoJsonHandler[ obj.geometry.type ]( obj.geometry )
-                    return geoms.map( function ( g ) {
-                        return {
-                            attributes: Object.assign( { _geojsonGeometry: obj.geometry }, obj.properties ),
-                            geometry:   g,
-                            symbol:     symbol( g.type, obj.properties )
-                        }
-                    } )
-                    .reduce( function( acc, val ) { return acc.concat( val ) }, [] )
-                },
-            }
-
-            return function ( geojson, symbol ) {
-                if ( !symbol ) symbol = function () {}
-
-                var eg = geoJsonHandler[ geojson.type || 'Feature' ]( geojson, symbol )
-                // console.log( geojson, eg )
-                return eg
-            }
-        } )(),
-
+        geoJsonToEsriGraphics: function ( geojson, symbols ) {
+            return convertGeojson( geojson, symbols )
+        },
 
         smkStyleToEsriSymbol: function ( styleConfig, viewer ) {
             var line = {
