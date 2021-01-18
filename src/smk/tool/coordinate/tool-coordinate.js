@@ -1,4 +1,4 @@
-include.module( 'tool-coordinate', [ 'tool.tool-js', 'tool-coordinate.coordinate-html' ], function ( inc ) {
+include.module( 'tool-coordinate', [ 'tool', 'tool-coordinate.coordinate-html' ], function ( inc ) {
     "use strict";
 
     return SMK.TYPE.Tool.define( 'CoordinateTool',

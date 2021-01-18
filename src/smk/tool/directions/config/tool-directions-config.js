@@ -1,7 +1,7 @@
 include.module( 'tool-directions-config', [
-    'tool-config.tool-base-config-js',
-    'tool-config.tool-widget-config-js',
-    'tool-config.tool-panel-config-js',
+    'tool-base-config',
+    'tool-widget-config',
+    'tool-panel-config',
     'tool-directions-config.marker-icon-blue-png',
     'tool-directions-config.marker-icon-green-png',
     'tool-directions-config.marker-icon-red-png',
@@ -10,9 +10,9 @@ include.module( 'tool-directions-config', [
     "use strict";
 
     SMK.CONFIG.tools.push(
-        inc[ 'tool-config.tool-base-config-js' ](
-        inc[ 'tool-config.tool-widget-config-js' ](
-        inc[ 'tool-config.tool-panel-config-js' ]( {    
+        inc[ 'tool-base-config' ](
+        inc[ 'tool-widget-config' ](
+        inc[ 'tool-panel-config' ]( {    
             type: 'directions',     
             enabled: false, 
             order: 4, 

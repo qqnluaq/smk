@@ -1,6 +1,6 @@
 include.module( 'tool-query.tool-query-feature-js', [
     'component-tool-panel-feature',
-    'tool.tool-panel-feature-js'
+    'tool-panel-feature'
  ], function ( inc ) {
     "use strict";
 

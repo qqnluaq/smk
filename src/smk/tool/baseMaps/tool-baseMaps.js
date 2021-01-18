@@ -1,7 +1,7 @@
 include.module( 'tool-baseMaps', [
-    'tool.tool-base-js',
-    'tool.tool-widget-js',
-    'tool.tool-panel-js',
+    'tool',
+    'tool-widget',
+    'tool-panel',
     'viewer',
     'leaflet',
     'tool-baseMaps.panel-base-maps-html'

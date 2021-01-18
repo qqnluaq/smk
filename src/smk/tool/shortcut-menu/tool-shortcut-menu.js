@@ -1,4 +1,4 @@
-include.module( 'tool-shortcut-menu', [ 'tool.tool-js', 'tool-shortcut-menu.shortcut-menu-html' ], function ( inc ) {
+include.module( 'tool-shortcut-menu', [ 'tool', 'tool-shortcut-menu.shortcut-menu-html' ], function ( inc ) {
     "use strict";
 
     return SMK.TYPE.Tool.define( 'ShortcutMenuTool',

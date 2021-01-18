@@ -1,4 +1,4 @@
-include.module( 'tool-markup', [ 'tool.tool-js' ], function () {
+include.module( 'tool-markup', [ 'tool' ], function () {
     "use strict";
 
     return SMK.TYPE.Tool.define( 'MarkupTool' )

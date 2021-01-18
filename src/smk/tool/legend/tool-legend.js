@@ -1,5 +1,5 @@
 include.module( 'tool-legend', [ 
-    'tool.tool-js', 
+    'tool', 
     'tool-legend.legend-html', 
     'tool-legend.legend-display-html' 
 ], function ( inc ) {

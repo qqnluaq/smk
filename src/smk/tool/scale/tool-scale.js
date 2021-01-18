@@ -1,4 +1,4 @@
-include.module( 'tool-scale', [ 'tool.tool-js', 'tool-scale.scale-html' ], function ( inc ) {
+include.module( 'tool-scale', [ 'tool', 'tool-scale.scale-html' ], function ( inc ) {
     "use strict";
 
     return SMK.TYPE.Tool.define( 'ScaleTool',

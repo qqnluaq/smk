@@ -1,7 +1,7 @@
 include.module( 'tool-layers', [
-    'tool.tool-base-js',
-    'tool.tool-widget-js',
-    'tool.tool-panel-js',
+    'tool',
+    'tool-widget',
+    'tool-panel',
     'tool-layers.panel-layers-html',
     'tool-layers.layer-display-html',
     'component-enter-input',

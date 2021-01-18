@@ -1,6 +1,5 @@
-include.module( 'tool.tool-panel-js', [ 
-    'tool.tool-base-js'
-    // 'component' 
+include.module( 'tool-panel', [ 
+    'component-tool-panel'
 ], function ( inc ) {
     "use strict";
 

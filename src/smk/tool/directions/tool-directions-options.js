@@ -1,6 +1,6 @@
 include.module( 'tool-directions.tool-directions-options-js', [
-    'tool.tool-base-js',
-    'tool.tool-panel-js',
+    'tool',
+    'tool-panel',
     'component-select-option',
     'tool-directions.panel-directions-options-html'
 ], function ( inc ) {

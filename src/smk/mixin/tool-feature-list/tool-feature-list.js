@@ -1,4 +1,5 @@
-include.module( 'tool.tool-feature-list-js', [ 
+include.module( 'tool-feature-list', [ 
+    'component-feature-list'
 ], function ( inc ) {
     "use strict";
 
@@ -37,7 +38,6 @@ include.module( 'tool.tool-feature-list-js', [
                 'swipe-down': function ( ev ) {
                     smk.$sidepanel.incrExpand( -1 )
                 }
-    
             } )
       
             // = : = : = : = : = : = : = : = : = : = : = : = : = : = : = : = : = : = : =
@@ -71,6 +71,9 @@ include.module( 'tool.tool-feature-list-js', [
             self.featureSet.clearedFeatures( function ( ev ) {
                 self.layers = []
                 self.firstId = null
+                self.clearInternalLayer( 'highlight-polygon' )
+                self.clearInternalLayer( 'highlight-line' )
+                self.clearInternalLayer( 'highlight-point' )
             } )
     
             self.featureSet.removedFeatures( function ( ev ) {
@@ -81,6 +84,52 @@ include.module( 'tool.tool-feature-list-js', [
                     return ft.id != ev.features[ 0 ].id
                 } )
             } )
+
+            self.featureSet.pickedFeature( function ( ev ) {
+                self.clearInternalLayer( 'highlight-polygon' )
+                self.clearInternalLayer( 'highlight-line' )
+                self.clearInternalLayer( 'highlight-point' )
+                if ( !ev.feature ) return
+
+                displayFeature( ev.feature )
+            } )
+
+            self.featureSet.highlightedFeatures( function ( ev ) {
+                self.clearInternalLayer( 'highlight-polygon' )
+                self.clearInternalLayer( 'highlight-line' )
+                self.clearInternalLayer( 'highlight-point' )
+
+                if ( ev.features ) 
+                    ev.features.forEach( function ( f ) {
+                        displayFeature( f )
+                    } )
+
+                var picked = self.featureSet.getPicked()
+                if ( picked )
+                    displayFeature( picked )
+            } )
+    
+            function displayFeature( feature ) {
+                switch ( turf.getType( feature ) ) {
+                    case 'Point':
+                    case 'MultiPoint':
+                        self.loadInternalLayer( 'highlight-point', feature )
+                        break
+    
+                    case 'LineString':
+                    case 'MultiLineString':
+                        self.loadInternalLayer( 'highlight-line', feature )
+                        break
+    
+                    case 'Polygon':
+                    case 'MultiPolygon':
+                        self.loadInternalLayer( 'highlight-polygon', feature )
+                        break
+    
+                    case 'GeometryCollection':                    
+                        break
+                }
+            }
         } )    
     }
 } )

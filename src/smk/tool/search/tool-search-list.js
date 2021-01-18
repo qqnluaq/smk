@@ -1,8 +1,8 @@
 include.module( 'tool-search.tool-search-list-js', [
-    'tool.tool-base-js',
-    'tool.tool-widget-js',
-    'tool.tool-panel-js',
-    'tool.tool-internal-layers-js',
+    'tool',
+    'tool-widget',
+    'tool-panel',
+    'tool-internal-layers',
     'tool-search.widget-search-html',
     'tool-search.panel-search-html'
 ], function ( inc ) {

@@ -1,7 +1,7 @@
 include.module( 'tool-menu', [
-    'tool.tool-base-js',
-    'tool.tool-widget-js',
-    'tool.tool-panel-js',
+    'tool',
+    'tool-widget',
+    'tool-panel',
     'tool-menu.panel-menu-html'
 ], function ( inc ) {
     "use strict";

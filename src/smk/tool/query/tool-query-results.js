@@ -1,6 +1,6 @@
 include.module( 'tool-query.tool-query-results-js', [
-    'tool.tool-base-js',
-    'tool.tool-feature-list-js',
+    'tool',
+    'tool-feature-list',
     'component-feature-list',
     'component-command-button',
     'tool-query.panel-query-results-html'

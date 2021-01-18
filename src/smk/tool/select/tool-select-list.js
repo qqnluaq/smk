@@ -1,7 +1,7 @@
 include.module( 'tool-select.tool-select-list-js', [
-    'tool.tool-base-js',
-    'tool.tool-widget-js',
-    'tool.tool-feature-list-js',
+    'tool',
+    'tool-widget',
+    'tool-feature-list',
     'component-feature-list',
     'component-command-button',
     'tool-select.panel-select-html'

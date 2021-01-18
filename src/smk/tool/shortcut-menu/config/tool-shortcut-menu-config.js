@@ -1,10 +1,10 @@
 include.module( 'tool-shortcut-menu-config', [
-    'tool-config.tool-base-config-js',
+    'tool-base-config',
 ], function ( inc ) {
     "use strict";
 
     SMK.CONFIG.tools.push(
-        inc[ 'tool-config.tool-base-config-js' ]( {
+        inc[ 'tool-base-config' ]( {
             type: 'shortcut-menu',
             order: 10
         } )

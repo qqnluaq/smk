@@ -1,5 +1,5 @@
 include.module( 'tool-search.tool-search-location-js', [
-    'tool.tool-panel-js',
+    'tool-panel',
     'tool-search.panel-search-location-html',
     'tool-search.location-title-html',
     'tool-search.location-address-html'

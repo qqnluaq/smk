@@ -1,6 +1,5 @@
-include.module( 'tool.tool-widget-js', [ 
-    'tool.tool-base-js'
-    // 'component' 
+include.module( 'tool-widget', [ 
+    'component' 
 ], function ( inc ) {
     "use strict";
 

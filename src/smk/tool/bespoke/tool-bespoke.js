@@ -1,7 +1,7 @@
 include.module( 'tool-bespoke', [ 
-    'tool.tool-base-js', 
-    'tool.tool-widget-js', 
-    'tool.tool-panel-js', 
+    'tool', 
+    'tool-widget', 
+    'tool-panel', 
     'tool-bespoke.panel-bespoke-html', 
     'vue-config' 
 ], function ( inc ) {

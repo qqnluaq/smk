@@ -1,7 +1,7 @@
 include.module( 'tool-measure', [ 
-    'tool.tool-base-js', 
-    'tool.tool-widget-js', 
-    'tool.tool-panel-js', 
+    'tool', 
+    'tool-widget', 
+    'tool-panel', 
     'tool-measure.panel-measure-html', 
     'component-command-button',
     'component-select-dropdown'

@@ -1,6 +1,6 @@
 include.module( 'tool-directions.tool-directions-route-js', [
-    'tool.tool-base-js',
-    'tool.tool-panel-js',
+    'tool',
+    'tool-panel',
     'tool-directions.panel-directions-route-html',
     'component-command-button',
     'turf'

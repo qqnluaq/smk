@@ -1,10 +1,10 @@
 include.module( 'tool-minimap-config', [
-    'tool-config.tool-base-config-js',
+    'tool-base-config',
 ], function ( inc ) {
     "use strict";
 
     SMK.CONFIG.tools.push(
-        inc[ 'tool-config.tool-base-config-js' ]( {
+        inc[ 'tool-base-config' ]( {
             type: 'minimap',
             order: 1
         } )

@@ -1,4 +1,4 @@
-include.module( 'smk-map', [ 'libs', 'util', 'theme-base', 'sidepanel', 'status-message', 'vue-config.spinner-gif', 'merge-config', 'default-config' ], function ( inc ) {
+include.module( 'smk-map', [ 'libs', 'util', 'tool', 'theme-base', 'sidepanel', 'status-message', 'vue-config.spinner-gif', 'merge-config', 'default-config' ], function ( inc ) {
     "use strict";
 
     function SmkMap( option ) {

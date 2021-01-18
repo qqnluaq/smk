@@ -1,4 +1,4 @@
-include.module( 'tool-config.tool-base-config-js', [], function ( inc ) {
+include.module( 'tool-base-config', [], function ( inc ) {
     "use strict";
 
     return function ( cfg ) {

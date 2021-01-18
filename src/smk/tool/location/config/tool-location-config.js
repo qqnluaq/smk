@@ -1,13 +1,13 @@
 include.module( 'tool-location-config', [
-    'tool-config.tool-base-config-js',
-    'tool-config.tool-widget-config-js',
-    'tool-config.tool-panel-config-js',
+    'tool-base-config',
+    'tool-widget-config',
+    'tool-panel-config',
 ], function ( inc ) {
     "use strict";
 
     SMK.CONFIG.tools.push(
-        inc[ 'tool-config.tool-base-config-js' ](
-        inc[ 'tool-config.tool-panel-config-js' ]( {
+        inc[ 'tool-base-config' ](
+        inc[ 'tool-panel-config' ]( {
             type: 'location',
             enabled: true,
             showHeader: false

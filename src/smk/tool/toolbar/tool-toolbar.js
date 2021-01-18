@@ -1,4 +1,4 @@
-include.module( 'tool-toolbar', [ 'tool.tool-js', 'tool-toolbar.toolbar-html' ], function ( inc ) {
+include.module( 'tool-toolbar', [ 'tool', 'tool-toolbar.toolbar-html' ], function ( inc ) {
     "use strict";
 
     return SMK.TYPE.Tool.define( 'ToolBarTool',

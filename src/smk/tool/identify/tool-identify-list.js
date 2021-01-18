@@ -1,8 +1,8 @@
 include.module( 'tool-identify.tool-identify-list-js', [
-    'tool.tool-base-js',
-    'tool.tool-widget-js',
-    'tool.tool-feature-list-js',
-    'tool.tool-internal-layers-js',
+    'tool',
+    'tool-widget',
+    'tool-feature-list',
+    'tool-internal-layers',
     'component-feature-list',
     'component-command-button',
     'component-enter-input',

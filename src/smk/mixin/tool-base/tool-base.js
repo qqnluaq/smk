@@ -1,4 +1,4 @@
-include.module( 'tool.tool-base-js', [ 'tool.tool-js' ], function ( inc ) {
+include.module( 'tool-base', [ ], function ( inc ) {
     "use strict";
 
     SMK.TYPE.ToolBase = function () {

@@ -1,4 +1,4 @@
-include.module( 'tool-minimap', [ 'tool.tool-js' ], function () {
+include.module( 'tool-minimap', [ 'tool' ], function () {
     "use strict";
 
     return SMK.TYPE.Tool.define( 'MinimapTool' )

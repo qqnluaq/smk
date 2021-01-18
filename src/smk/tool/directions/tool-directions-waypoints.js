@@ -1,7 +1,7 @@
 include.module( 'tool-directions.tool-directions-waypoints-js', [
-    'tool.tool-base-js',
-    'tool.tool-widget-js',
-    'tool.tool-panel-js',
+    'tool',
+    'tool-widget',
+    'tool-panel',
     'tool-directions.panel-directions-html',
     'component-address-search',
     'component-command-button',

@@ -1,6 +1,6 @@
 include.module( 'tool-location', [
-    'tool.tool-base-js',
-    'tool.tool-panel-js',
+    'tool',
+    'tool-panel',
     'tool-location.panel-location-html',
     'api'
 ], function ( inc ) {

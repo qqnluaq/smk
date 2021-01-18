@@ -57,8 +57,7 @@ t.script( 'feature-set','smk/feature-set.js' )
 t.script( 'projections','smk/projections.js' )
 t.script( 'layer-display','smk/layer-display.js' )
 
-t.group( 'tool' )
-    .dir( 'smk/tool/!(*-config.js)' )
+t.script( 'tool','smk/tool.js' )
 
 t.group( 'layer' )
     .dir( 'smk/layer/**/*' )
@@ -91,10 +90,57 @@ tg.forEachDir( 'smk/tool/*/', function ( fn, bn ) {
         .dir( fn + '/config/*' )
 } )
 
-g.push( 'tool-config' )
-t.group( 'tool-config' )
-    .dir( 'smk/tool/*-config.js' )
+// ==================================================================================
+// smk tool mixins
+// ==================================================================================
 
+t.group( 'tool-base' )
+    .dir( 'smk/mixin/tool-base/*' )
+
+g.push( 'tool-base-config' )
+t.group( 'tool-base-config' )
+    .dir( 'smk/mixin/tool-base/config/*' )
+
+
+t.group( 'tool-feature-list' )
+    .dir( 'smk/mixin/tool-feature-list/*' )
+
+g.push( 'tool-feature-list-config' )
+t.group( 'tool-feature-list-config' )
+    .dir( 'smk/mixin/tool-feature-list/config/*' )
+
+    
+t.group( 'tool-internal-layers' )
+    .dir( 'smk/mixin/tool-internal-layers/*' )
+
+g.push( 'tool-internal-layers-config' )
+t.group( 'tool-internal-layers-config' )
+    .dir( 'smk/mixin/tool-internal-layers/config/*' )
+
+
+t.group( 'tool-panel' )
+    .dir( 'smk/mixin/tool-panel/*' )
+
+g.push( 'tool-panel-config' )
+t.group( 'tool-panel-config' )
+    .dir( 'smk/mixin/tool-panel/config/*' )
+    
+
+t.group( 'tool-panel-feature' )
+    .dir( 'smk/mixin/tool-panel-feature/*' )
+
+g.push( 'tool-panel-feature-config' )
+t.group( 'tool-panel-feature-config' )
+    .dir( 'smk/mixin/tool-panel-feature/config/*' )
+    
+
+t.group( 'tool-widget' )
+    .dir( 'smk/mixin/tool-widget/*' )
+
+g.push( 'tool-widget-config' )
+t.group( 'tool-widget-config' )
+    .dir( 'smk/mixin/tool-widget/config/*' )
+    
 // ==================================================================================
 // smk tools
 // ==================================================================================

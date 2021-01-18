@@ -1,5 +1,6 @@
-include.module( 'tool.tool-js', [
-    'event'
+include.module( 'tool', [
+    'event',
+    'tool-base'
 ], function ( inc ) {
     "use strict";
 

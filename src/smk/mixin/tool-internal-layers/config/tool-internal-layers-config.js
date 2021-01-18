@@ -1,9 +1,9 @@
-include.module( 'tool-config.tool-widget-config-js', [], function ( inc ) {
+include.module( 'tool-internal-layers-config', [], function ( inc ) {
     "use strict";
 
     return function ( cfg ) {
         return Object.assign( {
-            showWidget: true,
+            internalLayer: {},
         }, cfg )
     }
 } )

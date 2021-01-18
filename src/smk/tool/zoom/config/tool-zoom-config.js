@@ -1,10 +1,10 @@
 include.module( 'tool-zoom-config', [
-    'tool-config.tool-base-config-js',
+    'tool-base-config',
 ], function ( inc ) {
     "use strict";
 
     SMK.CONFIG.tools.push(
-        inc[ 'tool-config.tool-base-config-js' ]( {
+        inc[ 'tool-base-config' ]( {
             type: 'zoom',
             enabled: false,
             order: 1,

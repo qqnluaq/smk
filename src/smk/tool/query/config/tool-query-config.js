@@ -1,16 +1,16 @@
 include.module( 'tool-query-config', [
-    'tool-config.tool-base-config-js',
-    'tool-config.tool-widget-config-js',
-    'tool-config.tool-panel-config-js',
-    'tool-config.tool-panel-feature-config-js'
+    'tool-base-config',
+    'tool-widget-config',
+    'tool-panel-config',
+    'tool-panel-feature-config'
 ], function ( inc ) {
     "use strict";
 
     SMK.CONFIG.tools.push(
-        inc[ 'tool-config.tool-base-config-js' ](
-        inc[ 'tool-config.tool-widget-config-js' ](
-        inc[ 'tool-config.tool-panel-config-js' ](
-        inc[ 'tool-config.tool-panel-feature-config-js' ]( {
+        inc[ 'tool-base-config' ](
+        inc[ 'tool-widget-config' ](
+        inc[ 'tool-panel-config' ](
+        inc[ 'tool-panel-feature-config' ]( {
             type: 'query',
             instance: true,
             order: 5,
