@@ -1,4 +1,4 @@
-include.module( 'tool-time-dimension', [ 'tool.tool-js' ], function () {
+include.module( 'tool-time-dimension', [ 'tool' ], function () {
     "use strict";
 
     return SMK.TYPE.Tool.define( 'TimeDimensionTool', null, function ( smk ) {
