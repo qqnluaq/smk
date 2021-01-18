@@ -207,32 +207,32 @@ include.module( 'tool-search.tool-search-list-js', [
             smk.$viewer.searched.addedFeatures( function ( ev ) {
                 self.results = ev.features
 
-                self.internalLayer[ '@search-results' ].clear()
-                self.internalLayer[ '@search-results' ].load( turf.featureCollection( ev.features ) )
+                self.clearInternalLayer( 'results' )
+                self.loadInternalLayer( 'results', turf.featureCollection( ev.features ) )
             } )
 
             smk.$viewer.searched.highlightedFeatures( function ( ev ) {
-                self.internalLayer[ '@search-result-highlight' ].clear()
+                self.clearInternalLayer( 'result-highlight' )
                 if ( !ev.features || !ev.features.length ) return
 
-                self.internalLayer[ '@search-result-highlight' ].load( turf.featureCollection( ev.features ) )
+                self.loadInternalLayer( 'result-highlight', turf.featureCollection( ev.features ) )
             } )
 
             smk.$viewer.searched.pickedFeature( function ( ev ) {
                 self.highlightId = ev.feature && ev.feature.id
 
-                self.internalLayer[ '@search-result-selected' ].clear()
+                self.clearInternalLayer( 'result-selected' )
                 if ( !ev.feature ) return
 
-                self.internalLayer[ '@search-result-selected' ].load( ev.feature )
+                self.loadInternalLayer( 'result-selected', ev.feature )
                 smk.$viewer.panToFeature( ev.feature, precisionZoom[ ev.feature.properties.matchPrecision ] || precisionZoom._OTHER_ )
             } )
 
             smk.$viewer.searched.clearedFeatures( function ( ev ) {
                 self.results = []
-                self.internalLayer[ '@search-result-selected' ].clear()
-                self.internalLayer[ '@search-result-highlight' ].clear()
-                self.internalLayer[ '@search-results' ].clear()
+                self.clearInternalLayer( 'result-selected' )
+                self.clearInternalLayer( 'result-highlight' )
+                self.clearInternalLayer( 'results' )
             } )
         }
     )

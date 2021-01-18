@@ -1,7 +1,8 @@
 include.module( 'tool-search-config', [
-    'tool-config.tool-base-config-js',
-    'tool-config.tool-widget-config-js',
-    'tool-config.tool-panel-config-js',
+    'tool-base-config',
+    'tool-widget-config',
+    'tool-panel-config',
+    'tool-internal-layers-config',
     'tool-search-config.marker-icon-yellow-png',
     'tool-search-config.marker-shadow-png',
     'tool-search-config.star-icon-yellow-png',
@@ -9,9 +10,10 @@ include.module( 'tool-search-config', [
     "use strict";
 
     SMK.CONFIG.tools.push(
-        inc[ 'tool-config.tool-base-config-js' ](
-        inc[ 'tool-config.tool-widget-config-js' ](
-        inc[ 'tool-config.tool-panel-config-js' ]( {
+        inc[ 'tool-base-config' ](
+        inc[ 'tool-widget-config' ](
+        inc[ 'tool-panel-config' ](
+        inc[ 'tool-internal-layers-config' ]( {
             type: 'search',
             enabled: true,
             order: 2,
@@ -25,9 +27,9 @@ include.module( 'tool-search-config', [
                 measure: true,
                 directions: true,
             },
-            internalLayers: [
-                {
-                    id: "@search-result-selected",
+            internalLayer: {
+                'result-selected': {
+                    // id: "@search-result-selected",
                     title: "Selected Search Result",
                     style: {               
                         markerUrl: inc[ 'tool-search-config.marker-icon-yellow-png' ],
@@ -41,8 +43,8 @@ include.module( 'tool-search-config', [
                         point: true
                     }
                 },
-                {
-                    id: "@search-result-highlight",
+                'result-highlight': {
+                    // id: "@search-result-highlight",
                     title: "Highlighted Search Result",
                     style: {               
                         markerUrl: inc[ 'tool-search-config.star-icon-yellow-png' ], 
@@ -56,8 +58,8 @@ include.module( 'tool-search-config', [
                         point: true
                     }
                 },
-                {
-                    id: "@search-results",
+                'results': {
+                    // id: "@search-results",
                     title: "Search Results",
                     style: {               
                         markerUrl: inc[ 'tool-search-config.star-icon-yellow-png' ], 
@@ -71,8 +73,8 @@ include.module( 'tool-search-config', [
                         point: true
                     }
                 }
-            ]
+            }
 
-        } ) ) )
+        } ) ) ) )
     )
 } )
