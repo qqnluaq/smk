@@ -1,4 +1,9 @@
-include.module( 'tool-query-esri3d', [ 'esri3d', 'types-esri3d', 'util-esri3d', 'tool-query', 'feature-list-esri3d' ], function ( inc ) {
+include.module( 'tool-query-esri3d', [ 
+    'esri3d', 
+    'types-esri3d', 
+    'util-esri3d', 
+    'tool-query'
+], function ( inc ) {
     "use strict";
 
     var E = SMK.TYPE.Esri3d
@@ -12,7 +17,5 @@ include.module( 'tool-query-esri3d', [ 'esri3d', 'types-esri3d', 'util-esri3d', 
             fillOpacity:    0.5,
         }, this.style, override )
     }
-
-    SMK.TYPE.QueryTool.prototype.afterInitialize.push( inc[ 'feature-list-esri3d' ] )
 
 } )

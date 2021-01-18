@@ -314,8 +314,6 @@ t.group( 'viewer-esri3d' )
     .script( 'smk/viewer-esri3d/viewer-esri3d.js' )
     .style( 'smk/viewer-esri3d/viewer-esri3d.css' )
 
-t.script( 'feature-list-esri3d', 'smk/viewer-esri3d/feature-list-esri3d.js' )
-
 t.sequence( 'esri3d' )
     .tag( 'leaflet' )
     .tag( 'projections' )

@@ -1,4 +1,9 @@
-include.module( 'tool-select-esri3d', [ 'esri3d', 'types-esri3d', 'util-esri3d', 'tool-select', 'feature-list-esri3d' ], function ( inc ) {
+include.module( 'tool-select-esri3d', [ 
+    'esri3d', 
+    'types-esri3d', 
+    'util-esri3d', 
+    'tool-select'
+], function ( inc ) {
     "use strict";
 
     var E = SMK.TYPE.Esri3d
@@ -12,7 +17,5 @@ include.module( 'tool-select-esri3d', [ 'esri3d', 'types-esri3d', 'util-esri3d',
             fillOpacity:    0.0,
         }, this.style, override )
     }
-
-    SMK.TYPE.SelectTool.prototype.afterInitialize.push( inc[ 'feature-list-esri3d' ] )
 
 } )

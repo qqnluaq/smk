@@ -1,7 +1,7 @@
 include.module( 'tool-leaflet.tool-feature-list-clustering-leaflet-js', [ 
     'leaflet', 
     'turf',
-    'tool-leaflet.tool-feature-list-leaflet-js', 
+    // 'tool-leaflet.tool-feature-list-leaflet-js', 
     // 'tool-leaflet.marker-icon-white-png',
     // 'tool-leaflet.marker-shadow-png'
 ], function ( inc ) {
@@ -19,7 +19,7 @@ include.module( 'tool-leaflet.tool-feature-list-clustering-leaflet-js', [
     return function ( smk ) {
         var self = this
 
-        inc[ 'tool-leaflet.tool-feature-list-leaflet-js' ].call( this, smk )
+        // inc[ 'tool-leaflet.tool-feature-list-leaflet-js' ].call( this, smk )
 
         this.marker = {}
         this.cluster = L.markerClusterGroup( Object.assign( {

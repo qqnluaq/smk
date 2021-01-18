@@ -2,7 +2,7 @@ include.module( 'tool-select-leaflet', [
     'leaflet',
     'tool-select',
     'tool-leaflet',
-    'tool-leaflet.tool-feature-list-leaflet-js'
+    // 'tool-leaflet.tool-feature-list-leaflet-js'
 ], function ( inc ) {
     "use strict";
 
@@ -25,7 +25,7 @@ include.module( 'tool-select-leaflet', [
     SMK.TYPE.SelectListTool.addInitializer( function ( smk ) {
         var self = this
 
-        inc[ 'tool-leaflet.tool-feature-list-leaflet-js' ].call( this, smk )
+        // inc[ 'tool-leaflet.tool-feature-list-leaflet-js' ].call( this, smk )
 
         self.featureSet.addedFeatures( function ( ev ) {
             ev.features.forEach( function ( f ) {

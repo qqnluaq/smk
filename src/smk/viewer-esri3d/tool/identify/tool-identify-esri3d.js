@@ -3,8 +3,6 @@ include.module( 'tool-identify-esri3d', [
     'types-esri3d', 
     'util-esri3d', 
     'tool-identify', 
-    'tool-esri3d',
-    // 'tool-esri3d.tool-feature-list-esri3d-js'
 ], function ( inc ) {
     "use strict";
 
@@ -22,8 +20,6 @@ include.module( 'tool-identify-esri3d', [
 
     SMK.TYPE.IdentifyListTool.addInitializer( function ( smk ) {
         var self = this
-
-        // inc[ 'tool-esri3d.tool-feature-list-esri3d-js' ].call( this, smk )
 
         smk.$viewer.handlePick( 3, function ( location ) {
             if ( !self.active ) return
