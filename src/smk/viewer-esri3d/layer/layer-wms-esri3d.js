@@ -51,11 +51,11 @@ include.module( 'layer-esri3d.layer-wms-esri3d-js', [ 'layer.layer-wms-js', 'typ
         // var attribution = layers[ 0 ].config.attribution
         var opacity     = layers[ 0 ].config.opacity
 
-        var host = serviceUrl.replace( /^(\w+:)?[/][/]/, '' ).replace( /[/].*$/, '' )
-        if ( E.config.request.corsEnabledServers.indexOf( host ) == -1 )
-            E.config.request.corsEnabledServers.push( host );
+        // var host = serviceUrl.replace( /^(\w+:)?[/][/]/, '' ).replace( /[/].*$/, '' )
+        // if ( E.config.request.corsEnabledServers.indexOf( host ) == -1 )
+            // E.config.request.corsEnabledServers.push( host );
 
-        var layer = WMSLayer( {
+        var layer = new WMSLayer( {
             serviceUrl: serviceUrl,
             layerNames: layers.map( function ( c ) { return c.config.layerName } ),
             styleNames: layers.map( function ( c ) { return c.config.styleName } ),

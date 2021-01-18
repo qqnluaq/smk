@@ -78,13 +78,22 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
 
             var point
             if ( styleConfig.markerUrl ) {
+                var sz = styleConfig.markerSize,
+                    cx = sz[ 0 ] / 2,
+                    cy = sz[ 1 ] / 2,
+                    off = styleConfig.markerOffset,
+                    ox = off[ 0 ] || cx,
+                    oy = off[ 0 ] || cy,
+                    x = ox / sz[ 0 ] - 0.5,
+                    y = oy / sz[ 1 ] - 0.5
                 point = {
                     type: 'point-3d',
                     symbolLayers: [
                         {
                             type:       'icon',
                             size:       Math.max.apply( Math, styleConfig.markerSize ) + 'px',
-                            anchor:     'bottom',
+                            anchor:     'relative',
+                            anchorPosition: { x: x, y: y },
                             resource: {
                                 href: viewer.resolveAttachmentUrl( styleConfig.markerUrl, null, 'png' )
                             }
