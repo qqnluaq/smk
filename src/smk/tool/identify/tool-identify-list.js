@@ -33,8 +33,8 @@ include.module( 'tool-identify.tool-identify-list-js', [
         construct: function () {
             SMK.TYPE.ToolWidget.call( this, 'identify-widget' )
             SMK.TYPE.ToolPanel.call( this, 'identify-panel' )
-            SMK.TYPE.ToolFeatureList.call( this, function ( smk ) { return smk.$viewer.identified } )
             SMK.TYPE.ToolInternalLayers.call( this )
+            SMK.TYPE.ToolFeatureList.call( this, function ( smk ) { return smk.$viewer.identified } )
 
             this.defineProp( 'tool' )
             this.defineProp( 'command' )
@@ -58,14 +58,19 @@ include.module( 'tool-identify.tool-identify-list-js', [
                     self.searchArea = null
                     self.searchLocation = null
                     self.trackMouse = false
-                    self.clearMarker()
 
                     self.setInternalLayerVisible( false )
+                    // workaround for a bug in updateLayersVisible for esri3d
+                    self.clearInternalLayer( 'search-area' )
+                    self.clearInternalLayer( 'search-border-1' )
+                    self.clearInternalLayer( 'search-border-2' )
+                    self.clearInternalLayer( 'location' )
+
                     smk.$viewer.identifyFeatures()
 
                     smk.$viewer.identified.clear()
                     smk.$viewer.identified.pick()
-                }
+                }   
             } )
 
             self.changedActive( function () {
@@ -275,23 +280,33 @@ include.module( 'tool-identify.tool-identify-list-js', [
                 if ( !this.searchLocation ) return
 
                 this.searchArea = this.makeSearchLocationCircle()
+                var borders = [ [], [] ]
+                turf.segmentEach( this.searchArea, function ( currentSegment, featureIndex, multiFeatureIndex, geometryIndex, segmentIndex ) {
+                    borders[ Math.trunc( ( segmentIndex + 4 ) / 8 ) % 2 ].push( currentSegment.geometry )
+                } )
 
                 this.setInternalLayerVisible( true )
                 this.displayEditSearchArea()
 
-                this.internalLayer[ '@identify-search-area' ].clear()
-                this.internalLayer[ '@identify-search-area' ].load( this.searchArea )
+                this.clearInternalLayer( 'search-area' )
+                this.loadInternalLayer( 'search-area', this.searchArea )
 
-                this.internalLayer[ '@identify-location' ].clear()
-                this.internalLayer[ '@identify-location' ].load( turf.point( [ this.searchLocation.map.longitude, this.searchLocation.map.latitude ] ) )
+                this.clearInternalLayer( 'search-border-1' )
+                this.loadInternalLayer( 'search-border-1', turf.geometryCollection( borders[ 0 ] ) )
+
+                this.clearInternalLayer( 'search-border-2' )
+                this.loadInternalLayer( 'search-border-2', turf.geometryCollection( borders[ 1 ] ) )
+
+                this.clearInternalLayer( 'location' )
+                this.loadInternalLayer( 'location', turf.point( [ this.searchLocation.map.longitude, this.searchLocation.map.latitude ] ) )
 
                 this.trackMouse = true
             },
 
             displayEditSearchArea: function ( editArea ) {
-                this.internalLayer[ '@identify-edit-search-area' ].clear()
+                this.clearInternalLayer( 'edit-search-area' )
                 if ( editArea )
-                    this.internalLayer[ '@identify-edit-search-area' ].load( editArea )
+                    this.loadInternalLayer( 'edit-search-area', editArea )
             }
         }
     } )

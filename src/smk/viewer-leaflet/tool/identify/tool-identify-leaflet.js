@@ -2,14 +2,14 @@ include.module( 'tool-identify-leaflet', [
     'leaflet',
     'tool-identify',
     'tool-leaflet',
-    'tool-leaflet.tool-feature-list-leaflet-js'
+    // 'tool-leaflet.tool-feature-list-leaflet-js'
 ], function ( inc ) {
     "use strict";
 
     SMK.TYPE.IdentifyListTool.addInitializer( function ( smk ) {
         var self = this
 
-        inc[ 'tool-leaflet.tool-feature-list-leaflet-js' ].call( this, smk )
+        // inc[ 'tool-leaflet.tool-feature-list-leaflet-js' ].call( this, smk )
 
         var lg = L.layerGroup().addTo( smk.$viewer.map )
 

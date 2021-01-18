@@ -80,7 +80,7 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
             return SMK.UTIL.smkStyleToEsriSymbol( st, self )
         } )
         if ( symbols.length == 0 )
-            symbols = [ {} ]
+            symbols.push( {} )
 
         return SMK.UTIL.resolved()
             .then( function () {

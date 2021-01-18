@@ -70,7 +70,9 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
                     size: styleConfig.strokeWidth,
                     material: {
                         color: color( styleConfig.strokeColor, styleConfig.strokeOpacity ),
-                    }
+                    },
+                    cap: styleConfig.strokeCap,
+                    join: styleConfig.strokeJoin
                 } ]
             }
 
@@ -112,13 +114,19 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
 
             var fill = {
                 type: 'polygon-3d',
-                symbolLayers: [ {
+                symbolLayers: []
+            }
+
+            if ( styleConfig.fill )
+                 fill.symbolLayers.push( {
                     type: 'fill',
                     material: {
                         color: color( styleConfig.fillColor, styleConfig.fillOpacity )
                     },
-                }, line.symbolLayers[ 0 ] ]
-            }
+                } )
+
+            if ( styleConfig.stroke !== false )
+                fill.symbolLayers.push( line.symbolLayers[ 0 ] )
 
             return {
                 point: point,

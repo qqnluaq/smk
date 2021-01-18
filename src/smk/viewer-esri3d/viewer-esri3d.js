@@ -295,5 +295,42 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
         return this.view.popup.visible
     }
 
+    ViewerEsri3d.prototype.panToFeature = function ( feature, zoomIn ) {
+        var geometry
+        switch ( turf.getType( feature ) ) {
+        case 'Point':
+            geometry = new SMK.TYPE.Esri3d.geometry.Point( { 
+                latitude: feature.geometry.coordinates[ 1 ], 
+                longitude: feature.geometry.coordinates[ 0 ] 
+            } )
+            break;
+
+        default:
+            var bbox = turf.bbox( feature )
+            geometry = new SMK.TYPE.Esri3d.geometry.Extent( {
+                xmin: bbox[ 0 ],
+                xmax: bbox[ 2 ],
+                ymin: bbox[ 1 ],
+                ymax: bbox[ 3 ]
+            })
+        }
+        if ( !geometry ) return
+
+        // var padding = this.getPanelPadding()
+
+        var maxZoom;
+        if ( !zoomIn ) {
+            maxZoom = this.view.zoom
+        }
+        else if ( zoomIn === true ) {
+            maxZoom = undefined 
+        }
+        else {
+            maxZoom = parseFloat( zoomIn )
+        }
+
+        return this.view.goTo( { target: geometry, zoom: maxZoom } ) 
+    }
+
 } )
 

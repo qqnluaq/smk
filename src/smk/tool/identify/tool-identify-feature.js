@@ -96,6 +96,11 @@ include.module( 'tool-identify.tool-identify-feature-js', [
 
                 smk.$viewer.panToFeature( ev.feature )
             } )
+
+            self.featureSet.zoomToFeature( function ( ev ) {
+                smk.$viewer.panToFeature( ev.feature, true )
+            } )
+
         }
     )
 } )
