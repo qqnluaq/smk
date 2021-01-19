@@ -51,28 +51,7 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
             } ),
         } )
 
-        if ( smk.viewer.location.extent ) {
-            var bx = smk.viewer.location.extent
-            this.view.extent = new E.geometry.Extent( {
-                xmin: bx[ 0 ],
-                ymin: bx[ 1 ],
-                xmax: bx[ 2 ],
-                ymax: bx[ 3 ]
-            } ) 
-            console.log(JSON.stringify(this.view.extent),!!this.view.resizing)
-        }
-
-        if ( smk.viewer.location.zoom ) {
-            this.view.zoom = smk.viewer.location.zoom
-            console.log(JSON.stringify(this.view.extent),!!this.view.resizing)
-        }
-
-        if ( smk.viewer.location.center ) {
-            this.view.center = new E.geometry.Point( {
-                x: smk.viewer.location.center[ 0 ],
-                y: smk.viewer.location.center[ 1 ]
-            } ) 
-        }
+        this.setView( smk.viewer.location )
 
         // disable panning
         this.panHandler = {
@@ -330,6 +309,31 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
         }
 
         return this.view.goTo( { target: geometry, zoom: maxZoom } ) 
+    }
+
+    ViewerEsri3d.prototype.setView = function ( opt ) {
+        if ( opt.extent ) {
+            var bx = opt.extent
+            this.view.extent = new E.geometry.Extent( {
+                xmin: bx[ 0 ],
+                ymin: bx[ 1 ],
+                xmax: bx[ 2 ],
+                ymax: bx[ 3 ]
+            } ) 
+            // console.log(JSON.stringify(this.view.extent),!!this.view.resizing)
+        }
+
+        if ( opt.zoom ) {
+            this.view.zoom = opt.zoom
+            // console.log(JSON.stringify(this.view.extent),!!this.view.resizing)
+        }
+
+        if ( opt.center ) {
+            this.view.center = new E.geometry.Point( {
+                x: opt.center[ 0 ],
+                y: opt.center[ 1 ]
+            } ) 
+        }
     }
 
 } )

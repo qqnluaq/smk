@@ -31,30 +31,7 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
 
         self.map.scrollWheelZoom.disable()
 
-        if ( smk.viewer.location.extent ) {
-            var bx = smk.viewer.location.extent
-            self.map.fitBounds( [ [ bx[ 1 ], bx[ 0 ] ], [ bx[ 3 ], bx[ 2 ] ] ], {
-                animate: false,
-                duration: 0,
-                paddingTopLeft: bx[ 4 ],
-                paddingBottomRight: bx[ 5 ],
-            } )
-        }
-
-        // NOT SURE PURPOSE
-        // self.resizeToExtent = function () {
-        //     var bx = smk.viewer.location.extent
-        //     self.map.fitBounds( [ [ bx[ 1 ], bx[ 0 ] ], [ bx[ 3 ], bx[ 2 ] ] ],  { animate: false, duration: 0 } )
-        //     console.log('resizeToExtent')
-        // }
-
-        if ( smk.viewer.location.zoom ) {
-            self.map.setZoom( smk.viewer.location.zoom, { animate: false } )
-        }
-
-        if ( smk.viewer.location.center ) {
-            self.map.panTo( [ smk.viewer.location.center[ 1 ], smk.viewer.location.center[ 0 ] ], { animate: false } )
-        }
+        this.setView( smk.viewer.location )
 
         if ( smk.viewer.baseMap ) {
             self.setBasemap( smk.viewer.baseMap )
@@ -120,6 +97,34 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
 
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
+
+    ViewerLeaflet.prototype.setView = function ( opt ) {
+        if ( opt.extent ) {
+            var bx = opt.extent
+            this.map.fitBounds( [ [ bx[ 1 ], bx[ 0 ] ], [ bx[ 3 ], bx[ 2 ] ] ], {
+                animate: false,
+                duration: 0,
+                paddingTopLeft: bx[ 4 ],
+                paddingBottomRight: bx[ 5 ],
+            } )
+        }
+
+        // NOT SURE PURPOSE
+        // this.resizeToExtent = function () {
+        //     var bx = opt.extent
+        //     this.map.fitBounds( [ [ bx[ 1 ], bx[ 0 ] ], [ bx[ 3 ], bx[ 2 ] ] ],  { animate: false, duration: 0 } )
+        //     console.log('resizeToExtent')
+        // }
+
+        if ( opt.zoom ) {
+            this.map.setZoom( opt.zoom, { animate: false } )
+        }
+
+        if ( opt.center ) {
+            this.map.panTo( [ opt.center[ 1 ], opt.center[ 0 ] ], { animate: false } )
+        }
+    }
+
     ViewerLeaflet.prototype.getScale = function () {
         var size = this.map.getSize()
 

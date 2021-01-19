@@ -94,6 +94,7 @@ tg.forEachDir( 'smk/tool/*/', function ( fn, bn ) {
 // smk tool mixins
 // ==================================================================================
 
+
 t.group( 'tool-base' )
     .dir( 'smk/mixin/tool-base/*' )
 
@@ -147,6 +148,9 @@ t.group( 'tool-widget-config' )
 
 t.group( 'tool-about' )
     .dir( 'smk/tool/about/*' )
+
+t.group( 'tool-actionbar' )
+    .dir( 'smk/tool/actionbar/*' )
 
 t.group( 'tool-baseMaps' )
     .dir( 'smk/tool/baseMaps/*' )
@@ -205,6 +209,9 @@ t.group( 'tool-query' )
 // broken
 // t.group( 'tool-query-place' )
 //     .dir( 'smk/tool/query-place/*' )
+
+t.group( 'tool-reset-view' )
+    .dir( 'smk/tool/reset-view/*' )
 
 t.group( 'tool-scale' )
     .dir( 'smk/tool/scale/*' )
