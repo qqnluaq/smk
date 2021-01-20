@@ -1,6 +1,7 @@
 include.module( 'tool-location', [
     'tool',
     'tool-panel',
+    'tool-internal-layers',
     'tool-location.panel-location-html',
     'api'
 ], function ( inc ) {
@@ -13,9 +14,10 @@ include.module( 'tool-location', [
     } )
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
-    return SMK.TYPE.Tool.define( 'LocationTool',
-        function () {
+    return SMK.TYPE.Tool.define( 'LocationTool', {
+        construct: function () {
             SMK.TYPE.ToolPanel.call( this, 'location-panel' )
+            SMK.TYPE.ToolInternalLayers.call( this )
 
             this.defineProp( 'site' )
             this.defineProp( 'tool' )
@@ -23,8 +25,11 @@ include.module( 'tool-location', [
             this.site = {}
             this.tool = {}
         },
-        function ( smk ) {
+
+        initialize: function ( smk ) {
             var self = this
+
+            this.setInternalLayerVisible( true )
 
             smk.getSidepanel().addTool( this, smk )
 
@@ -99,13 +104,20 @@ include.module( 'tool-location', [
                     } )
             } )
 
-            this.pickLocation = function ( location ) {}
+            this.pickLocation = function ( location ) {
+                self.clearInternalLayer( 'location' )
+                self.loadInternalLayer( 'location', turf.point( [ 
+                    location.map.longitude, 
+                    location.map.latitude 
+                ] ) )
+            }
 
             this.reset = function () {
                 this.site = {}
                 this.active = false
                 self.setDirectionsHandler()
                 self.setIdentifyHandler()
+                self.clearInternalLayer( 'location' )
             }
 
             smk.$viewer.changedView( function () {
@@ -117,5 +129,5 @@ include.module( 'tool-location', [
                     self.reset()
             } )
         }
-    )
+    } )
 } )
