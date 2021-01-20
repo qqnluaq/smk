@@ -18,6 +18,7 @@ include.module( 'types-esri3d', [ 'esri3d' ], function () {
             'esri/widgets/NavigationToggle',
             'esri/widgets/Compass',
             'esri/widgets/Zoom',
+            'esri/widgets/Zoom/ZoomViewModel',
             // 'esri/widgets/Expand',
             // 'esri/widgets/BasemapGallery',
             // 'esri/widgets/Legend',

@@ -12,6 +12,7 @@ include.module( 'tool-current-location-config', [
         inc[ 'tool-internal-layers-config' ]( {
             type: 'current-location',
             position: 'actionbar',
+            order: 3,
             icon: 'my_location',
             title: 'Current Location',
             zoom: 17,

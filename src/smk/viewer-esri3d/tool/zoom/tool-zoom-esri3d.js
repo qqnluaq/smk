@@ -18,12 +18,19 @@ include.module( 'tool-zoom-esri3d', [ 'tool-zoom', 'esri3d' ], function () {
 
         if ( this.control ) {
             smk.$viewer.zoomHandler.keyDown.remove()
-            smk.$viewer.view.ui.add( [
-                {
-                    component: new SMK.TYPE.Esri3d.widgets.Zoom( { view: smk.$viewer.view } ),
-                    position: 'top-right'
-                }
-            ] )
+
+            var zoomModel = new SMK.TYPE.Esri3d.widgets.Zoom.ZoomViewModel( { 
+                view: smk.$viewer.view,
+            } )
+
+            smk.on( this.id, {
+                'trigger-zoom-in': function () {
+                    zoomModel.zoomIn()
+                },               
+                'trigger-zoom-out': function () {
+                    zoomModel.zoomOut()
+                },               
+            } )   
         }
     } )
 

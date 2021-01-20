@@ -1,0 +1,19 @@
+<div v-if="control">
+    <div class="smk-tool"
+        v-bind:class="classes"
+        v-on:click="$$emit( 'trigger-zoom-in' )"
+        v-bind:title="title.zoomIn"
+    >
+        <i class="material-icons">{{ icon.zoomIn }}</i>
+        <span v-if="showTitle && title.zoomIn">{{ title.zoomIn }}</span>
+    </div>
+
+    <div class="smk-tool"
+        v-bind:class="classes"
+        v-on:click="$$emit( 'trigger-zoom-out' )"
+        v-bind:title="title.zoomOut"
+    >
+        <i class="material-icons">{{ icon.zoomOut }}</i>
+        <span v-if="showTitle && title.zoomOut">{{ title.zoomOut }}</span>
+    </div>
+</div>
