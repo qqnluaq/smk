@@ -94,7 +94,6 @@ tg.forEachDir( 'smk/tool/*/', function ( fn, bn ) {
 // smk tool mixins
 // ==================================================================================
 
-
 t.group( 'tool-base' )
     .dir( 'smk/mixin/tool-base/*' )
 
@@ -160,6 +159,9 @@ t.group( 'tool-bespoke' )
 
 t.group( 'tool-coordinate' )
     .dir( 'smk/tool/coordinate/*' )
+
+t.group( 'tool-current-location' )
+    .dir( 'smk/tool/current-location/*' )
 
 t.sequence( 'tool-directions-libs' )
     .script( 'smk/tool/directions/lib/sortable-1.7.0.min.js')

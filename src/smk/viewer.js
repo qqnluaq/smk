@@ -811,6 +811,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
                 }
             }
             catch ( e ) {}
+            self.currentLocationPromise = null
             return Promise.reject( err )
         } )
         .then( function ( loc ) {
