@@ -83,7 +83,7 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
                     cy = sz[ 1 ] / 2,
                     off = styleConfig.markerOffset,
                     ox = off[ 0 ] || cx,
-                    oy = off[ 0 ] || cy,
+                    oy = off[ 1 ] || cy,
                     x = ox / sz[ 0 ] - 0.5,
                     y = oy / sz[ 1 ] - 0.5
                 point = {
