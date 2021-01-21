@@ -8,7 +8,7 @@ include.module( 'tool-pan', [
     Vue.component( 'pan-widget', {
         extends: SMK.COMPONENT.ToolWidgetBase,
         template: inc[ 'tool-pan.widget-pan-html' ],
-        props: [ 'control', 'navMode' ],
+        props: [ 'control', 'navMode', 'compassStyle' ],
         computed: {
             navModePanClasses: function () {
                 var c = Object.assign( {}, this.classes )
@@ -30,6 +30,7 @@ include.module( 'tool-pan', [
 
             this.defineProp( 'control' )
             this.defineProp( 'navMode' )
+            this.defineProp( 'compassStyle' )
 
             this.navMode = 'pan'
         },

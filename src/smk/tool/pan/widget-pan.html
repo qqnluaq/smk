@@ -4,7 +4,7 @@
         v-on:click="$$emit( 'trigger-compass' )"
         v-bind:title="title.compass"
     >
-        <i class="material-icons">{{ icon.compass }}</i>
+        <i class="material-icons" v-bind:style="compassStyle">{{ icon.compass }}</i>
         <span v-if="showTitle && title.compass">{{ title.compass }}</span>
     </div>
 

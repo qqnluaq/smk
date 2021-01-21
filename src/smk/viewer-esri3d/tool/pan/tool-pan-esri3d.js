@@ -30,6 +30,10 @@ include.module( 'tool-pan-esri3d', [ 'tool-pan', 'esri3d' ], function () {
                         navModel.toggle()
                 },               
             } )   
+
+            SMK.TYPE.Esri3d.core.watchUtils.watch( compassModel, "orientation", function() {
+                self.compassStyle = { transform: 'rotateZ(' + compassModel.orientation.z + 'deg)' }
+            } )    
         }
 
         smk.$viewer.panHandler.drag.remove()
