@@ -22,14 +22,14 @@ include.module( 'tool-zoom', [
         initialize: function ( smk ) {
             var self = this
         
-            smk.on( this.id, {
-                'trigger-zoom-in': function () {
-                    console.log('trigger-zoom-in')
-                },               
-                'trigger-zoom-out': function () {
-                    console.log('trigger-zoom-out')
-                },               
-            } )   
+            // smk.on( this.id, {
+            //     'trigger-zoom-in': function () {
+            //         console.log('trigger-zoom-in')
+            //     },               
+            //     'trigger-zoom-out': function () {
+            //         console.log('trigger-zoom-out')
+            //     },               
+            // } )   
         }
     } )
 } )
