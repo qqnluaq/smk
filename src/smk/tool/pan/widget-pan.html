@@ -1,0 +1,28 @@
+<div v-if="control">
+    <div class="smk-tool"
+        v-bind:class="classes"
+        v-on:click="$$emit( 'trigger-compass' )"
+        v-bind:title="title.compass"
+    >
+        <i class="material-icons">{{ icon.compass }}</i>
+        <span v-if="showTitle && title.compass">{{ title.compass }}</span>
+    </div>
+
+    <div class="smk-tool"
+        v-bind:class="navModePanClasses"
+        v-on:click="$$emit( 'trigger-nav-mode-pan' )"
+        v-bind:title="title.navModePan"
+    >
+        <i class="material-icons">{{ icon.navModePan }}</i>
+        <span v-if="showTitle && title.navModePan">{{ title.navModePan }}</span>
+    </div>
+
+    <div class="smk-tool"
+        v-bind:class="navModeRotateClasses"
+        v-on:click="$$emit( 'trigger-nav-mode-rotate' )"
+        v-bind:title="title.navModeRotate"
+    >
+        <i class="material-icons">{{ icon.navModeRotate }}</i>
+        <span v-if="showTitle && title.navModeRotate">{{ title.navModeRotate }}</span>
+    </div>
+</div>

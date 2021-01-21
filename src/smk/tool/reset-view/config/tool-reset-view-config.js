@@ -9,7 +9,7 @@ include.module( 'tool-reset-view-config', [
         inc[ 'tool-widget-config' ]( {
             type: 'reset-view',
             position: 'actionbar',
-            order: 2,
+            order: 10,
             icon: 'zoom_out_map',
             title: 'Reset View'
         } ) )

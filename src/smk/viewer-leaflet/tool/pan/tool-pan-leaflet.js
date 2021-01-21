@@ -3,6 +3,8 @@ include.module( 'tool-pan-leaflet', [ 'tool-pan', 'leaflet' ], function () {
 
     SMK.TYPE.PanTool.addInitializer( function ( smk ) {
         smk.$viewer.map.dragging.enable()
+
+        this.control = false
     } )
 } )
 
