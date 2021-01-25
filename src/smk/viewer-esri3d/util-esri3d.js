@@ -1,6 +1,8 @@
 include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc ) {
     "use strict";
 
+    var featureId = 1000
+
     var geojsonType = {
         Point: function ( obj ) {
             return [ Object.assign( { type: 'point' }, Terraformer.ArcGIS.convert( obj ) ) ]
@@ -43,8 +45,9 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
         Feature:  function ( obj, symbols ) {
             return convertGeojson( obj.geometry ).reduce( function ( acc, g ) {
                 return acc.concat( symbols.reduce( function ( acc, s ) {
+                    featureId += 1
                     return {
-                        attributes: Object.assign( { _geojsonGeometry: obj.geometry }, obj.properties ),
+                        attributes: Object.assign( { _geojsonGeometry: obj.geometry, _featureId: featureId }, obj.properties ),
                         geometry:   g,
                         symbol:     s[ g.type ] //, obj.properties )
                     }    
@@ -81,11 +84,12 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
                 var sz = styleConfig.markerSize,
                     cx = sz[ 0 ] / 2,
                     cy = sz[ 1 ] / 2,
-                    off = styleConfig.markerOffset,
+                    off = styleConfig.markerOffset || [],
                     ox = off[ 0 ] || cx,
                     oy = off[ 1 ] || cy,
                     x = ox / sz[ 0 ] - 0.5,
                     y = oy / sz[ 1 ] - 0.5
+
                 point = {
                     type: 'point-3d',
                     symbolLayers: [
@@ -102,20 +106,26 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
                 }
             }
             else {
+                var sw = styleConfig.strokeWidth || 3,
+                    fc = styleConfig.fillColor || '#3388ff',
+                    fo = styleConfig.fillOpacity || 0.2,
+                    sc = styleConfig.strokeColor || '#3388ff',
+                    so = styleConfig.strokeOpacity || 1
+
                 point = {
                     type: 'point-3d',
                     symbolLayers: [ {
                         type: 'icon',
-                        size: styleConfig.strokeWidth * 2,
+                        size: sw * 2,
                         resource: {
                             primitive: 'circle'
                         },
                         material: {
-                            color: color( styleConfig.fillColor, styleConfig.fillOpacity ),
+                            color: color( fc, fo ),
                         },
                         outline: {
-                            size: styleConfig.strokeWidth / 2,
-                            color: color( styleConfig.strokeColor, styleConfig.strokeOpacity ),
+                            size: sw / 2,
+                            color: color( sc, so ),
                         }
                     } ]
                 }
