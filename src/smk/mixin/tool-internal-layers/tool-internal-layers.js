@@ -50,12 +50,26 @@ include.module( 'tool-internal-layers', [
                 return smk.$viewer.layerId[ this.id + '--' + id ]
             }
 
+            this.layerPromise = SMK.UTIL.resolved()
+
             this.clearInternalLayer = function ( id ) {
-                this.getInternalLayer( id ).clear()
+                var ly = this.getInternalLayer( id )
+
+                /* jshint -W093 */
+                return this.layerPromise = this.layerPromise.then( function () {
+                    return ly.clear()
+                }, console.warn )
             }
 
             this.loadInternalLayer = function ( id, geojson ) {
-                this.getInternalLayer( id ).load( geojson )
+                var ly = this.getInternalLayer( id )
+
+                /* jshint -W093 */
+                return this.layerPromise = this.layerPromise.then( function () {
+                    return ly.load( geojson )
+                }, console.warn )
+
+                // this.getInternalLayer( id ).load( geojson )
             }
 
         } )

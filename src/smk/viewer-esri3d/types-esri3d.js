@@ -34,8 +34,9 @@ include.module( 'types-esri3d', [ 'esri3d' ], function () {
             'esri/layers/MapImageLayer',
             'esri/layers/WMSLayer',
             'esri/layers/BaseDynamicLayer',
-            // 'esri/layers/FeatureLayer',
+            'esri/layers/FeatureLayer',
             'esri/layers/GraphicsLayer',
+            'esri/layers/GeoJSONLayer',
 
             // rendering
             // 'esri/renderers/SimpleRenderer',

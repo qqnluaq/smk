@@ -33,6 +33,7 @@ include.module( 'tool-identify-config', [
             internalLayer: {
                 'search-area': {
                     // title: "Identify Search Area",
+                    geometryType: 'polygon',
                     style: {
                         stroke:             false,
                         fill:               true,
@@ -42,6 +43,7 @@ include.module( 'tool-identify-config', [
                 },
                 'search-border-1': {
                     // title: "Identify Search Area Border",
+                    geometryType: 'polyline',
                     style: {
                         strokeWidth:        6,
                         strokeColor:        "black",
@@ -51,6 +53,7 @@ include.module( 'tool-identify-config', [
                 },
                 'search-border-2': {
                     // title: "Identify Search Area Border",
+                    geometryType: 'polyline',
                     style: {
                         strokeWidth:        6,
                         strokeColor:        "white",
@@ -60,6 +63,7 @@ include.module( 'tool-identify-config', [
                 },
                 'location': {
                     title: "Identify Location",
+                    geometryType: 'point',
                     style: {
                         markerUrl: inc[ 'tool-identify-config.crosshair-png' ],
                         markerSize: [ 40, 40 ],
@@ -71,6 +75,7 @@ include.module( 'tool-identify-config', [
                 },
                 'edit-search-area': {
                     // title: "Identify Edit Search Area",
+                    geometryType: 'polygon',
                     style: {
                         strokeWidth:        3,
                         strokeColor:        "red",

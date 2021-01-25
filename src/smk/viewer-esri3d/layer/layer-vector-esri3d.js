@@ -77,7 +77,7 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
         if ( layers.length != 1 ) throw new Error( 'only 1 config allowed' )
 
         var symbols = [].concat( layers[ 0 ].config.style ).map( function ( st ) {
-            return SMK.UTIL.smkStyleToEsriSymbol( st, self )
+            return SMK.UTIL.smkStyleToEsriSymbol( st || {}, self )
         } )
         if ( symbols.length == 0 )
             symbols.push( {} )
@@ -95,10 +95,55 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
                     } )
             } )
             .then( function ( reproject ) {
-                var layer = new E.layers.GraphicsLayer()   
+                var layer = new E.layers.FeatureLayer( {
+                    source: [],
+                    spatialReference: { wkid: 4326 },
+                    geometryType: layers[ 0 ].config.geometryType,
+                    objectIdField: layers[ 0 ].config.keyAttribute || '_featureId',
+                    fields: layers[ 0 ].config.attributes.map( function ( a ) {
+                        return {
+                            alias: a.title,
+                            name: a.name,
+                            type: 'string'
+                        }
+                    } ),
+                    renderer: {
+                        type: 'simple',
+                        symbol: symbols[ 0 ][ layers[ 0 ].config.geometryType ]
+                    },
+                } )
+
+                if ( layers[ 0 ].config.labelAttribute )
+                    layer.labelingInfo = [ {
+                        labelExpressionInfo: {
+                            expression: '$feature.' + layers[ 0 ].config.labelAttribute
+                        },
+                        symbol: {
+                            type: 'label-3d',
+                            symbolLayers: [ {
+                                type: 'text',
+                                material: { 
+                                    color: layers[ 0 ].config.style.labelColor || 'black' 
+                                },
+                                halo: { 
+                                    color: layers[ 0 ].config.style.labelBackgroundColor,
+                                    size: 3,
+                                },
+
+                            } ]
+                            // color: 'black',
+                            // halosize: 2,
+                            // haloColor: 'yellow',
+                            // backgroundColor: 'yellow'
+                        }
+                    } ]
 
                 layers[ 0 ].loadLayer = function ( data ) {        
-                    layer.addMany( SMK.UTIL.geoJsonToEsriGraphics( reproject( data ), symbols ) )
+                    return layer.applyEdits( { 
+                        addFeatures: SMK.UTIL.geoJsonToEsriGraphics( reproject( data ), symbols )
+                    } ).then( function () {
+                        console.log( layer.fields )
+                    } )
                 }
         
                 if ( layers[ 0 ].loadCache ) {
@@ -107,13 +152,22 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
                 }
         
                 layers[ 0 ].clearLayer = function () {
-                    layer.removeAll()
+                    return layer.queryObjectIds().then( function ( ids ) {
+                        layer.applyEdits( {
+                            deleteFeatures: ids.map( function ( id ) {
+                                return { objectId: id }
+                            } ) 
+                        } )
+                    } )
+                    // layer.destroy()
+                    // layer = new E.layers.FeatureLayer()   
+                    // layer.removeAll()
                 }
         
                 if ( layers[ 0 ].config.isInternal )
                     return layer
         
-                var url = self.resolveAttachmentUrl( layers[ 0 ].config.dataUrl, layers[ 0 ].config.id, 'json' )
+                var url = self.resolveAttachmentUrl( layers[ 0 ].config.dataUrl, layers[ 0 ].config.id, 'json' ) 
         
                 return SMK.UTIL.makePromise( function ( res, rej ) {
                     $.get( url, null, null, 'json' ).then( res, function ( xhr, status, err ) {

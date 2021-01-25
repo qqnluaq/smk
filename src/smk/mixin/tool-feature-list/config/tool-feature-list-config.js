@@ -8,6 +8,7 @@ include.module( 'tool-feature-list-config', [
         cfg.internalLayer = Object.assign( {
             'highlight-polygon': {
                 // title: "Identify Search Area",
+                geometryType: 'polygon',
                 style: {
                     fill:               true,
                     stroke:             true,
@@ -20,6 +21,7 @@ include.module( 'tool-feature-list-config', [
             },
             'highlight-line': {
                 // title: "Identify Search Area",
+                geometryType: 'polyline',
                 style: {
                     stroke:             true,
                     strokeColor:        "black",
@@ -29,6 +31,7 @@ include.module( 'tool-feature-list-config', [
             },
             'highlight-point': {
                 // title: "Identify Search Area",
+                geometryType: 'point',
                 style: {
                     markerUrl:      inc[ 'tool-feature-list-config.marker-icon-white-png' ],
                     markerSize:     [ 25, 41 ],

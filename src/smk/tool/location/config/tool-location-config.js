@@ -17,6 +17,7 @@ include.module( 'tool-location-config', [
             internalLayer: {
                 'location': {
                     title: "Picked Location",
+                    geometryType: 'point',
                     style: {
                         markerUrl:      inc[ 'tool-location-config.marker-icon-blue-png' ],
                         markerSize:     [ 25, 41 ],
