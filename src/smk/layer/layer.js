@@ -41,34 +41,6 @@ include.module( 'layer.layer-js', [ 'jquery', 'util', 'event' ], function () {
     SMK.TYPE.Layer = Layer
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
-    Layer.prototype.initialize = function ( id ) {
-        var self = this
-
-        // this.id = id
-        // this.parentId = parentId
-        // this.index = index
-
-        // seems obsolete
-        // if ( this.config.attributes ) {
-        //     this.attribute = {}
-
-        //     this.config.attributes.forEach( function ( at ) {
-        //         if ( at.name in self.attribute )
-        //             console.warn( 'attribute ' + at.name + ' is duplicated in ' + self.id )
-
-        //         self.attribute[ at.name ] = at
-
-        //         if ( self.config.geometryAttribute && self.config.geometryAttribute == at.name )
-        //             at.isGeometry = true
-
-        //         if ( self.config.titleAttribute && self.config.titleAttribute == at.name )
-        //             at.isTitle = true
-        //     } )
-        // }
-    }
-
-    Layer.prototype.hasChildren = function () { return false }
-
     Layer.prototype.initLegends = function () {
         return SMK.UTIL.resolved()
     }

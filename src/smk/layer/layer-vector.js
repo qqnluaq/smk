@@ -104,53 +104,6 @@ include.module( 'layer.layer-vector-js', [ 'layer.layer-js' ], function () {
         }
     }
 
-    VectorLayer.prototype.initialize = function () {
-        if ( this.hasChildren() )
-            this.isContainer = true
-
-        SMK.TYPE.Layer.prototype.initialize.apply( this, arguments )
-
-        if ( this.config.useHeatmap )
-            this.config.isQueryable = false
-    }
-
-    VectorLayer.prototype.hasChildren = function () {
-        return ( this.config.useRaw + this.config.useClustering + this.config.useHeatmap ) > 1
-    }
-
-    VectorLayer.prototype.childLayerConfigs = function () {
-        var configs = []
-
-        if ( this.config.useClustering )
-            configs.push( Object.assign( {}, this.config, {
-                id: this.id + '--clustered',
-                dataUrl: '@' + this.config.id,
-                title: 'Clustered',
-                useRaw: false,
-                useHeatmap: false,
-            } ) )
-
-        if ( this.config.useHeatmap )
-            configs.push( Object.assign( {}, this.config, {
-                id: this.id + '--heatmap',
-                dataUrl: '@' + this.config.id,
-                title: 'Heatmap',
-                useRaw: false,
-                useClustering: false,
-            } ) )
-
-        if ( this.config.useRaw )
-            configs.push( Object.assign( {}, this.config, {
-                id: this.id + '--raw',
-                dataUrl: '@' + this.config.id,
-                title: 'Raw',
-                useHeatmap: false,
-                useClustering: false,
-            } ) )
-
-        return configs
-    }
-
     VectorLayer.prototype.load = function ( data ) {
         if ( !data ) return
 
