@@ -44,12 +44,14 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
 
         Feature:  function ( obj, symbols ) {
             return convertGeojson( obj.geometry ).reduce( function ( acc, g ) {
-                return acc.concat( symbols.reduce( function ( acc, s ) {
+                return acc.concat( symbols.map( function ( symbol ) {
                     featureId += 1
+                    var s = symbol[ g.type ]
+                    if ( SMK.UTIL.type( s ) != 'function' ) s = function () { return symbol[ g.type ] }
                     return {
                         attributes: Object.assign( { _geojsonGeometry: obj.geometry, _featureId: featureId }, obj.properties ),
                         geometry:   g,
-                        symbol:     s[ g.type ] //, obj.properties )
+                        symbol:     s( obj.properties )
                     }    
                 }, [] ) )
             }, [] ) 
@@ -127,7 +129,7 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
                             size: sw / 2,
                             color: color( sc, so ),
                         }
-                    } ]
+                    }  ]
                 }
             }
 
@@ -147,12 +149,29 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
             if ( styleConfig.stroke !== false )
                 fill.symbolLayers.push( line.symbolLayers[ 0 ] )
 
-            return {
-                point: point,
-                // multipoint: Object.assign( point, { outline: line } ),
-                polyline: line,
-                polygon: fill
+            var styles = [
+                {
+                    point: point,
+                    polyline: line,
+                    polygon: fill
+                }
+            ]
+
+            if ( styleConfig.labelAttribute ) {
+                styles.unshift( {
+                    point: function ( prop ) {
+                        return {
+                            type: 'text',
+                            color: styleConfig.labelColor || 'black',
+                            haloColor: styleConfig.labelBackgroundColor, 
+                            haloSize: 3,
+                            text: prop[ styleConfig.labelAttribute ] + '\n\n'
+                        }                        
+                    } 
+                 } )
             }
+
+            return styles 
 
             function color( c, a ) {
                 var ec = new SMK.TYPE.Esri3d.Color( c )

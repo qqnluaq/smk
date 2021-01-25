@@ -8,6 +8,14 @@
             "enabled": true
         },
         {
+            "type": "identify",
+            "enabled": true
+        },
+        {
+            "type": "location",
+            "enabled": false
+        },
+        {
             "type": "zoom",
             "enabled": true
         },

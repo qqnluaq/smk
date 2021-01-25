@@ -75,10 +75,10 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
         var self = this;
 
         if ( layers.length != 1 ) throw new Error( 'only 1 config allowed' )
-
-        var symbols = [].concat( layers[ 0 ].config.style ).map( function ( st ) {
-            return SMK.UTIL.smkStyleToEsriSymbol( st, self )
-        } )
+            
+        var symbols = [].concat( layers[ 0 ].config.style ).reduce( function ( acc, st ) {
+            return acc.concat( SMK.UTIL.smkStyleToEsriSymbol( st, self ) )
+        }, [] )
         if ( symbols.length == 0 )
             symbols.push( {} )
 
