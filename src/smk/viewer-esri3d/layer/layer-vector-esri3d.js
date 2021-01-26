@@ -69,6 +69,11 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
 
         return features
     }
+
+    VectorEsri3dLayer.prototype.canAddToMap = function () {
+        return this.config.isOnMap !== false
+    }
+
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     SMK.TYPE.Layer[ 'vector' ][ 'esri3d' ].create = function ( layers, zIndex ) {
@@ -98,7 +103,9 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
                 var layer = new E.layers.GraphicsLayer()   
 
                 layers[ 0 ].loadLayer = function ( data ) {        
+                    layers[ 0 ].loading = true
                     layer.addMany( SMK.UTIL.geoJsonToEsriGraphics( reproject( data ), symbols ) )
+                    layers[ 0 ].loading = false
                 }
         
                 if ( layers[ 0 ].loadCache ) {
@@ -109,13 +116,25 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
                 layers[ 0 ].clearLayer = function () {
                     layer.removeAll()
                 }
-        
+
+                layers[ 0 ].getData = function () {
+                    return layer.graphics.map( function ( g ) {
+                        return Object.assign( { 
+                            x: g.geometry.x, 
+                            y: g.geometry.y, 
+                            symbol: g.symbol,
+                            layerId: layers[ 0 ].id 
+                        }, g.attributes )
+                    } ).toArray()
+                }
+
                 if ( layers[ 0 ].config.isInternal )
                     return layer
         
                 var url = self.resolveAttachmentUrl( layers[ 0 ].config.dataUrl, layers[ 0 ].config.id, 'json' )
         
                 return SMK.UTIL.makePromise( function ( res, rej ) {
+                    layers[ 0 ].loading = true
                     $.get( url, null, null, 'json' ).then( res, function ( xhr, status, err ) {
                         rej( 'Failed requesting ' + url + ': ' + xhr.status + ',' + err )
                     } )

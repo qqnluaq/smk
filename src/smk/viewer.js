@@ -359,6 +359,19 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         } )
     }
 
+    Viewer.prototype.eachLayer = function ( callback ) {
+        var self = this
+
+        this.layerIds.forEach( function ( id ) {
+            try {
+                callback( id, self.layerId[ id ], self.visibleLayer[ id ] )
+            }
+            catch ( e ) {
+                console.warn( e )
+            }
+        } )
+    }
+
     Viewer.prototype.initializeLayers = function ( smk ) {
     }
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
@@ -514,9 +527,11 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
             var p = self.createViewerLayer( cid, lys, maxZOrder - i )
                 .then( function ( ly ) {
-                    self.addViewerLayer( ly )
-                    self.positionViewerLayer( ly, maxZOrder - i )
-                    self.visibleLayer[ cid ] = ly
+                    if ( lys.length > 1 || lys[ 0 ].canAddToMap() ) {
+                        self.addViewerLayer( ly )
+                        self.positionViewerLayer( ly, maxZOrder - i )
+                        self.visibleLayer[ cid ] = ly
+                    }
                     return ly
                 } )
                 .catch( function ( e ) {

@@ -106,6 +106,9 @@
 
         // for esri3d
         window.dojoConfig = {
+            packages: [ {
+                name: "fcl",
+            } ],
             has: {
                 "esri-promise-compatibility": 1
             }
@@ -117,6 +120,8 @@
             SMK.BASE_URL = ( new URL( path, document.location ) ).toString()
             console.debug( 'Default base path from', scriptEl.src, 'is', SMK.BASE_URL )
         }
+
+        window.dojoConfig.packages[ 0 ].location = SMK.BASE_URL + 'assets/src/lib/esri3d'
 
         if ( scriptEl &&
             scriptEl.attributes &&

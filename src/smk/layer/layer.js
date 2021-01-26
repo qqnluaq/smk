@@ -76,4 +76,7 @@ include.module( 'layer.layer-js', [ 'jquery', 'util', 'event' ], function () {
         return this.config
     }
     
+    Layer.prototype.canAddToMap = function () {
+        return true
+    }
 } )

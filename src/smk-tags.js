@@ -323,6 +323,8 @@ t.group( 'viewer-esri3d' )
     .script( 'smk/viewer-esri3d/viewer-esri3d.js' )
     .style( 'smk/viewer-esri3d/viewer-esri3d.css' )
 
+t.script( 'flare-cluster-layer', 'lib/esri3d/FlareClusterLayer_v4.js', { inline: false } )
+
 t.sequence( 'esri3d' )
     .tag( 'leaflet' )
     .tag( 'projections' )

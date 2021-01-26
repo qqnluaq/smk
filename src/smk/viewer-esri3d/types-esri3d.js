@@ -40,7 +40,7 @@ include.module( 'types-esri3d', [ 'esri3d' ], function () {
             // rendering
             // 'esri/renderers/SimpleRenderer',
             // 'esri/renderers/UniqueValueRenderer',
-            // 'esri/renderers/ClassBreaksRenderer',
+            'esri/renderers/ClassBreaksRenderer',
 
             // symbols
             'esri/Graphic',
@@ -48,6 +48,7 @@ include.module( 'types-esri3d', [ 'esri3d' ], function () {
             'esri/symbols/SimpleMarkerSymbol',
             'esri/symbols/SimpleLineSymbol',
             'esri/symbols/SimpleFillSymbol',
+            'esri/symbols/TextSymbol',
 
             // geometry
             'esri/geometry/Point',
@@ -56,10 +57,13 @@ include.module( 'types-esri3d', [ 'esri3d' ], function () {
             'esri/geometry/Extent',
             'esri/geometry/SpatialReference',
             'esri/geometry/geometryEngine',
-            'esri/geometry/support/webMercatorUtils'
+            'esri/geometry/support/webMercatorUtils',
 
             // dojo stuff
             // 'dojo/domReady!'
+
+            // flare cluster layer (https://github.com/nickcam/FlareClusterLayer)
+            "fcl/FlareClusterLayer_v4",
         ]
 
         SMK.TYPE.Esri3d = {}
