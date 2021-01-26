@@ -311,32 +311,15 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
     Viewer.prototype.addLayer = function ( layerConfig ) {
         var self = this
 
-        var ly = createLayer( layerConfig )
+        var ly = makeLayer( layerConfig )
 
-        if ( !ly.hasChildren() ) {
-            registerLayer( ly )
-
-            return {
-                id: ly.id,
-            }
-        }
+        registerLayer( ly )
 
         return {
             id: ly.id,
-            type: 'folder',
-            title: ly.config.title,
-            isVisible: ly.config.isVisible,
-            isExpanded: false,
-            items: ly.childLayerConfigs().map( function ( childConfig ) {
-                var cly = createLayer( childConfig )
-                registerLayer( cly )
-                return {
-                    id: cly.id,
-                }
-            } )
         }
 
-        function createLayer( config ) {
+        function makeLayer( config ) {
             try {
                 if ( !( config.type in SMK.TYPE.Layer ) )
                     throw new Error( 'layer type "' + config.type + '" not defined' )
@@ -345,7 +328,6 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
                     throw new Error( 'layer type "' + config.type + '" not defined for viewer "' + self.type + '"' )
 
                 var ly = new SMK.TYPE.Layer[ config.type ][ self.type ]( config )
-                ly.initialize()
 
                 return ly
             }
@@ -374,6 +356,19 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
         return this.layerIds.map( function( id ) {
             return self.layerId[ id ].getConfig( self.visibleLayer[ id ] )
+        } )
+    }
+
+    Viewer.prototype.eachLayer = function ( callback ) {
+        var self = this
+
+        this.layerIds.forEach( function ( id ) {
+            try {
+                callback( id, self.layerId[ id ], self.visibleLayer[ id ] )
+            }
+            catch ( e ) {
+                console.warn( e )
+            }
         } )
     }
 
@@ -532,9 +527,11 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
             var p = self.createViewerLayer( cid, lys, maxZOrder - i )
                 .then( function ( ly ) {
-                    self.addViewerLayer( ly )
-                    self.positionViewerLayer( ly, maxZOrder - i )
-                    self.visibleLayer[ cid ] = ly
+                    if ( lys.length > 1 || lys[ 0 ].canAddToMap() ) {
+                        self.addViewerLayer( ly )
+                        self.positionViewerLayer( ly, maxZOrder - i )
+                        self.visibleLayer[ cid ] = ly
+                    }
                     return ly
                 } )
                 .catch( function ( e ) {
