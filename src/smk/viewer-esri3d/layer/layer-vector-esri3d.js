@@ -84,8 +84,8 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
         var symbols = [].concat( layers[ 0 ].config.style ).reduce( function ( acc, st ) {
             return acc.concat( SMK.UTIL.smkStyleToEsriSymbol( st, self ) )
         }, [] )
-        if ( symbols.length == 0 )
-            symbols.push( {} )
+
+        var layerData = []
 
         return SMK.UTIL.resolved()
             .then( function () {
@@ -104,7 +104,14 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
 
                 layers[ 0 ].loadLayer = function ( data ) {        
                     layers[ 0 ].loading = true
-                    layer.addMany( SMK.UTIL.geoJsonToEsriGraphics( reproject( data ), symbols ) )
+                    
+                    var gs = SMK.UTIL.geoJsonToEsriGraphics( reproject( data ) )
+                    layerData = layerData.concat( gs )
+
+                    if ( layers[ 0 ].canAddToMap() ) {
+                        layer.addMany( SMK.UTIL.mapSymbolsToGraphics( gs, symbols ) )
+                    }
+
                     layers[ 0 ].loading = false
                 }
         
@@ -115,17 +122,18 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
         
                 layers[ 0 ].clearLayer = function () {
                     layer.removeAll()
+                    layerData = []
                 }
 
                 layers[ 0 ].getData = function () {
-                    return layer.graphics.map( function ( g ) {
+                    return layerData.map( function ( g ) {
                         return Object.assign( { 
                             x: g.geometry.x, 
                             y: g.geometry.y, 
-                            symbol: g.symbol,
+                            symbols: SMK.UTIL.symbolsForGraphic( g, symbols ),
                             layerId: layers[ 0 ].id 
                         }, g.attributes )
-                    } ).toArray()
+                    } )
                 }
 
                 if ( layers[ 0 ].config.isInternal )

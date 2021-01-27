@@ -79,7 +79,7 @@ include.module( 'layer-esri3d.layer-cluster-esri3d-js', [ 'layer.layer-cluster-j
                     singleFlareTooltipProperty: "INCIDENT_NUMBER_LABEL",
                     maxSingleFlareCount: 8,
                     clusterRatio: 75,
-                    symbolPropertyName: 'symbol',
+                    symbolPropertyName: 'symbols',
                 } )   
 
                 // doesn't work in 3d
@@ -94,14 +94,20 @@ include.module( 'layer-esri3d.layer-cluster-esri3d-js', [ 'layer.layer-cluster-j
                 self.eachLayer( function ( id, ly, lyVis ) {
                     if ( ly.config.clusterId == layers[ 0 ].config.id ) { 
                         ly.finishedLoading( function () {
+                            // console.log( 'finishedLoading', ly.id )
                             layer.filterData( function ( ft ) {
+                                // console.log( 'finishedLoading', ly.id, ft )
                                 return ft.layerId != ly.id
                             } )
+                            // console.log(ly.getData())
                             layer.addData( ly.getData() )
+                            // console.log( '..finishedLoading', ly.id )
                         } )
 
                         if ( ly.getData ) {
+                            // console.log( 'startup', ly.id )
                             layer.filterData( function ( ft ) {
+                                // console.log( 'startup', ft, ly.id )
                                 return ft.layerId != ly.id
                             } )
                             layer.addData( ly.getData() )

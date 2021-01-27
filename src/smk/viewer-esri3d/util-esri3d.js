@@ -36,35 +36,67 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
             }, [] )
         },
 
-        FeatureCollection:  function ( obj, symbols ) {
+        FeatureCollection:  function ( obj ) {
             return obj.features.reduce( function ( acc, f ) {
-                return acc.concat( convertGeojson( f, symbols ) )
+                return acc.concat( convertGeojson( f ) )
             }, [] )
         },
 
-        Feature:  function ( obj, symbols ) {
-            return convertGeojson( obj.geometry ).reduce( function ( acc, g ) {
-                return acc.concat( symbols.map( function ( symbol ) {
-                    featureId += 1
-                    var s = symbol[ g.type ]
-                    if ( SMK.UTIL.type( s ) != 'function' ) s = function () { return symbol[ g.type ] }
-                    return {
-                        attributes: Object.assign( { _geojsonGeometry: obj.geometry, _featureId: featureId }, obj.properties ),
-                        geometry:   g,
-                        symbol:     s( obj.properties )
-                    }    
-                }, [] ) )
-            }, [] ) 
+        Feature:  function ( obj ) {
+            return convertGeojson( obj.geometry ).map( function ( g ) {
+                featureId += 1
+                return {
+                    geometry:   g,
+                    attributes: Object.assign( { 
+                        _geojsonGeometry: obj.geometry, 
+                        _featureId: featureId 
+                    }, obj.properties )
+                }    
+            } )
         },
     }
 
-    function convertGeojson( geojson, symbols ) {
-        return geojsonType[ geojson.type || 'Feature' ]( geojson, symbols )
+    function convertGeojson( geojson ) {
+        return geojsonType[ geojson.type || 'Feature' ]( geojson )
     }
 
     Object.assign( window.SMK.UTIL, {
-        geoJsonToEsriGraphics: function ( geojson, symbols ) {
-            return convertGeojson( geojson, symbols )
+        geoJsonToEsriGraphics: function ( geojson ) {
+            return convertGeojson( geojson )
+        },
+        
+        mapSymbolsToGraphics: function ( graphics, symbols ) {
+            var self = this
+
+            return graphics.reduce( function ( acc, g ) {
+                return acc.concat( self.symbolsForGraphic( g, symbols ).map( function ( symbol, i ) {
+                    var g1
+                    if ( g.clone ) {
+                        g1 = g.clone()
+                    }
+                    else {
+                        g1 = Object.assign( {}, g )
+                    }
+
+                    g1.symbol = symbol
+                    g1.attributes._symbolIndex = i
+
+                    return g1
+                } ) )
+            }, [] ) 
+        },
+
+        symbolsForGraphic: function ( graphic, symbols ) {
+            symbols = [].concat( symbols || [] )
+            if ( symbols.length == 0 ) symbols.push( {} )
+
+            return symbols.map( function ( symbol, i ) {
+                var s = symbol[ graphic.geometry.type ]
+                if ( SMK.UTIL.type( s ) == 'function' )
+                    return s( graphic.attributes ) 
+
+                return s
+            } )
         },
 
         smkStyleToEsriSymbol: function ( styleConfig, viewer ) {

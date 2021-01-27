@@ -365,32 +365,52 @@ define(["require", "exports", "esri/layers/GraphicsLayer", "esri/symbols/SimpleM
             return passes;
         };
         FlareClusterLayer.prototype._createSingle = function (obj) {
+            var self = this;
             var point = new Point({
                 x: obj[this.xPropertyName], y: obj[this.yPropertyName], z: obj[this.zPropertyName]
             });
             if (!point.spatialReference.isWebMercator) {
                 point = webMercatorUtils.geographicToWebMercator(point);
             }
-            var graphic = new Graphic({
-                geometry: point,
-                attributes: obj
-            });
-            graphic.popupTemplate = this.singlePopupTemplate;
+            var templ = this.singlePopupTemplate;
+            function addGraphic(symbol) {
+                if (symbol === void 0) { symbol = null; }
+                var graphic = new Graphic({
+                    geometry: point,
+                    attributes: obj,
+                    popupTemplate: templ,
+                    symbol: symbol
+                });
+                if (!symbol)
+                    graphic.symbol = self.singleRenderer.getSymbol(graphic, self._activeView);
+                self.add(graphic);
+            }
+            // let graphic = new Graphic({
+            //     geometry: point,
+            //     attributes: obj
+            // });
+            // graphic.popupTemplate = this.singlePopupTemplate;
             if (this.symbolPropertyName && obj[this.symbolPropertyName]) {
-                graphic.symbol = obj[this.symbolPropertyName];
+                [].concat(obj[this.symbolPropertyName]).forEach(function (s) {
+                    addGraphic(s);
+                });
+                // graphic.symbol = obj[ this.symbolPropertyName ];
             }
             else if (this.singleRenderer) {
-                var symbol = this.singleRenderer.getSymbol(graphic, this._activeView);
-                graphic.symbol = symbol;
+                // let symbol = this.singleRenderer.getSymbol(graphic, this._activeView) 
+                addGraphic();
+                // graphic.symbol = symbol;
             }
             else if (this.singleSymbol) {
-                graphic.symbol = this.singleSymbol;
+                // graphic.symbol = this.singleSymbol;
+                addGraphic(this.singleSymbol);
             }
             else {
                 // no symbology for singles defined, use the default symbol from the cluster renderer
-                graphic.symbol = this.clusterRenderer.defaultSymbol;
+                // graphic.symbol = this.clusterRenderer.defaultSymbol;
+                addGraphic(this.clusterRenderer.defaultSymbol);
             }
-            this.add(graphic);
+            // this.add(graphic);
         };
         FlareClusterLayer.prototype._createCluster = function (gridCluster) {
             return __awaiter(this, void 0, void 0, function () {
