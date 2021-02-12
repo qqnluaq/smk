@@ -24,6 +24,7 @@ include.module( 'tool-current-location-config', [
                         markerSize: [ 26, 26 ],
                         markerOffset: [ 13, 13 ],
                     },
+                    geometryType: 'point',
                     legend: {
                         point: true
                     }
