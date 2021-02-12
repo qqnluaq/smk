@@ -121,8 +121,6 @@
             console.debug( 'Default base path from', scriptEl.src, 'is', SMK.BASE_URL )
         }
 
-        window.dojoConfig.packages[ 0 ].location = SMK.BASE_URL + 'assets/src/lib/esri3d'
-
         if ( scriptEl &&
             scriptEl.attributes &&
             scriptEl.attributes[ 'smk-container-sel' ] ) {

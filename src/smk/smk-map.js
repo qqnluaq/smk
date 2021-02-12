@@ -43,6 +43,8 @@ include.module( 'smk-map', [ 'libs', 'util', 'tool', 'theme-base', 'sidepanel', 
 
         this.$container = container.get( 0 )
 
+        window.dojoConfig.packages[ 0 ].location = this.resolveAssetUrl( 'lib/esri3d' )
+
         return SMK.UTIL.resolved()
             .then( loadConfigs )
             .then( mergeConfigs )
