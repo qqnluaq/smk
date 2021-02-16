@@ -334,6 +334,17 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
                 y: opt.center[ 1 ]
             } ) 
         }
+
+        if ( opt.center ) {
+            this.view.center = new E.geometry.Point( {
+                x: opt.center[ 0 ],
+                y: opt.center[ 1 ]
+            } ) 
+        }
+
+        if ( opt.camera ) {
+            this.view.camera = new E.Camera( opt.camera )
+        }
     }
 
 } )

@@ -13,6 +13,7 @@ include.module( 'types-esri3d', [ 'esri3d' ], function () {
             'esri/views/ui/3d/DefaultUI3D',
             'esri/views/ui/UI',
             'esri/core/watchUtils',
+            'esri/Camera',
 
             // widgets
             'esri/widgets/NavigationToggle',
