@@ -104,12 +104,12 @@ include.module( 'tool-identify.tool-identify-list-js', [
                     .then( function () { return true }, function () { return true } )
             } )
 
-            this.getRadiusMeters = function () {
-                return smk.$viewer.distanceToMeters( self.radius, self.radiusUnit )
+            this.getRadiusMeters = function ( location ) {
+                return smk.$viewer.distanceToMeters( self.radius, self.radiusUnit, location )
             }
 
-            this.setRadiusMeters = function ( radiusMeters ) {
-                self.radius = smk.$viewer.distanceFromMeters( radiusMeters, self.radiusUnit )
+            this.setRadiusMeters = function ( radiusMeters, location ) {
+                self.radius = smk.$viewer.distanceFromMeters( radiusMeters, self.radiusUnit, location )
             }
 
             this.identifyStarts = 0
@@ -260,7 +260,7 @@ include.module( 'tool-identify.tool-identify-list-js', [
             makeSearchLocationCircle: function ( radiusMeters, steps ) {
                 return turf.circle(
                     [ this.searchLocation.map.longitude, this.searchLocation.map.latitude ],
-                    ( radiusMeters || this.getRadiusMeters() ) / 1000,
+                    ( radiusMeters || this.getRadiusMeters( this.searchLocation ) ) / 1000,
                     { steps: steps || 64 }
                 )
             },

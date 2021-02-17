@@ -19,7 +19,6 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
         if ( !option.layer ) return
 
         var features = []
-
         option.layer.graphics.forEach( function ( gr ) {
             var gm = gr.attributes._geojsonGeometry
 
@@ -108,9 +107,9 @@ include.module( 'layer-esri3d.layer-vector-esri3d-js', [ 'layer.layer-vector-js'
                     var gs = SMK.UTIL.geoJsonToEsriGraphics( reproject( data ) )
                     layerData = layerData.concat( gs )
 
-                    if ( layers[ 0 ].canAddToMap() ) {
-                        layer.addMany( SMK.UTIL.mapSymbolsToGraphics( gs, symbols ) )
-                    }
+                    // if ( layers[ 0 ].canAddToMap() ) {
+                    layer.addMany( SMK.UTIL.mapSymbolsToGraphics( gs, symbols ) )
+                    // }
 
                     layers[ 0 ].loading = false
                 }

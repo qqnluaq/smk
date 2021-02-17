@@ -181,6 +181,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         this.layerIds = []
         this.layerId = {}
         this.visibleLayer = {}
+        this.offMapLayer = {}
         this.layerIdPromise = {}
         this.deadViewerLayer = {}
 
@@ -532,6 +533,9 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
                         self.positionViewerLayer( ly, maxZOrder - i )
                         self.visibleLayer[ cid ] = ly
                     }
+                    else {
+                        self.offMapLayer[ cid ] = ly
+                    }
                     return ly
                 } )
                 .catch( function ( e ) {
@@ -646,9 +650,8 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
             var option = {
                 // tolerance: ly.config.tolerance || tolerance,
-                layer: self.visibleLayer[ id ]
+                layer: self.visibleLayer[ id ] || self.offMapLayer[ id ]
             }
-
             // if ( option.tolerance != tolerance )
                 // layerSearchArea = self.circleInMap( location.screen, option.tolerance, 12 )
             // self.temporaryFeature( 'identify', layerSearchArea )
@@ -757,17 +760,17 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         }
     } )()
 
-    Viewer.prototype.distanceToMeters = function ( distance, distanceUnit ) {
+    Viewer.prototype.distanceToMeters = function ( distance, distanceUnit, location ) {
         if ( distanceUnit == 'px' )
-            return distance * this.getView().metersPerPixel
+            return distance * this.getView( location ).metersPerPixel
             // return this.pixelsToMillimeters( distance ) / 1000
 
         return distance * SMK.UTIL.getMetersPerUnit( distanceUnit )
     }
 
-    Viewer.prototype.distanceFromMeters = function ( distanceMeters, distanceUnit ) {
+    Viewer.prototype.distanceFromMeters = function ( distanceMeters, distanceUnit, location ) {
         if ( distanceUnit == 'px' )
-            return distanceMeters / this.getView().metersPerPixel
+            return distanceMeters / this.getView( location ).metersPerPixel
             // return this.pixelsToMillimeters( distance ) / 1000
 
         return distanceMeters / SMK.UTIL.getMetersPerUnit( distanceUnit )
