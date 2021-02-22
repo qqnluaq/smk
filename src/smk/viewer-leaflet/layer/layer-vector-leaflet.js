@@ -228,8 +228,8 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
                 .then( function ( layer ) {
                     if ( !layers[ 0 ].config.useClustering ) return layer
 
-                    // var cluster = L.markerClusterGroup( self.clusterOption )
                     var cluster = L.markerClusterGroup( clusterOptions( layers[ 0 ].config, self ) )
+
                     cluster.addLayers( [ layer ] )
 
                     return cluster
@@ -308,24 +308,24 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
     }
 
     function clusterOptions( layerConfig, viewer ) {
-        if ( !layerConfig.clusterStyle ) return
+        var opt = viewer.clusterOption || {}
+        
+        if ( layerConfig.clusterStyle ) 
+            opt.iconCreateFunction = function( cluster ) {
+                var el = $( '<div>' )
+                    .append( $( '<img>' )
+                        .attr( 'src', viewer.resolveAttachmentUrl( layerConfig.clusterStyle.markerUrl, null, 'png' ) )
+                    )
+                    .append( $( '<span>' ).text( cluster.getChildCount() ) )
+                    .get( 0 ).innerHTML
 
-        var opt = {}
-        opt.iconCreateFunction = function( cluster ) {
-            var el = $( '<div>' )
-                .append( $( '<img>' )
-                    .attr( 'src', viewer.resolveAttachmentUrl( layerConfig.clusterStyle.markerUrl, null, 'png' ) )
-                )
-                .append( $( '<span>' ).text( cluster.getChildCount() ) )
-                .get( 0 ).innerHTML
-
-            return L.divIcon( {
-                className: 'smk-cluster-icon',
-                html: el,
-                iconSize: layerConfig.clusterStyle.markerSize,
-                iconAnchor: layerConfig.clusterStyle.markerOffset,
-            } );
-        }
+                return L.divIcon( {
+                    className: 'smk-cluster-icon',
+                    html: el,
+                    iconSize: layerConfig.clusterStyle.markerSize,
+                    iconAnchor: layerConfig.clusterStyle.markerOffset,
+                } );
+            }
 
         return opt
     }
