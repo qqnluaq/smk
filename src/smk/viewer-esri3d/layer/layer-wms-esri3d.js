@@ -18,6 +18,7 @@ include.module( 'layer-esri3d.layer-wms-esri3d-js', [ 'layer.layer-wms-js', 'typ
             serviceUrl: null,
             layerNames: [],
             styleNames: [],
+            cqlFilter: null
             // imageMaxWidth: 1024,
             // imageMaxHeight: 1024,
         },
@@ -39,6 +40,9 @@ include.module( 'layer-esri3d.layer-wms-esri3d-js', [ 'layer.layer-wms-js', 'typ
                 bbox:           [ extent.xmin, extent.ymin, extent.xmax, extent.ymax ].join( ',' )
             }
 
+            if ( this.cqlFilter )
+                param.cql_filter = this.cqlFilter
+
             return this.serviceUrl + '?' + Object.keys( param ).map( function ( p ) {
                 return p + '=' + encodeURIComponent( param[ p ] )
             } ).join( '&' )
@@ -50,6 +54,7 @@ include.module( 'layer-esri3d.layer-wms-esri3d-js', [ 'layer.layer-wms-js', 'typ
         // var version     = layers[ 0 ].config.version || '1.1.1'
         // var attribution = layers[ 0 ].config.attribution
         var opacity     = layers[ 0 ].config.opacity
+        var where       = layers.map( function ( c ) { return c.config.where || 'include' } ).join( ';' )
 
         // var host = serviceUrl.replace( /^(\w+:)?[/][/]/, '' ).replace( /[/].*$/, '' )
         // if ( E.config.request.corsEnabledServers.indexOf( host ) == -1 )
@@ -60,6 +65,7 @@ include.module( 'layer-esri3d.layer-wms-esri3d-js', [ 'layer.layer-wms-js', 'typ
             layerNames: layers.map( function ( c ) { return c.config.layerName } ),
             styleNames: layers.map( function ( c ) { return c.config.styleName } ),
             opacity:    opacity,
+            cqlFilter:  where
         } )
 
         layer.on( 'layerview-create', function ( ev ) {
