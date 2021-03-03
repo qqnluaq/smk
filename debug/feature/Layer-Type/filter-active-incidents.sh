@@ -1,0 +1,1 @@
+jq '[(.features|keys),.features]|transpose|map(select(.[0]%3==2))|map(.[1].properties.STAGE_OF_CONTROL_CODE|="OUT OF CONTROL")|map(.[1])|{type:"FeatureCollection",features:.}' active-incidents-out.json>out-of-control.json
