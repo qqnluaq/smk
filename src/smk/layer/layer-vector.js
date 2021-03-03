@@ -30,7 +30,9 @@ include.module( 'layer.layer-vector-js', [ 'layer.layer-js' ], function () {
             .then( function () {
                 return [ {
                     url: cv.toDataURL( 'image/png' ),
-                    title: self.config.legend.title || self.config.title
+                    title: self.config.legend.title || self.config.title,
+                    width: width,
+                    height: height
                 } ]
             } )
 

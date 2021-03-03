@@ -19,11 +19,14 @@ include.module( 'layer.layer-wms-js', [ 'layer.layer-js' ], function () {
     // }
 
     WmsLayer.prototype.initLegends = function () {
+        var self = this
+
         var url =  this.config.serviceUrl + '?' + $.param( {
             SERVICE:    'WMS',
             VERSION:    '1.1.1',
             REQUEST:    'getlegendgraphic',
             FORMAT:     'image/png',
+            TRANSPARENT: 'true',
             LAYER:      this.config.layerName,
             STYLE:      this.config.styleName
         } )
@@ -32,15 +35,24 @@ include.module( 'layer.layer-wms-js', [ 'layer.layer-js' ], function () {
             try {
                 var i = $( '<img>' )
                     .on( 'load', function () {
-                        res( [ { url: url } ] )
+                        res( [ Object.assign( { 
+                            url: url,
+                            width: i.get( 0 ).naturalWidth,
+                            height: i.get( 0 ).naturalHeight,
+                        }, self.config.legend ) ] )
                     } )
                     .on( 'error', function ( ev ) {
                         rej( new Error( 'Unable to load: ' + url ) )
                     } )
                     .attr( 'src', url )
 
-                if ( i.get( 0 ).complete ) {
-                    res( [ { url: url } ] )
+                var img = i.get( 0 )
+                if ( img.complete ) {
+                    res( [ Object.assign( { 
+                        url: url,
+                        width: img.naturalWidth,
+                        height: img.naturalHeight,
+                    }, self.config.legend ) ] )
                 }
             }
             catch ( e ) {

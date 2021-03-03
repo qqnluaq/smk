@@ -8,12 +8,13 @@
     align-items: center;
 }
 
-.smk-legend-status .smk-display .smk-legend-item img {
-    margin: 2px;
+.smk-legend-status .smk-legend .smk-legend-item .smk-legend-graphic {
+    display: inline-block;
 }
 
-.smk-legend-status .smk-display .smk-legend-title {
+.smk-legend-status .smk-legend .smk-legend-title {
     font-size: 11px;
+    padding-left: 8px;
 }
 
 .smk-legend-status .smk-display .smk-item {

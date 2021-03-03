@@ -91,12 +91,13 @@
     align-items: center;
 }
 
-.smk-layers-panel .smk-legend .smk-legend-item img {
-    margin: 2px;
+.smk-layers-panel .smk-legend .smk-legend-item .smk-legend-graphic {
+    display: inline-block;
 }
 
 .smk-layers-panel .smk-legend .smk-legend-title {
     font-size: 11px;
+    padding-left: 8px;
 }
 
 .smk-layers-panel .smk-display .smk-folder-expand:hover {

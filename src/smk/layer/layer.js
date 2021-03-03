@@ -52,6 +52,21 @@ include.module( 'layer.layer-js', [ 'jquery', 'util', 'event' ], function () {
             this.legendPromise = SMK.UTIL.makePromise( function ( res, rej ) {
                 res( self.initLegends( viewer ) )
             } )        
+            .then( function ( legends ) {
+                return legends.map( function ( lg ) {
+                    lg.style = Object.assign( {
+                        'background-image': 'url( ' + lg.url + ')',
+                        'background-repeat': 'no-repeat',
+                        'background-size': lg.width + 'px ' + lg.height + 'px',
+                        // 'padding-left': ( lg.width + 2 ) + 'px',
+                        'width': ( lg.clipWidth || lg.width ) + 'px',
+                        'height': ( lg.clipHeight || lg.height ) + 'px',
+                        'display': 'block'
+                    }, lg.style )
+// console.log(lg)
+                    return lg
+                } )
+            } )
         }
 
         return this.legendPromise

@@ -73,8 +73,8 @@ include.module( 'layer-esri3d.layer-cluster-esri3d-js', [ 'layer.layer-cluster-j
                     // clusterAreaDisplay: 'activated'
                     flareRenderer: flareRenderer,
                     spatialReference: { "wkid": 4326 },
-                    displayFlares: true,
-                    displaySubTypeFlares: true,
+                    displayFlares: false,
+                    displaySubTypeFlares: false,
                     subTypeFlareProperty: "STAGE_OF_CONTROL_DESC",
                     singleFlareTooltipProperty: "INCIDENT_NUMBER_LABEL",
                     maxSingleFlareCount: 8,

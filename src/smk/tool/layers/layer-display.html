@@ -37,7 +37,7 @@
             <div class="smk-legend-item"
                 v-for="legend in display.legends"
             >
-                <img v-bind:src="legend.url" v-bind:style="{ width: legend.width + 'px', height: legend.height + 'px' }">
+                <span class="smk-legend-graphic" v-bind:style="legend.style"></span>
                 <span class="smk-legend-title">{{ legend.title }}</span>
             </div>
         </div>
