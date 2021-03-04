@@ -190,9 +190,14 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
                     mapDist = c
             }
 
-            if ( mapDist )
+            if ( mapDist ) {
                 scale = mapDist / this.screenpixelsToMeters
                 metersPerPixel = mapDist / 100
+            }
+            else {
+                scale = this.view.scale
+                metersPerPixel = ( scale * this.screenpixelsToMeters ) / 100
+            }
         }
 
         return {

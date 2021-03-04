@@ -87,8 +87,8 @@ include.module( 'layer-display', [ 'jquery', 'util', 'event' ], function () {
         if ( forceVisible )
             this.isVisible = true
 
-        defLayerProperty( 'scaleMin' )
-        defLayerProperty( 'scaleMax' )
+        defLayerProperty( 'minScale' )
+        defLayerProperty( 'maxScale' )
 
         if ( !( 'class' in option ) )
             defLayerProperty( 'class' )
@@ -122,12 +122,12 @@ include.module( 'layer-display', [ 'jquery', 'util', 'event' ], function () {
     }
 
     LayerDisplay.layer.prototype.getVisible = function ( viewScale ) {
+        // console.log( this.id, this.minScale, viewScale, this.maxScale, this.isVisible )
         if ( !viewScale || !this.isVisible ) return this.isVisible
         if ( !this.isEnabled ) return false
 
-        // console.log( this.id, this.scale.min, viewScale, this.scale.max )
-        if ( this.scaleMin && this.scaleMin < viewScale ) return false
-        if ( this.scaleMax && this.scaleMax > viewScale ) return false
+        if ( this.minScale && this.minScale < viewScale ) return false
+        if ( this.maxScale && this.maxScale > viewScale ) return false
         return true
     }
 
