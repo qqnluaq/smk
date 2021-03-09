@@ -150,7 +150,7 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
                     type: 'point-3d',
                     symbolLayers: [ {
                         type: 'icon',
-                        size: sw * 2,
+                        size: sw,
                         resource: {
                             primitive: 'circle'
                         },
@@ -158,7 +158,7 @@ include.module( 'util-esri3d', [ 'types-esri3d', 'terraformer' ], function ( inc
                             color: color( fc, fo ),
                         },
                         outline: {
-                            size: sw / 2,
+                            size: 1,
                             color: color( sc, so ),
                         }
                     }  ]
