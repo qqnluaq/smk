@@ -192,11 +192,7 @@ include.module( 'merge-config', [ 'util' ], function () {
             var b = deref( base ),
                 s = deref( source )
 
-            if ( !b ) {
-                base[0][ base[1] ] = s
-                console.log( path, '=', JSON.parse( JSON.stringify( s ) ) )
-                return
-            }
+            if ( !b ) b = []
 
             if ( s === null ) {
                 delete base[0][ base[1] ]
@@ -207,28 +203,51 @@ include.module( 'merge-config', [ 'util' ], function () {
             assertArray( b, 'base', path )
             assertArray( s, 'source', path )
 
-            s.forEach( function ( so, si ) {
-                assertObject( so, 'source', path + '[' + si + ']' )
+            var res = []
 
-                var id = new RegExp( '^' + ( so[ key ] == '*' ? '.*' : so[ key ] ) + '$' )
-
-                var bis = b.map( function ( bo, bi ) {
-                    if ( id.test( bo[ key ] ) )
-                        return bi
-                } ).filter( function ( i ) {
-                    return i != null
-                } )
-
-                if ( bis.length > 0 ) {
-                    bis.forEach( function ( bi ) {
-                        merge( [ b, bi ], [ s, si ], path + '<' + b[ bi ][ key ] + '>' )
-                    } )
-                }
-                else {
-                    b.push( so )
-                    console.log( path, 'concat', so )
-                }
+            b.forEach( function ( bo ) {
+                updateObjectSet( res, bo, key, path )
             } )
+
+            s.forEach( function ( so ) {
+                updateObjectSet( res, so, key, path )
+            } )
+
+            base[0][ base[1] ] = res
+        }
+    }
+
+    function updateObjectSet( set, item, key, path ) {
+        assertArray( set, 'set', path )
+        assertObject( item, 'item', path  )
+
+        var keyVal = item[ key ],
+            matchAll = keyVal == '*'
+        
+        if ( keyVal == null ) throw Error( 'Key value is null at ' + path )
+
+        var indexes = set
+            .map( function ( o, i ) {
+                if ( matchAll ) return i
+                if ( o[ key ] == keyVal ) return i
+            } )
+            .filter( function ( i ) {
+                return i != null
+            } )
+
+        if ( matchAll || indexes.length > 0 ) {
+            if ( indexes.length > 1 && !matchAll ) throw Error( 'Match more than 1 object at ' + path )
+
+            var item2 = JSON.parse( JSON.stringify( item ) )
+            delete item2[ key ]
+
+            indexes.forEach( function ( i ) {
+                merge( [ set, i ], [ [ item2 ], 0 ], path + '<' + set[ i ][ key ] + '>' )
+            } )
+        }
+        else {
+            set.push( item )
+            console.log( path, 'concat', item )
         }
     }
 
@@ -279,7 +298,7 @@ include.module( 'merge-config', [ 'util' ], function () {
         } )
     }
 
-    return function mergeConfigs ( configs ) {
+    var mergeConfigs = function  ( configs ) {
         var base = JSON.parse( JSON.stringify( SMK.CONFIG ) )
         var inline = 0
 
@@ -300,6 +319,15 @@ include.module( 'merge-config', [ 'util' ], function () {
         return base
     }
 
+    mergeConfigs.merge = merge
+    mergeConfigs.arrayOfObjectMerge = arrayOfObjectMerge
+    mergeConfigs.assignMerge = assignMerge
+    mergeConfigs.ignoreMerge = ignoreMerge
+    mergeConfigs.objectMerge = objectMerge
+    mergeConfigs.toolMerge = toolMerge
+    mergeConfigs.valueMerge = valueMerge
+
+    return mergeConfigs
     // function mergeViewer( base, merge ) {
     //     if ( !merge.viewer ) return
 
