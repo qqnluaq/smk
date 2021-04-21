@@ -12,6 +12,10 @@ include.module( 'merge-config', [ 'util' ], function () {
     }
 
     addPathMatchStrategy( '',                                           objectMerge )
+    addPathMatchStrategy( '.+/style/markerSize',                        assignMerge )
+    addPathMatchStrategy( '.+/style/markerOffset',                      assignMerge )
+    addPathMatchStrategy( '.+/style/popupOffset',                       assignMerge )
+    addPathMatchStrategy( '.+/style/shadowSize',                        assignMerge )    
     addPathMatchStrategy( '/name',                                      valueMerge )
     addPathMatchStrategy( '/viewer',                                    objectMerge )
     addPathMatchStrategy( '/viewer/location',                           assignMerge )
@@ -27,7 +31,7 @@ include.module( 'merge-config', [ 'util' ], function () {
     addPathMatchStrategy( '/tools<layers,.+?>/display',                 arrayOfObjectMerge( 'id' ) )
     addPathMatchStrategy( '/tools<layers,.+?>/display<.+?>(/items<.+?>)*/items',   arrayOfObjectMerge( 'id' ) )
     addPathMatchStrategy( '/tools<.+?>/internalLayers',                 arrayOfObjectMerge( 'id' ) )
-    addPathMatchStrategy( '/tools<.+?>/internalLayers<.+?>/style',      assignMerge )
+    addPathMatchStrategy( '/tools<.+?>/internalLayers<.+?>/style',      objectMerge )
 
     function getPathStrategy( path ) {
         for ( var i = 0; i < pathMatchers.length; i += 1 ) {
@@ -206,7 +210,7 @@ include.module( 'merge-config', [ 'util' ], function () {
             var res = []
 
             b.forEach( function ( bo ) {
-                updateObjectSet( res, bo, key, path )
+                updateObjectSet( res, bo, key, path, true )
             } )
 
             s.forEach( function ( so ) {
@@ -217,7 +221,7 @@ include.module( 'merge-config', [ 'util' ], function () {
         }
     }
 
-    function updateObjectSet( set, item, key, path ) {
+    function updateObjectSet( set, item, key, path, isBase ) {
         assertArray( set, 'set', path )
         assertObject( item, 'item', path  )
 
@@ -247,7 +251,7 @@ include.module( 'merge-config', [ 'util' ], function () {
         }
         else {
             set.push( item )
-            console.log( path, 'concat', item )
+            if ( !isBase ) console.log( path, 'concat', item )
         }
     }
 

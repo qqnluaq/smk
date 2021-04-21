@@ -16,8 +16,9 @@ include.module( 'tool-current-location-config', [
             icon: 'my_location',
             title: 'Current Location',
             zoom: 17,
-            internalLayer: {
-                'current-location': {
+            internalLayers: [
+                {
+                    id: 'current-location',
                     title: "Current Location",
                     style: {
                         markerUrl: inc[ 'tool-current-location-config.my-location-png' ],
@@ -29,7 +30,7 @@ include.module( 'tool-current-location-config', [
                         point: true
                     }
                 }
-            }
+            ]
         } ) ) )
     )
 } )
