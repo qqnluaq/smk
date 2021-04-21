@@ -68,7 +68,7 @@ include.module( 'layer.layer-esri-feature-js', [ 'layer.layer-js', 'terraformer'
             if ( !data.features || data.features.length == 0 ) throw new Error( 'no features' )
 
             return data.features.map( function ( r, i ) {
-                var f = {}
+                var f = { type: 'Feature' }
 
                 if ( r.displayFieldName )
                     f.title = r.attributes[ r.displayFieldName ]
