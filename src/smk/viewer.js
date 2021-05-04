@@ -497,6 +497,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
                 // console.log( 'visible',id )
 
             var ly = self.layerId[ id ]
+            if ( ly.config.isDisplayed === false ) return
             if ( !ly ) return
 
             if ( !merged ) {
