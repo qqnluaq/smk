@@ -98,7 +98,7 @@ include.module( 'tool-feature-list', [
                 self.clearInternalLayer( 'highlight-polygon' )
                 self.clearInternalLayer( 'highlight-line' )
                 self.clearInternalLayer( 'highlight-point' )
-
+               
                 if ( ev.features ) 
                     ev.features.forEach( function ( f ) {
                         displayFeature( f )
@@ -110,6 +110,11 @@ include.module( 'tool-feature-list', [
             } )
     
             function displayFeature( feature ) {
+                if ( feature.layerId ) {
+                    var ly = smk.$viewer.layerId[ feature.layerId ]
+                    if ( ly.config.isDisplayed === false ) return
+                }
+                
                 switch ( turf.getType( feature ) ) {
                     case 'Point':
                     case 'MultiPoint':

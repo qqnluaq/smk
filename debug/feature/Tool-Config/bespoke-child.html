@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bespoke Child</title>
+
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <script src="default-config.js"></script>
+<!--***************************************************************************
+    This example shows the default configuration for select tool.
+-->
+    <div id="smk-map-frame"></div>
+    <script>
+        var foo
+        SMK.INIT( {
+            containerSel: "#smk-map-frame",
+            config: defaultConfig.concat( {
+                tools: [
+                    {
+                        type: "bespoke",
+                        instance: 'foo',
+                        enabled: true,
+                        component: { template: '<div>foo<button type="button" onclick="foo()">Click me</button></div>' },
+                        position: 'toolbar',
+                        title: 'foo',
+                        icon: 'widgets',
+                    },
+                    {
+                        type: "bespoke",
+                        instance: 'bar',
+                        enabled: true,
+                        component: { template: '<div>bar</div>' },
+                        position: 'toolbar',
+                        title: 'bar',
+                        icon: 'widgets',
+                        parentId: 'BespokeTool--foo',
+                        showWidget: false
+                    }
+                ]
+            }, '?' )
+        } )
+        .then( function ( smk ) {
+            foo = function () {
+                smk.getToolById( 'BespokeTool--bar' ).active = true;
+                
+                console.log("foo")
+            }
+        } )
+
+    </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+
