@@ -66,6 +66,23 @@ include.module( 'tool-bespoke', [
             } )
     
             SMK.HANDLER.get( self.id, 'initialized' )( smk, self )    
+        },
+        {
+            configure: function ( name, option ) {
+                Object.assign( this, option )
+        
+                if ( this.instance ) {
+                    this.id = name + '--' + this.instance
+        
+                    // if ( this.parentId && !this.parentId.includes( '--' ) )
+                    //     this.parentId = this.parentId + '--' + this.instance
+                }
+                else {
+                    this.id = name
+                }
+        
+                return this
+            }
         }
     )
 } )
