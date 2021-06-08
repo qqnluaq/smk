@@ -18,7 +18,7 @@ include.module( 'layer-image-leaflet', [ 'layer-image' ], function () {
         });
 
         var timeOverlay = L.timeDimension.layer.imageOverlay( overlay, {
-            getUrlFunction: getImageUrl
+            getUrlFunction: SMK.TYPE.Layer[ 'image' ][ 'leaflet' ].getImageUrl
         });
 
         return Promise.resolve( timeOverlay )
@@ -26,7 +26,7 @@ include.module( 'layer-image-leaflet', [ 'layer-image' ], function () {
 
     function pad2 ( n ) { return n < 10 ? '0' + n : n }
     
-    function getImageUrl( baseUrl, time, context ) {        
+    SMK.TYPE.Layer[ 'image' ][ 'leaflet' ].getImageUrl = function ( baseUrl, time, context ) {        
         /* jshint evil: true */
 
         var timestamp = time.getUTCFullYear().toString()

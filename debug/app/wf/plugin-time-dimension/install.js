@@ -1,12 +1,24 @@
 include.tag( "layer-image",
     { loader: "group", tags: [
-        { loader: "script", url: "./plugin-time-dimension/layer/layer-image.js" },
+        { loader: "script", url: "./plugin-time-dimension/layer/layer-image.js" }
+    ] }
+);
+
+include.tag( "layer-wms-time",
+    { loader: "group", tags: [
+        { loader: "script", url: "./plugin-time-dimension/layer/layer-wms-time.js" }
     ] }
 );
 
 include.tag( "layer-image-leaflet",
     { loader: "group", tags: [
-        { loader: "script", url: "./plugin-time-dimension/viewer-leaflet/layer/layer-image-leaflet.js" },
+        { loader: "script", url: "./plugin-time-dimension/viewer-leaflet/layer/layer-image-leaflet.js" }
+    ] }
+);
+
+include.tag( "layer-wms-time-leaflet",
+    { loader: "group", tags: [
+        { loader: "script", url: "./plugin-time-dimension/viewer-leaflet/layer/layer-wms-time-leaflet.js" }
     ] }
 );
 
@@ -27,4 +39,5 @@ include.tag( "tool-time-dimension-leaflet",
 );
 
 include( 'layer-image-leaflet' )
+include( 'layer-wms-time-leaflet' )
 console.log('plugin-time-dimension loaded')
