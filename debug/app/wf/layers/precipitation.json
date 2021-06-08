@@ -1,0 +1,23 @@
+{
+    "layers": [
+        {
+            "type": "wms-time",
+            "id": "precipitation",
+            "title": "Precipitation ",
+            "isQueryable": false,
+            "opacity": 0.65,
+            "minScale": null,
+            "maxScale": null,
+            "titleAttribute": null,
+            "attributes": false,
+            "queries": null,
+            "tiled": false,
+            "version": "1.3.0",
+            "serviceUrl":"https://geo.weather.gc.ca/geomet",
+            "capabilitiesUrl":"https://geo.weather.gc.ca/geomet/?lang=E&service=WMS&request=GetCapabilities&layers=HRDPS.CONTINENTAL_NT&legend_format=image/png&feature_info_type=text/plain&request=GetCapabilities&service=WMS&version=1.3.0",
+            "layerName": "HRDPS.CONTINENTAL_NT",
+            "#layerName": "RDPA.6F_PR",
+            "#styleName": "CLOUD-50"
+        }
+    ]
+}
