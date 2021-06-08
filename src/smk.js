@@ -735,7 +735,8 @@
                     baseMap: 'Topographic',
                     clusterOption: {
                         showCoverageOnHover: false
-                    }
+                    },
+                    zoomSnap: 1
                 },
                 tools: []
             },
