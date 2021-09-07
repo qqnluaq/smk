@@ -18,9 +18,16 @@
             config: defaultConfig.concat( {
                 tools: [ {
                     type: "markup",
-                    enabled: true
+                    instance: 'point',
+                    enabled: true,
+                    icon: 'place',
+                    // drawMode: 'Marker'
+                    drawMode: 'Polygon'
                 } ]
             }, '?' )
+        } )
+        SMK.HANDLER.set( 'MarkupTool--point', 'markup-created', function ( smk, tool, ft ) {
+            console.log( ft )
         } )
     </script>
 <!--***************************************************************************-->
