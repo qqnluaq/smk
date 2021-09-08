@@ -6,10 +6,7 @@ include.module( 'tool-markup-leaflet', [ 'leaflet', 'tool-markup' ], function ()
 
         this.changedActive( function () {
             if ( self.active ) {
-                if ( self.prevLayer ) {
-                    self.prevLayer.remove()
-                    self.prevLayer = null
-                }
+                self.removeMarkup()
 
                 smk.$viewer.map.on( 'pm:create', function( ev ) {
                     // console.log('pm:create',ev)
@@ -25,6 +22,13 @@ include.module( 'tool-markup-leaflet', [ 'leaflet', 'tool-markup' ], function ()
                 smk.$viewer.map.off( 'pm:create' )
             }
         } )
+
+        this.removeMarkup = function () {
+            if ( self.prevLayer ) {
+                self.prevLayer.remove()
+                self.prevLayer = null
+            }
+        }
 
     } )
 } )
