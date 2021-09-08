@@ -2,16 +2,33 @@ include.module( 'tool-markup-leaflet', [ 'leaflet', 'tool-markup' ], function ()
     "use strict";
 
     SMK.TYPE.MarkupTool.addInitializer( function ( smk ) {
-        if ( smk.$device == 'mobile' ) return
+        var self = this
 
-        smk.$viewer.map.pm.addControls( {
-            position: 'topright', // toolbar position, options are 'topleft', 'topright', 'bottomleft', 'bottomright'
-            drawMarker: true,  // adds button to draw markers
-            drawPolygon: true,  // adds button to draw a polygon
-            drawPolyline: true,  // adds button to draw a polyline
-            drawCircle: true,  // adds button to draw a cricle
-            editPolygon: true,  // adds button to toggle global edit mode
-            deleteLayer: true   // adds a button to delete layers
+        this.changedActive( function () {
+            if ( self.active ) {
+                self.removeMarkup()
+
+                smk.$viewer.map.on( 'pm:create', function( ev ) {
+                    // console.log('pm:create',ev)
+                    self.prevLayer = ev.layer
+                    self.active = false
+                    SMK.HANDLER.get( self.id, 'markup-created' )( smk, self, ev.layer.toGeoJSON() )
+                } )
+
+                smk.$viewer.map.pm.enableDraw( self.drawMode )
+            }
+            else {
+                smk.$viewer.map.pm.disableDraw()
+                smk.$viewer.map.off( 'pm:create' )
+            }
         } )
+
+        this.removeMarkup = function () {
+            if ( self.prevLayer ) {
+                self.prevLayer.remove()
+                self.prevLayer = null
+            }
+        }
+
     } )
 } )
