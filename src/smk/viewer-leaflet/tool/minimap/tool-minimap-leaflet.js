@@ -8,7 +8,7 @@ include.module( 'tool-minimap-leaflet', [ 'leaflet', 'tool-minimap' ], function 
 
         var ly = smk.$viewer.createBasemapLayer( this.baseMap || "Topographic" );
 
-        ( new L.Control.MiniMap( ly[ 0 ], { toggleDisplay: true } ) )
+        ( new L.Control.MiniMap( ly[ 0 ], Object.assign( { toggleDisplay: true }, this.option ) ) )
             .addTo( smk.$viewer.map );
     } )
 
