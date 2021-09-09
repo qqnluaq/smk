@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Minimap</title>
+
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <script src="default-config.js"></script>
+<!--***************************************************************************
+    This example shows the default configuration for meaasure tool.
+-->
+    <div id="smk-map-frame"></div>
+    <script>
+        SMK.INIT( {
+            containerSel: "#smk-map-frame",
+            config: defaultConfig.concat( {
+                tools: [ {
+                    type: "minimap",
+                    enabled: true,
+                    option: {
+                        minimized: true
+                    }
+                } ]
+            }, '?' )
+        } )
+    </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+

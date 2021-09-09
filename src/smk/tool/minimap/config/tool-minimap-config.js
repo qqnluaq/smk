@@ -6,7 +6,9 @@ include.module( 'tool-minimap-config', [
     SMK.CONFIG.tools.push(
         inc[ 'tool-base-config' ]( {
             type: 'minimap',
-            order: 1
+            order: 1,
+            baseMap: null,
+            option: {}
         } )
     )
 } )
