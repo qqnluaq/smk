@@ -25,6 +25,11 @@
             v-on:click="$$emit( 'zoom', { instance: instance } )"
         >Zoom to</command-button>
 
+        <command-button class="smk-custom"
+            v-if="showCustom"
+            v-on:click="$$emit( 'custom', { instance: instance } )"
+        >{{ command.custom.label }}</command-button>
+
         <command-button class="smk-select"
             v-if="tool.select && command.select"
             v-on:click="$$emit( 'select', { instance: instance } )"
