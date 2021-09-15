@@ -40,6 +40,13 @@ include.module( 'component-tool-panel-feature', [
                             } 
                         } )
                 }
+            },
+            showCustom: {
+                get: function () {
+                    if ( !this.command.custom ) return false
+
+                    return SMK.HANDLER.get( this.id, 'show-custom' )( this )                    
+                }
             }
         }
     } )
