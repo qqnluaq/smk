@@ -43,7 +43,23 @@ include.module( 'tool-measure-leaflet', [ 'leaflet', 'tool-measure', 'turf' ], f
                     return
                 }
 
-                return inner.call( this, ev )
+                self.latlngs = JSON.parse( JSON.stringify( this._latlngs ))
+
+                inner.call( this, ev )
+
+                if ( self.measureDistance ) {
+                    var resultFeature = L.polyline( self.latlngs, this._symbols.getSymbol('resultLine'));                    
+                    this._layer.clearLayers()
+                    resultFeature.addTo( this._layer )
+                }
+            }
+        } )
+
+        SMK.UTIL.wrapFunction( this.control, '_addMeasureArea', function ( inner ) {
+            return function ( latlngs ) {
+                if ( !self.measureArea ) return
+
+                return inner.call( this, latlngs )
             }
         } )
 
@@ -77,6 +93,21 @@ include.module( 'tool-measure-leaflet', [ 'leaflet', 'tool-measure', 'turf' ], f
                     area:   ev.area,
                     length: ev.length,
                 } )
+
+                if ( self.measureDistance ) 
+                    smk.emit( self.id, 'measure-distance', {
+                        count:  ev.pointCount,
+                        length: ev.length,
+                        points: self.latlngs
+                    } )
+
+                if ( self.measureArea ) 
+                    smk.emit( self.id, 'measure-area', {
+                        count:  ev.pointCount,
+                        length: ev.length,
+                        area:   ev.area,
+                        points: self.latlngs
+                    } )
             }
         } )
 
@@ -85,7 +116,7 @@ include.module( 'tool-measure-leaflet', [ 'leaflet', 'tool-measure', 'turf' ], f
 
             if ( !res.count ) return
 
-            if ( res.count > 2 ) {
+            if ( self.measureArea ) {
                 self.showStatusMessage()
                 self.results.push( {
                     title:  'Number of edges',
@@ -107,8 +138,14 @@ include.module( 'tool-measure-leaflet', [ 'leaflet', 'tool-measure', 'turf' ], f
                         dim:    1
                     } )
             }
-            else if ( res.count > 1 ) {
+            else if ( self.measureDistance ) {
                 self.showStatusMessage()
+                self.results.push( {
+                    title:  'Number of edges',
+                    value:  res.count - 1,
+                    // unit:   'vertices'
+                } )
+
                 self.results.push( {
                     title:  'Length',
                     value:  res.length,
@@ -131,6 +168,8 @@ include.module( 'tool-measure-leaflet', [ 'leaflet', 'tool-measure', 'turf' ], f
                 self.busy = true
                 self.control._layer.clearLayers()
                 self.results = []
+                self.measureDistance = false
+                self.measureArea = true
                 self.showStatusMessage( "Click on map to set first point", 'progress' )
 
                 self.minPoints = 3
@@ -143,10 +182,12 @@ include.module( 'tool-measure-leaflet', [ 'leaflet', 'tool-measure', 'turf' ], f
                 self.busy = true
                 self.control._layer.clearLayers()
                 self.results = []
+                self.measureDistance = true
+                self.measureArea = false
                 self.showStatusMessage( "Click on map to set starting point", 'progress' )
 
                 self.minPoints = 2
-                self.maxPoints = 2
+                self.maxPoints = null
 
                 self.control._startMeasure()
             },
@@ -154,6 +195,8 @@ include.module( 'tool-measure-leaflet', [ 'leaflet', 'tool-measure', 'turf' ], f
             'cancel': function ( ev ) {
                 self.busy = false
                 self.results = []
+                self.measureDistance = false
+                self.measureArea = false
                 self.showStatusMessage( "Select measurement method" )
 
                 self.control._finishMeasure()

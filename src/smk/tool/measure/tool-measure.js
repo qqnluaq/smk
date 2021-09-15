@@ -44,6 +44,14 @@ include.module( 'tool-measure', [
             this.viewer = {}
 
             this.$propFilter.dimensionalNumber = false
+        },
+        function ( smk ) {
+            var self = this
+            this.content = { 
+                create: function ( el ) {
+                    SMK.HANDLER.get( self.id, 'activated' )( smk, self, el )
+                }
+            }
         }
     )
 } )
