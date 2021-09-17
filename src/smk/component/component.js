@@ -6,6 +6,20 @@ include.module( 'component', [
 
     SMK.COMPONENT.FeatureBase = { //Vue.extend( {
         props: [ 'feature', 'layer', 'showHeader', 'attributes' ],
+        created: function() {
+            if ( SMK.HANDLER.has( 'IdentifyFeatureTool', 'attribute-replacer-context' ) ) {
+                var rep = SMK.HANDLER.get( 'IdentifyFeatureTool', 'attribute-replacer-context' )
+                this.replacerContext = rep.call( this, this.layer.id )
+            }
+            else {
+                this.replacerContext = function ( token ) {
+                    /* jshint evil: true */
+                    var e = eval( token )
+                    // console.log( 'replace', token, e, this )
+                    return e
+                }    
+            }
+        },
         methods: {
             insertWordBreaks: function ( str ) {
                 return str.replace( /[^a-z0-9 ]+/ig, function ( m ) { return '<wbr>' + m } )
@@ -19,35 +33,24 @@ include.module( 'component', [
             },
             formatAttribute: function ( attr ) {
                 /* jshint evil: true */
-                var self = this
-
                 var m = attr.format.match( /^(.+)[(](.+)[)]$/)
                 if ( !m ) {
-                    var value = SMK.UTIL.templateReplace( attr.value, function ( token ) {
-                        return ( function () {
-                            var e = eval( token )
-                            // console.log( 'replace', token, e, this )
-                            return e
-                        } ).call( self )
-                    } )
+                    var value = this.evalTemplate( attr.value )
                     return formatter[ attr.format ]( Object.assign( {}, attr, { value: value } ), this.feature, this.layer )()
                 }
 
                 return formatter[ m[ 1 ] ]( attr, this.feature, this.layer ).apply( this, eval( '[' + m[ 2 ] + ']' ) )
             },
             formatTitle: function ( attr ) {
-                /* jshint evil: true */
+                var title = this.evalTemplate( attr.title )
+                return this.insertWordBreaks( title )
+            },
+            evalTemplate: function ( templ ) {
                 var self = this
 
-                var title = SMK.UTIL.templateReplace( attr.title, function ( token ) {
-                    return ( function () {
-                        var e = eval( token )
-                        // console.log( 'replace', token, e, this )
-                        return e
-                    } ).call( self )
+                return SMK.UTIL.templateReplace( templ, function ( token ) {
+                    return self.replacerContext( token )
                 } )
-
-                return this.insertWordBreaks( title )
             }
         }
     }//)
