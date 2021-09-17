@@ -70,15 +70,17 @@ include.module( 'tool-measure-leaflet', [ 'leaflet', 'tool-measure', 'turf' ], f
                 var result = {}
 
                 var pts = this._latlngs.concat( this._measureDrag.getLatLng() ).map( function ( pt ) { return [ pt.lng, pt.lat ] } )
-                result.count = pts.length
+                // result.count = pts.length
 
                 if ( pts.length > 2 ) {
                     var poly = pts.concat( [ pts[ 0 ] ] )
                     result.area = turf.area( turf.polygon( [ poly ] ) )
                     result.length = turf.length( turf.lineString( poly ), { units: 'meters' } )
+                    result.count = pts.length
                 }
                 else if ( pts.length > 1 ) {
                     result.length = turf.length( turf.lineString( pts ), { units: 'meters' } )
+                    result.count = pts.length
                 }
                 // console.log( pts )
                 displayResult( result )

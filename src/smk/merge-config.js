@@ -15,6 +15,8 @@ include.module( 'merge-config', [ 'util' ], function () {
     addPathMatchStrategy( '/name',                                      valueMerge )
     addPathMatchStrategy( '/viewer',                                    objectMerge )
     addPathMatchStrategy( '/viewer/location',                           assignMerge )
+    addPathMatchStrategy( '/viewer/displayContext',                     arrayOfObjectMerge( 'id' ) )
+    addPathMatchStrategy( '/viewer/displayContext<.+?>(/items<.+?>)*/items',   arrayOfObjectMerge( 'id' ) )
     addPathMatchStrategy( '/layers',                                    arrayOfObjectMerge( 'id' ) )
     addPathMatchStrategy( '/layers<.+?>/id',                            ignoreMerge )
     addPathMatchStrategy( '/layers<.+?>/attributes',                    assignMerge )

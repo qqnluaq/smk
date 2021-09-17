@@ -213,8 +213,8 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         }
 
         if ( smk.viewer.displayContext ) {
-            Object.keys( smk.viewer.displayContext ).forEach( function ( k ) {
-                self.setDisplayContextItems( k, smk.viewer.displayContext[ k ] )
+            smk.viewer.displayContext.forEach( function ( dc ) {
+                self.setDisplayContextItems( dc.id, dc.items )
             } )
         }
 
@@ -420,9 +420,12 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
     }
 
     Viewer.prototype.getDisplayContextConfig = function () {
-        var config = {}
+        var config = []
         this.eachDisplayContext( function ( dc, c ) {
-            config[ c ] = dc.getConfig()
+            config.push( {
+                id: c,
+                items: dc.getConfig()
+            } )
         } )
         return config
     }
