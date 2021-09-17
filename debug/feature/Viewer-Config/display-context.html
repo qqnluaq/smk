@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>displayContext</title>
+        
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+<!--***************************************************************************
+    This example shows a SMK application using the viewer.minZoom configuration.
+
+    Try zooming out beyond zoom level 5. The scale bar shows zoom level.
+    Compare zoom out behaviour with the Default map.
+-->
+        <div id="smk-map-frame"></div>
+        <script>
+            SMK.INIT( {
+                containerSel: "#smk-map-frame",
+                config: [ 
+                    './default-config.json',
+                    'show-tool=layers',
+                    './../../config/victoria.json',
+                    './../../layer/int-land-act-crown-grant.json',
+                    './../../layer/int-land-act-licence.json',
+                    './../../layer/int-land-act-reserve.json',
+                    {
+                        viewer: {
+                            minZoom: 5,
+                            displayContext: [
+                                {
+                                    id: 'layers',
+                                    items: [
+                                        { 
+                                            id: 'folder-0',
+                                            type: 'folder',
+                                            items: [
+                                                { id: 'INT_LAND_ACT_CROWN_GRANT_SVW' },
+                                                { 
+                                                    id: 'folder-1',
+                                                    type: 'folder',
+                                                    items: [
+                                                        { id: 'INT_LAND_ACT_LICENCE_SVW' },
+                                                    ]
+                                                },
+                                                { 
+                                                    id: 'folder-2',
+                                                    type: 'folder',
+                                                    items: [
+                                                        { id: 'INT_LAND_ACT_RESERVE_SVW' },
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        viewer: {
+                            minZoom: 5,
+                            displayContext: [
+                                {
+                                    id: 'layers',
+                                    items: [
+                                        { 
+                                            id: 'folder-0',
+                                            type: 'folder',
+                                            items: [
+                                                { id: 'INT_LAND_ACT_CROWN_GRANT_SVW', isVisible:false },
+                                                { 
+                                                    id: 'folder-1',
+                                                    type: 'folder',
+                                                    items: [
+                                                        { id: 'INT_LAND_ACT_LICENCE_SVW', title: 'foo' },
+                                                    ]
+                                                },
+                                                { 
+                                                    id: 'folder-2',
+                                                    type: 'folder',
+                                                    items: [
+                                                        { id: 'INT_LAND_ACT_RESERVE_SVW', isVisible:false },
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    '?'
+                ]
+            } )
+        </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+
