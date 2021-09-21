@@ -80,6 +80,7 @@ include.module( 'component', [
 
     var formatter = {
         simple: makeFormatter( '<span class="smk-value" v-if="attribute.value">{{ attribute.value }}</span>' ),
+        HTML: makeFormatter( '<span class="smk-value" v-if="attribute.value" v-html="attribute.value"></span>' ),
         asLocalTimestamp: makeFormatter( '<span class="smk-value" v-if="attribute.value">{{ ( new Date( attribute.value ) ).toLocaleString() }}</span>' ),
         asLocalDate: makeFormatter( '<span class="smk-value" v-if="attribute.value">{{ ( new Date( attribute.value ) ).toLocaleDateString() }}</span>' ),
         asLocalTime: makeFormatter( '<span class="smk-value" v-if="attribute.value">{{ ( new Date( attribute.value ) ).toLocaleTimeString() }}</span>' ),
