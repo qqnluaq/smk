@@ -41,7 +41,7 @@ include.module( 'component-tool-panel-feature', [
                         } )
                 }
             },
-            showCustom: {
+            customLabel: {
                 get: function () {
                     if ( !this.command.custom ) return false
 
