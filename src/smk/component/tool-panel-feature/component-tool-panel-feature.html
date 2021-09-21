@@ -26,9 +26,14 @@
         >Zoom to</command-button>
 
         <command-button class="smk-custom"
-            v-if="showCustom"
-            v-on:click="$$emit( 'custom', { instance: instance } )"
-        >{{ command.custom.label }}</command-button>
+            v-if="customLabel"
+            v-on:click="$$emit( 'custom', { 
+                instance:  instance, 
+                layer:      layer, 
+                feature:    feature,
+                attributes: attributes
+            } )"
+        >{{ customLabel }}</command-button>
 
         <command-button class="smk-select"
             v-if="tool.select && command.select"
