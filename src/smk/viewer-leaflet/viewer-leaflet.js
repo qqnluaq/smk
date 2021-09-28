@@ -49,6 +49,7 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
         this.changedViewDebounced()
 
         self.finishedLoading( function () {
+            // console.log('viewer-leaflet finishedLoading')
             self.map.eachLayer( function ( ly ) {
                 if ( !ly._smk_id ) return
 

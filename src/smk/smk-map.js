@@ -249,12 +249,15 @@ include.module( 'smk-map', [ 'libs', 'util', 'tool', 'theme-base', 'sidepanel', 
 
             return SMK.UTIL.resolved()
                 .then( function () {
-                    return self.$viewer.updateLayersVisible()
+                    return self.$viewer.refreshLayers()
                 } )
+                // .then( function () {
+                    // console.log('fire changedLayerVisibility')
+                    // self.$viewer.changedLayerVisibility()
+                    // return self.$viewer.waitFinishedLoading()
+                // } )
                 .then( function () {
-                    return self.$viewer.waitFinishedLoading()
-                } )
-                .then( function () {
+                    // console.log('finished loading')
                     if ( self.viewer.activeTool )
                         self.withTool( self.viewer.activeTool, function ( t ) {
                             console.log( 'activating tool:', t.id )

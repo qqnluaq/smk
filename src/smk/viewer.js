@@ -270,32 +270,29 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             return smk.getSidepanelPosition()
         }
 
-        this.delayedUpdateLayersVisible = SMK.UTIL.makeDelayedCall( function () {
-            self.updateLayersVisible().then( function () {
-            } )
-        } )
-
         this.changedLayerVisibility( function () {
-            self.delayedUpdateLayersVisible()
+            self.refreshLayers()
         } )
 
         this.layersLoading = SMK.UTIL.resolved()
         var whenFinishedLoading
         this.startedLoading( function () {
+            // console.log('viewer startedLoading')
             if ( whenFinishedLoading ) {
                 whenFinishedLoading[ 1 ]( new Error( 'startedLoading called before finishedLoading' ) )
                 whenFinishedLoading = null
             }
 
-            this.layersLoading = SMK.UTIL.makePromise( function ( res, rej ) {
+            self.layersLoading = SMK.UTIL.makePromise( function ( res, rej ) {
                 whenFinishedLoading = [ res, rej ]
             } )
         } )
         if ( this.loading ) {
-            console.log( 'already laoding' )
+            console.log( 'already loading' )
         }
 
         this.finishedLoading( function () {
+            // console.log('viewer finishedLoading')
             if ( whenFinishedLoading ) {
                 whenFinishedLoading[ 0 ]()
                 whenFinishedLoading = null
@@ -307,6 +304,64 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
     Viewer.prototype.waitFinishedLoading = function () {
         return this.layersLoading
+    }
+
+    Viewer.prototype.refreshLayers = function ( delay ) {
+        var self = this
+        // console.log( 'refreshLayers' )
+
+        if ( this.refreshLayersTimer ) {
+            // console.log( 'refreshLayersTimer exists, reseting timeout' )
+            clearTimeout( this.refreshLayersTimer )
+            this.refreshLayersTimer = null
+        }
+        else if ( this.refreshLayersPromise ) {
+            // console.log( 'no refreshLayersTimer, return existing refreshLayersPromise' )
+            return this.refreshLayersPromise
+        }
+
+        if ( !this.refreshLayersPromise ) {
+            // console.log( 'no refreshLayersPromise, creating' )
+            this.refreshLayersPromise = SMK.UTIL.makePromise( function ( res, rej ) {
+                self.refreshLayersResolve = res
+                self.refreshLayersRejext = rej
+            } )
+                // .then( function () { console.log( 'refreshLayers resolved' ) } )
+                // .catch( function ( e ) { console.warn( 'refreshLayers', e ); throw e } )
+
+            // console.log( 'start viewer loading = ',this.loading )
+            // this.loading = true
+        }
+
+        // console.log( 'creating refreshLayersTimer' )
+        this.refreshLayersTimer = setTimeout( function () {
+            // console.log( 'clear refreshLayersTimer' )
+            self.refreshLayersTimer = null
+            self.updateLayersVisible()
+                .then( function () {
+                    // console.log( 'viewer loading = ',self.loading )
+                    if ( !self.loading )
+                        return self.refreshLayersResolve()
+
+                    // console.log( 'wait for loading finish' )
+                    return self.waitFinishedLoading()
+                } )
+                .then( function () {
+                    // console.log( 'loading finished' )
+                    return self.refreshLayersResolve()
+                } )
+                .catch( function ( e ) {
+                    return self.refreshLayersReject( e )
+                } )
+                .finally( function () {
+                    // console.log( 'clear refreshLayersPromise' )
+                    self.refreshLayersPromise = null
+                    self.refreshLayersResolve = null
+                    self.refreshLayersReject = null
+                } )
+        }, delay || 200 )
+
+        return this.refreshLayersPromise
     }
 
     Viewer.prototype.addLayer = function ( layerConfig ) {
@@ -343,10 +398,12 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             self.layerId[ ly.id ] = ly
 
             ly.startedLoading( function () {
+                // console.log(ly.id,'startedLoading', self.anyLayersLoading())
                 self.loading = true
             } )
 
             ly.finishedLoading( function () {
+                // console.log(ly.id,'finishedLoading', self.anyLayersLoading())
                 self.loading = self.anyLayersLoading()
             } )
         }
@@ -497,7 +554,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         var merged
         this.getDisplayContextLayerIds().forEach( function ( id, i ) {
             if ( !self.isDisplayContextItemVisible( id )  ) return
-                // console.log( 'visible',id )
+            // console.log( 'visible',id )
 
             var ly = self.layerId[ id ]
             if ( ly.config.isDisplayed === false ) return
@@ -532,6 +589,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
             var p = self.createViewerLayer( cid, lys, maxZOrder - i )
                 .then( function ( ly ) {
+                    console.log('created layer',cid)
                     if ( lys.length > 1 || lys[ 0 ].canAddToMap() ) {
                         self.addViewerLayer( ly )
                         self.positionViewerLayer( ly, maxZOrder - i )
@@ -554,8 +612,16 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
         Object.assign( this.deadViewerLayer, pending )
 
-        if ( promises.length == 0 )
-            self.finishedLoading()
+        if ( promises.length == 0 ) {
+            // console.log( 'no layers created' )
+            if ( self.loading ) 
+                self.loading = false
+            else
+                self.finishedLoading()
+        }
+        else {
+            // console.log( promises.length, 'layers created' )
+        }
 
         return SMK.UTIL.waitAll( promises )
     }
