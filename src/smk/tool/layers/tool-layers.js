@@ -92,12 +92,10 @@ include.module( 'tool-layers', [
 
                 'set-all-layers-visible': function ( ev ) {
                     smk.$viewer.displayContext.layers.setItemVisible( smk.$viewer.displayContext.layers.root.id, ev.visible, ev.deep )
-                    smk.$viewer.updateLayersVisible()
                 },
 
                 'set-item-visible': function ( ev ) {
                     smk.$viewer.displayContext.layers.setItemVisible( ev.id, ev.visible, ev.deep )
-                    smk.$viewer.updateLayersVisible()
                 },
 
                 'layer-click': function ( ev ) {
