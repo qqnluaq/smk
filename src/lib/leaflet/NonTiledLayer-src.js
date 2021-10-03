@@ -88,6 +88,46 @@ L.nonTiledLayer.wms = function (url, options) {
 	return new L.NonTiledLayer.WMS(url, options);
 };
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+L.NonTiledLayer.WMSfetch = L.NonTiledLayer.WMS.extend({
+	options: {
+        wmsHeaders: {}
+	},
+
+	getImageUrlAsync: function (bounds, width, height, key, callback ) {
+        var url = L.NonTiledLayer.WMS.prototype.getImageUrl.call( this, bounds, width, height )
+
+        fetch( url, {
+            method: 'GET',
+            headers: this.options.wmsHeaders,
+            mode: 'cors'
+        } )
+        .then( function ( res ) {
+            return res.blob()
+        } )
+        .then( function ( blob ) {
+            var reader = new FileReader()
+            reader.onload = function () {
+                callback( key, reader.result )
+            }
+            reader.readAsDataURL( blob )
+        } )
+        .catch( function ( e ) {
+            console.warn( e )
+            callback()
+        } )
+	},
+
+    getImageUrl: null
+});
+
+L.nonTiledLayer.wmsFetch = function (url, options) {
+	return new L.NonTiledLayer.WMSfetch(url, options);
+};
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 module.exports = L.NonTiledLayer.WMS;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})

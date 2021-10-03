@@ -18,20 +18,38 @@ include.module( 'layer-leaflet.layer-wms-leaflet-js', [ 'layer.layer-wms-js' ], 
         var attribution = layers[ 0 ].config.attribution
         var opacity     = layers[ 0 ].config.opacity
         var where       = layers.map( function ( c ) { return c.config.where || 'include' } ).join( ';' )
+        var header      = layers[ 0 ].config.header
 
         return resolveSLD( this, layers[ 0 ].config.sld ).then( function ( sld ) {
-            var layer = L.nonTiledLayer.wms( serviceUrl, {
-                layers:         layerNames,
-                styles:         styleNames,
-                version:        version,
-                attribution:    attribution,
-                opacity:        opacity,
-                format:         'image/png',
-                transparent:    true,
-                zIndex:         zIndex,
-                cql_filter:     where
-            } )
-    
+            var layer
+            if ( header && Object.keys( header ).length > 0 ) {
+                layer = L.nonTiledLayer.wmsFetch( serviceUrl, {
+                    layers:         layerNames,
+                    styles:         styleNames,
+                    version:        version,
+                    attribution:    attribution,
+                    opacity:        opacity,
+                    format:         'image/png',
+                    transparent:    true,
+                    zIndex:         zIndex,
+                    cql_filter:     where,
+                    wmsHeaders:     header
+                } )
+            }
+            else {
+                layer = L.nonTiledLayer.wms( serviceUrl, {
+                    layers:         layerNames,
+                    styles:         styleNames,
+                    version:        version,
+                    attribution:    attribution,
+                    opacity:        opacity,
+                    format:         'image/png',
+                    transparent:    true,
+                    zIndex:         zIndex,
+                    cql_filter:     where
+                } )
+            }
+
             if ( sld ) {
                 layer.wmsParams.sld_body = sld
                 delete layer.wmsParams.styles
