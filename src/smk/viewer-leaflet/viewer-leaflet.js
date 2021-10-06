@@ -73,11 +73,21 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
             } )
         } )
 
+
         self.map.on( 'click', function ( ev ) {
-            self.pickedLocation( {
-                map:    { latitude: ev.latlng.lat, longitude: ev.latlng.lng },
-                screen: ev.containerPoint,
-            } )
+            if ( self.clickTimeout ) clearTimeout( self.clickTimeout )
+            self.clickTimeout = setTimeout( function () {
+                // console.log('click')
+                self.pickedLocation( {
+                    map:    { latitude: ev.latlng.lat, longitude: ev.latlng.lng },
+                    screen: ev.containerPoint,
+                } )    
+            }, 300 )
+        } )
+
+        self.map.on( 'dblclick', function ( ev ) {
+            // console.log('dblclick')
+            if ( self.clickTimeout ) clearTimeout( self.clickTimeout )
         } )
 
         self.map.on( 'mousemove', function ( ev ) {
