@@ -261,6 +261,10 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
     ViewerLeaflet.prototype.addViewerLayer = function ( viewerLayer ) {
         this.map.addLayer( viewerLayer )
     }
+
+    ViewerLeaflet.prototype.positionViewerLayer = function ( viewerLayer, zOrder ) {
+        viewerLayer.setZIndex( zOrder )
+    }
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     ViewerLeaflet.prototype.getPanelPadding = function ( panelVisible ) {
         var sbp = this.getSidepanelPosition()

@@ -524,7 +524,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         this.eachDisplayContext( function ( dc ) {
             ids = ids.concat( dc.getLayerIds() )
         } )
-        return ids.reverse()
+        return ids
     }
 
     Viewer.prototype.setDisplayContextItemEnabled = function ( layerId, enabled ) {
@@ -605,7 +605,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
             var p = self.createViewerLayer( cid, lys, maxZOrder - i )
                 .then( function ( ly ) {
-                    console.log('created layer',cid)
+                    // console.log('created layer',cid)
                     if ( lys.length > 1 || lys[ 0 ].canAddToMap() ) {
                         self.addViewerLayer( ly )
                         self.positionViewerLayer( ly, maxZOrder - i )
@@ -669,6 +669,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             .then( function () {
                 // try {
                 // console.log( 'create', id, type, self.type)
+                console.log('creating layer',type,id)
                 return SMK.TYPE.Layer[ type ][ self.type ].create.call( self, layers, zIndex )
                 // }
                 // catch ( e ) {
