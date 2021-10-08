@@ -12,6 +12,10 @@ include.module( 'merge-config', [ 'util' ], function () {
     }
 
     addPathMatchStrategy( '',                                           objectMerge )
+    addPathMatchStrategy( '.+/style/markerSize',                        assignMerge )
+    addPathMatchStrategy( '.+/style/markerOffset',                      assignMerge )
+    addPathMatchStrategy( '.+/style/popupOffset',                       assignMerge )
+    addPathMatchStrategy( '.+/style/shadowSize',                        assignMerge )    
     addPathMatchStrategy( '/name',                                      valueMerge )
     addPathMatchStrategy( '/viewer',                                    objectMerge )
     addPathMatchStrategy( '/viewer/location',                           assignMerge )
@@ -29,7 +33,7 @@ include.module( 'merge-config', [ 'util' ], function () {
     addPathMatchStrategy( '/tools<layers,.+?>/display',                 arrayOfObjectMerge( 'id' ) )
     addPathMatchStrategy( '/tools<layers,.+?>/display<.+?>(/items<.+?>)*/items',   arrayOfObjectMerge( 'id' ) )
     addPathMatchStrategy( '/tools<.+?>/internalLayers',                 arrayOfObjectMerge( 'id' ) )
-    addPathMatchStrategy( '/tools<.+?>/internalLayers<.+?>/style',      assignMerge )
+    addPathMatchStrategy( '/tools<.+?>/internalLayers<.+?>/style',      objectMerge )
 
     function getPathStrategy( path ) {
         for ( var i = 0; i < pathMatchers.length; i += 1 ) {
@@ -194,11 +198,7 @@ include.module( 'merge-config', [ 'util' ], function () {
             var b = deref( base ),
                 s = deref( source )
 
-            if ( !b ) {
-                base[0][ base[1] ] = s
-                console.log( path, '=', JSON.parse( JSON.stringify( s ) ) )
-                return
-            }
+            if ( !b ) b = []
 
             if ( s === null ) {
                 delete base[0][ base[1] ]
@@ -209,28 +209,51 @@ include.module( 'merge-config', [ 'util' ], function () {
             assertArray( b, 'base', path )
             assertArray( s, 'source', path )
 
-            s.forEach( function ( so, si ) {
-                assertObject( so, 'source', path + '[' + si + ']' )
+            var res = []
 
-                var id = new RegExp( '^' + ( so[ key ] == '*' ? '.*' : so[ key ] ) + '$' )
-
-                var bis = b.map( function ( bo, bi ) {
-                    if ( id.test( bo[ key ] ) )
-                        return bi
-                } ).filter( function ( i ) {
-                    return i != null
-                } )
-
-                if ( bis.length > 0 ) {
-                    bis.forEach( function ( bi ) {
-                        merge( [ b, bi ], [ s, si ], path + '<' + b[ bi ][ key ] + '>' )
-                    } )
-                }
-                else {
-                    b.push( so )
-                    console.log( path, 'concat', so )
-                }
+            b.forEach( function ( bo ) {
+                updateObjectSet( res, bo, key, path, true )
             } )
+
+            s.forEach( function ( so ) {
+                updateObjectSet( res, so, key, path )
+            } )
+
+            base[0][ base[1] ] = res
+        }
+    }
+
+    function updateObjectSet( set, item, key, path, isBase ) {
+        assertArray( set, 'set', path )
+        assertObject( item, 'item', path  )
+
+        var keyVal = item[ key ],
+            matchAll = keyVal == '*'
+        
+        if ( keyVal == null ) throw Error( 'Key value is null at ' + path )
+
+        var indexes = set
+            .map( function ( o, i ) {
+                if ( matchAll ) return i
+                if ( o[ key ] == keyVal ) return i
+            } )
+            .filter( function ( i ) {
+                return i != null
+            } )
+
+        if ( matchAll || indexes.length > 0 ) {
+            if ( indexes.length > 1 && !matchAll ) throw Error( 'Match more than 1 object at ' + path )
+
+            var item2 = JSON.parse( JSON.stringify( item ) )
+            delete item2[ key ]
+
+            indexes.forEach( function ( i ) {
+                merge( [ set, i ], [ [ item2 ], 0 ], path + '<' + set[ i ][ key ] + '>' )
+            } )
+        }
+        else {
+            set.push( item )
+            if ( !isBase ) console.log( path, 'concat', item )
         }
     }
 
@@ -281,7 +304,7 @@ include.module( 'merge-config', [ 'util' ], function () {
         } )
     }
 
-    return function mergeConfigs ( configs ) {
+    var mergeConfigs = function  ( configs ) {
         var base = JSON.parse( JSON.stringify( SMK.CONFIG ) )
         var inline = 0
 
@@ -302,129 +325,13 @@ include.module( 'merge-config', [ 'util' ], function () {
         return base
     }
 
-    // function mergeViewer( base, merge ) {
-    //     if ( !merge.viewer ) return
+    mergeConfigs.merge = merge
+    mergeConfigs.arrayOfObjectMerge = arrayOfObjectMerge
+    mergeConfigs.assignMerge = assignMerge
+    mergeConfigs.ignoreMerge = ignoreMerge
+    mergeConfigs.objectMerge = objectMerge
+    mergeConfigs.toolMerge = toolMerge
+    mergeConfigs.valueMerge = valueMerge
 
-    //     if ( base.viewer ) {
-    //         if ( base.viewer.location && merge.viewer.location ) {
-    //             Object.assign( base.viewer.location, merge.viewer.location )
-    //             delete merge.viewer.location
-    //         }
-
-    //         Object.assign( base.viewer, merge.viewer )
-    //     }
-    //     else {
-    //         base.viewer = merge.viewer
-    //     }
-
-    //     delete merge.viewer
-    // }
-
-
-    // function mergeTools( base, merge ) {
-    //     return mergeCollection( base, merge, 'tools', {
-    //         findFn: function ( merge ) {
-    //             return function ( base ) {
-    //                 return ( merge.type == base.type || merge.type == '*' ) &&
-    //                     ( !merge.instance || merge.instance == base.instance )
-    //             }
-    //         },
-    //         mergeFn: function ( base, merge ) {
-    //             if ( merge.type && merge.type == '*' ) {
-    //                 var m = JSON.parse( JSON.stringify( merge ) )
-    //                 delete m.type
-    //                 Object.assign( base, m )
-    //             }
-    //             else if ( merge.type === 'layers' ) {
-    //                 mergeLayerDisplays( base, merge )
-    //                 Object.assign( base, merge )
-    //             }
-    //             else {
-    //                 Object.assign( base, merge )
-    //             }
-    //         }
-    //     } )
-    // }
-
-    // function mergeLayerDisplays( base, merge ) {
-    //     return mergeCollection( base, merge, 'display', {
-    //         findFn: function ( merge ) {
-    //             return function ( base ) {
-    //                 return merge.id == base.id
-    //             }
-    //         },
-    //         mergeFn: function ( base, merge ) {
-    //             mergeLayerDisplays( base, merge )
-
-    //             Object.assign( base, merge )
-    //         }
-    //     } )
-    // }
-
-    // function mergeLayers( base, merge ) {
-    //     return mergeCollection( base, merge, 'layers', {
-    //         findFn: function ( merge ) {
-    //             return function ( base ) {
-    //                 return merge.id == base.id || merge.id.startsWith( '*' )
-    //             }
-    //         },
-    //         mergeFn: function ( baseLayer, mergeLayer ) {
-    //             mergeCollection( baseLayer, mergeLayer, 'queries', {
-    //                 mergeFn: function ( baseQuery, mergeQuery ) {
-    //                     mergeCollection( baseQuery, mergeQuery, 'parameters', {} )
-
-    //                     Object.assign( baseQuery, mergeQuery )
-    //                 }
-    //             } )
-
-    //             if ( mergeLayer.id == '**' && !mergeLayer.layers )
-    //                 mergeLayer.layers = [ JSON.parse( JSON.stringify( mergeLayer ) ) ]
-
-    //             mergeLayers( baseLayer, mergeLayer )
-
-    //             if ( mergeLayer.id && mergeLayer.id.startsWith( '*' ) ) {
-    //                 var m = JSON.parse( JSON.stringify( mergeLayer ) )
-    //                 delete m.id
-    //                 Object.assign( baseLayer, m )
-    //             }
-    //             else {
-    //                 Object.assign( baseLayer, mergeLayer )
-    //             }
-    //         }
-    //     } )
-    // }
-
-    // function mergeCollection( base, merge, prop, arg ) {
-    //     var findFn = arg[ 'findFn' ] || function ( merge ) {
-    //         return function ( base ) {
-    //             return merge.id == base.id
-    //         }
-    //     }
-
-    //     var mergeFn = arg[ 'mergeFn' ] || function ( base, merge ) {
-    //         Object.assign( base, merge )
-    //     }
-
-    //     if ( !merge[ prop ] ) return
-
-    //     if ( base[ prop ] ) {
-    //         merge[ prop ].forEach( function( m ) {
-    //             var items = base[ prop ].filter( findFn( m ) )
-    //             if ( items.length > 0 ) {
-    //                 items.forEach( function ( item ) {
-    //                     mergeFn( item, m )
-    //                 } )
-    //             }
-    //             else {
-    //                 base[ prop ].push( m )
-    //             }
-    //         } )
-    //     }
-    //     else {
-    //         base[ prop ] = merge[ prop ]
-    //     }
-
-    //     delete merge[ prop ]
-    // }
-
+    return mergeConfigs
 } )

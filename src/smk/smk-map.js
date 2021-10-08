@@ -55,6 +55,7 @@ include.module( 'smk-map', [ 'libs', 'util', 'tool', 'theme-base', 'sidepanel', 
             .then( loadTools )
             .then( initViewer )
             .then( initTools )
+            .then( initDisplayContext )
             .then( showMap )
             .finally( function () {
                 return ( new Promise( function ( res ) {
@@ -243,19 +244,16 @@ include.module( 'smk-map', [ 'libs', 'util', 'tool', 'theme-base', 'sidepanel', 
             } ) )
         }
 
-        function showMap() {
-            if ( !self.$viewer.isDisplayContext( 'layers' ) )
-                self.$viewer.setDisplayContextItems( 'layers', self.$viewer.defaultLayerDisplay )
+        function initDisplayContext() {
+            self.$viewer.initializeDisplayContext()
+            return self.$viewer.displayContextInitialized
+        }
 
+        function showMap() {
             return SMK.UTIL.resolved()
                 .then( function () {
                     return self.$viewer.refreshLayers()
                 } )
-                // .then( function () {
-                    // console.log('fire changedLayerVisibility')
-                    // self.$viewer.changedLayerVisibility()
-                    // return self.$viewer.waitFinishedLoading()
-                // } )
                 .then( function () {
                     // console.log('finished loading')
                     if ( self.viewer.activeTool )

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Current Location</title>
+
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <script src="default-config.js"></script>
+<!--***************************************************************************
+    This example shows the default configuration for meaasure tool.
+-->
+    <div id="smk-map-frame"></div>
+    <script>
+        SMK.INIT( {
+            containerSel: "#smk-map-frame",
+            config: defaultConfig.concat( {
+                tools: [ {
+                    type: "current-location",
+                    enabled: true,
+                    internalLayers: [
+                        {
+                            id: 'current-location',
+                            style: {
+                                markerSize: [ 50, 50 ],
+                            }
+                        }
+                    ]
+
+                } ],
+                viewer: {
+                    displayContext: [ {
+                        id: 'current-location',
+                        items: [
+                            {
+                                id: 'CurrentLocationTool',
+                                showItem: false,
+                                title: 'foo'
+                            }
+                        ]
+                    } ]
+                }
+            }, '?' )
+        } )
+    </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+

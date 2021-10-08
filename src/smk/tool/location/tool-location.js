@@ -29,7 +29,9 @@ include.module( 'tool-location', [
         initialize: function ( smk ) {
             var self = this
 
-            this.setInternalLayerVisible( true )
+            smk.$viewer.displayContextInitialized.then( function () {
+                self.setInternalLayerVisible( true )
+            } )
 
             smk.getSidepanel().addTool( this, smk )
 

@@ -736,7 +736,8 @@
                     clusterOption: {
                         showCoverageOnHover: false
                     },
-                    zoomSnap: 1
+                    zoomSnap: 1,
+                    displayContext: []
                 },
                 tools: []
             },

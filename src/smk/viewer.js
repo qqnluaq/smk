@@ -188,6 +188,28 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         this.displayContext = {
             layers: null
         }
+        this.displayContextInitialized = SMK.UTIL.makePromise( function ( res, rej ) {
+            self.initializeDisplayContext = function () {
+                try {   
+                    smk.viewer.displayContext.forEach( function ( dc ) {
+                        if ( smk.hasToolType( dc.id ) ) {
+                            self.setDisplayContextItems( dc.id, dc.items )
+                            console.log( 'display context "' + dc.id + '" initialized' )
+                        }
+                    } )        
+
+                    if ( !self.isDisplayContext( 'layers' ) ) {
+                        self.setDisplayContextItems( 'layers', self.defaultLayerDisplay )
+                        console.log( 'display context "layers" initialized with default' )
+                    }
+                    
+                    res()    
+                }
+                catch( e ) {
+                    rej( e )
+                }
+            }
+        } )
 
         this.pickHandlers = []
         this.query = {}
@@ -210,12 +232,6 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             } )
 
             self.defaultLayerDisplay = items
-        }
-
-        if ( smk.viewer.displayContext ) {
-            smk.viewer.displayContext.forEach( function ( dc ) {
-                self.setDisplayContextItems( dc.id, dc.items )
-            } )
         }
 
         this.pickedLocation( function ( ev ) {
