@@ -1,4 +1,4 @@
-QUnit.module('SMK.merge', {
+QUnit.module('SMK.array-of-object-merge', {
     before: function () {
         var self = this
         window[ 'include' ].option( { baseUrl: document.location + '../../dist/assets/src/' } )

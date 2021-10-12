@@ -257,51 +257,124 @@ include.module( 'merge-config', [ 'util' ], function () {
         }
     }
 
+    function updateToolSet( set, item, path, isBase ) {
+        assertArray( set, 'set', path )
+        assertObject( item, 'item', path  )
+
+        var itemType = item.type,
+            itemInst = item.instance
+            // matchAll = keyVal == '*'
+        
+        // if ( keyVal == null ) throw Error( 'Key value is null at ' + path )
+
+        var indexes = set
+            .map( function ( o, i ) {
+                // if ( matchAll ) return i
+                if ( o.type == itemType ) {
+                    if ( !itemInst ) return i
+                    if ( o.instance == itemInst )
+                        return i
+                }
+            } )
+            .filter( function ( i ) {
+                return i != null
+            } )
+
+        // if ( matchAll || indexes.length > 0 ) {
+        if (indexes.length > 0 ) {
+            if ( indexes.length > 1 ) throw Error( 'Match more than 1 object at ' + path )
+            // if ( indexes.length > 1 && !matchAll ) throw Error( 'Match more than 1 object at ' + path )
+
+            var item2 = JSON.parse( JSON.stringify( item ) )
+            delete item2.type
+            delete item2.instance
+
+            merge( 
+                [ set, indexes[ 0 ] ], 
+                [ [ item2 ], 0 ], 
+                path + '<' + set[ indexes[ 0 ] ].type + ',' + set[ indexes[ 0 ] ].instance + '>' 
+            )
+        }
+        else {
+            set.push( item )
+            if ( !isBase ) console.log( path, 'concat', item )
+        }
+    }
+
     function toolMerge( base, source, path ) {
+        // var b = deref( base ),
+        //     s = deref( source )
+
+        // assertArray( b, 'base', path )
+        // assertArray( s, 'source', path )
+
         var b = deref( base ),
             s = deref( source )
+
+        if ( !b ) b = []
+
+        if ( s === null ) {
+            delete base[0][ base[1] ]
+            console.log( path, 'deleted' )
+            return
+        }
 
         assertArray( b, 'base', path )
         assertArray( s, 'source', path )
 
-        s.forEach( function ( so, si ) {
-            if ( !so.instance ) {
-                arrayOfObjectMerge( 'type' )( base, [ [ [ so ] ], 0 ], path )
-                return
-            }
+        var res = []
 
-            if ( so.type == '*' ) {
-                console.warn( 'tool type is *, but instance not null, skipping', so )
-                return
-            }
-
-            var inst = b.find( function ( bo ) {
-                return bo.type == so.type && bo.instance == so.instance
-            } )
-
-            if ( !inst ) {
-                var baseInst = b.find( function ( bo ) {
-                    return bo.type == so.type && bo.instance === true
-                } )
-
-                if ( baseInst ) {
-                    inst = JSON.parse( JSON.stringify( baseInst ) )
-                    inst.instance = so.instance
-                    console.log( 'copied base instance', JSON.parse( JSON.stringify( inst ) ) )
-                }
-                else {
-                    inst = {
-                        type: so.type,
-                        instance: so.instance
-                    }
-                    console.log( 'created base instance', JSON.parse( JSON.stringify( inst ) ) )
-                }
-
-                b.push( inst )
-            }
-
-            merge( [ [ inst ], 0 ], [ [ so ], 0 ], path + '<' + so.type + ',' + so.instance + '>' )
+        b.forEach( function ( bo ) {
+            updateToolSet( res, bo, path, true )
         } )
+
+        s.forEach( function ( so ) {
+            updateToolSet( res, so, path )
+        } )
+
+        base[0][ base[1] ] = res
+
+        
+        // s.forEach( function ( so, si ) {
+
+
+        //     if ( !so.instance ) {
+        //         arrayOfObjectMerge( 'type' )( base, [ [ [ so ] ], 0 ], path )
+        //         return
+        //     }
+
+        //     if ( so.type == '*' ) {
+        //         console.warn( 'tool type is *, but instance not null, skipping', so )
+        //         return
+        //     }
+
+        //     var inst = b.find( function ( bo ) {
+        //         return bo.type == so.type && bo.instance == so.instance
+        //     } )
+
+        //     if ( !inst ) {
+        //         var baseInst = b.find( function ( bo ) {
+        //             return bo.type == so.type && bo.instance === true
+        //         } )
+
+        //         if ( baseInst ) {
+        //             inst = JSON.parse( JSON.stringify( baseInst ) )
+        //             inst.instance = so.instance
+        //             console.log( 'copied base instance', JSON.parse( JSON.stringify( inst ) ) )
+        //         }
+        //         else {
+        //             inst = {
+        //                 type: so.type,
+        //                 instance: so.instance
+        //             }
+        //             console.log( 'created base instance', JSON.parse( JSON.stringify( inst ) ) )
+        //         }
+
+        //         base[0][ base[1] ].push( inst )
+        //     }
+
+        //     merge( [ [ inst ], 0 ], [ [ so ], 0 ], path + '<' + so.type + ',' + so.instance + '>' )
+        // } )
     }
 
     var mergeConfigs = function  ( configs ) {

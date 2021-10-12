@@ -1,0 +1,869 @@
+{
+    "name": "SMK Default Map",
+    "viewer": {
+        "type": "leaflet",
+        "device": "auto",
+        "deviceAutoBreakpoint": 500,
+        "themes": [],
+        "location": {
+            "extent": [
+                -139.1782,
+                47.6039,
+                -110.3533,
+                60.5939
+            ]
+        },
+        "baseMap": "Topographic",
+        "clusterOption": {
+            "showCoverageOnHover": false
+        },
+        "zoomSnap": 1,
+        "displayContext": [
+            {
+                "id": "location",
+                "items": [
+                    {
+                        "id": "LocationTool",
+                        "type": "group",
+                        "title": "Picked Location",
+                        "class": "smk-inline-legend",
+                        "isVisible": false,
+                        "isInternal": true,
+                        "showItem": false,
+                        "items": [
+                            {
+                                "id": "LocationTool--location"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "current-location",
+                "items": [
+                    {
+                        "id": "CurrentLocationTool",
+                        "type": "group",
+                        "title": "Current Location",
+                        "class": "smk-inline-legend",
+                        "isVisible": false,
+                        "isInternal": true,
+                        "showItem": false,
+                        "items": [
+                            {
+                                "id": "CurrentLocationTool--current-location"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "identify",
+                "items": [
+                    {
+                        "id": "IdentifyListTool",
+                        "type": "group",
+                        "title": "Identify Features",
+                        "class": "smk-inline-legend",
+                        "isVisible": false,
+                        "isInternal": true,
+                        "showItem": false,
+                        "items": [
+                            {
+                                "id": "IdentifyListTool--search-area"
+                            },
+                            {
+                                "id": "IdentifyListTool--search-border-1"
+                            },
+                            {
+                                "id": "IdentifyListTool--search-border-2"
+                            },
+                            {
+                                "id": "IdentifyListTool--location"
+                            },
+                            {
+                                "id": "IdentifyListTool--edit-search-area"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "search",
+                "items": [
+                    {
+                        "id": "SearchListTool",
+                        "type": "group",
+                        "title": "Search for Location",
+                        "class": "smk-inline-legend",
+                        "isVisible": false,
+                        "isInternal": true,
+                        "showItem": false,
+                        "items": [
+                            {
+                                "id": "SearchListTool--result-selected"
+                            },
+                            {
+                                "id": "SearchListTool--result-highlight"
+                            },
+                            {
+                                "id": "SearchListTool--results"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "tools": [
+        {
+            "type": "actionbar",
+            "instance": null,
+            "order": 1,
+            "enabled": true,
+            "title": null,
+            "icon": "widgets",
+            "showTitle": false
+        },
+        {
+            "type": "coordinate",
+            "instance": null,
+            "order": 1,
+            "enabled": false,
+            "title": null,
+            "icon": "widgets",
+            "showTitle": false
+        },
+        {
+            "type": "legend",
+            "instance": null,
+            "order": 1,
+            "enabled": false,
+            "title": null,
+            "icon": "widgets",
+            "showTitle": false
+        },
+        {
+            "type": "minimap",
+            "instance": null,
+            "order": 1,
+            "enabled": false,
+            "title": null,
+            "icon": "widgets",
+            "showTitle": false,
+            "baseMap": null,
+            "option": {}
+        },
+        {
+            "type": "pan",
+            "instance": null,
+            "order": 2,
+            "enabled": false,
+            "title": {
+                "compass": "Reset Orientation",
+                "navModePan": "Panning Mode",
+                "navModeRotate": "Rotate Mode"
+            },
+            "icon": {
+                "compass": "navigation",
+                "navModePan": "open_with",
+                "navModeRotate": "3d_rotation"
+            },
+            "showTitle": false,
+            "position": "actionbar",
+            "control": true
+        },
+        {
+            "type": "scale",
+            "instance": null,
+            "order": 2,
+            "enabled": false,
+            "title": null,
+            "icon": "widgets",
+            "showTitle": false,
+            "showFactor": true,
+            "showBar": true,
+            "showZoom": false
+        },
+        {
+            "type": "shortcut-menu",
+            "instance": null,
+            "order": 10,
+            "enabled": false,
+            "title": null,
+            "icon": "widgets",
+            "showTitle": false
+        },
+        {
+            "type": "toolbar",
+            "instance": null,
+            "order": 1,
+            "enabled": true,
+            "title": null,
+            "icon": "widgets",
+            "showTitle": false
+        },
+        {
+            "type": "zoom",
+            "instance": null,
+            "order": 1,
+            "enabled": false,
+            "title": {
+                "zoomIn": "Zoom In",
+                "zoomOut": "Zoom Out"
+            },
+            "icon": {
+                "zoomIn": "add",
+                "zoomOut": "remove"
+            },
+            "showTitle": false,
+            "position": "actionbar",
+            "mouseWheel": true,
+            "doubleClick": true,
+            "box": true,
+            "control": true
+        },
+        {
+            "type": "location",
+            "instance": null,
+            "order": 1,
+            "enabled": true,
+            "title": null,
+            "icon": "widgets",
+            "showTitle": false,
+            "showPanel": true,
+            "showHeader": false,
+            "showSwipe": false,
+            "expand": 0,
+            "internalLayers": [
+                {
+                    "id": "location",
+                    "style": {
+                        "markerUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/location/config/marker-icon-blue.png",
+                        "markerSize": [
+                            25,
+                            41
+                        ],
+                        "markerOffset": [
+                            12,
+                            41
+                        ],
+                        "shadowUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/location/config/marker-shadow.png",
+                        "shadowSize": [
+                            41,
+                            41
+                        ]
+                    },
+                    "legend": {
+                        "point": true
+                    }
+                }
+            ]
+        },
+        {
+            "type": "markup",
+            "instance": true,
+            "order": 3,
+            "enabled": false,
+            "title": "Markup",
+            "icon": "edit",
+            "showTitle": false,
+            "showWidget": true,
+            "position": "toolbar"
+        },
+        {
+            "type": "reset-view",
+            "instance": null,
+            "order": 10,
+            "enabled": false,
+            "title": "Reset View",
+            "icon": "zoom_out_map",
+            "showTitle": false,
+            "showWidget": true,
+            "position": "actionbar"
+        },
+        {
+            "type": "about",
+            "instance": null,
+            "order": 1,
+            "enabled": false,
+            "title": "About SMK",
+            "icon": "help",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "position": "list-menu",
+            "content": "Welcome to SMK"
+        },
+        {
+            "type": "baseMaps",
+            "instance": null,
+            "order": 3,
+            "enabled": false,
+            "title": "Base Maps",
+            "icon": "map",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "position": [
+                "shortcut-menu",
+                "list-menu"
+            ],
+            "mapStyle": {
+                "width": "110px",
+                "height": "110px"
+            }
+        },
+        {
+            "type": "bespoke",
+            "instance": null,
+            "order": 1,
+            "enabled": false,
+            "title": null,
+            "icon": "widgets",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0
+        },
+        {
+            "type": "dropdown",
+            "instance": null,
+            "order": 1,
+            "enabled": false,
+            "title": null,
+            "icon": "widgets",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0
+        },
+        {
+            "type": "layers",
+            "instance": null,
+            "order": 3,
+            "enabled": false,
+            "title": "Layers",
+            "icon": "layers",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "position": [
+                "shortcut-menu",
+                "list-menu"
+            ],
+            "command": {
+                "allVisibility": true,
+                "filter": true,
+                "legend": true
+            },
+            "glyph": {
+                "visible": "visibility",
+                "hidden": "visibility_off"
+            }
+        },
+        {
+            "type": "list-menu",
+            "instance": null,
+            "order": 1,
+            "enabled": false,
+            "title": null,
+            "icon": "menu",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "position": "toolbar"
+        },
+        {
+            "type": "measure",
+            "instance": null,
+            "order": 6,
+            "enabled": false,
+            "title": "Measurement",
+            "icon": "straighten",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "position": [
+                "shortcut-menu",
+                "list-menu"
+            ]
+        },
+        {
+            "type": "menu",
+            "instance": null,
+            "order": 1,
+            "enabled": false,
+            "title": null,
+            "icon": "menu",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "position": "toolbar"
+        },
+        {
+            "type": "version",
+            "instance": null,
+            "order": 99,
+            "enabled": false,
+            "title": "Version Info",
+            "icon": "build",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "position": "list-menu",
+            "build": {
+                "commit": "9e100c3ea0410a8b41f5d90229b40318110e193e",
+                "branch": "develop",
+                "lastCommit": "2021-10-08 16:24:49 -0700",
+                "origin": "https://github.com/qqnluaq/smk.git",
+                "version": "1.0.25"
+            }
+        },
+        {
+            "type": "current-location",
+            "instance": null,
+            "order": 11,
+            "enabled": false,
+            "title": "Current Location",
+            "icon": "my_location",
+            "showTitle": false,
+            "showWidget": true,
+            "internalLayers": [
+                {
+                    "id": "current-location",
+                    "title": "Current Location",
+                    "style": {
+                        "markerUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/current-location/config/my-location.png",
+                        "markerSize": [
+                            26,
+                            26
+                        ],
+                        "markerOffset": [
+                            13,
+                            13
+                        ]
+                    },
+                    "geometryType": "point",
+                    "legend": {
+                        "point": true
+                    }
+                }
+            ],
+            "position": "actionbar",
+            "zoom": 17
+        },
+        {
+            "type": "query",
+            "instance": true,
+            "order": 5,
+            "enabled": false,
+            "title": null,
+            "icon": "widgets",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "attributeMode": "default",
+            "within": false,
+            "command": {
+                "navigator": true,
+                "zoom": true,
+                "select": true,
+                "attributeMode": false,
+                "within": true
+            }
+        },
+        {
+            "type": "select",
+            "instance": null,
+            "order": 6,
+            "enabled": false,
+            "title": "Selected Features",
+            "icon": "select_all",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "attributeMode": "default",
+            "position": "list-menu",
+            "command": {
+                "navigator": true,
+                "zoom": true,
+                "select": true,
+                "attributeMode": false,
+                "clear": true,
+                "remove": true
+            }
+        },
+        {
+            "type": "directions",
+            "instance": null,
+            "order": 4,
+            "enabled": false,
+            "title": "Route Planner",
+            "icon": "directions_car",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "position": [
+                "shortcut-menu",
+                "list-menu"
+            ],
+            "optimal": false,
+            "geocoderService": {},
+            "routePlannerService": {},
+            "segmentLayers": [
+                {
+                    "id": "@segments",
+                    "title": "Segments",
+                    "style": {
+                        "strokeColor": "blue",
+                        "strokeWidth": 8,
+                        "strokeOpacity": 0.8
+                    },
+                    "legend": {
+                        "line": true
+                    }
+                }
+            ],
+            "waypointLayers": [
+                {
+                    "id": "@waypoint-start",
+                    "title": "Starting Route Location",
+                    "style": {
+                        "markerUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/directions/config/marker-icon-green.png",
+                        "markerSize": [
+                            25,
+                            41
+                        ],
+                        "markerOffset": [
+                            12,
+                            41
+                        ],
+                        "shadowUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/directions/config/marker-shadow.png",
+                        "shadowSize": [
+                            41,
+                            41
+                        ],
+                        "popupOffset": [
+                            1,
+                            -34
+                        ]
+                    },
+                    "legend": {
+                        "title": "Starting Route Location",
+                        "point": true
+                    },
+                    "isDraggable": true,
+                    "isQueryable": false
+                },
+                {
+                    "id": "@waypoint-end",
+                    "title": "Ending Route Location",
+                    "style": {
+                        "markerUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/directions/config/marker-icon-red.png",
+                        "markerSize": [
+                            25,
+                            41
+                        ],
+                        "markerOffset": [
+                            12,
+                            41
+                        ],
+                        "shadowUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/directions/config/marker-shadow.png",
+                        "shadowSize": [
+                            41,
+                            41
+                        ],
+                        "popupOffset": [
+                            1,
+                            -34
+                        ]
+                    },
+                    "legend": {
+                        "title": "Ending Route Location",
+                        "point": true
+                    },
+                    "isDraggable": true,
+                    "isQueryable": false
+                },
+                {
+                    "id": "@waypoint-middle",
+                    "title": "Waypoint on Route",
+                    "style": {
+                        "markerUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/directions/config/marker-icon-blue.png",
+                        "markerSize": [
+                            25,
+                            41
+                        ],
+                        "markerOffset": [
+                            12,
+                            41
+                        ],
+                        "shadowUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/directions/config/marker-shadow.png",
+                        "shadowSize": [
+                            41,
+                            41
+                        ],
+                        "popupOffset": [
+                            1,
+                            -34
+                        ]
+                    },
+                    "legend": {
+                        "title": "Waypoint on Route",
+                        "point": true
+                    },
+                    "isDraggable": true,
+                    "isQueryable": false
+                }
+            ]
+        },
+        {
+            "type": "identify",
+            "instance": null,
+            "order": 5,
+            "enabled": false,
+            "title": "Identify Features",
+            "icon": "info_outline",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "attributeMode": "default",
+            "internalLayers": [
+                {
+                    "id": "search-area",
+                    "style": {
+                        "stroke": false,
+                        "fill": true,
+                        "fillColor": "white",
+                        "fillOpacity": 0.5
+                    }
+                },
+                {
+                    "id": "search-border-1",
+                    "style": {
+                        "strokeWidth": 6,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1,
+                        "strokeCap": "butt"
+                    }
+                },
+                {
+                    "id": "search-border-2",
+                    "style": {
+                        "strokeWidth": 6,
+                        "strokeColor": "white",
+                        "strokeOpacity": 1,
+                        "strokeCap": "butt"
+                    }
+                },
+                {
+                    "id": "location",
+                    "title": "Identify Location",
+                    "style": {
+                        "markerUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/identify/config/crosshair.png",
+                        "markerSize": [
+                            40,
+                            40
+                        ],
+                        "markerOffset": [
+                            20,
+                            20
+                        ]
+                    },
+                    "legend": {
+                        "point": true
+                    }
+                },
+                {
+                    "id": "edit-search-area",
+                    "style": {
+                        "strokeWidth": 3,
+                        "strokeColor": "red",
+                        "strokeOpacity": 1
+                    }
+                }
+            ],
+            "position": "list-menu",
+            "command": {
+                "navigator": true,
+                "zoom": true,
+                "select": true,
+                "attributeMode": false,
+                "radius": false,
+                "radiusUnit": false,
+                "nearBy": true
+            },
+            "radius": 5,
+            "radiusUnit": "px",
+            "internalLayer": {
+                "highlight-polygon": {
+                    "style": {
+                        "fill": true,
+                        "stroke": true,
+                        "fillColor": "white",
+                        "fillOpacity": 0.5,
+                        "strokeColor": "black",
+                        "strokeWidth": 3,
+                        "strokeOpacity": 0.8
+                    }
+                },
+                "highlight-line": {
+                    "style": {
+                        "stroke": true,
+                        "strokeColor": "black",
+                        "strokeWidth": 3,
+                        "strokeOpacity": 0.8
+                    }
+                },
+                "highlight-point": {
+                    "style": {
+                        "markerUrl": "http://127.0.0.1:8080/dist/assets/src/smk/mixin/tool-feature-list/config/marker-icon-white.png",
+                        "markerSize": [
+                            25,
+                            41
+                        ],
+                        "markerOffset": [
+                            12,
+                            41
+                        ],
+                        "shadowUrl": "http://127.0.0.1:8080/dist/assets/src/smk/mixin/tool-feature-list/config/marker-shadow.png",
+                        "shadowSize": [
+                            41,
+                            41
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "type": "search",
+            "instance": null,
+            "order": 2,
+            "enabled": true,
+            "title": "Search for Location",
+            "icon": "search",
+            "showTitle": false,
+            "showWidget": true,
+            "showPanel": true,
+            "showHeader": true,
+            "showSwipe": false,
+            "expand": 0,
+            "internalLayers": [
+                {
+                    "id": "result-selected",
+                    "title": "Selected Search Result",
+                    "style": {
+                        "markerUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/search/config/marker-icon-yellow.png",
+                        "markerSize": [
+                            25,
+                            41
+                        ],
+                        "markerOffset": [
+                            12,
+                            41
+                        ],
+                        "shadowUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/search/config/marker-shadow.png",
+                        "shadowSize": [
+                            41,
+                            41
+                        ]
+                    },
+                    "legend": {
+                        "point": true
+                    }
+                },
+                {
+                    "id": "result-highlight",
+                    "title": "Highlighted Search Result",
+                    "style": {
+                        "markerUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/search/config/star-icon-yellow.png",
+                        "markerSize": [
+                            40,
+                            36
+                        ],
+                        "markerOffset": [
+                            20,
+                            18
+                        ],
+                        "shadowUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/search/config/marker-shadow.png",
+                        "shadowSize": [
+                            31,
+                            31
+                        ]
+                    },
+                    "legend": {
+                        "point": true
+                    }
+                },
+                {
+                    "id": "results",
+                    "title": "Search Results",
+                    "style": {
+                        "markerUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/search/config/star-icon-yellow.png",
+                        "markerSize": [
+                            20,
+                            19
+                        ],
+                        "markerOffset": [
+                            10,
+                            9
+                        ],
+                        "shadowUrl": "http://127.0.0.1:8080/dist/assets/src/smk/tool/search/config/marker-shadow.png",
+                        "shadowSize": [
+                            21,
+                            21
+                        ]
+                    },
+                    "legend": {
+                        "point": true
+                    }
+                }
+            ],
+            "position": "toolbar",
+            "showLocation": true,
+            "command": {
+                "identify": true,
+                "measure": true,
+                "directions": true
+            }
+        }
+    ]
+}
