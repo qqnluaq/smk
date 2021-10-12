@@ -12,12 +12,13 @@ include.module( 'layer-leaflet.layer-wms-leaflet-js', [ 'layer.layer-wms-js' ], 
     //
     SMK.TYPE.Layer[ 'wms' ][ 'leaflet' ].create = function ( layers, zIndex ) {
         var serviceUrl  = layers[ 0 ].config.serviceUrl
-        var layerNames  = layers.map( function ( c ) { return c.config.layerName } ).join( ',' )
-        var styleNames  = layers.map( function ( c ) { return c.config.styleName } ).join( ',' )
+        var layerNames  = layers.map( function ( c ) { return c.config.layerName } ).reverse().join( ',' )
+        var styleNames  = layers.map( function ( c ) { return c.config.styleName } ).reverse().join( ',' )
         var version     = layers[ 0 ].config.version || '1.1.1'
         var attribution = layers[ 0 ].config.attribution
         var opacity     = layers[ 0 ].config.opacity
-        var where       = layers.map( function ( c ) { return c.config.where || 'include' } ).join( ';' )
+        var transparent = layers[ 0 ].config.transparent 
+        var where       = layers.map( function ( c ) { return c.config.where || 'include' } ).reverse().join( ';' )
         var header      = layers[ 0 ].config.header
 
         return resolveSLD( this, layers[ 0 ].config.sld ).then( function ( sld ) {
@@ -30,7 +31,7 @@ include.module( 'layer-leaflet.layer-wms-leaflet-js', [ 'layer.layer-wms-js' ], 
                     attribution:    attribution,
                     opacity:        opacity,
                     format:         'image/png',
-                    transparent:    true,
+                    transparent:    transparent == null ? true : !!transparent,
                     zIndex:         zIndex,
                     cql_filter:     where,
                     wmsHeaders:     header
@@ -44,7 +45,7 @@ include.module( 'layer-leaflet.layer-wms-leaflet-js', [ 'layer.layer-wms-js' ], 
                     attribution:    attribution,
                     opacity:        opacity,
                     format:         'image/png',
-                    transparent:    true,
+                    transparent:    transparent == null ? true : !!transparent,
                     zIndex:         zIndex,
                     cql_filter:     where
                 } )

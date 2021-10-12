@@ -50,9 +50,6 @@ include.module( 'tool-layers', [
         function ( smk ) {
             var self = this
 
-            if ( this.display )
-                smk.$viewer.setDisplayContextItems( this.type, this.display )
-
             self.changedActive( function () {
                 if ( self.active ) {
                     self.contexts = smk.$viewer.getDisplayContexts()

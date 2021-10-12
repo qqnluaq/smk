@@ -21,7 +21,9 @@ include.module( 'tool-current-location', [
         initialize: function ( smk ) {
             var self = this
         
-            this.setInternalLayerVisible( true )
+            smk.$viewer.displayContextInitialized.then( function () {
+                self.setInternalLayerVisible( true )
+            } )
 
             smk.on( this.id, {
                 'trigger': function () {

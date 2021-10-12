@@ -3,7 +3,7 @@ include.module( 'tool-internal-layers-config', [], function ( inc ) {
 
     return function ( cfg ) {
         return Object.assign( {
-            internalLayer: {},
+            internalLayers: [],
         }, cfg )
     }
 } )

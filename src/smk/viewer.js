@@ -188,6 +188,28 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         this.displayContext = {
             layers: null
         }
+        this.displayContextInitialized = SMK.UTIL.makePromise( function ( res, rej ) {
+            self.initializeDisplayContext = function () {
+                try {   
+                    smk.viewer.displayContext.forEach( function ( dc ) {
+                        if ( smk.hasToolType( dc.id ) ) {
+                            self.setDisplayContextItems( dc.id, dc.items )
+                            console.log( 'display context "' + dc.id + '" initialized' )
+                        }
+                    } )        
+
+                    if ( !self.isDisplayContext( 'layers' ) ) {
+                        self.setDisplayContextItems( 'layers', self.defaultLayerDisplay )
+                        console.log( 'display context "layers" initialized with default' )
+                    }
+                    
+                    res()    
+                }
+                catch( e ) {
+                    rej( e )
+                }
+            }
+        } )
 
         this.pickHandlers = []
         this.query = {}
@@ -210,12 +232,6 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             } )
 
             self.defaultLayerDisplay = items
-        }
-
-        if ( smk.viewer.displayContext ) {
-            smk.viewer.displayContext.forEach( function ( dc ) {
-                self.setDisplayContextItems( dc.id, dc.items )
-            } )
         }
 
         this.pickedLocation( function ( ev ) {
@@ -508,7 +524,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         this.eachDisplayContext( function ( dc ) {
             ids = ids.concat( dc.getLayerIds() )
         } )
-        return ids.reverse()
+        return ids
     }
 
     Viewer.prototype.setDisplayContextItemEnabled = function ( layerId, enabled ) {
@@ -557,6 +573,13 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             // console.log( 'visible',id )
 
             var ly = self.layerId[ id ]
+            if ( !ly ) {
+                if ( ly !== false )
+                    console.warn( 'layer "' + id + '" not defined' )
+                self.layerId[ id ] = false
+                return
+            }
+
             if ( ly.config.isDisplayed === false ) return
             if ( !ly ) return
 
@@ -589,7 +612,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
             var p = self.createViewerLayer( cid, lys, maxZOrder - i )
                 .then( function ( ly ) {
-                    console.log('created layer',cid)
+                    // console.log('created layer',cid)
                     if ( lys.length > 1 || lys[ 0 ].canAddToMap() ) {
                         self.addViewerLayer( ly )
                         self.positionViewerLayer( ly, maxZOrder - i )
@@ -653,6 +676,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             .then( function () {
                 // try {
                 // console.log( 'create', id, type, self.type)
+                console.log('creating layer',type,id)
                 return SMK.TYPE.Layer[ type ][ self.type ].create.call( self, layers, zIndex )
                 // }
                 // catch ( e ) {

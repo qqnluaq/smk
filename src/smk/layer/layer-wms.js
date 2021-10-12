@@ -10,13 +10,14 @@ include.module( 'layer.layer-wms-js', [ 'layer.layer-js' ], function () {
     SMK.TYPE.Layer[ 'wms' ] = WmsLayer
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
-    // WmsLayer.prototype.canMergeWith = function ( other ) {
-        // if ( this.config.type != other.config.type ) return false
-        // if ( this.config.serviceUrl != other.config.serviceUrl ) return false
-        // if ( this.config.opacity != other.config.opacity ) return false
+    WmsLayer.prototype.canMergeWith = function ( other ) {
+        if ( !this.config.canMerge || !other.config.canMerge ) return false
+        if ( this.config.type != other.config.type ) return false
+        if ( this.config.serviceUrl != other.config.serviceUrl ) return false
+        if ( this.config.opacity != other.config.opacity ) return false
 
-        // return true
-    // }
+        return true
+    }
 
     WmsLayer.prototype.initLegends = function () {
         var self = this
