@@ -573,6 +573,13 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             // console.log( 'visible',id )
 
             var ly = self.layerId[ id ]
+            if ( !ly ) {
+                if ( ly !== false )
+                    console.warn( 'layer "' + id + '" not defined' )
+                self.layerId[ id ] = false
+                return
+            }
+
             if ( ly.config.isDisplayed === false ) return
             if ( !ly ) return
 
