@@ -5,7 +5,8 @@ include.module( 'tool-layers', [
     'tool-layers.panel-layers-html',
     'tool-layers.layer-display-html',
     'component-enter-input',
-    'component-toggle-button'
+    'component-toggle-button',
+    'component-menu-button'
 ], function ( inc ) {
     "use strict";
 

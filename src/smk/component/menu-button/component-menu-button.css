@@ -1,0 +1,8 @@
+.smk-menu-panel {
+    position: absolute;
+    z-index: 2;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+

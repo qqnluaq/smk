@@ -14,6 +14,17 @@
             v-on:click="$$emit( 'set-all-layers-visible', { visible: !allVisible, deep: $event.shiftKey } )"
         >{{ allVisible ? glyph.visible : glyph.hidden }}</i>
 
+        <menu-button class="smk-theme"
+            title="Theme"
+            v-on:click="$$emit( 'choose-theme', { } )"
+            icon="library_add_check"
+            v-bind:menuItems="[
+                { icon: 'radio', title: 'title' },
+                { icon: 'bookmarks', title: 'bookmarks' },
+                { icon: 'recent_actors', title: 'recent_actors' },
+            ]"
+        ></menu-button>
+
         <enter-input class="smk-filter"
             placeholder="Filter layers"
             v-if="command.filter"
