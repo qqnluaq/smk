@@ -19,6 +19,7 @@ include.module( 'tool-layers-config', [
                 allVisibility: true,
                 filter: true,
                 legend: true,
+                themes: false
             },
             glyph: {
                 visible: 'visibility',

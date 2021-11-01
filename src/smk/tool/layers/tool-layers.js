@@ -115,6 +115,12 @@ include.module( 'tool-layers', [
 
                 'swipe-down': function ( ev ) {
                     smk.$sidepanel.incrExpand( -1 )
+                },
+
+                'pick-theme': function ( ev ) {
+                    ev.theme.layers.forEach( function ( layerId ) {
+                        smk.$viewer.displayContext.layers.setItemVisible( layerId, true )
+                    } )
                 }
             } )
 

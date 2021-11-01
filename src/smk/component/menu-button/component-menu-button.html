@@ -12,6 +12,10 @@
         v-bind:icon="icon"
     ></command-button>
 
+    <div class="smk-backdrop" v-if="menuVisible"
+        v-on:click="onBackdropClick()"
+    ></div>
+
     <div class="smk-menu-panel" v-if="menuVisible">
         <div class="smk-tool"
             v-for="item in menuItems"

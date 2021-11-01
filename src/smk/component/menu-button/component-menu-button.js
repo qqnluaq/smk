@@ -20,14 +20,20 @@ include.module( 'component-menu-button', [
         },
         methods: {
             onToggleMenu: function ( ev ) {
-                // this.$refs.menu
                 this.menuVisible = !this.menuVisible
             },
 
-            onClick: function ( ev ) {
+            onClick: function ( menuItem ) {
                 if ( this.disabled ) return
-                this.$emit( 'click', ev )
-            }
+                this.$emit( 'click', menuItem )
+                this.menuVisible = false
+            },
+
+            onBackdropClick: function () {
+                this.menuVisible = false
+            },
+
+            onMove: function () {}
         }
     } )
 } )
