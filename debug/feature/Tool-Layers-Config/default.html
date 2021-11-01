@@ -24,7 +24,36 @@
                         tools: [
                             {
                                 type: "layers",
-                                enabled: true
+                                enabled: true,
+                                command: {
+                                    themes: [
+                                        { 
+                                            icon: 'radio', 
+                                            title: 'title',
+                                            layers: [
+                                                'INT_LAND_ACT_CROWN_GRANT_SVW',
+                                                'INT_LAND_ACT_LICENCE_SVW'
+                                            ]
+                                        },
+                                        { 
+                                            icon: 'bookmarks', 
+                                            title: 'bookmarks',
+                                            layers: [
+                                                'INT_LAND_ACT_CROWN_GRANT_SVW',
+                                                'INT_LAND_ACT_LICENCE_SVW',
+                                                'INT_LAND_ACT_RESERVE_SVW',
+                                            ]
+                                        },
+                                        { 
+                                            icon: 'recent_actors', 
+                                            title: 'recent_actors',
+                                            layers: [
+                                                'INT_LAND_ACT_LICENCE_SVW',
+                                                'INT_LAND_ACT_RESERVE_SVW'
+                                            ]
+                                        },
+                                    ]
+                                }
                             }
                         ],
                         viewer: {

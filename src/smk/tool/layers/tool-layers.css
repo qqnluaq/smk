@@ -2,6 +2,10 @@
     order: 60
 }
 
+.smk-layers-panel .smk-commands .smk-theme {
+    order: 65;
+}
+
 .smk-layers-panel .smk-commands .smk-filter {
     flex-grow: 1;
     order: 70

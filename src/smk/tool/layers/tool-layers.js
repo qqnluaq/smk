@@ -5,7 +5,8 @@ include.module( 'tool-layers', [
     'tool-layers.panel-layers-html',
     'tool-layers.layer-display-html',
     'component-enter-input',
-    'component-toggle-button'
+    'component-toggle-button',
+    'component-menu-button'
 ], function ( inc ) {
     "use strict";
 
@@ -114,6 +115,12 @@ include.module( 'tool-layers', [
 
                 'swipe-down': function ( ev ) {
                     smk.$sidepanel.incrExpand( -1 )
+                },
+
+                'pick-theme': function ( ev ) {
+                    ev.theme.layers.forEach( function ( layerId ) {
+                        smk.$viewer.displayContext.layers.setItemVisible( layerId, true )
+                    } )
                 }
             } )
 
