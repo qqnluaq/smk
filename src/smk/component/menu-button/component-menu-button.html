@@ -5,12 +5,11 @@
     }"
 >
     <command-button class="smk-menu"
-        ref="menu"
         v-bind:title="title"
         v-bind:disabled="disabled"
         v-on:click="onToggleMenu( $event )"
         v-bind:icon="icon"
-    ></command-button>
+    >{{ title }}</command-button>
 
     <div class="smk-backdrop" v-if="menuVisible"
         v-on:click="onBackdropClick()"
