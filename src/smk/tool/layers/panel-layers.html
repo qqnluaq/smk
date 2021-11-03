@@ -18,7 +18,6 @@
             v-if="command.themes && command.themes.length > 0"
             title="Theme"
             v-on:click="$$emit( 'pick-theme', { theme: $event } )"
-            icon="library_add_check"
             v-bind:menuItems="command.themes"
         ></menu-button>
 
