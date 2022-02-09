@@ -2,10 +2,10 @@
     v-if="latitude && longitude"
 >
     <span class="smk-ordinate">
-        <label>latitude<div>{{ latitude | formatNumber( 6, 3 ) }}</div></label>
+        <label>latitude<div>{{ formatValue( latitude )  }}</div></label>
     </span>
     <span class="smk-ordinate">
-        <label>longitude<div>{{ longitude | formatNumber( 6, 3 ) }}</div></label>
+        <label>longitude<div>{{ formatValue( longitude ) }}</div></label>
     </span>
 
 </div>

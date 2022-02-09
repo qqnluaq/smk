@@ -5,7 +5,8 @@ include.module( 'tool-coordinate-config', [
 
     SMK.CONFIG.tools.push(
         inc[ 'tool-base-config' ]( {
-            type: 'coordinate'
+            type: 'coordinate',
+            format: 'DD'
         } )
     )
 } )
