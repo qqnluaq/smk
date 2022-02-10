@@ -25,7 +25,7 @@
         <select-dropdown class="smk-units"
             v-if="viewer.leaflet"
             v-bind:disabled="busy"
-            v-model="unit"
+            v-model="unitProp"
             v-bind:options="[
                 { value: 'metric',          label: 'Metric' },
                 { value: 'imperial',        label: 'Imperial' },
@@ -55,7 +55,7 @@
             v-for="result in results"
         >
             <span class="smk-measure-title" v-html="result.title"></span>
-            <span class="smk-value" v-html="dimensionalNumber( result.value, result.dim, unit, 5 )"></span>
+            <span class="smk-value" v-html="dimensionalNumber( result.value, result.dim, unitProp, 5 )"></span>
         </div>
     </div>
 

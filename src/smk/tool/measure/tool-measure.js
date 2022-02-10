@@ -15,10 +15,10 @@ include.module( 'tool-measure', [
     Vue.component( 'measure-panel', {
         extends: SMK.COMPONENT.ToolPanelBase,
         template: inc[ 'tool-measure.panel-measure-html' ],
-        props: [ 'results', 'viewer', 'content' ],
+        props: [ 'results', 'viewer', 'content', 'unit' ],
         data: function () {
             return {
-                unit: 'metric'
+                unitProp: this.unit
             }
         },
         computed: {
@@ -39,6 +39,7 @@ include.module( 'tool-measure', [
             this.defineProp( 'results' )
             this.defineProp( 'viewer' )
             this.defineProp( 'content' )
+            this.defineProp( 'unit' )
 
             this.results = []
             this.viewer = {}
