@@ -13,7 +13,8 @@ include.module( 'tool-measure-config', [
             order: 6,
             position: [ 'shortcut-menu', 'list-menu' ],
             icon: 'straighten',
-            title: 'Measurement'
+            title: 'Measurement',
+            unit: 'metric'
         } ) ) )
     )
 } )
