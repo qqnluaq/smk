@@ -253,6 +253,9 @@ include.module( 'smk-map', [ 'libs', 'util', 'tool', 'theme-base', 'sidepanel', 
             return SMK.UTIL.resolved()
                 .then( function () {
                     return self.$viewer.refreshLayers()
+                        .catch( function ( e ) {
+                            console.warn( e )
+                        } )
                 } )
                 .then( function () {
                     // console.log('finished loading')
