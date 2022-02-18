@@ -5,9 +5,10 @@ include.module( 'tool-feature-list-config', [
     "use strict";
 
     return function ( cfg ) {
-        cfg.internalLayer = Object.assign( {
-            'highlight-polygon': {
-                // title: "Identify Search Area",
+        if ( !cfg.internalLayers ) cfg.internalLayers = []
+        cfg.internalLayers.unshift(
+            {
+                id: 'highlight-polygon',
                 style: {
                     fill:               true,
                     stroke:             true,
@@ -18,8 +19,8 @@ include.module( 'tool-feature-list-config', [
                     strokeOpacity:      0.8,
                 }
             },
-            'highlight-line': {
-                // title: "Identify Search Area",
+            {
+                id: 'highlight-line',
                 style: {
                     stroke:             true,
                     strokeColor:        "black",
@@ -27,8 +28,8 @@ include.module( 'tool-feature-list-config', [
                     strokeOpacity:      0.8,
                 }
             },
-            'highlight-point': {
-                // title: "Identify Search Area",
+            {
+                id: 'highlight-point',
                 style: {
                     markerUrl:      inc[ 'tool-feature-list-config.marker-icon-white-png' ],
                     markerSize:     [ 25, 41 ],
@@ -37,7 +38,7 @@ include.module( 'tool-feature-list-config', [
                     shadowSize:     [ 41, 41 ]
                 }
             }
-        }, cfg.internalLayer )
+        )
 
         return Object.assign( {
         }, cfg )

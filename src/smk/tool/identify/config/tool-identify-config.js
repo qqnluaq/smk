@@ -93,6 +93,9 @@ include.module( 'tool-identify-config', [
             isInternal: true,
             showItem: false,
             items: [
+                { id: 'IdentifyListTool--highlight-point' },
+                { id: 'IdentifyListTool--highlight-line' },
+                { id: 'IdentifyListTool--highlight-polygon' },
                 { id: 'IdentifyListTool--search-area' },
                 { id: 'IdentifyListTool--search-border-1' },
                 { id: 'IdentifyListTool--search-border-2' },
