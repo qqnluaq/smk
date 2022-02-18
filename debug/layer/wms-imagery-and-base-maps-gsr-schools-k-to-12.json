@@ -12,6 +12,7 @@
             "metadataUrl": "",
             "opacity": 0.65,
             "titleAttribute": "OCCUPANT_NAME",
+            "geometryAttribute": "SHAPE",
             "attributes": [
                 {
                     "id": "OCCUPANT_NAME",
