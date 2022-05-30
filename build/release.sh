@@ -3,7 +3,8 @@
 BUMP=${1:-patch}
 
 VERSION=$( node --eval "console.log( require( './package.json' ).version )" )
-NEXT=$( semver $VERSION -i $BUMP )
+# NEXT=$( semver $VERSION -i $BUMP )
+NEXT=$BUMP
 
 echo ------------------------------------------------------------------
 echo "SMK is now v$VERSION, next will be v$NEXT"
