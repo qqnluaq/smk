@@ -35,6 +35,10 @@ var defaultConfig = [
             {
                 "type": "layers",
                 "enabled": true
+            },
+            {
+                "type": "legend",
+                "enabled": true
             }
         ]
     }    
