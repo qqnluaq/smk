@@ -48,7 +48,7 @@ include.module( 'tool-measure-leaflet', [ 'leaflet', 'tool-measure', 'turf' ], f
                 inner.call( this, ev )
 
                 if ( self.measureDistance ) {
-                    var resultFeature = L.polyline( self.latlngs, this._symbols.getSymbol('resultLine'));                    
+                    var resultFeature = L.polyline( self.latlngs, this._symbols.getSymbol('resultLine'));
                     this._layer.clearLayers()
                     resultFeature.addTo( this._layer )
                 }
@@ -72,17 +72,17 @@ include.module( 'tool-measure-leaflet', [ 'leaflet', 'tool-measure', 'turf' ], f
                 var pts = this._latlngs.concat( this._measureDrag.getLatLng() ).map( function ( pt ) { return [ pt.lng, pt.lat ] } )
                 // result.count = pts.length
 
-                if ( pts.length > 2 ) {
+                if ( self.measureDistance && pts.length > 1 ) {
+                    result.length = turf.length( turf.lineString( pts ), { units: 'meters' } )
+                    result.count = pts.length
+                }
+                else if ( self.measureArea && pts.length > 2 ) {
                     var poly = pts.concat( [ pts[ 0 ] ] )
                     result.area = turf.area( turf.polygon( [ poly ] ) )
                     result.length = turf.length( turf.lineString( poly ), { units: 'meters' } )
                     result.count = pts.length
                 }
-                else if ( pts.length > 1 ) {
-                    result.length = turf.length( turf.lineString( pts ), { units: 'meters' } )
-                    result.count = pts.length
-                }
-                // console.log( pts )
+
                 displayResult( result )
             }
         } )
@@ -96,14 +96,14 @@ include.module( 'tool-measure-leaflet', [ 'leaflet', 'tool-measure', 'turf' ], f
                     length: ev.length,
                 } )
 
-                if ( self.measureDistance ) 
+                if ( self.measureDistance )
                     smk.emit( self.id, 'measure-distance', {
                         count:  ev.pointCount,
                         length: ev.length,
                         points: self.latlngs
                     } )
 
-                if ( self.measureArea ) 
+                if ( self.measureArea )
                     smk.emit( self.id, 'measure-area', {
                         count:  ev.pointCount,
                         length: ev.length,
