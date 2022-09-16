@@ -1,0 +1,16 @@
+<tool-panel class="smk-bookmarks-panel"
+    v-bind="$$projectProps( 'tool-panel' )"
+>
+    <template slot="header">
+        <slot></slot>
+    </template>
+
+    <div class="smk-bookmarks">
+        <div class="smk-bookmark"
+            v-for="bookmark in bookmarks"
+            v-on:click="$$emit( 'show-bookmark', bookmark )"
+        >
+            {{ bookmark.title }}
+        </div>
+    </div>
+</tool-panel>

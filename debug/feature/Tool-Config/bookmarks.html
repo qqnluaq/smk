@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bookmarks</title>
+
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <script src="default-config.js"></script>
+<!--***************************************************************************
+    This example shows the default configuration for meaasure tool.
+-->
+    <div id="smk-map-frame"></div>
+    <script>
+        SMK.INIT( {
+            containerSel: "#smk-map-frame",
+            config: defaultConfig.concat( {
+                tools: [ {
+                    type: "bookmarks",
+                    enabled: true,
+                    bookmarks: [
+                        {
+                            "title": "Cariboo",
+                            "extent": [ -126.304316666667, 53.5403, -119.85535, 50.8579833333333, ]
+                        },
+                        {
+                            "title": "Coastal",
+                            "extent": [ -133.901366666667, 54.88925, -120.49255, 48.1972166666667, ]
+                        },
+                        {
+                            "title": "Kamloops",
+                            "extent": [ -124.0686, 52.9817166666667, -117.850333333333, 48.8285666666667, ]
+                        },
+                        {
+                            "title": "Northwest",
+                            "extent": [ -139.592283333333, 60.2289, -124.617916666667, 51.7746333333333, ]
+                        },
+                        {
+                            "title": "Prince George",
+                            "extent": [ -129.66065, 60.2507166666667, -117.619633333333, 51.9036166666667, ]
+                        },
+                        {
+                            "title": "Southeast",
+                            "extent": [ -119.4873, 52.6897, -113.82935, 48.8864, ]
+                        }
+                    ]
+                } ]
+            }, '?' )
+        } )
+    </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+
+

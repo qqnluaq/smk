@@ -1,0 +1,10 @@
+.smk-bookmarks-panel .smk-bookmark {
+    padding: 5px 5px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+.smk-bookmarks-panel .smk-bookmark:hover {
+    border: 1px solid black;
+}
