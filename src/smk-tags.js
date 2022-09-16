@@ -109,7 +109,7 @@ g.push( 'tool-feature-list-config' )
 t.group( 'tool-feature-list-config' )
     .dir( 'smk/mixin/tool-feature-list/config/*' )
 
-    
+
 t.group( 'tool-internal-layers' )
     .dir( 'smk/mixin/tool-internal-layers/*' )
 
@@ -124,7 +124,7 @@ t.group( 'tool-panel' )
 g.push( 'tool-panel-config' )
 t.group( 'tool-panel-config' )
     .dir( 'smk/mixin/tool-panel/config/*' )
-    
+
 
 t.group( 'tool-panel-feature' )
     .dir( 'smk/mixin/tool-panel-feature/*' )
@@ -132,7 +132,7 @@ t.group( 'tool-panel-feature' )
 g.push( 'tool-panel-feature-config' )
 t.group( 'tool-panel-feature-config' )
     .dir( 'smk/mixin/tool-panel-feature/config/*' )
-    
+
 
 t.group( 'tool-widget' )
     .dir( 'smk/mixin/tool-widget/*' )
@@ -140,7 +140,7 @@ t.group( 'tool-widget' )
 g.push( 'tool-widget-config' )
 t.group( 'tool-widget-config' )
     .dir( 'smk/mixin/tool-widget/config/*' )
-    
+
 // ==================================================================================
 // smk tools
 // ==================================================================================
@@ -156,6 +156,9 @@ t.group( 'tool-baseMaps' )
 
 t.group( 'tool-bespoke' )
     .dir( 'smk/tool/bespoke/*' )
+
+t.group( 'tool-bookmarks' )
+    .dir( 'smk/tool/bookmarks/*' )
 
 t.group( 'tool-coordinate' )
     .dir( 'smk/tool/coordinate/*' )
