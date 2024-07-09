@@ -33,10 +33,11 @@ include.module( 'vue-config', [ 'vue', 'vue-config.spinner-gif', 'util' ], funct
         if ( !fractionPlaces )
             return rounded.toLocaleString()
 
-        var i = Math.floor( rounded ),
-            f = rounded - i
-
-        return i.toLocaleString() + f.toFixed( fractionPlaces ).substr( 1 )
+        var a = Math.abs( rounded ),
+            s = Math.sign( rounded ),
+            i = Math.floor( a ),
+            f = a - i
+        return ( s * i ).toLocaleString() + f.toFixed( fractionPlaces ).substr( 1 )
     }
 
     Vue.filter( 'formatDate', function ( date ) {
