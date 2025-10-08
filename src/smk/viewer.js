@@ -100,8 +100,23 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         // },
     }
 
+    Viewer.prototype.getBasemapConfig = function ( basemapId ) {
+        var basemap = JSON.parse( JSON.stringify( this.basemap[ basemapId ] ) )
+
+        basemap.id = basemapId
+
+        var config = this.baseMapConfig.find( function ( b ) { return b.id == basemapId } )
+        if ( config ) Object.assign( basemap, config )
+
+        basemap.create = this.basemap[ basemapId ].create
+
+        return basemap
+    }
+
     Viewer.prototype.createBasemapLayer = function ( basemapId ) {
-        return this.basemap[ basemapId ].create( basemapId )
+        var basemap = this.getBasemapConfig( basemapId )
+
+        return basemap.create( basemapId )
     }
 
     function createBasemapEsri( id ) {
@@ -172,6 +187,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             // return ( new URL( url, smk.$option.baseUrl ) ).toString()
         }
         this.clusterOption = smk.viewer.clusterOption
+        this.baseMapConfig = smk.viewer.baseMapConfig
 
         this.identified = new SMK.TYPE.FeatureSet()
         this.selected = new SMK.TYPE.FeatureSet()

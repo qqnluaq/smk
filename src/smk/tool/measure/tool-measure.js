@@ -49,7 +49,7 @@ include.module( 'tool-measure', [
         function ( smk ) {
             var self = this
             this.content = { 
-                create: function ( el ) {
+                createContent: function ( el ) {
                     SMK.HANDLER.get( self.id, 'activated' )( smk, self, el )
                 }
             }

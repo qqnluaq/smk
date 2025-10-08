@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Default with size</title>
+
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <script src="map-config.js"></script>
+<!--***************************************************************************
+    This example shows the default configuration for zoom tool.
+-->
+    <div id="smk-map-frame"></div>
+    <script>
+        SMK.INIT( {
+            containerSel: "#smk-map-frame",
+            config: mapConfig( {
+                viewer: {
+                },
+                tools: [
+                    {
+                        type: 'baseMaps',
+                        mapStyle: {
+                            width: "200px",
+                            height: "100px"
+                        },
+                    }
+                ]
+            } )
+        } )
+    </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+

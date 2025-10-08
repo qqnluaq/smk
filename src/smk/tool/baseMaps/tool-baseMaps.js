@@ -33,7 +33,7 @@ include.module( 'tool-baseMaps', [
 
             this.basemaps = Object.keys( smk.$viewer.basemap )
                 .map( function ( id ) {
-                    return Object.assign( { id: id }, smk.$viewer.basemap[ id ] )
+                    return smk.$viewer.getBasemapConfig( id )
                 } )
                 .filter( function ( bm ) {
                     if ( !self.choices || self.choices.length == 0 ) return true
@@ -46,24 +46,29 @@ include.module( 'tool-baseMaps', [
                 .map( function ( bm ) {
                     var m
 
-                    bm.create = function ( el ) {
-                        m = L.map( el, {
-                            attributionControl: false,
-                            zoomControl: false,
-                            dragging: false,
-                            keyboard: false,
-                            scrollWheelZoom: false,
-                            zoom: 10,
-                            zoomSnap: 0
-                        } );
-
-                        var bmLayers = smk.$viewer.createBasemapLayer( bm.id )
-                        m.addLayer( bmLayers[ 0 ] )
+                    if ( bm.optionImageUrl ) {
+                        bm[ 'update' ] = function () {}
                     }
+                    else {
+                        bm[ 'createContent' ] = function ( el ) {
+                            m = L.map( el, {
+                                attributionControl: false,
+                                zoomControl: false,
+                                dragging: false,
+                                keyboard: false,
+                                scrollWheelZoom: false,
+                                zoom: 10,
+                                zoomSnap: 0
+                            } );
 
-                    bm.update = function () {
-                        var v = smk.$viewer.getView()
-                        m.setView( [ v.center.latitude, v.center.longitude ], v.zoom )
+                            var bmLayers = bm.create( bm.id )
+                            m.addLayer( bmLayers[ 0 ] )
+                        }
+
+                        bm[ 'update' ] = function () {
+                            var v = smk.$viewer.getView()
+                            m.setView( [ v.center.latitude, v.center.longitude ], v.zoom )
+                        }
                     }
 
                     return bm
