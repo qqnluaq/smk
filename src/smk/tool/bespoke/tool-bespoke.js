@@ -50,7 +50,7 @@ include.module( 'tool-bespoke', [
     
             if ( !this.component )
                 this.content = { 
-                    create: function ( el ) {
+                    createContent: function ( el ) {
                         SMK.HANDLER.get( self.id, 'activated' )( smk, self, el )
                     }
                 }

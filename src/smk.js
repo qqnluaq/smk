@@ -737,7 +737,8 @@
                         showCoverageOnHover: false
                     },
                     zoomSnap: 1,
-                    displayContext: []
+                    displayContext: [],
+                    baseMapConfig: []
                 },
                 tools: []
             },

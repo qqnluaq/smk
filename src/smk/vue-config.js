@@ -153,7 +153,7 @@ include.module( 'vue-config', [ 'vue', 'vue-config.spinner-gif', 'util' ], funct
 
     Vue.directive( 'content', {
         bind: function ( el, binding ) {
-            binding.value.create( el )
+            binding.value.createContent( el )
         }
     } )
 

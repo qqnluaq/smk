@@ -8,10 +8,21 @@
     height: 100%;
 }
 
-.smk-base-map-sample {
+.smk-base-map-sample, .smk-base-map-option-image {
     border-radius: 5px;
     margin: 5px;
-    padding: 4px;
+}
+
+.smk-base-map-option-image {
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
+
+}
+
+.smk-base-map-option-image img {
+    width: 100%;
+    height: auto;
 }
 
 .smk-base-map {
