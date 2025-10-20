@@ -105,10 +105,75 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
 
         SMK.TYPE.Viewer.prototype.destroy.call( this )
     }
-
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
+    ViewerLeaflet.prototype.initializeBasemaps = function ( defineBaseMap, defineBaseMapType ) {
+        defineBaseMapType( 'esri-basemap', function ( cfg ) {
+            var opt = Object.assign( { detectRetina: true }, cfg.option )
+           
+            var orig = clone( L.esri.BasemapLayer.TILES[ cfg.key ].options )
+            var ly = L.esri.basemapLayer( cfg.key, clone( opt || {} ) )
+            L.esri.BasemapLayer.TILES[ cfg.key ].options = orig
 
+            return [ ly ]
+        } )
+
+        defineBaseMapType( 'tile', function ( cfg ) {
+            var ly = L.tileLayer( cfg.url, Object.assign( { attribution: cfg.attribution }, cfg.option ) ) 
+
+            return [ ly ]
+        } )
+
+        defineBaseMapType( 'esri-vector-tile', function ( cfg ) {
+            var ly = L.esri.Vector.vectorTileLayer( cfg.url, Object.assign( { maxZoom: 30 }, cfg.option ) )
+
+            return [ ly ]
+        } )
+
+        defineBaseMapType( 'esri-vector-basemap', function ( cfg ) {
+            var ly = L.esri.Vector.vectorBasemapLayer( cfg.key, Object.assign( { maxZoom: 30 }, cfg.option ) )
+
+            return [ ly ]
+        } )
+
+        defineBaseMapType( 'esri-tiled-map', function ( cfg ) {
+            var ly = L.esri.tiledMapLayer( Object.assign( { url: cfg.url, maxZoom: 30 }, cfg.option ) )
+
+            return [ ly ]
+        } )
+
+        defineBaseMapType( 'esri-static-basemap-tile', function ( cfg ) {
+            var ly = L.esri.Static.staticBasemapTileLayer( cfg.style, Object.assign( { maxZoom: 30 }, cfg.option ) )
+
+            return [ ly ]
+        } )
+
+        SMK.TYPE.Viewer.prototype.initializeBasemaps.call( this, defineBaseMap, defineBaseMapType )
+    }
+
+    ViewerLeaflet.prototype.setBasemap = function ( basemapId ) {
+        var self = this
+
+        if( this.currentBasemap ) {
+            this.currentBasemap.forEach( function ( ly ) {
+                self.map.removeLayer( ly );
+            } )
+        }
+
+        this.currentBasemap = this.createBasemapLayer( basemapId );
+
+        this.map.addLayer( this.currentBasemap[ 0 ] );
+
+        if ( this.currentBasemap[ 0 ].bringToBack )
+            this.currentBasemap[ 0 ].bringToBack();
+
+        for ( var i = 1; i < this.currentBasemap.length; i += 1 )
+            this.map.addLayer( this.currentBasemap[ i ] );
+
+        this.changedBaseMap( { baseMap: basemapId } )
+    }
+    // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+    //
     ViewerLeaflet.prototype.setView = function ( opt ) {
         if ( opt.extent ) {
             var bx = opt.extent
@@ -186,76 +251,6 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
 
         return [ ll.lng, ll.lat ]
     }
-    // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-    //
-    // ViewerLeaflet.prototype.basemap.Topographic.create = createBasemapEsri
-
-    // ViewerLeaflet.prototype.basemap.Streets.create = createBasemapEsri
-
-    // ViewerLeaflet.prototype.basemap.Imagery.create = createBasemapEsri
-    // ViewerLeaflet.prototype.basemap.Imagery.labels = [ 'ImageryTransportation', 'ImageryLabels' ]
-
-    // ViewerLeaflet.prototype.basemap.Oceans.create = createBasemapEsri
-    // ViewerLeaflet.prototype.basemap.Oceans.labels = [ 'OceansLabels' ]
-
-    // ViewerLeaflet.prototype.basemap.NationalGeographic.create = createBasemapEsri
-
-    // ViewerLeaflet.prototype.basemap.ShadedRelief.create = createBasemapEsri
-    // ViewerLeaflet.prototype.basemap.ShadedRelief.labels = [ 'ShadedReliefLabels' ]
-
-    // ViewerLeaflet.prototype.basemap.DarkGray.create = createBasemapEsri
-    // ViewerLeaflet.prototype.basemap.DarkGray.labels = [ 'DarkGrayLabels' ]
-
-    // ViewerLeaflet.prototype.basemap.Gray.create = createBasemapEsri
-    // ViewerLeaflet.prototype.basemap.Gray.labels = [ 'GrayLabels' ]
-
-    // ViewerLeaflet.prototype.basemap.StamenTonerLight.create = createBasemapTiled
-    // ViewerLeaflet.prototype.basemap.StamenTonerLight.url = 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png'
-    // ViewerLeaflet.prototype.basemap.StamenTonerLight.attribution = "Map tiles by <a href='http://stamen.com'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a>. Data by <a href='http://openstreetmap.org'>OpenStreetMap</a>, under <a href='http://www.openstreetmap.org/copyright'>ODbL</a>."
-
-    // function createBasemapEsri( id ) {
-    //     /* jshint -W040 */
-    //     var opt = Object.assign( { detectRetina: true }, this.option )
-
-    //     var lys = []
-    //     lys.push( L.esri.basemapLayer( id, opt ) )
-
-    //     if ( this.labels )
-    //         this.labels.forEach( function ( lid ) {
-    //             lys.push( L.esri.basemapLayer( lid, opt ) )
-    //         } )
-
-    //     return lys
-    // }
-
-    // function createBasemapTiled( id ) {
-    //     /* jshint -W040 */
-    //     return [ L.tileLayer( this.url, { attribution: this.attribution } ) ]
-    // }
-
-    ViewerLeaflet.prototype.setBasemap = function ( basemapId ) {
-        var self = this
-
-        if( this.currentBasemap ) {
-            this.currentBasemap.forEach( function ( ly ) {
-                self.map.removeLayer( ly );
-            } )
-        }
-
-        this.currentBasemap = this.createBasemapLayer( basemapId );
-
-        this.map.addLayer( this.currentBasemap[ 0 ] );
-        this.currentBasemap[ 0 ].bringToBack();
-
-        for ( var i = 1; i < this.currentBasemap.length; i += 1 )
-            this.map.addLayer( this.currentBasemap[ i ] );
-
-        this.changedBaseMap( { baseMap: basemapId } )
-    }
-
-    // ViewerLeaflet.prototype.createBasemapLayer = function ( basemapId ) {
-    //     return this.basemap[ basemapId ].create( basemapId )
-    // }
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     ViewerLeaflet.prototype.addViewerLayer = function ( viewerLayer ) {
@@ -388,5 +383,11 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
     //         }
     //     } )
     // }
+
+    function clone( obj ) {
+        return JSON.parse( JSON.stringify( obj ) )
+    }
 } )
+
+
 

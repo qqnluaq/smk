@@ -7,7 +7,7 @@
 
     <div class="smk-base-map"  
         v-for="basemap in basemaps" 
-        v-on:click="$$emit( 'set-base-map', basemap )" 
+        v-on:click="$$emit( 'set-base-map', basemap.id )" 
         v-bind:class="{ 'smk-active': basemap.id == current }"
     >
         <div class="smk-base-map-sample" 

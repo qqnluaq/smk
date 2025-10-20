@@ -31,27 +31,33 @@ include.module( 'tool-baseMaps', [
         function ( smk ) {
             var self = this
 
-            this.basemaps = Object.keys( smk.$viewer.basemap )
+            this.basemaps = smk.$viewer.getBasemapIds()
                 .map( function ( id ) {
                     return smk.$viewer.getBasemapConfig( id )
                 } )
-                .filter( function ( bm ) {
-                    if ( !self.choices || self.choices.length == 0 ) return true
-                    if ( self.choices.indexOf( bm.id ) > -1 ) return true
-                    if ( smk.viewer.baseMap == bm.id ) return true
+                .filter( function ( config ) {
+                    if ( !self.choices || self.choices.length == 0 ) return !config.internal && !config.deprecated
+                    if ( self.choices.some( function ( c ) { return c.toLowerCase() == config.id } ) ) return true
+                    if ( smk.viewer.baseMap.toLowerCase() == config.id ) return true
 
                     return false
                 } )
                 .sort( function ( a, b ) { return a.order - b.order } )
-                .map( function ( bm ) {
-                    var m
-
-                    if ( bm.optionImageUrl ) {
-                        bm[ 'update' ] = function () {}
-                    }
-                    else {
-                        bm[ 'createContent' ] = function ( el ) {
-                            m = L.map( el, {
+                .map( function ( config ) {
+                    if ( config.optionImageUrl ) 
+                        return {
+                            id: config.id,
+                            title: config.title,
+                            optionImageUrl: config.optionImageUrl,
+                            update: function () {}
+                        }
+                    
+                    var map
+                    return {
+                        id: config.id,
+                        title: config.title,
+                        createContent: function ( el ) {
+                            map = L.map( el, {
                                 attributionControl: false,
                                 zoomControl: false,
                                 dragging: false,
@@ -61,17 +67,14 @@ include.module( 'tool-baseMaps', [
                                 zoomSnap: 0
                             } );
 
-                            var bmLayers = bm.create( bm.id )
-                            m.addLayer( bmLayers[ 0 ] )
-                        }
-
-                        bm[ 'update' ] = function () {
+                            var bmLayers = smk.$viewer.createBasemapLayer( config.id )
+                            map.addLayer( bmLayers[ 0 ] )
+                        },
+                        update: function () {
                             var v = smk.$viewer.getView()
-                            m.setView( [ v.center.latitude, v.center.longitude ], v.zoom )
+                            map.setView( [ v.center.latitude, v.center.longitude ], v.zoom )
                         }
                     }
-
-                    return bm
                 } )
 
             this.current = smk.viewer.baseMap
@@ -105,7 +108,7 @@ include.module( 'tool-baseMaps', [
                         var i = self.basemaps.findIndex( function ( b ) {
                             return b.id == self.current
                         } )
-                        setBasemap( self.basemaps[ ( i + 1 ) % self.basemaps.length ] )
+                        setBasemap( self.basemaps[ ( i + 1 ) % self.basemaps.length ].id )
                     }
                 },
 
@@ -114,8 +117,8 @@ include.module( 'tool-baseMaps', [
                 }
             } )
 
-            function setBasemap( basemap ) {
-                smk.$viewer.setBasemap( basemap.id )
+            function setBasemap( basemapId ) {
+                smk.$viewer.setBasemap( basemapId )
             }
 
             smk.$viewer.changedBaseMap( function ( ev ) {

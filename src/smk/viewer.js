@@ -1,4 +1,4 @@
-include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', 'query', 'turf', 'layer-display' ], function () {
+include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', 'query', 'turf', 'layer-display', 'base-maps' ], function ( inc ) {
     "use strict";
 
     var ViewerEvent = SMK.TYPE.Event.define( [
@@ -36,110 +36,6 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
     SMK.TYPE.Viewer = Viewer
 
     $.extend( Viewer.prototype, ViewerEvent.prototype )
-    // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-    //
-    Viewer.prototype.basemap = {
-        Topographic: {
-            order: 1,
-            title: 'Topographic',
-            option: {
-                maxNativeZoom: 16
-            },
-            create: createBasemapEsri
-        },
-        Streets: {
-            order: 2,
-            title: 'Streets',
-            create: createBasemapEsri
-        },
-        Imagery: {
-            order: 3,
-            title: 'Imagery',
-            option: {
-                maxNativeZoom: 14
-            },
-            labels: [ 'ImageryTransportation', 'ImageryLabels' ],
-            create: createBasemapEsri
-        },
-        Oceans: {
-            order: 4,
-            title: 'Oceans',
-            labels: [ 'OceansLabels' ],
-            create: createBasemapEsri
-        },
-        NationalGeographic: {
-            order: 5,
-            title: 'National Geographic',
-            create: createBasemapEsri
-        },
-        ShadedRelief: {
-            order: 6,
-            title: 'Shaded Relief',
-            create: createBasemapEsri
-        },
-        DarkGray: {
-            order: 7,
-            title: 'Dark Gray',
-            create: createBasemapEsri
-        },
-        Gray: {
-            order: 8,
-            title: 'Gray',
-            create: createBasemapEsri
-        },
-        StamenTonerLight: {
-            order: 9,
-            title: 'Stamen Toner Light',
-            create: createBasemapTiled,
-            url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
-            attribution: "Map tiles by <a href='http://stamen.com'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a>. Data by <a href='http://openstreetmap.org'>OpenStreetMap</a>, under <a href='http://www.openstreetmap.org/copyright'>ODbL</a>."
-        },
-        // Terrain: {
-        //     order: 9,
-        //     title: 'Terrain'
-        // },
-    }
-
-    Viewer.prototype.getBasemapConfig = function ( basemapId ) {
-        var basemap = JSON.parse( JSON.stringify( this.basemap[ basemapId ] ) )
-
-        basemap.id = basemapId
-
-        var config = this.baseMapConfig.find( function ( b ) { return b.id == basemapId } )
-        if ( config ) Object.assign( basemap, config )
-
-        basemap.create = this.basemap[ basemapId ].create
-
-        return basemap
-    }
-
-    Viewer.prototype.createBasemapLayer = function ( basemapId ) {
-        var basemap = this.getBasemapConfig( basemapId )
-
-        return basemap.create( basemapId )
-    }
-
-    function createBasemapEsri( id ) {
-        /* jshint -W040 */
-        var opt = Object.assign( { detectRetina: true }, this.option )
-
-        var lys = []
-        lys.push( L.esri.basemapLayer( id, opt ) )
-
-        if ( this.labels )
-            this.labels.forEach( function ( lid ) {
-                lys.push( L.esri.basemapLayer( lid, opt ) )
-            } )
-
-        return lys
-    }
-
-    function createBasemapTiled( id ) {
-        /* jshint -W040 */
-        return [ L.tileLayer( this.url, { attribution: this.attribution } ) ]
-    }
-
-
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
     // for(s=1;s<25;s++){v.map.setZoom(s,{animate:false});console.log(s,v.getScale())}
@@ -187,7 +83,6 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             // return ( new URL( url, smk.$option.baseUrl ) ).toString()
         }
         this.clusterOption = smk.viewer.clusterOption
-        this.baseMapConfig = smk.viewer.baseMapConfig
 
         this.identified = new SMK.TYPE.FeatureSet()
         this.selected = new SMK.TYPE.FeatureSet()
@@ -200,6 +95,29 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         this.offMapLayer = {}
         this.layerIdPromise = {}
         this.deadViewerLayer = {}
+
+        this.basemap = {}
+        this.basemapType = {}
+
+        function defineBaseMap( id, def ) {
+            var lowerId = id.toLowerCase()
+
+            if ( !def ) return self.basemap[ lowerId ]
+
+            var config = smk.viewer.baseMapConfig.find( function ( b ) { return b.id.toLowerCase() == lowerId } ) 
+            var option = Object.assign( {}, def.option, config && config.option )
+            self.basemap[ lowerId ] = Object.assign( { id: lowerId }, def, config, { option: option } )            
+        }
+
+        function defineBaseMapType( id, fn ) {
+            var lowerId = id.toLowerCase()
+
+            if ( !fn ) return self.basemapType[ lowerId ]
+
+            self.basemapType[ lowerId ] = fn
+        }
+
+        this.initializeBasemaps( defineBaseMap, defineBaseMapType )
 
         this.displayContext = {
             layers: null
@@ -337,7 +255,50 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
     Viewer.prototype.waitFinishedLoading = function () {
         return this.layersLoading
     }
+    // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+    //    
+    Viewer.prototype.initializeBasemaps = function ( defineBaseMap, defineBaseMapType ) {       
+        inc[ 'base-maps' ]( defineBaseMap, defineBaseMapType )
 
+        if ( SMK.HANDLER.has( 'viewer', 'defineBaseMap' ) ) {
+            SMK.HANDLER.get( 'viewer', 'defineBaseMap' )( defineBaseMap )
+        }
+
+        if ( SMK.HANDLER.has( 'viewer', 'defineBaseMapType' ) ) {
+            SMK.HANDLER.get( 'viewer', 'defineBaseMapType' )( defineBaseMapType )
+        }
+    }
+
+    Viewer.prototype.getBasemapIds = function ( basemapId ) {
+        return Object.keys( this.basemap )
+    }
+
+    Viewer.prototype.getBasemapConfig = function ( basemapId ) {
+        var lowerId = basemapId.toLowerCase()
+
+        var config = this.basemap[ lowerId ] 
+        if ( !config ) throw Error( 'no base map defined for ' + lowerId )
+
+        return config
+    }
+
+    Viewer.prototype.createBasemapLayer = function ( basemapId ) {
+        var config = this.getBasemapConfig( basemapId )
+
+        var create = this.basemapType[ config.type ]
+        if ( !create ) throw Error( 'base map ' + config.id + ' has unknown type ' + config.type )
+
+        try {
+            if ( config.deprecated ) console.warn( 'base map ' + config.id + ' is deprecated, and could stop working at any time' )
+
+            return create( config )
+        }
+        catch ( e ) {
+            throw Error( 'creating base map ' + config.id + ' failed: ' + e )            
+        }
+    }
+    // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+    //
     Viewer.prototype.refreshLayers = function ( delay ) {
         var self = this
         // console.log( 'refreshLayers' )
