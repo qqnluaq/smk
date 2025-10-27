@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WFIM</title>
+
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <script src="map-config.js"></script>
+<!--***************************************************************************
+    This example shows the default configuration for zoom tool.
+-->
+    <div id="smk-map-frame"></div>
+    <script>
+        SMK.INIT( {
+            containerSel: '#smk-map-frame',
+            config: mapConfig( {
+                viewer: {
+                    baseMap: 'bc-roads',
+                    baseMapConfig: [
+                        {
+                            id: 'bc-roads',
+                            optionImageUrl: 'basemaps/bc-basemap-vector.png',
+                        },
+                        {
+                            id: 'bc-roads-raster',
+                            optionImageUrl: 'basemaps/bc-roads-raster.png',
+                        },
+                        {
+                            id: 'topography',
+                            optionImageUrl: 'basemaps/canada-topography.png',
+                        },
+                        {
+                            id: 'imagery-esri-v2',
+                            optionImageUrl: 'basemaps/imagery.png',
+                            option: {
+                                token: 'AAPTxy8BH1VEsoebNVZXo8HurP77f8sW1--cynLvPuxXH_36TC1ArLs6qA_MTgOgaKQGSMblj7_JvOeyRVnduxg9O90QhIyyioffpvhxH3KyFFy_oubkP1_csjKC7MCTuWcCpXdhaSRUp943JuptQzBqxgg2dH6OQ-_YNVNmtCV0nxoCp-tIZflp1h4XVti3tPxzq2-njsuZLHRn89toGusStIFmp6ATVZTjEPyeZ8nONQI.AT1_uo5rorTK'
+                            }
+                        },
+                        {
+                            id: 'streets-esri-v2',
+                            optionImageUrl: 'basemaps/streets.png',
+                            option: {
+                                token: 'AAPTxy8BH1VEsoebNVZXo8HurP77f8sW1--cynLvPuxXH_36TC1ArLs6qA_MTgOgaKQGSMblj7_JvOeyRVnduxg9O90QhIyyioffpvhxH3KyFFy_oubkP1_csjKC7MCTuWcCpXdhaSRUp943JuptQzBqxgg2dH6OQ-_YNVNmtCV0nxoCp-tIZflp1h4XVti3tPxzq2-njsuZLHRn89toGusStIFmp6ATVZTjEPyeZ8nONQI.AT1_uo5rorTK'
+                            }
+                        },
+                        {
+                            id: 'night',
+                            optionImageUrl: 'basemaps/night.png',
+                        }                
+                    ]
+                },
+                tools: [
+                    {
+                        type: 'baseMaps',
+                        choices: [
+                            'bc-roads',
+                            'bc-roads-raster',
+                            'topography',
+                            'imagery-esri-v2',
+                            'streets-esri-v2',
+                            'night'
+                        ],
+                        mapStyle: {
+                            width: '240px',
+                            height: '80px'
+                        }
+                    }
+                ]
+            } )
+        } )
+    </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+
