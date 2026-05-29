@@ -149,6 +149,103 @@ include.module( 'base-maps', [ 'jquery', 'util', 'base-map-assets' ], function (
         // Basemaps used by WFIM
         //
 
+        // =======================================================================================================================
+        // BC Basemap without hillshade	
+
+        // =======================================================================================================================
+        // BC Basemap with hillshade	
+
+
+        var bcHillshadeStyle = JSON.parse( inc[ 'base-map-assets' ][ 'base-map-assets.vector-basemap-bc-hillshade-json' ] )
+
+        defineBaseMap( 'bc-hillshade2', {
+            type: 'esri-vector-tile',
+            order: 25,
+            title: 'BC (hillshade)',
+            url: 'https://tiles.arcgis.com/tiles/ubm4tcTYICKBpist/arcgis/rest/services/BC_BASEMAP_20240307/VectorTileServer',
+            option: {
+                style: function ( style ) {
+                    return bcHillshadeStyle
+                }
+            }
+        } )
+
+ 
+        defineBaseMap( 'bc-hillshade', {
+            type: 'composite',
+            order: 22,
+            title: 'BC (Hillshade)',
+            layers: [
+                'bc-hillshade-tiles',
+                'bc-hillshade-vector',
+            ]
+        } )
+
+
+        var bcHillshadeTilesStyle = JSON.parse( inc[ 'base-map-assets' ][ 'base-map-assets.vector-basemap-bc-hillshade-tiles-json' ] )
+
+        // defineBaseMap( 'bc-hillshade', {
+        //     type: 'esri-vector-tile',
+        //     order: 25,
+        //     title: 'BC (hillshade)',
+        //     url: 'https://tiles.arcgis.com/tiles/ubm4tcTYICKBpist/arcgis/rest/services/BC_BASEMAP_20240307/VectorTileServer',
+        //     option: {
+        //         style: function ( style ) {
+        //             return bcHillshadeStyle
+        //         }
+        //     }
+        // } )
+
+
+        defineBaseMap( 'bc-hillshade-tiles', {
+            type: 'esri-vector-tile',
+            order: 25,
+            title: 'BC (hillshade)',
+            url: "https://tiles.arcgis.com/tiles/ubm4tcTYICKBpist/arcgis/rest/services/BC_Basemap_Vector_Hillshade/VectorTileServer",
+            // option: {
+            //     opacity: 0.7,
+            //     style: function ( style ) {
+            //         return bcHillshadeTilesStyle
+            //     }
+            // }
+        } )
+
+        var bcHillshadeVectorStyle = JSON.parse( inc[ 'base-map-assets' ][ 'base-map-assets.vector-basemap-bc-hillshade-vector-json' ] )
+
+        defineBaseMap( 'bc-hillshade-vector', {
+            type: 'esri-vector-tile',
+            order: 25,
+            title: 'BC (hillshade) x',
+            url: "https://tiles.arcgis.com/tiles/ubm4tcTYICKBpist/arcgis/rest/services/BC_BASEMAP_20240307/VectorTileServer",
+            // option: {
+            //     style: function ( style ) {
+            //         return bcHillshadeVectorStyle
+            //     }
+            // }
+        } )
+
+
+        // =======================================================================================================================
+        // Topography	
+
+        // =======================================================================================================================
+        // Imagery	
+
+        // =======================================================================================================================
+        // Streets	
+
+        // =======================================================================================================================
+        // Night	
+
+        // =======================================================================================================================
+        // Oceans	
+
+        // =======================================================================================================================
+        // National Geographic
+
+        // =======================================================================================================================
+        // Light Grey        
+
         defineBaseMap( 'bc-roads', {
             type: 'esri-vector-tile',
             order: 20,
@@ -207,32 +304,32 @@ include.module( 'base-maps', [ 'jquery', 'util', 'base-map-assets' ], function (
                 url: 'https://tiles.arcgis.com/tiles/B6yKvIZqzuOr0jBR/arcgis/rest/services/Canada_Hillshade/MapServer',
             } )
 
-        defineBaseMap( 'imagery-esri-v2', {
-            internal: true,
-            type: 'esri-vector-basemap',
-            order: 23,
-            title: 'Imagery',
-            key: 'arcgis/imagery',
-            option: {
-                token: '** NEEDS AN API TOKEN **',
-                maxNativeZoom: 19,
-                maxZoom: 30,
-                tileSize: 512,
-                zoomOffset: -1
-            }
-        } )
+        // defineBaseMap( 'imagery-esri-v2', {
+        //     internal: true,
+        //     type: 'esri-vector-basemap',
+        //     order: 23,
+        //     title: 'Imagery',
+        //     key: 'arcgis/imagery',
+        //     option: {
+        //         token: '** NEEDS AN API TOKEN **',
+        //         maxNativeZoom: 19,
+        //         maxZoom: 30,
+        //         tileSize: 512,
+        //         zoomOffset: -1
+        //     }
+        // } )
 
-        defineBaseMap( 'streets-esri-v2', {
-            type: 'esri-vector-basemap',
-            order: 24,
-            title: 'ESRI Streets',
-            key: 'arcgis/streets',
-            option: {
-                token: '** NEEDS AN API TOKEN **',
-                maxNativeZoom: 19,
-                maxZoom: 30,
-            }
-        } )
+        // defineBaseMap( 'streets-esri-v2', {
+        //     type: 'esri-vector-basemap',
+        //     order: 24,
+        //     title: 'ESRI Streets',
+        //     key: 'arcgis/streets',
+        //     option: {
+        //         token: '** NEEDS AN API TOKEN **',
+        //         maxNativeZoom: 19,
+        //         maxZoom: 30,
+        //     }
+        // } )
 
         var nightStyle = JSON.parse( inc[ 'base-map-assets' ][ 'base-map-assets.vector-basemap-night-json' ] )
 
@@ -247,5 +344,78 @@ include.module( 'base-maps', [ 'jquery', 'util', 'base-map-assets' ], function (
                 }
             }
         } )
+
+        defineBaseMap( 'topography-v3', {
+            internal: true,
+            type: 'esri-vector-basemap',
+            order: 23,
+            title: 'Topographic',
+            key: 'dc6cea0b1764a1f9af2e679f642f0f5',
+            option: {
+                // token: '** NEEDS AN API TOKEN **',
+                maxNativeZoom: 19,
+                maxZoom: 30,
+                tileSize: 512,
+                zoomOffset: -1
+            }
+        } )
+
+        defineBaseMap( 'night', {
+            type: 'esri-vector-tile',
+            order: 25,
+            title: 'Night',
+            url: 'https://tiles.arcgis.com/tiles/B6yKvIZqzuOr0jBR/arcgis/rest/services/Canada_Topographic/VectorTileServer',
+            option: {
+                style: function ( style ) {
+                    return nightStyle
+                }
+            }
+        } )
+
+        var streetsStyle = JSON.parse( inc[ 'base-map-assets' ][ 'base-map-assets.vector-basemap-streets-json' ] )
+
+        defineBaseMap( 'streets-esri-v2', {
+            type: 'esri-vector-tile',
+            order: 25,
+            title: 'Streets',
+            url: 'https://tiles.arcgis.com/tiles/B6yKvIZqzuOr0jBR/arcgis/rest/services/Canada_Topographic/VectorTileServer',
+            option: {
+                style: function ( style ) {
+                    return streetsStyle
+                }
+            }
+        } )
+
+
+        defineBaseMap( 'canadian-imagery', {
+            type: 'composite',
+            order: 22,
+            title: 'Canada Imagery',
+            layers: [
+                'canadian-imagery-vector',
+                'canadian-imagery-tiles'
+            ]
+        } )
+                var imageryStyle = JSON.parse( inc[ 'base-map-assets' ][ 'base-map-assets.vector-basemap-imagery-json' ] )
+                
+                defineBaseMap( 'canadian-imagery-vector', {
+                    type: 'esri-vector-tile',
+                    order: 25,
+                    title: 'Imagery',
+                    url: 'https://tiles.arcgis.com/tiles/B6yKvIZqzuOr0jBR/arcgis/rest/services/Canada_Topographic/VectorTileServer',
+                    option: {
+                        style: function ( style ) {
+                            return imageryStyle
+                        }
+                    }
+                } )
+
+                defineBaseMap( 'canadian-imagery-tiles', {
+                    type: 'esri-tiled-map',
+                    order: 25,
+                    title: 'Imagery',
+                    url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+                } )             
+
     }
 } )

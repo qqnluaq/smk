@@ -17,8 +17,12 @@
             containerSel: '#smk-map-frame',
             config: mapConfig( {
                 viewer: {
-                    baseMap: 'bc-roads',
+                    baseMap: 'topography',
                     baseMapConfig: [
+                        {
+                            id: 'topography-v3',
+                            optionImageUrl: 'basemaps/canada-topography.png',
+                        },
                         {
                             id: 'bc-roads',
                             optionImageUrl: 'basemaps/bc-basemap-vector.png',
@@ -34,19 +38,23 @@
                         {
                             id: 'imagery-esri-v2',
                             optionImageUrl: 'basemaps/imagery.png',
-                            option: {
+                            xoption: {
                                 token: 'AAPTxy8BH1VEsoebNVZXo8HurP77f8sW1--cynLvPuxXH_36TC1ArLs6qA_MTgOgaKQGSMblj7_JvOeyRVnduxg9O90QhIyyioffpvhxH3KyFFy_oubkP1_csjKC7MCTuWcCpXdhaSRUp943JuptQzBqxgg2dH6OQ-_YNVNmtCV0nxoCp-tIZflp1h4XVti3tPxzq2-njsuZLHRn89toGusStIFmp6ATVZTjEPyeZ8nONQI.AT1_uo5rorTK'
                             }
                         },
                         {
                             id: 'streets-esri-v2',
                             optionImageUrl: 'basemaps/streets.png',
-                            option: {
+                            xoption: {
                                 token: 'AAPTxy8BH1VEsoebNVZXo8HurP77f8sW1--cynLvPuxXH_36TC1ArLs6qA_MTgOgaKQGSMblj7_JvOeyRVnduxg9O90QhIyyioffpvhxH3KyFFy_oubkP1_csjKC7MCTuWcCpXdhaSRUp943JuptQzBqxgg2dH6OQ-_YNVNmtCV0nxoCp-tIZflp1h4XVti3tPxzq2-njsuZLHRn89toGusStIFmp6ATVZTjEPyeZ8nONQI.AT1_uo5rorTK'
                             }
                         },
                         {
                             id: 'night',
+                            optionImageUrl: 'basemaps/night.png',
+                        },                
+                        {
+                            id: 'bc-hillshade',
                             optionImageUrl: 'basemaps/night.png',
                         }                
                     ]
@@ -55,12 +63,18 @@
                     {
                         type: 'baseMaps',
                         choices: [
-                            'bc-roads',
-                            'bc-roads-raster',
+                            'bc-hillshade',
+                            'bc-hillshade2',
+                            '#bc-hillshade-x',
+
+                            '#topography-v3',
+                            '#bc-roads',
+                            '#bc-roads-raster',
                             'topography',
-                            'imagery-esri-v2',
-                            'streets-esri-v2',
-                            'night'
+                            '#imagery-esri-v2',
+                            '#streets-esri-v2',
+                            '#night',
+                            '#canadian-imagery'
                         ],
                         mapStyle: {
                             width: '240px',
