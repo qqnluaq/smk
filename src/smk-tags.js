@@ -63,6 +63,7 @@ t.group( 'base-map-assets' )
     .template( 'smk/assets/vector-basemap-bc-hillshade.json' )
     .template( 'smk/assets/vector-basemap-bc-hillshade-vector.json' )
     .template( 'smk/assets/vector-basemap-bc-hillshade-tiles.json' )
+    .template( 'smk/assets/vector-basemap-canada-topographic.json' )
 
 t.script( 'feature-set','smk/feature-set.js' )
 t.script( 'projections','smk/projections.js' )

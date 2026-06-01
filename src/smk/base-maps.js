@@ -228,6 +228,68 @@ include.module( 'base-maps', [ 'jquery', 'util', 'base-map-assets' ], function (
         // =======================================================================================================================
         // Topography	
 
+
+        defineBaseMap( 'canada-topography', {
+            type: 'composite',
+            order: 22,
+            title: 'Canadian Topography',
+            layers: [
+                'canada-topography-vector',
+                // 'world-vector',
+                // 'world-hillshade',
+                // 'canada-hillshade',
+            ]
+        } )
+                var canadaTopographicStyle = JSON.parse( inc[ 'base-map-assets' ][ 'base-map-assets.vector-basemap-canada-topographic-json' ] )
+                defineBaseMap( 'canada-topography-vector', {
+                    type: 'esri-vector-tile',
+                    // order: 25,
+                    // title: 'Canadian Topography',
+                    url: 'https://tiles.arcgis.com/tiles/B6yKvIZqzuOr0jBR/arcgis/rest/services/Canada_Topographic/VectorTileServer',
+                    option: {
+                        style: function ( style ) {
+                            return canadaTopographicStyle
+                        }
+                    }
+                } )
+
+                defineBaseMap( 'canada-hillshade', {
+                    type: 'esri-tiled-map',
+                    // order: 25,
+                    // title: 'Canadian Topography',
+                    url: 'https://tiles.arcgis.com/tiles/B6yKvIZqzuOr0jBR/arcgis/rest/services/Canada_Hillshade/MapServer',
+                    // option: {
+                    //     style: function ( style ) {
+                    //         return bcHillshadeStyle
+                    //     }
+                    // }
+                } )
+
+                defineBaseMap( 'world-vector', {
+                    type: 'esri-vector-tile',
+                    // order: 25,
+                    // title: 'Canadian Topography',
+                    url: 'https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_v2/VectorTileServer'
+                    // url: "6d0ed88458c6429d99331260fb7bf2b0",
+                    // option: {
+                    //     style: function ( style ) {
+                    //         return bcHillshadeStyle
+                    //     }
+                    // }
+                } )
+
+                defineBaseMap( 'world-hillshade', {
+                    type: 'esri-tiled-map',
+                    // order: 25,
+                    // title: 'Canadian Topography',
+                    url: "https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer",                    
+                    // option: {
+                    //     style: function ( style ) {
+                    //         return bcHillshadeStyle
+                    //     }
+                    // }
+                } )
+
         // =======================================================================================================================
         // Imagery	
 
