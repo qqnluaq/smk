@@ -1,4 +1,4 @@
-/* esri-leaflet-vector - v4.3.1 - Thu Sep 04 2025 12:15:35 GMT-0500 (Central Daylight Time)
+/* esri-leaflet-vector - v4.3.2 - Fri Oct 24 2025 14:46:14 GMT-0500 (Central Daylight Time)
  * Copyright (c) 2025 Environmental Systems Research Institute, Inc.
  * Apache-2.0 */
 (function (global, factory) {
@@ -13,7 +13,7 @@
 
   var name = "esri-leaflet-vector";
   var description = "Esri vector basemap and vector tile layer plugin for Leaflet.";
-  var version$1 = "4.3.1";
+  var version$1 = "4.3.2";
   var author = "John Gravois (https://johngravois.com)";
   var contributors = [
   	"Patrick Arlt <parlt@esri.com> (http://patrickarlt.com)",
@@ -708,7 +708,7 @@
       });
 
       // allow GL base map to pan beyond min/max latitudes
-      this._glMap.transform.latRange = null;
+    //   this._glMap.transform.latRange = null;
       this._glMap.transform.maxValidLatitude = Infinity;
 
       this._transformGL(this._glMap);
@@ -733,6 +733,9 @@
     },
 
     _update() {
+      if (!this._map) {
+        return;
+      }
       // update the offset, so we can correct for it later when we zoom
       this._offset = this._map.containerPointToLayerPoint([0, 0]);
 

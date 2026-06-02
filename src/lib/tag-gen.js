@@ -79,7 +79,8 @@ tl.prototype.asset = function ( url, option ) {
 var extTemplate = {
     js: 'script',
     css: 'style',
-    html: 'template'
+    html: 'template',
+    json: 'template'
 }
 
 tl.prototype.dir = function ( pattern, option ) {
