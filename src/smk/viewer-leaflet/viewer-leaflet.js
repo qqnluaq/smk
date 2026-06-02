@@ -154,22 +154,34 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
     ViewerLeaflet.prototype.setBasemap = function ( basemapId ) {
         var self = this
 
-        if( this.currentBasemap ) {
-            this.currentBasemap.forEach( function ( ly ) {
-                self.map.removeLayer( ly );
-            } )
+        if ( this.currentBasemapId != basemapId ) {        
+            if( this.currentBasemap ) {
+                this.currentBasemap.forEach( function ( ly ) {
+                    self.map.removeLayer( ly );
+                } )
+            }
+
+            try {
+                this.getBasemapConfig( basemapId )
+            }
+            catch ( e ) {
+                var fallbackBasemapId = this.getBasemapIds()[ 0 ]
+                console.warn( 'base map', basemapId, 'is not defined, using', fallbackBasemapId )
+                basemapId = fallbackBasemapId
+            }
+
+            this.currentBasemap = this.createBasemapLayer( basemapId );
+            this.currentBasemapId = basemapId;
+
+            this.map.addLayer( this.currentBasemap[ 0 ] );
+
+            if ( this.currentBasemap[ 0 ].bringToBack )
+                this.currentBasemap[ 0 ].bringToBack();
+
+            for ( var i = 1; i < this.currentBasemap.length; i += 1 )
+                this.map.addLayer( this.currentBasemap[ i ] );
         }
-
-        this.currentBasemap = this.createBasemapLayer( basemapId );
-
-        this.map.addLayer( this.currentBasemap[ 0 ] );
-
-        if ( this.currentBasemap[ 0 ].bringToBack )
-            this.currentBasemap[ 0 ].bringToBack();
-
-        for ( var i = 1; i < this.currentBasemap.length; i += 1 )
-            this.map.addLayer( this.currentBasemap[ i ] );
-
+        
         this.changedBaseMap( { baseMap: basemapId } )
     }
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _

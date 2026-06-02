@@ -1,4 +1,4 @@
-include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', 'query', 'turf', 'layer-display', 'base-maps' ], function ( inc ) {
+include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', 'query', 'turf', 'layer-display', 'base-map' ], function ( inc ) {
     "use strict";
 
     var ViewerEvent = SMK.TYPE.Event.define( [
@@ -257,8 +257,8 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
     }
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //    
-    Viewer.prototype.initializeBasemaps = function ( defineBaseMap, defineBaseMapType ) {       
-        inc[ 'base-maps' ]( defineBaseMap, defineBaseMapType )
+    Viewer.prototype.initializeBasemaps = function ( defineBaseMap, defineBaseMapType ) {     
+        inc[ 'base-map' ][ 'base-map.base-map-js' ]( defineBaseMap, defineBaseMapType )
 
         if ( SMK.HANDLER.has( 'viewer', 'defineBaseMap' ) ) {
             SMK.HANDLER.get( 'viewer', 'defineBaseMap' )( defineBaseMap )
