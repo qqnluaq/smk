@@ -6,6 +6,7 @@ include.module( 'base-map.streets-v2-js', [], function ( inc ) {
     
     return function ( defineBaseMap, defineBaseMapType ) {
         defineBaseMap( 'streets-v2', {
+            title: 'Streets',
             type: 'esri-vector-tile',
             url: 'de26a3cf4cc9451298ea173c4b324736',
         } )
