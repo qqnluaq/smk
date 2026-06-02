@@ -6,6 +6,7 @@ include.module( 'base-map.streets-night-js', [], function ( inc ) {
     
     return function ( defineBaseMap, defineBaseMapType ) {
         defineBaseMap( 'streets-night', {
+            title: 'Streets (Night)',
             type: 'esri-vector-tile',
             url: '86f556a2d1fd468181855a35e344567f',
         } )       
