@@ -1,6 +1,9 @@
 include.module( 'base-map.bc-basemap-js', [], function ( inc ) {
     "use strict";
 
+    // taken from 
+    // https://governmentofbc.maps.arcgis.com/home/item.html?id=b1624fea73bd46c681fab55be53d96ae
+
     return function ( defineBaseMap, defineBaseMapType ) {
         defineBaseMap( 'bc-basemap', {
             type: 'esri-vector-tile',

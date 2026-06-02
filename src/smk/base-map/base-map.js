@@ -16,7 +16,6 @@ include.module( 'base-map.base-map-js', [
 
     return function ( defineBaseMap, defineBaseMapType ) {
         inc[ 'base-map.composite-js'                ]( defineBaseMap, defineBaseMapType )
-        inc[ 'base-map.legacy-js'                   ]( defineBaseMap, defineBaseMapType )
 
         inc[ 'base-map.bc-basemap-js'               ]( defineBaseMap, defineBaseMapType )
         inc[ 'base-map.bc-basemap-hillshade-js'     ]( defineBaseMap, defineBaseMapType )
@@ -27,5 +26,7 @@ include.module( 'base-map.base-map-js', [
         inc[ 'base-map.oceans-v2-js'                ]( defineBaseMap, defineBaseMapType )
         inc[ 'base-map.national-geographic-v2-js'   ]( defineBaseMap, defineBaseMapType )
         inc[ 'base-map.light-gray-v2-js'            ]( defineBaseMap, defineBaseMapType )
+
+        inc[ 'base-map.legacy-js'                   ]( defineBaseMap, defineBaseMapType )
     }
 } )
