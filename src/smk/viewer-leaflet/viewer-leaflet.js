@@ -154,6 +154,8 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
     ViewerLeaflet.prototype.setBasemap = function ( basemapId ) {
         var self = this
 
+        if ( this.currentBasemapId == basemapId ) return
+        
         if( this.currentBasemap ) {
             this.currentBasemap.forEach( function ( ly ) {
                 self.map.removeLayer( ly );
@@ -161,6 +163,7 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
         }
 
         this.currentBasemap = this.createBasemapLayer( basemapId );
+        this.currentBasemapId = basemapId;
 
         this.map.addLayer( this.currentBasemap[ 0 ] );
 

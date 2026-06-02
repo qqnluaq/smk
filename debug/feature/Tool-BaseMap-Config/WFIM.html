@@ -17,65 +17,59 @@
             containerSel: '#smk-map-frame',
             config: mapConfig( {
                 viewer: {
-                    baseMap: 'canada-topography',
+                    baseMap: 'bc-basemap',
                     baseMapConfig: [
-                        {
-                            id: 'topography-v3',
-                            optionImageUrl: 'basemaps/canada-topography.png',
+                        { 
+                            id: 'bc-basemap',
+                            optionImageUrl: 'basemaps/bc-basemap.png',
                         },
-                        {
-                            id: 'bc-roads',
-                            optionImageUrl: 'basemaps/bc-basemap-vector.png',
+                        { 
+                            id: 'bc-basemap-hillshade',
+                            optionImageUrl: 'basemaps/bc-basemap-hillshade.png',
                         },
-                        {
-                            id: 'bc-roads-raster',
-                            optionImageUrl: 'basemaps/bc-roads-raster.png',
+                        { 
+                            id: 'topographic-v2',
+                            optionImageUrl: 'basemaps/topographic-v2.png',
                         },
-                        {
-                            id: 'topography',
-                            optionImageUrl: 'basemaps/canada-topography.png',
+                        { 
+                            id: 'imagery-v2',
+                            optionImageUrl: 'basemaps/imagery-v2.png',
                         },
-                        {
-                            id: 'imagery-esri-v2',
-                            optionImageUrl: 'basemaps/imagery.png',
-                            xoption: {
-                                token: 'AAPTxy8BH1VEsoebNVZXo8HurP77f8sW1--cynLvPuxXH_36TC1ArLs6qA_MTgOgaKQGSMblj7_JvOeyRVnduxg9O90QhIyyioffpvhxH3KyFFy_oubkP1_csjKC7MCTuWcCpXdhaSRUp943JuptQzBqxgg2dH6OQ-_YNVNmtCV0nxoCp-tIZflp1h4XVti3tPxzq2-njsuZLHRn89toGusStIFmp6ATVZTjEPyeZ8nONQI.AT1_uo5rorTK'
-                            }
+                        { 
+                            id: 'streets-v2',
+                            optionImageUrl: 'basemaps/streets-v2.png',
                         },
-                        {
-                            id: 'streets-esri-v2',
-                            optionImageUrl: 'basemaps/streets.png',
-                            xoption: {
-                                token: 'AAPTxy8BH1VEsoebNVZXo8HurP77f8sW1--cynLvPuxXH_36TC1ArLs6qA_MTgOgaKQGSMblj7_JvOeyRVnduxg9O90QhIyyioffpvhxH3KyFFy_oubkP1_csjKC7MCTuWcCpXdhaSRUp943JuptQzBqxgg2dH6OQ-_YNVNmtCV0nxoCp-tIZflp1h4XVti3tPxzq2-njsuZLHRn89toGusStIFmp6ATVZTjEPyeZ8nONQI.AT1_uo5rorTK'
-                            }
+                        { 
+                            id: 'streets-night',	
+                            optionImageUrl: 'basemaps/streets-night.png',
                         },
-                        {
-                            id: 'night',
-                            optionImageUrl: 'basemaps/night.png',
-                        },                
-                        {
-                            id: 'bc-hillshade',
-                            optionImageUrl: 'basemaps/night.png',
-                        }                
+                        { 
+                            id: 'oceans-v2',
+                            optionImageUrl: 'basemaps/oceans-v2.png',
+                        },
+                        { 
+                            id: 'national-geographic-v2',
+                            optionImageUrl: 'basemaps/national-geographic-v2.png',
+                        },
+                        { 
+                            id: 'light-gray-v2',
+                            optionImageUrl: 'basemaps/light-gray-v2.png',
+                        },
                     ]
                 },
                 tools: [
                     {
                         type: 'baseMaps',
                         choices: [
-                            '#bc-hillshade',
-                            '#bc-hillshade2',
-                            '#bc-hillshade-x',
-                            '#canada-topography',
-
-                            '#topography-v3',
-                            '#bc-roads',
-                            '#bc-roads-raster',
-                            '#topography',
-                            '#imagery-esri-v2',
-                            '#streets-esri-v2',
-                            '#night',
-                            '#canadian-imagery'
+                            'bc-basemap',
+                            'bc-basemap-hillshade',
+                            'topographic-v2',
+                            'imagery-v2',
+                            'streets-v2',
+                            'streets-night',	
+                            'oceans-v2',
+                            'national-geographic-v2',
+                            'light-gray-v2',
                         ],
                         mapStyle: {
                             width: '240px',
