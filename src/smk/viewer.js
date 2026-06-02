@@ -260,8 +260,6 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
     Viewer.prototype.initializeBasemaps = function ( defineBaseMap, defineBaseMapType ) {     
         inc[ 'base-map' ][ 'base-map.base-map-js' ]( defineBaseMap, defineBaseMapType )
 
-        console.warn( JSON.stringify( Object.keys( this.basemap ), null, '  ' ) )
-
         if ( SMK.HANDLER.has( 'viewer', 'defineBaseMap' ) ) {
             SMK.HANDLER.get( 'viewer', 'defineBaseMap' )( defineBaseMap )
         }
