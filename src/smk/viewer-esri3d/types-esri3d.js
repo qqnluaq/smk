@@ -37,6 +37,7 @@ include.module( 'types-esri3d', [ 'esri3d' ], function () {
             'esri/layers/BaseDynamicLayer',
             // 'esri/layers/FeatureLayer',
             'esri/layers/GraphicsLayer',
+            'esri/layers/VectorTileLayer',
 
             // rendering
             // 'esri/renderers/SimpleRenderer',

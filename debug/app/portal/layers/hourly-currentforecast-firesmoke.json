@@ -1,0 +1,12 @@
+{
+    "layers": [
+        {
+            "type": "image",
+            "id": "hourly-currentforecast-firesmoke",
+            "title": "Smoke Forecast, Hourly",
+            "opacity": 0.65,
+            "baseUrl": "https://firesmoke.ca/forecasts/current/images/hourly_<%= timestamp %>.png",
+            "bounds": [[40.0, -144.5], [70.0, -52.5]]
+        }
+    ]
+}
