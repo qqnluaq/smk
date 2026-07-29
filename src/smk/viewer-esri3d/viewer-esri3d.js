@@ -33,7 +33,7 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
         var layerExtras = []
 
         this.map = new E.Map( {
-            basemap: this.basemap[ smk.viewer.baseMap ].esri3d || 'topo',
+            // basemap: this.basemap[ smk.viewer.baseMap ].esri3d || 'topo',
             ground: "world-elevation"
         } )
 
@@ -134,6 +134,9 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
             self.changedPopup()
         } )
 
+        // setTimeout( function () {
+        //     self.setBasemap( 'topographic' )        
+        // }, 500 )
     }
 
     ViewerEsri3d.prototype.screenToGroundDistance = function ( pt1, pt2 ) {
@@ -225,9 +228,34 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
     }
 
     ViewerEsri3d.prototype.setBasemap = function ( basemapId ) {
-        this.map.basemap = this.basemap[ basemapId ].esri3d
+        console.warn(basemapId, this.oldBasemapId)
+        // if ( !this.displayContext.layers ) return
+
+        // this.map.basemap = this.basemap[ basemapId ].esri3d
 
         this.changedBaseMap( { baseMap: basemapId } )
+
+        if ( this.oldBasemapId ) {
+            this.displayContext.layers.setItemVisible( this.oldBasemapId, false, false )
+        }
+
+        this.oldBasemapId = basemapId
+
+        switch ( basemapId ) {
+            case 'Topographic': 
+                this.displayContext.layers.setItemVisible( 'topographic-basemap', true, true )
+                break
+
+            case 'Imagery': 
+                this.displayContext.layers.setItemVisible( 'imagery-basemap', true, true )
+                break
+
+            case 'Streets': 
+                this.displayContext.layers.setItemVisible( 'streets-basemap', true, true )
+                break
+        }
+
+        this.updateLayersVisible()
     }
 
     ViewerEsri3d.prototype.addViewerLayer = function ( viewerLayer ) {

@@ -130,7 +130,10 @@ include.module( 'tool-baseMaps', [
                 } )
             } )
 
-            smk.$viewer.setBasemap( smk.viewer.baseMap )
+            smk.$viewer.finishedLoadingLayers.then( function () {
+                console.log(smk.viewer.baseMap)
+                smk.$viewer.setBasemap( smk.viewer.baseMap )
+            } )
         }
     )
 } )

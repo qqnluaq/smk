@@ -50,6 +50,7 @@ include.module( 'tool-layers', [
         function ( smk ) {
             var self = this
 
+            console.log(this.display)
             if ( this.display )
                 smk.$viewer.setDisplayContextItems( this.type, this.display )
 
@@ -134,6 +135,8 @@ include.module( 'tool-layers', [
             smk.$viewer.finishedLoading( function ( ev ) {
                 self.busy = false
             } )
+
+            smk.$viewer.setFinishedLoadingLayers()
         }
     )
 } )
