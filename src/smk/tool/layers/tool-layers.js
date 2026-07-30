@@ -50,7 +50,6 @@ include.module( 'tool-layers', [
         function ( smk ) {
             var self = this
 
-            console.log(this.display)
             if ( this.display )
                 smk.$viewer.setDisplayContextItems( this.type, this.display )
 
