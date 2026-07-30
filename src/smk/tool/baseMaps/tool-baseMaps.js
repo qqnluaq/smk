@@ -4,7 +4,10 @@ include.module( 'tool-baseMaps', [
     'tool-panel',
     'viewer',
     'leaflet',
-    'tool-baseMaps.panel-base-maps-html'
+    'tool-baseMaps.panel-base-maps-html',
+    'tool-baseMaps-config.imagery-png',
+    'tool-baseMaps-config.topographic-png',
+    'tool-baseMaps-config.streets-png'
 ], function ( inc ) {
     "use strict";
 
@@ -15,7 +18,7 @@ include.module( 'tool-baseMaps', [
     Vue.component( 'baseMaps-panel', {
         extends: SMK.COMPONENT.ToolPanelBase,
         template: inc[ 'tool-baseMaps.panel-base-maps-html' ],
-        props: [ 'current', 'basemaps', 'mapStyle' ]
+        props: [ 'current', 'basemaps', 'mapStyle', 'imageTopographic', 'imageImagery', 'imageStreets' ]
     } )
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
@@ -27,6 +30,13 @@ include.module( 'tool-baseMaps', [
             this.defineProp( 'current' )
             this.defineProp( 'basemaps' )
             this.defineProp( 'mapStyle' )
+            this.defineProp( 'imageTopographic' )
+            this.defineProp( 'imageImagery' )
+            this.defineProp( 'imageStreets' )
+
+            this.imageTopographic = inc[ 'tool-baseMaps-config.topographic-png' ]
+            this.imageImagery = inc[ 'tool-baseMaps-config.imagery-png' ]
+            this.imageStreets = inc[ 'tool-baseMaps-config.streets-png' ]
         },
         function ( smk ) {
             var self = this

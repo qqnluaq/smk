@@ -228,34 +228,40 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
     }
 
     ViewerEsri3d.prototype.setBasemap = function ( basemapId ) {
-        console.warn(basemapId, this.oldBasemapId)
-        // if ( !this.displayContext.layers ) return
+        var self = this
 
-        // this.map.basemap = this.basemap[ basemapId ].esri3d
+        return Promise.resolve()
+            .then( function () {
+                if ( !self.basemapLayerId ) return
 
-        this.changedBaseMap( { baseMap: basemapId } )
+                self.displayContext.layers.setItemVisible( self.basemapLayerId, false, false )
 
-        if ( this.oldBasemapId ) {
-            this.displayContext.layers.setItemVisible( this.oldBasemapId, false, false )
-        }
+                return self.updateLayersVisible()
+            } )
+            .then( function () {
+                return new Promise( function ( res, rej ) {
+                    setTimeout( res, 1000 )
+                } )
+            } )
+            .then( function () {
+                switch ( basemapId ) {
+                    case 'Topographic': 
+                        self.basemapLayerId = 'topographic-basemap'
+                        break
 
-        this.oldBasemapId = basemapId
+                    case 'Imagery': 
+                        self.basemapLayerId = 'imagery-basemap'
+                        break
 
-        switch ( basemapId ) {
-            case 'Topographic': 
-                this.displayContext.layers.setItemVisible( 'topographic-basemap', true, true )
-                break
+                    case 'Streets': 
+                        self.basemapLayerId = 'streets-basemap'
+                        break
+                }
+                self.displayContext.layers.setItemVisible( self.basemapLayerId, true, true )
+                self.changedBaseMap( { baseMap: basemapId } )
 
-            case 'Imagery': 
-                this.displayContext.layers.setItemVisible( 'imagery-basemap', true, true )
-                break
-
-            case 'Streets': 
-                this.displayContext.layers.setItemVisible( 'streets-basemap', true, true )
-                break
-        }
-
-        this.updateLayersVisible()
+                return self.updateLayersVisible()
+            } )
     }
 
     ViewerEsri3d.prototype.addViewerLayer = function ( viewerLayer ) {

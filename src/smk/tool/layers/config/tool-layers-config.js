@@ -23,7 +23,58 @@ include.module( 'tool-layers-config', [
             glyph: {
                 visible: 'visibility',
                 hidden: 'visibility_off',
-            }
+            },
+            "display": [
+                {
+                    "type": "folder",
+                    "title": "Base Maps",
+                    "isVisible": false,
+                    "isExpanded": true,
+                    "showItem": false,
+                    "items": [
+                        {
+                            "id": "topographic-basemap",
+                            "type": "group",
+                            "title": "Topographic",
+                            "isVisible": false,
+                            "showItem": false,
+                            "items": [
+                                {
+                                    "id": "topographic-basemap-raster",
+                                    "isVisible": true
+                                },
+                                {
+                                    "id": "topographic-basemap-vector",
+                                    "isVisible": true
+                                }
+                            ]
+                        },
+                        {
+                            "id": "imagery-basemap",
+                            "type": "group",
+                            "title": "Imagery",
+                            "isVisible": false,
+                            "showItem": false,
+                            "items": [
+                                {
+                                    "id": "imagery-basemap-raster",
+                                    "isVisible": true
+                                },
+                                {
+                                    "id": "imagery-basemap-vector",
+                                    "isVisible": true
+                                }
+                            ]
+                        },
+                        {
+                            "id": "streets-basemap",
+                            "isVisible": false,
+                            "showItem": false
+                        }
+                    ]
+                }
+            ]
+
         } ) ) )
     )
 } )

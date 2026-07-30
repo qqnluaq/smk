@@ -6,14 +6,26 @@
     </template>
 
     <div class="smk-base-map"  
-        v-for="basemap in basemaps" 
-        v-on:click="$$emit( 'set-base-map', basemap )" 
-        v-bind:class="{ 'smk-active': basemap.id == current }"
+        v-on:click="$$emit( 'set-base-map', { id: 'Topographic' } )" 
+        v-bind:class="{ 'smk-active': 'Topographic' == current }"
     >
-        <div class="smk-base-map-sample" 
-            v-bind:title="basemap.title"
-            v-bind:style="mapStyle"
-            v-content="basemap"
-        ></div>
+        <div>Topographic</div>
+        <img v-bind:src="imageTopographic"></img>
+    </div>
+
+    <div class="smk-base-map"  
+        v-on:click="$$emit( 'set-base-map', { id: 'Imagery' } )" 
+        v-bind:class="{ 'smk-active': 'Imagery' == current }"
+    >
+        <div>Imagery</div>
+        <img v-bind:src="imageImagery"></img>
+    </div>
+
+    <div class="smk-base-map"  
+        v-on:click="$$emit( 'set-base-map', { id: 'Streets' } )" 
+        v-bind:class="{ 'smk-active': 'Streets' == current }"
+    >
+        <div>Streets</div>
+        <img v-bind:src="imageStreets"></img>
     </div>
 </tool-panel>
