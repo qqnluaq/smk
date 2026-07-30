@@ -133,10 +133,6 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
         E.core.watchUtils.watch( this.view.popup, "visible", function() {
             self.changedPopup()
         } )
-
-        // setTimeout( function () {
-        //     self.setBasemap( 'topographic' )        
-        // }, 500 )
     }
 
     ViewerEsri3d.prototype.screenToGroundDistance = function ( pt1, pt2 ) {
