@@ -134,6 +134,8 @@ include.module( 'tool-layers', [
             smk.$viewer.finishedLoading( function ( ev ) {
                 self.busy = false
             } )
+
+            smk.$viewer.setFinishedLoadingLayers()
         }
     )
 } )

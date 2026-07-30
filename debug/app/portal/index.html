@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title></title>
+        <!-- SMK BOOTSTRAP - - - - - - - -->
+        <script src="../../../dist/smk.js"></script>
+        <!-- - - - - - - - - - - - - - - -->
+        <style>
+            #header {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 70px;
+
+                border-bottom:      2px solid #fcba19;
+                background-color: #036;
+                font-family:        Helvetica,Arial,sans-serif;
+
+                display:            flex;
+                justify-content:    flex-start;
+                align-items:        center;
+            }
+
+            #header img {
+                margin-left:    10px;
+                margin-bottom:  10px;
+            }
+
+            #header-title {
+                color:          white;
+                margin-left:    20px;
+
+                display:        flex;
+                flex-direction: column;
+                justify-content:center;
+                align-items:    flex-start;
+                font-size:      30px;
+            }
+
+            #smk-map-frame {
+                position: absolute;
+                top: 72px;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+
+        <style>
+            .smk-time-dimension {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+
+                font-size: 14px;
+                font-weight: bold;
+                text-shadow: 1px 0 0 #fff, 0 -1px 0 #fff, 0 1px 0 #fff, -1px 0 0 #fff;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="header">
+            <img src="bc-gov-logo-transparent.png">
+            <div id="header-title"></div>
+        </div>
+        <div id="smk-map-frame"></div>
+    </body>
+
+    <!-- './assets/js/smk/map-config.json',
+    './assets/js/smk/layers/active-wildfires.json',
+    './assets/js/smk/layers/area-restrictions.json',
+    './assets/js/smk/layers/bans-and-prohibitions.json',
+    './assets/js/smk/layers/bc-fire-centres.json',
+    './assets/js/smk/layers/bcws-activefires-publicview-inactive.json',
+    './assets/js/smk/layers/closed-recreation-sites.json',
+    './assets/js/smk/layers/danger-rating.json',
+    './assets/js/smk/layers/drive-bc-active-events.json',
+    JSON.stringify({ 'layers': [{ id: 'drive-bc-active-events', serviceUrl: driveBcBaseUrl || 'https://maps.th.gov.bc.ca/geoV05/ows'}]}),
+    './assets/js/smk/layers/evacuation-orders-and-alerts.json',
+    './assets/js/smk/layers/evacuation-orders-and-alerts-wms.json',
+    './assets/js/smk/layers/fire-perimeters.json',
+    './assets/js/smk/layers/prescribed-fire.json',
+    './assets/js/smk/layers/weather.json',
+    './assets/js/smk/layers/smoke.json',
+    // './assets/js/smk/layers/whse-land-and-natural-resource-prot-current-fire-polys-sp.json',
+    JSON.stringify( { 'layers': openmapsLayers.map( id => { return {
+            id: id,
+            serviceUrl: openmapsBaseUrl || "https://delivery.openmaps.gov.bc.ca/geo/pub/ows"
+        }; } ) } ),
+    './assets/js/smk/layer-display-config.json',
+    `{ "viewer": { "device": "${ deviceMode }" } }`,
+    `{ "layers": [ { "id": "bans-and-prohibitions-highlight", "sld": "@${window.location.protocol}//${window.location.host}/assets/js/smk/bans-and-prohibitions-highlight.sld" } ] }`,
+    // 'show-tool=coordinate',                
+    // self.queryAll('evacuation-orders-and-alerts','esri', 'Fire Evacuation Orders and Alerts (ESRI)'),
+    // self.queryAll('evacuation-orders-and-alerts-wms','wms', 'Fire Evacuation Orders and Alerts (WMS)'),
+    'theme=wf', '?' -->
+
+
+    <!-- <script src="plugin-time-dimension/install.js"></script> -->
+    <script>
+
+        // var startTime = new Date()
+        // startTime.setUTCMilliseconds(0)
+        // startTime.setUTCSeconds(0)
+        // startTime.setUTCMinutes(0)
+        // startTime.setHours( Math.trunc( startTime.getHours() / 6 ) * 6 )        
+
+        // var endTime = new Date( startTime )
+        // endTime.setHours( endTime.getHours() + 48 )
+
+        // var timeDimTool = {
+        //     tools: [ {
+        //         type: "time-dimension",
+        //         enabled: true
+        //         // timeDimensionOptions: {
+        //         //     timeInterval: `${ startTime.toISOString() }/${ endTime.toISOString() }`,
+        //         //     period: "PT1H",
+        //         //     currentTime: startTime,
+        //         // }
+        //     } ]
+        // } 
+
+        SMK.INIT( {
+            'smk-container-sel': "#smk-map-frame",
+            'smk-title-sel': "#header-title, head title",
+            'smk-config': [ 
+                './map-config.json', 
+                // './layers/active-wildfires.json',
+                // './layers/area-restrictions.json',
+                // './layers/bans-and-prohibitions.json',
+                // './layers/bc-fire-centres.json',
+                // './layers/bcws-activefires-publicview-inactive.json',
+                // './layers/closed-recreation-sites.json',
+                // './layers/danger-rating.json',
+                // './layers/drive-bc-active-events.json',
+                // './layers/evacuation-orders-and-alerts-wms.json',
+                // './layers/fire-perimeters.json',
+                // './layers/prescribed-fire.json',
+                // './layers/weather.json',
+                // './layers/precipitation.json',
+                // './layers/smoke.json',
+                // './layers/hourly-currentforecast-firesmoke.json',
+                // './layers/whse-land-and-natural-resource-prot-current-fire-polys-sp.json',
+                // './layer-display-config.json', 
+                // timeDimTool,
+                'theme=wf', '?' 
+            ],
+        } ).then( function () {
+            // SMK.HANDLER.set( 'bespoke', 'initialized', function ( smk ) {
+            //     // console.log( 'init!' )
+            // } )
+            // SMK.HANDLER.set( 'bespoke', 'activated', function ( smk, tool ) {
+            //     // console.log( 'active!' )
+            //     var html = '<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel sapien auctor, blandit mi eget, iaculis erat. Nam rutrum luctus est, sed accumsan sapien rhoncus ac. Curabitur in suscipit sem. Integer mollis risus cursus tempor ullamcorper. Nullam mollis urna at ante consequat, eget rhoncus velit varius. Sed posuere tortor nec eleifend feugiat. Cras vestibulum dolor ut elit aliquet, nec auctor magna lacinia. Pellentesque eget quam quis mi iaculis venenatis. Vestibulum vel enim risus.</div>'
+            //     var el = $( html ).get(0)            
+            //     tool.content = el.innerHTML
+            // } )
+
+            // SMK.HANDLER.set( 'bespoke--menu', 'triggered', function ( smk, tool ) {
+            //     console.log('triggered')
+            // } )
+
+            // SMK.HANDLER.set( 'bespoke--foo', 'activated', function ( smk, tool ) {
+            //     // console.log( 'foo active!' )
+            //     tool.content = '<div>I am a legend in my own mind</div>'
+            // } )
+
+            // include( 'component' ).then( function () {
+            //     Vue.component( 'wf-feature', {
+            //         template: '#wf-feature-template',
+            //         extends: SMK.TYPE.VueFeatureComponent
+            //     } )
+            // } )
+        } )
+    </script>
+
+    <style>
+        .wf-feature-attribute {
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            word-break: break-word;
+        }
+
+        .wf-feature-attribute.wf-title-feature-attribute {
+            font-weight: bold;
+            padding-top: 0px;
+        }
+
+        .wf-feature-attribute-title {
+            flex-basis: 40%;
+            font-size: 11px;
+            text-align: right;
+        }
+
+        .wf-feature-attribute-value {
+            flex-basis: 55%;
+            font-size: 13px;
+            text-align: left;
+        }
+    </style>
+
+    <template id="wf-feature-template">
+        <div>
+            <div class="smk-attributes" v-if="attributes && attributes.length > 0">
+                <div class="wf-feature-attribute wf-title-feature-attribute" v-if="attributes.length > 0">
+                    <span class="wf-feature-attribute-title" v-html="insertWordBreaks( attributes[ 0 ].title )"></span>
+                    <span class="wf-feature-attribute-value" v-html="formatAttribute( attributes[ 0 ] )"></span>
+                </div>
+                <div class="wf-feature-attribute" v-for="(attr,index) in attributes" v-if="attr.visible !== false && index > 0">
+                    <span class="wf-feature-attribute-title" v-html="insertWordBreaks( attr.title )"></span>
+                    <span class="wf-feature-attribute-value" v-html="formatAttribute( attr )"></span>
+                </div>
+            </div>
+        </div>
+    </template>
+</html>

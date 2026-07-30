@@ -33,7 +33,7 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
         var layerExtras = []
 
         this.map = new E.Map( {
-            basemap: this.basemap[ smk.viewer.baseMap ].esri3d || 'topo',
+            // basemap: this.basemap[ smk.viewer.baseMap ].esri3d || 'topo',
             ground: "world-elevation"
         } )
 
@@ -133,7 +133,6 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
         E.core.watchUtils.watch( this.view.popup, "visible", function() {
             self.changedPopup()
         } )
-
     }
 
     ViewerEsri3d.prototype.screenToGroundDistance = function ( pt1, pt2 ) {
@@ -225,9 +224,40 @@ include.module( 'viewer-esri3d', [ 'viewer', 'esri3d', 'types-esri3d', 'layer-es
     }
 
     ViewerEsri3d.prototype.setBasemap = function ( basemapId ) {
-        this.map.basemap = this.basemap[ basemapId ].esri3d
+        var self = this
 
-        this.changedBaseMap( { baseMap: basemapId } )
+        return Promise.resolve()
+            .then( function () {
+                if ( !self.basemapLayerId ) return
+
+                self.displayContext.layers.setItemVisible( self.basemapLayerId, false, false )
+
+                return self.updateLayersVisible()
+            } )
+            .then( function () {
+                return new Promise( function ( res, rej ) {
+                    setTimeout( res, 1000 )
+                } )
+            } )
+            .then( function () {
+                switch ( basemapId ) {
+                    case 'Topographic': 
+                        self.basemapLayerId = 'topographic-basemap'
+                        break
+
+                    case 'Imagery': 
+                        self.basemapLayerId = 'imagery-basemap'
+                        break
+
+                    case 'Streets': 
+                        self.basemapLayerId = 'streets-basemap'
+                        break
+                }
+                self.displayContext.layers.setItemVisible( self.basemapLayerId, true, true )
+                self.changedBaseMap( { baseMap: basemapId } )
+
+                return self.updateLayersVisible()
+            } )
     }
 
     ViewerEsri3d.prototype.addViewerLayer = function ( viewerLayer ) {

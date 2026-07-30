@@ -164,6 +164,10 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
     Viewer.prototype.initialize = function ( smk ) {
         var self = this
 
+        this.finishedLoadingLayers = new Promise( function ( res, rej ) {
+            self.setFinishedLoadingLayers = res
+        } )
+
         this.lmfId = smk.lmfId
         this.type = smk.viewer.type
         this.serviceUrl = smk.$option[ 'service-url' ]
@@ -382,6 +386,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
     }
 
     Viewer.prototype.setDisplayContextItems = function ( context, items ) {
+        // console.warn(items)
         var self = this
 
         if ( this.isDisplayContext( context ) ) {
