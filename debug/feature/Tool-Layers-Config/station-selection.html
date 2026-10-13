@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Station Selection</title>
+        
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+<!--***************************************************************************
+    This example shows a SMK application, with the command configuration for the 
+    layer tool.
+-->
+        <div id="smk-map-frame"></div>
+        <script>
+            SMK.INIT( {
+                containerSel: "#smk-map-frame",
+                config: [ 
+                    './station-selection-config.json',
+                ]
+            } )
+        </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+

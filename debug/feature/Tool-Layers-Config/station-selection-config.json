@@ -1,0 +1,195 @@
+{
+    "version": "1.2.7",
+    "name": "Wildfire DataMart",
+    "createdBy": "SMK Developer",
+    "viewer": {
+        "type": "leaflet",
+        "activeTool": "pan",
+        "location": {
+            "extent": [
+                -140.80078125000004,
+                61.62728646147466,
+                -108.72070312500002,
+                46.13417004624326
+            ],
+            "center": [
+                -125,
+                54
+            ],
+            "zoom": 6
+        },
+        "esriApiKey": "",
+        "baseMap": "bc-basemap"
+    },
+    "layers": [
+        {
+            "type": "wms",
+            "id": "fire-centres",
+            "title": "BC Wildfire Fire Centres",
+            "isVisible": true,
+            "isQueryable": false,
+            "opacity": 0.65,
+            "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/wms",
+            "layerName": "pub:WHSE_LEGAL_ADMIN_BOUNDARIES.DRP_MOF_FIRE_CENTRES_SP",
+            "styleName": "3458",
+            "titleAttribute": "MOF_FIRE_CENTRE_NAME",
+            "geometryAttribute": "GEOMETRY",
+            "attributes": [
+                {
+                    "name": "MOF_FIRE_CENTRE_ID",
+                    "title": "Fire Centre ID",
+                    "visible": true
+                },
+                {
+                    "name": "MOF_FIRE_CENTRE_NAME",
+                    "title": "Fire Centre Name",
+                    "visible": true
+                }
+            ]
+        },
+        {
+            "type": "vector",
+            "id": "weather-stations",
+            "title": "Reporting Stations",
+            "isQueryable": false,
+            "useClustering": false,
+            "dataUrl": "./data.json",
+            "isInternal": false,
+            "titleAttribute": "stationName",
+            "@popupTemplate": "<div id='weatherStationPopup'>{{window.weatherStationPopup(feature.properties)}}</div>",
+              "style": {
+                "strokeColor": "green",
+                "strokeWidth": 8,
+                "strokeOpacity": 0.8,
+                "fillOpacity": 0.6,
+                "fillColor": "blue"
+            },
+            "attributes": [
+                {
+                    "name": "stationName",
+                    "title": "Station Name",
+                    "visible": true
+                }
+            ],
+            "#queries": [
+                {
+                    "id": "station-query",
+                    "title": "Station Search",
+                    "description": "Search for a reporting weather station",
+                    "parameters": [
+                        {
+                            "id": "param1",
+                            "type": "input",
+                            "title": "Station Name",
+                            "value": ""
+                        }
+                    ],
+                    "predicate": {
+                        "operator": "and",
+                        "arguments": [
+                            {
+                                "operator": "contains",
+                                "arguments": [
+                                    {
+                                        "operand": "attribute",
+                                        "name": "stationName"
+                                    },
+                                    {
+                                        "operand": "parameter",
+                                        "id": "param1"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "tools": [
+        {
+            "type": "toolbar",
+            "enabled": true
+        },
+        {
+            "type": "list-menu",
+            "enabled": false,
+            "title": "Wildfire DataMart"
+        },
+        {
+            "type": "pan",
+            "enabled": true
+        },
+        {
+            "type": "zoom",
+            "enabled": true
+        },
+        {
+            "type": "about",
+            "enabled": false
+        },
+        {
+            "type": "layers",
+            "enabled": true
+        },
+        {
+            "type": "baseMaps",
+            "enabled": false
+        },
+        {
+            "type": "identify",
+            "enabled": false,
+            "showWidget": true,
+            "command": {
+                "select": true,
+                "radius": true,
+                "radiusUnit": true,
+                "nearBy": true
+            },
+            "radius": 10,
+            "radiusUnit": "px",
+            "tolerance": 12
+        },
+        {
+            "type": "search",
+            "enabled": true
+        },
+        {
+            "type": "coordinate",
+            "enabled": false
+        },
+        {
+            "type": "markup",
+            "enabled": false
+        },
+        {
+            "type": "scale",
+            "enabled": false
+        },
+        {
+            "type": "minimap",
+            "enabled": false
+        },
+        {
+            "type": "directions",
+            "enabled": false
+        },
+        {
+            "type": "location",
+            "enabled": false
+        },
+        {
+            "type": "select",
+            "enabled": true
+        },
+        {
+            "type": "geomark",
+            "enabled": false
+        },
+        {
+            "type": "measure",
+            "enabled": true,
+            "position": "toolbar"
+        }
+    ]
+}

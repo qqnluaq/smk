@@ -125,7 +125,8 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
         if ( ( layers[0].useClustering + layers[0].useHeatmap + layers[0].useRaw ) > 1 ) throw new Error( 'raw or heatmap or clustering' )
 
         var styles = [].concat( layers[ 0 ].config.style )
-
+/* jshint -W087 */
+debugger
         return SMK.UTIL.resolved()
             .then( function () {
                 if ( !layers[ 0 ].config.projection )
@@ -211,6 +212,8 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
                     console.log( 'loaded', url )
 
                     var feats = []
+                    /* jshint -W087 */
+                    // debugger 
                     turf.featureEach( data, function ( ft ) {
                         styles.forEach( function ( st, i ) {
                             if ( i > 0 )
