@@ -57,11 +57,12 @@
             "isInternal": false,
             "titleAttribute": "stationName",
             "@popupTemplate": "<div id='weatherStationPopup'>{{window.weatherStationPopup(feature.properties)}}</div>",
-              "style": {
+            "opacity": 0.85,
+            "style": {
                 "strokeColor": "green",
-                "strokeWidth": 8,
+                "strokeWidth": 12,
                 "strokeOpacity": 0.8,
-                "fillOpacity": 0.6,
+                "fillOpacity": 1,
                 "fillColor": "blue"
             },
             "attributes": [

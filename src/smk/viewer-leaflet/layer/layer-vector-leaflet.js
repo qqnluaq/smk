@@ -126,7 +126,7 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
 
         var styles = [].concat( layers[ 0 ].config.style )
 /* jshint -W087 */
-debugger
+// debugger
         return SMK.UTIL.resolved()
             .then( function () {
                 if ( !layers[ 0 ].config.projection )
@@ -187,6 +187,21 @@ debugger
                     } )
 
                     // layer.addData( turf.featureCollection( feats ) )
+                }
+
+                layers[ 0 ].loadFeatures = function ( features ) {
+                    var feats = []
+                    turf.featureEach( features, function ( ft ) {
+                        styles.forEach( function ( st, i ) {
+                            if ( i > 0 )
+                                ft = turf.clone( ft )
+
+                            ft.style = st
+                            feats.push( ft )
+                        } )
+                    } )
+
+                    layer.addData( turf.featureCollection( feats ) )
                 }
 
                 if ( layers[ 0 ].loadCache ) {
