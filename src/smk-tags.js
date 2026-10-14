@@ -28,7 +28,7 @@ t.sequence( 'terraformer' )
     .script( 'lib/terraformer/terraformer-arcgis-parser-1.0.5.js' )
     // .script( 'lib/terraformer/terraformer-wkt-parser-1.1.2.js' )
 
-// t.style( 'material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons', { external: true } )
+// t.style( 'material-icons', 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@1', { external: true } )
 
 t.group( 'material-icons' )
     .style( '../node_modules/material-design-icons-iconfont/dist/material-design-icons.css', { inline: false } )
@@ -232,6 +232,9 @@ t.group( 'tool-search' )
 t.group( 'tool-select' )
     .dir( 'smk/tool/select/*' )
 
+t.group( 'tool-select-lasso' )
+    .dir( 'smk/tool/select-lasso/*' )
+
 t.group( 'tool-shortcut-menu' )
     .dir( 'smk/tool/shortcut-menu/*' )
 
@@ -270,6 +273,7 @@ t.sequence( 'leaflet' )
     .script( 'lib/leaflet/maplibre-gl-3.6.2.min.js' )
     .script( 'lib/leaflet/esri-leaflet-vector-4.3.2.min.js' )
     .script( 'lib/leaflet/esri-leaflet-static-basemap-tile-1.0.0.min.js' )
+    .script( 'lib/leaflet/leaflet-lasso-2.2.13.min.js' )
     .dir( 'lib/leaflet/images/**' )
 
 t.group( 'tool-coordinate-leaflet' )
@@ -314,6 +318,9 @@ t.group( 'tool-search-leaflet' )
 
 t.group( 'tool-select-leaflet' )
     .dir( 'smk/viewer-leaflet/tool/select/**/*' )
+
+t.group( 'tool-select-lasso-leaflet' )
+    .dir( 'smk/viewer-leaflet/tool/select-lasso/**/*' )
 
 t.group( 'tool-zoom-leaflet' )
     .dir( 'smk/viewer-leaflet/tool/zoom/**/*' )

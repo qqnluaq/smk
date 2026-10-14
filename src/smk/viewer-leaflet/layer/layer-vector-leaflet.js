@@ -12,7 +12,8 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
     //
     VectorLeafletLayer.prototype.getFeaturesInArea = function ( area, view, option ) {
         var self = this
-
+/* jshint -W087 */
+// debugger
         if ( !option.layer ) return
 
         var features = []

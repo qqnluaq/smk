@@ -185,9 +185,9 @@
             "enabled": false
         },
         {
-            "type": "select",
+            "type": "select-lasso",
             "enabled": true,
-            "showWidget": false,
+            "showWidget": true,
             "showPanel": false,
             "internalLayers": [
                 {
