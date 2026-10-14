@@ -27,6 +27,12 @@
             } )
             .then( smk => {
                 // debugger
+
+                smk.$viewer.selected.addedFeatures( ( ev ) => {
+                    console.log('selected.addedFeatures',Object.keys( smk.$viewer.selected.featureSet ))
+                    smk.$viewer.selected.highlight( Object.keys( smk.$viewer.selected.featureSet ) )
+                } )
+
                 return fetch( 'data.json' )
                     .then( res => {
                         return res.json()

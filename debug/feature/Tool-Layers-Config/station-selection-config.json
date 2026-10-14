@@ -52,7 +52,7 @@
             "id": "weather-stations",
             "title": "Reporting Stations",
             "isVisible": false,
-            "isQueryable": false,
+            "isQueryable": true,
             "useClustering": false,
             "#dataUrl": "./data.json",
             "isInternal": true,
@@ -64,9 +64,13 @@
                 "strokeWidth": 12,
                 "strokeOpacity": 0.8,
                 "fillOpacity": 1,
-                "fillColor": "blue"
+                "fillColor": "blue",
+                "markerUrl": "marker.svg",
+                "markerSize": [ 20, 20 ],
+                "markerOffset": [ 10, 10 ]
+
             },
-            "attributes": [
+            "#attributes": [
                 {
                     "name": "stationName",
                     "title": "Station Name",
@@ -141,16 +145,16 @@
         {
             "type": "identify",
             "enabled": true,
-            "showWidget": true,
+            "#showWidget": true,
             "command": {
                 "select": true,
-                "radius": true,
-                "radiusUnit": true,
-                "nearBy": true
+                "#radius": true,
+                "#radiusUnit": true,
+                "#nearBy": true
             },
-            "radius": 10,
-            "radiusUnit": "px",
-            "tolerance": 12
+            "radius": 100,
+            "radiusUnit": "km",
+            "$tolerance": 12
         },
         {
             "type": "search",
@@ -182,7 +186,24 @@
         },
         {
             "type": "select",
-            "enabled": false
+            "enabled": true,
+            "showWidget": false,
+            "showPanel": false,
+            "internalLayers": [
+                {
+                    "id": "highlight-point",
+                    "style": {
+                        "strokeColor": "green",
+                        "strokeWidth": 30,
+                        "strokeOpacity": 0.8,
+                        "markerUrl": null,
+                        "markerSize": null,
+                        "markerOffset": null,
+                        "shadowUrl": null,
+                        "shadowSize": null
+                    }
+                }
+            ]
         },
         {
             "type": "geomark",
