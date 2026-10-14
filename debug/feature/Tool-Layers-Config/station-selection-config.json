@@ -51,10 +51,11 @@
             "type": "vector",
             "id": "weather-stations",
             "title": "Reporting Stations",
+            "isVisible": false,
             "isQueryable": false,
             "useClustering": false,
-            "dataUrl": "./data.json",
-            "isInternal": false,
+            "#dataUrl": "./data.json",
+            "isInternal": true,
             "titleAttribute": "stationName",
             "@popupTemplate": "<div id='weatherStationPopup'>{{window.weatherStationPopup(feature.properties)}}</div>",
             "opacity": 0.85,
@@ -139,7 +140,7 @@
         },
         {
             "type": "identify",
-            "enabled": false,
+            "enabled": true,
             "showWidget": true,
             "command": {
                 "select": true,
@@ -181,7 +182,7 @@
         },
         {
             "type": "select",
-            "enabled": true
+            "enabled": false
         },
         {
             "type": "geomark",

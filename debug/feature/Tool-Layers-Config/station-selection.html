@@ -20,6 +20,22 @@
                     './../../config/vector.json',
                 ]
             } )
+            .then( smk => {
+                smk.$viewer.layerId[ "weather-stations" ].clear()
+                smk.$viewer.displayContext.layers.setItemVisible( "weather-stations", true )
+                return smk.$viewer.refreshLayers().then( () => smk )
+            } )
+            .then( smk => {
+                // debugger
+                return fetch( 'data.json' )
+                    .then( res => {
+                        return res.json()
+                    } )
+                    .then( data => {
+                        smk.$viewer.layerId[ "weather-stations" ].loadLayer( data )
+                    } )
+            } )
+
         </script>
 <!--***************************************************************************-->
     </body>
