@@ -119,7 +119,7 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
 
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
-    SMK.TYPE.Layer[ 'vector' ][ 'leaflet' ].create = function ( layers, zIndex ) {
+    SMK.TYPE.Layer[ 'vector' ][ 'leaflet' ].create = function ( layers, zIndex, id ) {
         var self = this
 
         if ( layers.length != 1 ) throw new Error( 'only 1 config allowed' )
@@ -142,6 +142,7 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
                     } )
             } )
             .then( function ( projectCoord ) {
+                var nonce = 0
                 var layer = new L.geoJson( null, {
                     coordsToLatLng: projectCoord,
                     pointToLayer: function ( geojson, latlng ) {
@@ -155,6 +156,12 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
                     onEachFeature: function ( feature, layer ) {
                         if ( layer.setStyle )
                             layer.setStyle( convertStyle( feature.style /* || layers[ 0 ].config.style */, feature.geometry.type ) )
+
+                        layer._smk_layer_id = id
+                        layer._smk_type = 'vector-feature'
+                        layer._smk_id = id + '--' + featureId( feature, nonce )
+                        console.log(layer._smk_id)
+                        nonce += 1
                     },
                     renderer: L.svg(),
                     interactive: false
@@ -348,4 +355,9 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
 
         return opt
     }
+
+    function featureId( feature, nonce ) {
+        return include.hash( [ feature.properties, nonce ] )
+    }
 } )
+

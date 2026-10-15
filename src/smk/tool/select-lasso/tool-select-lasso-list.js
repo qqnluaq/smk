@@ -55,7 +55,6 @@ include.module( 'tool-select-lasso.tool-select-lasso-list-js', [
                 .removedFeatures( updateMessage )
 
             function updateMessage() {
-
                 var stat = smk.$viewer.selected.getStats()
 
                 if ( stat.featureCount == 0 ) {
@@ -73,6 +72,13 @@ include.module( 'tool-select-lasso.tool-select-lasso-list-js', [
             setTimeout( function() {
                 self.setInternalLayerVisible( true )
             }, 1000 )
+
+            smk.$viewer.handlePick( 3, function ( location ) {
+                console.log(location)
+                if ( self.active ) return true
+                // return self.startIdentify( location )
+                //     .then( function () { return true }, function () { return true } )
+            } )
 
         }
     )

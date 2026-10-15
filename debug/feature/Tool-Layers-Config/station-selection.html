@@ -33,6 +33,11 @@
                     smk.$viewer.selected.highlight( Object.keys( smk.$viewer.selected.featureSet ) )
                 } )
 
+                smk.$viewer.identified.addedFeatures( ( ev ) => {
+                    console.log('identified.addedFeatures',Object.keys( smk.$viewer.identified.featureSet ))
+                    // smk.$viewer.selected.highlight( Object.keys( smk.$viewer.selected.featureSet ) )
+                } )
+
                 return fetch( 'data.json' )
                     .then( res => {
                         return res.json()

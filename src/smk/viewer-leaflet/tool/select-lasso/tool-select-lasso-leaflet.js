@@ -32,16 +32,30 @@ include.module( 'tool-select-lasso-leaflet', [
 
         smk.$viewer.map.on( 'lasso.finished', function (event) {
             console.log(event)
+            var layerFeatures = event.layers.reduce( function ( acc, ly ) {
+                var feature = ly.toGeoJSON()
+                if( !acc[ ly._smk_layer_id ] ) acc[ ly._smk_layer_id ] = []
+                acc[ ly._smk_layer_id ].push( feature )
+                // console.log(feature)
+                return acc
+            }, {} )
+            console.log(layerFeatures)
+
+            Object.keys( layerFeatures ).forEach( function ( id ) {
+                smk.$viewer.selected.add( id, layerFeatures[ id ] )
+            } )
         })
 
         smk.$viewer.map.on( 'lasso.enabled', function (event) {
-            console.log(event)
+            // console.log(event)
             self.active = true
         })
 
         smk.$viewer.map.on( 'lasso.disabled', function (event) {
-            console.log(event)
-            self.active = false
+            setTimeout( function() {
+                // console.log(event)
+                self.active = false            
+            }, 1000 )
         })
 
         self.changedActive( function () {

@@ -145,7 +145,8 @@
         {
             "type": "identify",
             "enabled": true,
-            "#showWidget": true,
+            "showWidget": false,
+            "showPanel": false,
             "command": {
                 "select": true,
                 "#radius": true,
@@ -185,10 +186,31 @@
             "enabled": false
         },
         {
+            "type": "select",
+            "enabled": false,
+            "showWidget": true,
+            "showPanel": true,
+            "internalLayers": [
+                {
+                    "id": "highlight-point",
+                    "style": {
+                        "strokeColor": "green",
+                        "strokeWidth": 30,
+                        "strokeOpacity": 0.8,
+                        "markerUrl": null,
+                        "markerSize": null,
+                        "markerOffset": null,
+                        "shadowUrl": null,
+                        "shadowSize": null
+                    }
+                }
+            ]
+        },
+        {
             "type": "select-lasso",
             "enabled": true,
             "showWidget": true,
-            "showPanel": false,
+            "showPanel": true,
             "internalLayers": [
                 {
                     "id": "highlight-point",
