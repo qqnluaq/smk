@@ -87,6 +87,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         this.identified = new SMK.TYPE.FeatureSet()
         this.selected = new SMK.TYPE.FeatureSet()
         this.searched = new SMK.TYPE.FeatureSet()
+        this.lassoed = new SMK.TYPE.FeatureSet()
         this.queried = {} // new SMK.TYPE.FeatureSet()
 
         this.layerIds = []
@@ -813,6 +814,20 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             return this.resolveUrl( 'attachments/' + id + ( type ? '.' + type : '' ) )
         else
             return this.serviceUrl + '/MapConfigurations/' + this.lmfId + '/Attachments/' + id
+    }
+
+    Viewer.prototype.loadAttachmentUrl = function ( url ) {
+        if ( !this.loadAttachmentPrpmise ) this.loadAttachmentPrpmise = {}
+        if ( this.loadAttachmentPrpmise[ url ] ) return this.loadAttachmentPrpmise[ url ]
+
+        return this.loadAttachmentPrpmise[ url ] = fetch( url )
+            .then( function ( res ) {
+                if ( !res.ok ) {
+                    throw Error( res.statusText )
+                }
+
+                return res
+            } )
     }
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //

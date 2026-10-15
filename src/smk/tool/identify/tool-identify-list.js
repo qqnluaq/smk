@@ -300,7 +300,7 @@ include.module( 'tool-identify.tool-identify-list-js', [
                 this.clearInternalLayer( 'location' )
                 this.loadInternalLayer( 'location', turf.point( [ this.searchLocation.map.longitude, this.searchLocation.map.latitude ] ) )
 
-                this.trackMouse = true
+                // this.trackMouse = true
             },
 
             displayEditSearchArea: function ( editArea ) {

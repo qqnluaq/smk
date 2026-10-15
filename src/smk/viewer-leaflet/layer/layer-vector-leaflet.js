@@ -159,9 +159,14 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
 
                         layer._smk_layer_id = id
                         layer._smk_type = 'vector-feature'
-                        layer._smk_id = id + '--' + featureId( feature, nonce )
+                        if ( layers[ 0 ].config.keyAttribute ) {
+                            layer._smk_id = id + '--' + feature.properties[ layers[ 0 ].config.keyAttribute ]
+                        }
+                        else {
+                            layer._smk_id = id + '--' + featureId( feature, nonce )
+                            nonce += 1
+                        }
                         console.log(layer._smk_id)
-                        nonce += 1
                     },
                     renderer: L.svg(),
                     interactive: false
@@ -311,20 +316,34 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
             }
     }
 
-    function markerForStyle( viewer, latlng, styleConfig, layerConfig ) {
+    function markerForStyle( viewer, latlng, styleConfig, layerConfig, inlineHTML ) {
         if ( styleConfig && styleConfig.markerUrl ) {
-            return L.marker( latlng, {
-                icon: L.icon( {
-                    iconUrl: viewer.resolveAttachmentUrl( styleConfig.markerUrl, null, 'png' ),
-                    shadowUrl: viewer.resolveAttachmentUrl( styleConfig.shadowUrl, null, 'png', false ),
-                    iconSize: styleConfig.markerSize,
-                    iconAnchor: styleConfig.markerOffset,
-                    popupAnchor: styleConfig.popupOffset,
-                    shadowSize: styleConfig.shadowSize,
-                } ),
-                interactive: !!layerConfig.isDraggable,
-                draggable: !!layerConfig.isDraggable
-            } )
+            if ( inlineHTML ) {
+                return L.marker( latlng, {
+                    icon: L.divIcon( {
+                        html: inlineHTML,
+                        iconSize: styleConfig.markerSize,
+                        iconAnchor: styleConfig.markerOffset,
+                        className: layerConfig.id + '-marker'
+                    } ),
+                    interactive: !!layerConfig.isDraggable,
+                    draggable: !!layerConfig.isDraggable
+                } )
+            }
+            else {
+                return L.marker( latlng, {
+                    icon: L.icon( {
+                        iconUrl: viewer.resolveAttachmentUrl( styleConfig.markerUrl, null, 'png' ),
+                        shadowUrl: viewer.resolveAttachmentUrl( styleConfig.shadowUrl, null, 'png', false ),
+                        iconSize: styleConfig.markerSize,
+                        iconAnchor: styleConfig.markerOffset,
+                        popupAnchor: styleConfig.popupOffset,
+                        shadowSize: styleConfig.shadowSize,
+                        className: layerConfig.id + '-marker'
+                    } ),
+                    interactive: !!layerConfig.isDraggable,
+                    draggable: !!layerConfig.isDraggable
+                } )
         }
         else {
             return L.circleMarker( latlng, {

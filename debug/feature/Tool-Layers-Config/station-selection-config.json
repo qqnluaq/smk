@@ -59,6 +59,7 @@
             "titleAttribute": "stationName",
             "@popupTemplate": "<div id='weatherStationPopup'>{{window.weatherStationPopup(feature.properties)}}</div>",
             "opacity": 0.85,
+            "keyAttribute": "WEATHER_STATION_GUID",
             "style": {
                 "strokeColor": "green",
                 "strokeWidth": 12,
@@ -136,7 +137,7 @@
         },
         {
             "type": "layers",
-            "enabled": true
+            "enabled": false
         },
         {
             "type": "baseMaps",
@@ -145,17 +146,48 @@
         {
             "type": "identify",
             "enabled": true,
-            "showWidget": false,
-            "showPanel": false,
-            "command": {
+            "showWidget": true,
+            "showPanel": true,
+            "#command": {
                 "select": true,
                 "#radius": true,
                 "#radiusUnit": true,
                 "#nearBy": true
             },
-            "radius": 100,
-            "radiusUnit": "km",
-            "$tolerance": 12
+            "radius": 20,
+            "radiusUnit": "px",
+            "$tolerance": 12,
+            "internalLayers": [
+                {
+                    "id": "search-area",
+                    "style": {
+                        "fillOpacity": 0,
+                        "strokeOpacity": 0
+                    }
+                },
+                {
+                    "id": "search-border-1",
+                    "style": {
+                        "fillOpacity": 0,
+                        "strokeOpacity": 0
+                    }
+                },
+                {
+                    "id": "search-border-2",
+                    "style": {
+                        "fillOpacity": 0,
+                        "strokeOpacity": 0
+                    }
+                },
+                {
+                    "id": "location", 
+                    "style": {
+                        "fillOpacity": 0,
+                        "strokeOpacity": 0,
+                        "markerUrl": null
+                    }
+                }
+            ]
         },
         {
             "type": "search",
@@ -233,7 +265,7 @@
         },
         {
             "type": "measure",
-            "enabled": true,
+            "enabled": false,
             "position": "toolbar"
         }
     ]

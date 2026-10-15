@@ -7,7 +7,7 @@ include.module( 'tool-select-lasso.tool-select-lasso-feature-js', [
     return SMK.TYPE.Tool.define( 'SelectLassoFeatureTool',
         function () {
             SMK.TYPE.ToolPanel.call( this, 'tool-panel-feature' )
-            SMK.TYPE.ToolPanelFeature.call( this, function ( smk ) { return smk.$viewer.selected } )
+            SMK.TYPE.ToolPanelFeature.call( this, function ( smk ) { return smk.$viewer.lassoed } )
 
             this.parentId = 'SelectLassoListTool'
         },

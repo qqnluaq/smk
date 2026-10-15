@@ -42,7 +42,7 @@ include.module( 'tool-select-lasso-leaflet', [
             console.log(layerFeatures)
 
             Object.keys( layerFeatures ).forEach( function ( id ) {
-                smk.$viewer.selected.add( id, layerFeatures[ id ] )
+                self.featureSet.add( id, layerFeatures[ id ] )
             } )
         })
 
@@ -52,10 +52,11 @@ include.module( 'tool-select-lasso-leaflet', [
         })
 
         smk.$viewer.map.on( 'lasso.disabled', function (event) {
-            setTimeout( function() {
+            self.active = false            
+            self.disabledDelay = setTimeout( function() {
                 // console.log(event)
-                self.active = false            
-            }, 1000 )
+                self.disabledDelay = null
+            }, 2500 )
         })
 
         self.changedActive( function () {

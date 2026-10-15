@@ -25,7 +25,8 @@ include.module( 'tool-select-lasso.tool-select-lasso-list-js', [
             SMK.TYPE.ToolWidget.call( this, 'select-lasso-widget' )
             SMK.TYPE.ToolPanel.call( this, 'select-lasso-panel' )
             SMK.TYPE.ToolInternalLayers.call( this )
-            SMK.TYPE.ToolFeatureList.call( this, function ( smk ) { return smk.$viewer.selected } )
+            // SMK.TYPE.ToolFeatureList.call( this, function ( smk ) { return smk.$viewer.identified } )
+            SMK.TYPE.ToolFeatureList.call( this, function ( smk ) { return smk.$viewer.lassoed } )
 
             this.defineProp( 'command' )
         },
@@ -37,7 +38,7 @@ include.module( 'tool-select-lasso.tool-select-lasso-list-js', [
             self.changedActive( function () {
                 if ( self.active ) {
                     // console.log('active')
-                    smk.$viewer.selected.pick()
+                    self.featureSet.pick()
                 }
                 else {
                     // console.log('inactive')
@@ -55,7 +56,7 @@ include.module( 'tool-select-lasso.tool-select-lasso-list-js', [
                 .removedFeatures( updateMessage )
 
             function updateMessage() {
-                var stat = smk.$viewer.selected.getStats()
+                var stat = self.featureSet.getStats()
 
                 if ( stat.featureCount == 0 ) {
                     self.showStatusMessage()
@@ -74,8 +75,9 @@ include.module( 'tool-select-lasso.tool-select-lasso-list-js', [
             }, 1000 )
 
             smk.$viewer.handlePick( 3, function ( location ) {
-                console.log(location)
+                // console.log(location)
                 if ( self.active ) return true
+                if ( self.disabledDelay ) return true
                 // return self.startIdentify( location )
                 //     .then( function () { return true }, function () { return true } )
             } )
