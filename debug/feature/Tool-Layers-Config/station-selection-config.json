@@ -1,0 +1,273 @@
+{
+    "version": "1.2.7",
+    "name": "Wildfire DataMart",
+    "createdBy": "SMK Developer",
+    "viewer": {
+        "type": "leaflet",
+        "activeTool": "pan",
+        "location": {
+            "extent": [
+                -140.80078125000004,
+                61.62728646147466,
+                -108.72070312500002,
+                46.13417004624326
+            ],
+            "center": [
+                -125,
+                54
+            ],
+            "zoom": 6
+        },
+        "esriApiKey": "",
+        "baseMap": "bc-basemap"
+    },
+    "layers": [
+        {
+            "type": "wms",
+            "id": "fire-centres",
+            "title": "BC Wildfire Fire Centres",
+            "isVisible": true,
+            "isQueryable": false,
+            "opacity": 0.65,
+            "serviceUrl": "https://openmaps.gov.bc.ca/geo/pub/wms",
+            "layerName": "pub:WHSE_LEGAL_ADMIN_BOUNDARIES.DRP_MOF_FIRE_CENTRES_SP",
+            "styleName": "3458",
+            "titleAttribute": "MOF_FIRE_CENTRE_NAME",
+            "geometryAttribute": "GEOMETRY",
+            "attributes": [
+                {
+                    "name": "MOF_FIRE_CENTRE_ID",
+                    "title": "Fire Centre ID",
+                    "visible": true
+                },
+                {
+                    "name": "MOF_FIRE_CENTRE_NAME",
+                    "title": "Fire Centre Name",
+                    "visible": true
+                }
+            ]
+        },
+        {
+            "type": "vector",
+            "id": "weather-stations",
+            "title": "Reporting Stations",
+            "isVisible": false,
+            "isQueryable": true,
+            "useClustering": false,
+            "#dataUrl": "./data.json",
+            "isInternal": true,
+            "titleAttribute": "stationName",
+            "@popupTemplate": "<div id='weatherStationPopup'>{{window.weatherStationPopup(feature.properties)}}</div>",
+            "opacity": 0.85,
+            "keyAttribute": "WEATHER_STATION_GUID",
+            "style": {
+                "strokeColor": "green",
+                "strokeWidth": 12,
+                "strokeOpacity": 0.8,
+                "fillOpacity": 1,
+                "fillColor": "blue",
+                "markerUrl": "marker.svg",
+                "markerSize": [ 20, 20 ],
+                "markerOffset": [ 10, 10 ],
+                "markerInline": true
+
+            },
+            "#attributes": [
+                {
+                    "name": "stationName",
+                    "title": "Station Name",
+                    "visible": true
+                }
+            ],
+            "#queries": [
+                {
+                    "id": "station-query",
+                    "title": "Station Search",
+                    "description": "Search for a reporting weather station",
+                    "parameters": [
+                        {
+                            "id": "param1",
+                            "type": "input",
+                            "title": "Station Name",
+                            "value": ""
+                        }
+                    ],
+                    "predicate": {
+                        "operator": "and",
+                        "arguments": [
+                            {
+                                "operator": "contains",
+                                "arguments": [
+                                    {
+                                        "operand": "attribute",
+                                        "name": "stationName"
+                                    },
+                                    {
+                                        "operand": "parameter",
+                                        "id": "param1"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "tools": [
+        {
+            "type": "toolbar",
+            "enabled": true
+        },
+        {
+            "type": "list-menu",
+            "enabled": false,
+            "title": "Wildfire DataMart"
+        },
+        {
+            "type": "pan",
+            "enabled": true
+        },
+        {
+            "type": "zoom",
+            "enabled": true
+        },
+        {
+            "type": "about",
+            "enabled": false
+        },
+        {
+            "type": "layers",
+            "enabled": false
+        },
+        {
+            "type": "baseMaps",
+            "enabled": false
+        },
+        {
+            "type": "identify",
+            "enabled": true,
+            "showWidget": true,
+            "showPanel": true,
+            "#command": {
+                "select": true,
+                "#radius": true,
+                "#radiusUnit": true,
+                "#nearBy": true
+            },
+            "radius": 20,
+            "radiusUnit": "px",
+            "$tolerance": 12,
+            "internalLayers": [
+                {
+                    "id": "search-area",
+                    "style": {
+                        "fillOpacity": 0,
+                        "strokeOpacity": 0
+                    }
+                },
+                {
+                    "id": "search-border-1",
+                    "style": {
+                        "fillOpacity": 0,
+                        "strokeOpacity": 0
+                    }
+                },
+                {
+                    "id": "search-border-2",
+                    "style": {
+                        "fillOpacity": 0,
+                        "strokeOpacity": 0
+                    }
+                },
+                {
+                    "id": "location", 
+                    "style": {
+                        "fillOpacity": 0,
+                        "strokeOpacity": 0,
+                        "markerUrl": null
+                    }
+                }
+            ]
+        },
+        {
+            "type": "search",
+            "enabled": true
+        },
+        {
+            "type": "coordinate",
+            "enabled": false
+        },
+        {
+            "type": "markup",
+            "enabled": false
+        },
+        {
+            "type": "scale",
+            "enabled": false
+        },
+        {
+            "type": "minimap",
+            "enabled": false
+        },
+        {
+            "type": "directions",
+            "enabled": false
+        },
+        {
+            "type": "location",
+            "enabled": false
+        },
+        {
+            "type": "select",
+            "enabled": false,
+            "showWidget": true,
+            "showPanel": true,
+            "internalLayers": [
+                {
+                    "id": "highlight-point",
+                    "style": {
+                        "strokeColor": "green",
+                        "strokeWidth": 30,
+                        "strokeOpacity": 0.8,
+                        "markerUrl": null,
+                        "markerSize": null,
+                        "markerOffset": null,
+                        "shadowUrl": null,
+                        "shadowSize": null
+                    }
+                }
+            ]
+        },
+        {
+            "type": "select-lasso",
+            "enabled": true,
+            "showWidget": true,
+            "showPanel": true,
+            "internalLayers": [
+                {
+                    "id": "highlight-point",
+                    "style": {
+                        "strokeColor": "green",
+                        "strokeWidth": 30,
+                        "strokeOpacity": 0.8,
+                        "markerUrl": null,
+                        "markerSize": null,
+                        "markerOffset": null,
+                        "shadowUrl": null,
+                        "shadowSize": null
+                    }
+                }
+            ]
+        },
+        {
+            "type": "geomark",
+            "enabled": false
+        },
+        {
+            "type": "measure",
+            "enabled": false,
+            "position": "toolbar"
+        }
+    ]
+}
