@@ -6,6 +6,7 @@ module.exports = function( grunt ) {
         'copy:styles',
         'copy:templates',
         'copy:assets',
+        'copy:attachments',
     ] )
 
     grunt.config.merge( {
@@ -43,8 +44,15 @@ module.exports = function( grunt ) {
             'assets': {
                 expand: true,
                 cwd: '<%= srcPath %>',
-                src: '<%= tagRef.assets %>',
+                src: [ '<%= tagRef.assets %>', 'debug/data/**' ],
                 dest: '<%= distPath %>/assets/src'
+            },
+
+            'attachments': {
+                expand: true,
+                cwd: 'debug/data',
+                src: [ '**' ],
+                dest: '<%= distPath %>/assets/src/attachments'
             }
         }
 

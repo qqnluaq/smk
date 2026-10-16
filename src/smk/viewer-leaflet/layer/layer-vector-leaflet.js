@@ -12,7 +12,8 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
     //
     VectorLeafletLayer.prototype.getFeaturesInArea = function ( area, view, option ) {
         var self = this
-
+/* jshint -W087 */
+// debugger
         if ( !option.layer ) return
 
         var features = []
@@ -118,14 +119,15 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
 
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
-    SMK.TYPE.Layer[ 'vector' ][ 'leaflet' ].create = function ( layers, zIndex ) {
+    SMK.TYPE.Layer[ 'vector' ][ 'leaflet' ].create = function ( layers, zIndex, id ) {
         var self = this
 
         if ( layers.length != 1 ) throw new Error( 'only 1 config allowed' )
         if ( ( layers[0].useClustering + layers[0].useHeatmap + layers[0].useRaw ) > 1 ) throw new Error( 'raw or heatmap or clustering' )
 
         var styles = [].concat( layers[ 0 ].config.style )
-
+/* jshint -W087 */
+// debugger
         return SMK.UTIL.resolved()
             .then( function () {
                 if ( !layers[ 0 ].config.projection )
@@ -140,24 +142,45 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
                     } )
             } )
             .then( function ( projectCoord ) {
-                var layer = new L.geoJson( null, {
-                    coordsToLatLng: projectCoord,
-                    pointToLayer: function ( geojson, latlng ) {
-                        // return markerForStyle( self, latlng, layers[ 0 ].config.style )
-                        return markerForStyle( self, latlng, styles[ 0 ], layers[ 0 ].config )
-                            .on( 'moveend', function ( ev ) {
-                                var ll = ev.target.getLatLng()
-                                layers[ 0 ].changedFeature( { newPt: { latitude: ll.lat, longitude: ll.lng }, geojson: geojson } )
-                            } )
-                    },
-                    onEachFeature: function ( feature, layer ) {
-                        if ( layer.setStyle )
-                            layer.setStyle( convertStyle( feature.style /* || layers[ 0 ].config.style */, feature.geometry.type ) )
-                    },
-                    renderer: L.svg(),
-                    interactive: false
-                } )
+                return SMK.UTIL.resolved()
+                    .then( function () {
+                        if ( !styles[ 0 ].markerInline ) return
 
+                        return self.loadAttachmentUrlText( styles[ 0 ].markerUrl )
+                    } )
+                    .then( function ( markerHTML ) {
+                        var nonce = 0
+                        return new L.geoJson( null, {
+                            coordsToLatLng: projectCoord,
+                            pointToLayer: function ( geojson, latlng ) {
+                                // return markerForStyle( self, latlng, layers[ 0 ].config.style )
+                                return markerForStyle( self, latlng, styles[ 0 ], layers[ 0 ].config, markerHTML )
+                                    .on( 'moveend', function ( ev ) {
+                                        var ll = ev.target.getLatLng()
+                                        layers[ 0 ].changedFeature( { newPt: { latitude: ll.lat, longitude: ll.lng }, geojson: geojson } )
+                                    } )
+                            },
+                            onEachFeature: function ( feature, layer ) {
+                                if ( layer.setStyle )
+                                    layer.setStyle( convertStyle( feature.style /* || layers[ 0 ].config.style */, feature.geometry.type ) )
+
+                                layer._smk_layer_id = id
+                                layer._smk_type = 'vector-feature'
+                                if ( layers[ 0 ].config.keyAttribute ) {
+                                    layer._smk_id = id + '--' + feature.properties[ layers[ 0 ].config.keyAttribute ]
+                                }
+                                else {
+                                    layer._smk_id = id + '--' + featureId( feature, nonce )
+                                    nonce += 1
+                                }
+                                // console.log(layer._smk_id)
+                            },
+                            renderer: L.svg(),
+                            interactive: false
+                        } )
+                    } )
+            } )
+            .then( function ( layer ) {
                 if ( layers[ 0 ].config.tooltip ) {
                     layer.bindTooltip( layers[ 0 ].config.tooltip.title, Object.assign( { permanent: true }, layers[ 0 ].config.tooltip.option ) )
                 }
@@ -188,6 +211,21 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
                     // layer.addData( turf.featureCollection( feats ) )
                 }
 
+                layers[ 0 ].loadFeatures = function ( features ) {
+                    var feats = []
+                    turf.featureEach( features, function ( ft ) {
+                        styles.forEach( function ( st, i ) {
+                            if ( i > 0 )
+                                ft = turf.clone( ft )
+
+                            ft.style = st
+                            feats.push( ft )
+                        } )
+                    } )
+
+                    layer.addData( turf.featureCollection( feats ) )
+                }
+
                 if ( layers[ 0 ].loadCache ) {
                     layers[ 0 ].loadLayer( layers[ 0 ].loadCache )
                     layers[ 0 ].loadCache = null
@@ -211,6 +249,8 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
                     console.log( 'loaded', url )
 
                     var feats = []
+                    /* jshint -W087 */
+                    // debugger 
                     turf.featureEach( data, function ( ft ) {
                         styles.forEach( function ( st, i ) {
                             if ( i > 0 )
@@ -285,20 +325,35 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
             }
     }
 
-    function markerForStyle( viewer, latlng, styleConfig, layerConfig ) {
+    function markerForStyle( viewer, latlng, styleConfig, layerConfig, inlineHTML ) {
         if ( styleConfig && styleConfig.markerUrl ) {
-            return L.marker( latlng, {
-                icon: L.icon( {
-                    iconUrl: viewer.resolveAttachmentUrl( styleConfig.markerUrl, null, 'png' ),
-                    shadowUrl: viewer.resolveAttachmentUrl( styleConfig.shadowUrl, null, 'png', false ),
-                    iconSize: styleConfig.markerSize,
-                    iconAnchor: styleConfig.markerOffset,
-                    popupAnchor: styleConfig.popupOffset,
-                    shadowSize: styleConfig.shadowSize,
-                } ),
-                interactive: !!layerConfig.isDraggable,
-                draggable: !!layerConfig.isDraggable
-            } )
+            if ( inlineHTML ) {
+                return L.marker( latlng, {
+                    icon: L.divIcon( {
+                        html: inlineHTML,
+                        iconSize: styleConfig.markerSize,
+                        iconAnchor: styleConfig.markerOffset,
+                        className: layerConfig.id + '-marker'
+                    } ),
+                    interactive: !!layerConfig.isDraggable,
+                    draggable: !!layerConfig.isDraggable
+                } )
+            }
+            else {
+                return L.marker( latlng, {
+                    icon: L.icon( {
+                        iconUrl: viewer.resolveAttachmentUrl( styleConfig.markerUrl, null, 'png' ),
+                        shadowUrl: viewer.resolveAttachmentUrl( styleConfig.shadowUrl, null, 'png', false ),
+                        iconSize: styleConfig.markerSize,
+                        iconAnchor: styleConfig.markerOffset,
+                        popupAnchor: styleConfig.popupOffset,
+                        shadowSize: styleConfig.shadowSize,
+                        className: layerConfig.id + '-marker'
+                    } ),
+                    interactive: !!layerConfig.isDraggable,
+                    draggable: !!layerConfig.isDraggable
+                } )
+            }
         }
         else {
             return L.circleMarker( latlng, {
@@ -329,4 +384,9 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
 
         return opt
     }
+
+    function featureId( feature, nonce ) {
+        return include.hash( [ feature.properties, nonce ] )
+    }
 } )
+

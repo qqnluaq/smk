@@ -87,6 +87,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
         this.identified = new SMK.TYPE.FeatureSet()
         this.selected = new SMK.TYPE.FeatureSet()
         this.searched = new SMK.TYPE.FeatureSet()
+        this.lassoed = new SMK.TYPE.FeatureSet()
         this.queried = {} // new SMK.TYPE.FeatureSet()
 
         this.layerIds = []
@@ -651,15 +652,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
         return ( this.layerIdPromise[ id ] = SMK.UTIL.resolved()
             .then( function () {
-                // try {
-                // console.log( 'create', id, type, self.type)
-                console.log('creating layer',type,id)
-                return SMK.TYPE.Layer[ type ][ self.type ].create.call( self, layers, zIndex )
-                // }
-                // catch ( e ) {
-                    // console.warn( 'failed to create viewer layer', layers, e )
-                    // return SMK.UTIL.rejected( e )
-                // }
+                return SMK.TYPE.Layer[ type ][ self.type ].create.call( self, layers, zIndex, id )
             } )
             .then( function ( ly ) {
                 return self.afterCreateViewerLayer( id, type, layers, ly )
@@ -813,6 +806,22 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             return this.resolveUrl( 'attachments/' + id + ( type ? '.' + type : '' ) )
         else
             return this.serviceUrl + '/MapConfigurations/' + this.lmfId + '/Attachments/' + id
+    }
+
+    Viewer.prototype.loadAttachmentUrlText = function ( url ) {
+        if ( !this.loadAttachmentPrpmise ) this.loadAttachmentPrpmise = {}
+        if ( this.loadAttachmentPrpmise[ url ] ) return this.loadAttachmentPrpmise[ url ]
+
+        this.loadAttachmentPrpmise[ url ] = fetch( url )
+            .then( function ( res ) {
+                if ( !res.ok ) {
+                    throw Error( res.statusText )
+                }
+
+                return res.text()
+            } )
+
+        return this.loadAttachmentPrpmise[ url ]
     }
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //

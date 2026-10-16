@@ -2,6 +2,7 @@ include.module( 'tool-select.tool-select-list-js', [
     'tool',
     'tool-widget',
     'tool-feature-list',
+    'tool-internal-layers',
     'component-feature-list',
     'component-command-button',
     'tool-select.panel-select-html'
@@ -23,6 +24,7 @@ include.module( 'tool-select.tool-select-list-js', [
         function () {
             SMK.TYPE.ToolWidget.call( this, 'select-widget' )
             SMK.TYPE.ToolPanel.call( this, 'select-panel' )
+            SMK.TYPE.ToolInternalLayers.call( this )
             SMK.TYPE.ToolFeatureList.call( this, function ( smk ) { return smk.$viewer.selected } )
 
             this.defineProp( 'command' )
@@ -49,6 +51,7 @@ include.module( 'tool-select.tool-select-list-js', [
                 .removedFeatures( updateMessage )
 
             function updateMessage() {
+
                 var stat = smk.$viewer.selected.getStats()
 
                 if ( stat.featureCount == 0 ) {
@@ -62,6 +65,11 @@ include.module( 'tool-select.tool-select-list-js', [
 
                 self.showStatusMessage( '<div>Selection contains ' + SMK.UTIL.grammaticalNumber( stat.featureCount, null, 'a feature', '{} features' ) + '</div>' + sub )
             }
+
+            setTimeout( function() {
+                self.setInternalLayerVisible( true )
+            }, 1000 )
+
         }
     )
 

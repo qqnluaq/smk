@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+    <circle class="station-marker-inner" cx="10" cy="10" r="6.5"></circle>
+    <circle class="station-marker-outer" cx="10" cy="10" r="9"></circle>
+</svg>

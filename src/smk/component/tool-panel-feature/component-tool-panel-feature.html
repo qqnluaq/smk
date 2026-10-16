@@ -36,7 +36,7 @@
         >{{ customLabel }}</command-button>
 
         <command-button class="smk-select"
-            v-if="tool.select && command.select"
+            v-if="( tool.select || tool['select-lasso'] ) && command.select"
             v-on:click="$$emit( 'select', { instance: instance } )"
         >Add to selection</command-button>
 

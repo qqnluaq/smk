@@ -27,26 +27,26 @@ include.module( 'tool-select-leaflet', [
 
         // inc[ 'tool-leaflet.tool-feature-list-leaflet-js' ].call( this, smk )
 
-        self.featureSet.addedFeatures( function ( ev ) {
-            ev.features.forEach( function ( f ) {
-                switch ( turf.getType( f ) ) {
-                case 'Point':
-                    self.highlight[ f.id ] = L.circleMarker( L.GeoJSON.coordsToLatLng( f.geometry.coordinates ), {
-                            radius: 20
-                        } )
-                        .setStyle( self.styleFeature()() )
-                    break;
+        // self.featureSet.addedFeatures( function ( ev ) {
+        //     ev.features.forEach( function ( f ) {
+        //         switch ( turf.getType( f ) ) {
+        //         case 'Point':
+        //             self.highlight[ f.id ] = L.circleMarker( L.GeoJSON.coordsToLatLng( f.geometry.coordinates ), {
+        //                     radius: 20
+        //                 } )
+        //                 .setStyle( self.styleFeature()() )
+        //             break;
 
-                case 'MultiPoint':
-                    break;
+        //         case 'MultiPoint':
+        //             break;
 
-                default:
-                    self.highlight[ f.id ] = L.geoJSON( f.geometry, {
-                        style: self.styleFeature()
-                    } )
-                }
-            } )
-        } )
+        //         default:
+        //             self.highlight[ f.id ] = L.geoJSON( f.geometry, {
+        //                 style: self.styleFeature()
+        //             } )
+        //         }
+        //     } )
+        // } )
 
     } )
 } )

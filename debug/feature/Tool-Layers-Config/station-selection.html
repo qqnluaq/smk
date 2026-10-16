@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Station Selection</title>
+        
+        <script src="../../../dist/smk.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+<!--***************************************************************************
+    This example shows a SMK application, with the command configuration for the 
+    layer tool.
+-->
+        <div id="smk-map-frame"></div>
+        <script>
+            SMK.INIT( {
+                containerSel: "#smk-map-frame",
+                config: [ 
+                    './station-selection-config.json',
+                    './../../config/vector.json',
+                ]
+            } )
+            .then( smk => {
+                smk.$viewer.layerId[ "weather-stations" ].clear()
+                smk.$viewer.displayContext.layers.setItemVisible( "weather-stations", true )
+                return smk.$viewer.refreshLayers().then( () => smk )
+            } )
+            .then( smk => {
+                // debugger
+
+                smk.$viewer.selected.addedFeatures( ( ev ) => {
+                    console.log('selected.addedFeatures',Object.keys( smk.$viewer.selected.featureSet ))
+                    smk.$viewer.selected.highlight( Object.keys( smk.$viewer.selected.featureSet ) )
+                } )
+
+                smk.$viewer.identified.addedFeatures( ( ev ) => {
+                    console.log('identified.addedFeatures',Object.keys( smk.$viewer.identified.featureSet ))
+                    // smk.$viewer.selected.highlight( Object.keys( smk.$viewer.selected.featureSet ) )
+                } )
+
+                return fetch( 'data.json' )
+                    .then( res => {
+                        return res.json()
+                    } )
+                    .then( data => {
+                        smk.$viewer.layerId[ "weather-stations" ].loadLayer( data )
+                    } )
+            } )
+
+        </script>
+<!--***************************************************************************-->
+    </body>
+</html>
+
