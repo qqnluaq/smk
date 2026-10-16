@@ -31,7 +31,7 @@ include.module( 'tool-select-lasso-leaflet', [
         self.lasso = L.lasso( smk.$viewer.map, options);
 
         smk.$viewer.map.on( 'lasso.finished', function (event) {
-            console.log(event)
+            // console.log(event)
             var layerFeatures = event.layers.reduce( function ( acc, ly ) {
                 var feature = ly.toGeoJSON()
                 if( !acc[ ly._smk_layer_id ] ) acc[ ly._smk_layer_id ] = []
@@ -48,6 +48,7 @@ include.module( 'tool-select-lasso-leaflet', [
 
         smk.$viewer.map.on( 'lasso.enabled', function (event) {
             // console.log(event)
+            self.featureSet.clear()
             self.active = true
         })
 
