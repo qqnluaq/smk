@@ -39,7 +39,7 @@ include.module( 'tool-select-lasso-leaflet', [
                 // console.log(feature)
                 return acc
             }, {} )
-            console.log(layerFeatures)
+            // console.log(layerFeatures)
 
             Object.keys( layerFeatures ).forEach( function ( id ) {
                 self.featureSet.add( id, layerFeatures[ id ] )
@@ -63,11 +63,11 @@ include.module( 'tool-select-lasso-leaflet', [
         self.changedActive( function () {
             if ( self.active ) {
                 self.lasso.enable()
-                console.log('active')
+                // console.log('active')
             }
             else {
                 self.lasso.disable()
-                console.log('inactive')
+                // console.log('inactive')
             }
         } )
 
