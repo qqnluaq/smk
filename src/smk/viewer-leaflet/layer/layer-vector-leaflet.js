@@ -142,36 +142,45 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
                     } )
             } )
             .then( function ( projectCoord ) {
-                var nonce = 0
-                var layer = new L.geoJson( null, {
-                    coordsToLatLng: projectCoord,
-                    pointToLayer: function ( geojson, latlng ) {
-                        // return markerForStyle( self, latlng, layers[ 0 ].config.style )
-                        return markerForStyle( self, latlng, styles[ 0 ], layers[ 0 ].config )
-                            .on( 'moveend', function ( ev ) {
-                                var ll = ev.target.getLatLng()
-                                layers[ 0 ].changedFeature( { newPt: { latitude: ll.lat, longitude: ll.lng }, geojson: geojson } )
-                            } )
-                    },
-                    onEachFeature: function ( feature, layer ) {
-                        if ( layer.setStyle )
-                            layer.setStyle( convertStyle( feature.style /* || layers[ 0 ].config.style */, feature.geometry.type ) )
+                return SMK.UTIL.resolved()
+                    .then( function () {
+                        if ( !styles[ 0 ].markerInline ) return
 
-                        layer._smk_layer_id = id
-                        layer._smk_type = 'vector-feature'
-                        if ( layers[ 0 ].config.keyAttribute ) {
-                            layer._smk_id = id + '--' + feature.properties[ layers[ 0 ].config.keyAttribute ]
-                        }
-                        else {
-                            layer._smk_id = id + '--' + featureId( feature, nonce )
-                            nonce += 1
-                        }
-                        console.log(layer._smk_id)
-                    },
-                    renderer: L.svg(),
-                    interactive: false
-                } )
+                        return self.loadAttachmentUrlText( styles[ 0 ].markerUrl )
+                    } )
+                    .then( function ( markerHTML ) {
+                        var nonce = 0
+                        return new L.geoJson( null, {
+                            coordsToLatLng: projectCoord,
+                            pointToLayer: function ( geojson, latlng ) {
+                                // return markerForStyle( self, latlng, layers[ 0 ].config.style )
+                                return markerForStyle( self, latlng, styles[ 0 ], layers[ 0 ].config, markerHTML )
+                                    .on( 'moveend', function ( ev ) {
+                                        var ll = ev.target.getLatLng()
+                                        layers[ 0 ].changedFeature( { newPt: { latitude: ll.lat, longitude: ll.lng }, geojson: geojson } )
+                                    } )
+                            },
+                            onEachFeature: function ( feature, layer ) {
+                                if ( layer.setStyle )
+                                    layer.setStyle( convertStyle( feature.style /* || layers[ 0 ].config.style */, feature.geometry.type ) )
 
+                                layer._smk_layer_id = id
+                                layer._smk_type = 'vector-feature'
+                                if ( layers[ 0 ].config.keyAttribute ) {
+                                    layer._smk_id = id + '--' + feature.properties[ layers[ 0 ].config.keyAttribute ]
+                                }
+                                else {
+                                    layer._smk_id = id + '--' + featureId( feature, nonce )
+                                    nonce += 1
+                                }
+                                // console.log(layer._smk_id)
+                            },
+                            renderer: L.svg(),
+                            interactive: false
+                        } )
+                    } )
+            } )
+            .then( function ( layer ) {
                 if ( layers[ 0 ].config.tooltip ) {
                     layer.bindTooltip( layers[ 0 ].config.tooltip.title, Object.assign( { permanent: true }, layers[ 0 ].config.tooltip.option ) )
                 }
@@ -344,6 +353,7 @@ include.module( 'layer-leaflet.layer-vector-leaflet-js', [ 'layer.layer-vector-j
                     interactive: !!layerConfig.isDraggable,
                     draggable: !!layerConfig.isDraggable
                 } )
+            }
         }
         else {
             return L.circleMarker( latlng, {

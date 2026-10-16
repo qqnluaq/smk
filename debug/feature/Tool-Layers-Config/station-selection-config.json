@@ -68,7 +68,8 @@
                 "fillColor": "blue",
                 "markerUrl": "marker.svg",
                 "markerSize": [ 20, 20 ],
-                "markerOffset": [ 10, 10 ]
+                "markerOffset": [ 10, 10 ],
+                "markerInline": true
 
             },
             "#attributes": [

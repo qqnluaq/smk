@@ -654,7 +654,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             .then( function () {
                 // try {
                 // console.log( 'create', id, type, self.type)
-                console.log('creating layer',type,id)
+                // console.log('creating layer',type,id)
                 return SMK.TYPE.Layer[ type ][ self.type ].create.call( self, layers, zIndex, id )
                 // }
                 // catch ( e ) {
@@ -816,18 +816,20 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
             return this.serviceUrl + '/MapConfigurations/' + this.lmfId + '/Attachments/' + id
     }
 
-    Viewer.prototype.loadAttachmentUrl = function ( url ) {
+    Viewer.prototype.loadAttachmentUrlText = function ( url ) {
         if ( !this.loadAttachmentPrpmise ) this.loadAttachmentPrpmise = {}
         if ( this.loadAttachmentPrpmise[ url ] ) return this.loadAttachmentPrpmise[ url ]
 
-        return this.loadAttachmentPrpmise[ url ] = fetch( url )
+        this.loadAttachmentPrpmise[ url ] = fetch( url )
             .then( function ( res ) {
                 if ( !res.ok ) {
                     throw Error( res.statusText )
                 }
 
-                return res
+                return res.text()
             } )
+
+        return this.loadAttachmentPrpmise[ url ]
     }
     // _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     //
