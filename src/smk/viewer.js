@@ -652,15 +652,7 @@ include.module( 'viewer', [ 'jquery', 'util', 'event', 'layer', 'feature-set', '
 
         return ( this.layerIdPromise[ id ] = SMK.UTIL.resolved()
             .then( function () {
-                // try {
-                // console.log( 'create', id, type, self.type)
-                // console.log('creating layer',type,id)
                 return SMK.TYPE.Layer[ type ][ self.type ].create.call( self, layers, zIndex, id )
-                // }
-                // catch ( e ) {
-                    // console.warn( 'failed to create viewer layer', layers, e )
-                    // return SMK.UTIL.rejected( e )
-                // }
             } )
             .then( function ( ly ) {
                 return self.afterCreateViewerLayer( id, type, layers, ly )
