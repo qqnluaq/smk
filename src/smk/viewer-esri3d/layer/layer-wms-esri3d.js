@@ -16,8 +16,11 @@ include.module( 'layer-esri3d.layer-wms-esri3d-js', [ 'layer.layer-wms-js', 'typ
     var WMSLayer = E.layers.BaseDynamicLayer.createSubclass( {
         properties: {
             serviceUrl: null,
-            layerNames: [],
-            styleNames: [],
+            // Array-valued properties must declare their item type explicitly.
+            // A bare `[]` is read by the ArcGIS Accessor as type `[ undefined ]`,
+            // which from ArcGIS 4.24 throws "Invalid value used as weak map key".
+            layerNames: { type: [ String ], value: null },
+            styleNames: { type: [ String ], value: null },
             cqlFilter: null
             // imageMaxWidth: 1024,
             // imageMaxHeight: 1024,
