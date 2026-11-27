@@ -137,7 +137,7 @@ include.module( 'viewer-leaflet', [ 'viewer', 'leaflet', 'layer-leaflet', /*'fea
         } )
 
         defineBaseMapType( 'esri-tiled-map', function ( cfg ) {
-            var ly = L.esri.tiledMapLayer( Object.assign( { url: cfg.url, maxZoom: 30 }, cfg.option ) )
+            var ly = SMK.UTIL.esriTiledMapLayerWithFallback( Object.assign( { url: cfg.url, maxZoom: 30 }, cfg.option ) )
 
             return [ ly ]
         } )
